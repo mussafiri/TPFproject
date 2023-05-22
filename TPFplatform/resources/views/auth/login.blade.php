@@ -37,7 +37,7 @@
                                 
                                 <div class="text-center w-75 m-auto">
                                     <div class="auth-logo">
-                                        <a href="index.html" class="logo logo-dark text-center">
+                                        <a href="{{ url('/') }}" class="logo logo-dark text-center">
                                             <span class="logo-lg">
                                                 <img src="https://www.tpf.or.tz/images/logo.jpg" alt="" height="70">
                                             </span>

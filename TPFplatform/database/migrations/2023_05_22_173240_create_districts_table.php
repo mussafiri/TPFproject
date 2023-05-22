@@ -11,10 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contributor_types', function (Blueprint $table) {
+        Schema::create('districts', function (Blueprint $table) {
             $table->id();
+            $table->integer('zone_id');
+            $table->string('district_code');
             $table->string('name');
-            $table->enum('status', ['ACTIVE','SUSPENDED'])->default('ACTIVE');
+            $table->string('postal_address');
+            $table->string('physical_address');
+            $table->string('phone');
+            $table->string('email');
+            $table->enum('status',['ACTIVE','SUSPENDED']);
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->timestamps();
@@ -26,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contributor_types');
+        Schema::dropIfExists('districts');
     }
 };

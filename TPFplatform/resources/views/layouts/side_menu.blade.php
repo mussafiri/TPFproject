@@ -7,7 +7,6 @@
                             <li>
                                 <a href="#sidebarDashboards" data-toggle="collapse">
                                     <i data-feather="airplay"></i>
-                                    <span class="badge badge-success badge-pill float-right">4</span>
                                     <span> Dashboards </span>
                                 </a>
                                 <div class="collapse" id="sidebarDashboards">

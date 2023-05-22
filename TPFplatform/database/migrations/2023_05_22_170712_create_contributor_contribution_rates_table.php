@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contributor_types', function (Blueprint $table) {
+        Schema::create('contributor_contribution_rates', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->integer('contributor_type_id');
+            $table->integer('salutation_id');
+            $table->integer('contribution_rate');
             $table->enum('status', ['ACTIVE','SUSPENDED'])->default('ACTIVE');
-            $table->integer('created_by');
-            $table->integer('updated_by');
+            $table->string('created_by');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contributor_types');
+        Schema::dropIfExists('contributor_contribution_rates');
     }
 };

@@ -174,25 +174,26 @@
 
                     <!-- LOGO -->
                     <div class="logo-box">
-                        <a href="index.html" class="logo logo-dark text-center">
+                         {{--<a href="index.html" class="logo logo-dark text-center">
                             <span class="logo-sm">
-                                <img src="../assets/images/logo-sm.png" alt="" height="22">
+                                 <img src="https://www.tpf.or.tz/images/logo.jpg" alt="" height="22">
                                 <!-- <span class="logo-lg-text-light">UBold</span> -->
                             </span>
                             <span class="logo-lg">
-                                <img src="../assets/images/logo-dark.png" alt="" height="20">
+                                 <img src="https://www.tpf.or.tz/images/logo.jpg" alt="" height="22">
                                 <!-- <span class="logo-lg-text-light">U</span> -->
                             </span>
                         </a>
     
                         <a href="index.html" class="logo logo-light text-center">
                             <span class="logo-sm">
-                                <img src="../assets/images/logo-sm.png" alt="" height="22">
+                                 <img src="https://www.tpf.or.tz/images/logo.jpg" alt="" height="22">
                             </span>
                             <span class="logo-lg">
-                                <img src="../assets/images/logo-light.png" alt="" height="20">
+                                 <img src="https://www.tpf.or.tz/images/logo.jpg" alt="" height="22">
                             </span>
-                        </a>
+                        </a> --}}
+                        <h2 class="text-center text-white">TPF</h2>
                     </div>
                     
                     <div class="clearfix"></div>
