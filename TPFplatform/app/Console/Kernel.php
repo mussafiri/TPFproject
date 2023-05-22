@@ -7,6 +7,12 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+    protected $commands = [
+        commands\ContributorsUpload::class,
+        commands\MembersUpload::class,
+        commands\ContributionsUpload::class,
+    ];
+    
     /**
      * Define the application's command schedule.
      */
