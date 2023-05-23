@@ -11,8 +11,10 @@ class Kernel extends ConsoleKernel
         commands\ContributorsUpload::class,
         commands\MembersUpload::class,
         commands\ContributionsUpload::class,
+        commands\UsersUpload::class,
+        commands\SectionsUpload::class,
     ];
-    
+
     /**
      * Define the application's command schedule.
      */

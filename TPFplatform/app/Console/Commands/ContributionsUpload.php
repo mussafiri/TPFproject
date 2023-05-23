@@ -5,25 +5,25 @@ namespace App\Console\Commands;
 use App\Models\Contribution;
 use Illuminate\Console\Command;
 
-class ContributionsUpload extends Command
-{
+class ContributionsUpload extends Command {
     /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'app:contributions-upload';
+    * The name and signature of the console command.
+    *
+    * @var string
+    */
+    protected $signature = 'app:contributionsUpload';
 
     /**
-     * The console command description.
-     *
-     * @var string
-     */
+    * The console command description.
+    *
+    * @var string
+    */
     protected $description = 'Command description';
 
     /**
-     * Execute the console command.
-     */
+    * Execute the console command.
+    */
+
     public function handle() {
         $this->init();
     }

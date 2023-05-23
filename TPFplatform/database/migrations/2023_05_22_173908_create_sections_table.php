@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
+            $table->integer('district_id');
+            $table->string('section_code');
+            $table->string('name');
+            $table->string('postal_address');
+            $table->string('physical_address');
+            $table->string('phone');
+            $table->string('email');
+            $table->enum('status',['ACTIVE','SUSPENDED']);
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }

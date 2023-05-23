@@ -30,9 +30,9 @@
                             <li class="menu-title mt-2">Apps</li>
 
                             <li>
-                                <a href="apps-calendar.html">
+                                <a href="{{url('defaultpage')}}">
                                     <i data-feather="calendar"></i>
-                                    <span> Calendar </span>
+                                    <span> Default Page </span>
                                 </a>
                             </li>
 

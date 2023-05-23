@@ -11,20 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contributors', function (Blueprint $table) {
+        Schema::create('contributor_contact_people', function (Blueprint $table) {
             $table->id();
-            $table->integer('section_id');
-            $table->string('contributor_code');
+            $table->integer('contributor_id');
             $table->string('name');
-            $table->integer('contributor_type_id');
-            $table->string('postal_address');
-            $table->string('physical_address');
+            $table->string('title');
             $table->string('phone');
             $table->string('email');
             $table->enum('status',['ACTIVE','SUSPENDED']);
-            $table->string('reg_form')->default('NULL');
-            $table->string('created_by');
-            $table->string('updated_by');
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }
@@ -34,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contributors');
+        Schema::dropIfExists('contributor_contact_people');
     }
 };

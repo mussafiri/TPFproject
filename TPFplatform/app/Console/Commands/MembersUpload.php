@@ -12,7 +12,7 @@ class MembersUpload extends Command
      *
      * @var string
      */
-    protected $signature = 'app:members-upload';
+    protected $signature = 'app:membersUpload';
 
     /**
      * The console command description.

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('contribution_rate');
             $table->enum('status', ['ACTIVE','SUSPENDED'])->default('ACTIVE');
             $table->string('created_by');
+            $table->string('updated_by');
             $table->timestamps();
         });
     }
