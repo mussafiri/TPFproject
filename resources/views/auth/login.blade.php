@@ -55,7 +55,7 @@
                                     <div class="form-group mb-3">
                                         <label for="emailaddress">Email address</label>
                                         <input class="form-control" type="email" name="email" :value="old('email')" required autofocus autocomplete="username"  placeholder="Enter your email">
-                                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                                         <x-input-error :messages="$errors->get('email')" class="mt-2 text-danger" />
                                     </div>
 
                                     <div class="form-group mb-3">
