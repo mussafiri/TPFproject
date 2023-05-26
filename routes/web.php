@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContributorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +31,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     //::::::::::::::::::::::::::::::::::::::::::::::::ZONES ROUTES :::::::::::::::::::::::::::::::::::::::::
-    
+
+    //START:: Contributor
+    Route::get('contributors/category', [ContributorController::class, 'contributorsCategory'])->name('contributors.category');
+    Route::get('contributors/list', [ContributorController::class, 'contributors'])->name('contributors.list');
+    //END:: Contributor
 });
 
 require __DIR__.'/auth.php';
