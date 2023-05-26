@@ -3,6 +3,7 @@
 use App\Http\Controllers\ContributorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ZoneController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -31,6 +32,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     //::::::::::::::::::::::::::::::::::::::::::::::::ZONES ROUTES :::::::::::::::::::::::::::::::::::::::::
+    Route::get('/contributors/zones', [ZoneController::class, 'zones']);
+
+    
 
     //START:: Contributor
     Route::get('contributors/category', [ContributorController::class, 'contributorsCategory'])->name('contributors.category');
