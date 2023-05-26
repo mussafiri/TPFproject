@@ -55,56 +55,46 @@
                                         <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100">
                                             <thead>
                                                 <tr>
+                                                    <th>#</th>
                                                     <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
-                                                    <th>Age</th>
-                                                    <th>Start date</th>
-                                                    <th>Salary</th>
+                                                    <th>Status</th>
+                                                    <th>Created by</th>
+                                                    <th>Created at</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
 
                                             <tbody>
+                                            @php $n=1; @endphp
+                                            @foreach($contrCateg AS $data)
                                                 <tr>
-                                                    <td>Tiger Nixon</td>
-                                                    <td>System Architect</td>
-                                                    <td>Edinburgh</td>
-                                                    <td>61</td>
-                                                    <td>2011/04/25</td>
-                                                    <td>$320,800</td>
+                                                    <td>{{$n}}.</td>
+                                                    <td>{{$data->name}}</td>
+                                                    <td><span class="badge badge-outline-{{$data->status=='ACTIVE'?'success':'danger'}} badge-pill">{{$data->status}}</span></td>
+                                                    <td><small>{{$data->created_by->fname.' '.$data->created_by->mname.' '.$data->created_by->lname}}</small></td>
+                                                    <td><small>{{date('D M Y', strtotime($data->created_at))}}</small></td>
+                                                    <td>
+                                                         <div class="dropdown float-right">
+                                                            <a href="#" class="dropdown-toggle arrow-none text-muted"
+                                                                data-toggle="dropdown" aria-expanded="false">
+                                                                <i class='mdi mdi-dots-horizontal font-18'></i>
+                                                            </a>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <a href="javascript:void(0);" class="dropdown-item">
+                                                                    <i class='mdi mdi-pencil-outline mr-1'></i>Edit
+                                                                </a>
+                                                                <div class="dropdown-divider"></div>
+                                                                <!-- item-->
+                                                                <a href="javascript:void(0);" class="dropdown-item text-danger">
+                                                                    <i class='mdi mdi-close-thick mr-1'></i>Suspend
+                                                                </a>
+                                                            </div> <!-- end dropdown menu-->
+                                                        </div>
+                                                    </td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Garrett Winters</td>
-                                                    <td>Accountant</td>
-                                                    <td>Tokyo</td>
-                                                    <td>63</td>
-                                                    <td>2011/07/25</td>
-                                                    <td>$170,750</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Ashton Cox</td>
-                                                    <td>Junior Technical Author</td>
-                                                    <td>San Francisco</td>
-                                                    <td>66</td>
-                                                    <td>2009/01/12</td>
-                                                    <td>$86,000</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Cedric Kelly</td>
-                                                    <td>Senior Javascript Developer</td>
-                                                    <td>Edinburgh</td>
-                                                    <td>22</td>
-                                                    <td>2012/03/29</td>
-                                                    <td>$433,060</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Airi Satou</td>
-                                                    <td>Accountant</td>
-                                                    <td>Tokyo</td>
-                                                    <td>33</td>
-                                                    <td>2008/11/28</td>
-                                                    <td>$162,700</td>
-                                                </tr>
+                                            @php $n++; @endphp
+                                            @endforeach
+                                                
                                             </tbody>
                                         </table>
                                     </div> <!-- end .table-responsive-->
