@@ -1,188 +1,115 @@
-
 @extends('layouts.admin_main')
+@section('custom_css')
+<!-- third party css -->
+<link href="{{asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{asset('assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{asset('assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{asset('assets/libs/datatables.net-select-bs4/css//select.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+<!-- third party css end -->
+@endsection
 @section('content')
-                <div class="content">
+<div class="content">
 
-                    <!-- Start Content-->
-                    <div class="container-fluid">
+    <!-- Start Content-->
+    <div class="container-fluid">
 
-                        <!-- start page title -->
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="page-title-box">
-                                    <div class="page-title-right">
-                                        <form class="form-inline">
-                                            <div class="form-group">
-                                                <div class="input-group input-group-sm">
-                                                    <input type="text" class="form-control border" id="dash-daterange">
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text bg-blue border-blue text-white">
-                                                            <i class="mdi mdi-calendar-range"></i>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <a href="javascript: void(0);" class="btn btn-blue btn-sm ml-2">
-                                                <i class="mdi mdi-autorenew"></i>
-                                            </a>
-                                            <a href="javascript: void(0);" class="btn btn-blue btn-sm ml-1">
-                                                <i class="mdi mdi-filter-variant"></i>
-                                            </a>
-                                        </form>
-                                    </div>
-                                    <h4 class="page-title">Dashboard </h4>
-                                </div>
-                            </div>
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{{url('/contributors')}}">Contributors</a></li>
+                            <li class="breadcrumb-item active">Zones</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Zones</h4>
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+
+        <!-- end row-->
+        <div class="row">
+            <div class="col-12">
+                <div class="card-box">
+                    <div class="dropdown float-right">
+                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
+                            <i class="mdi mdi-dots-vertical"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <!-- item-->
+                            <a href="javascript:void(0);" class="dropdown-item">Edit Report</a>
+                            <!-- item-->
+                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
+                            <!-- item-->
+                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
                         </div>
-                        <!-- end page title -->
+                    </div>
 
-                        <div class="row">
-                            <div class="col-md-6 col-xl-3">
-                                <div class="widget-rounded-circle card-box">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="avatar-lg rounded-circle bg-soft-primary border-primary border">
-                                                <i class="fe-heart font-22 avatar-title text-primary"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="text-right">
-                                                <h3 class="mt-1">$<span data-plugin="counterup">58,947</span></h3>
-                                                <p class="text-muted mb-1 text-truncate">Total Revenue</p>
-                                            </div>
-                                        </div>
-                                    </div> <!-- end row-->
-                                </div> <!-- end widget-rounded-circle-->
-                            </div> <!-- end col-->
+                    <h4 class="header-title mb-3">List of Zones</h4>
 
-                            <div class="col-md-6 col-xl-3">
-                                <div class="widget-rounded-circle card-box">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="avatar-lg rounded-circle bg-soft-success border-success border">
-                                                <i class="fe-shopping-cart font-22 avatar-title text-success"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="text-right">
-                                                <h3 class="text-dark mt-1"><span data-plugin="counterup">127</span></h3>
-                                                <p class="text-muted mb-1 text-truncate">Today's Sales</p>
-                                            </div>
-                                        </div>
-                                    </div> <!-- end row-->
-                                </div> <!-- end widget-rounded-circle-->
-                            </div> <!-- end col-->
+                    <div class="table-responsive">
+                        <table id="datatable-buttons" class="table table-sm table-striped dt-responsive nowrap w-100">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Zone code</th>
+                                    <th>Name</th>
+                                    <th>Postal Address</th>
+                                    <th>Physical Address</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php  $x=1;  @endphp
+                                @foreach ($zones as $data)
+                                    <tr>
+                                        <td>{{$x}}</td>
+                                        <td>{{$data->zone_code}}</td>
+                                        <td>{{$data->name}}</td>
+                                        <td>{{$data->postal_address}}</td>
+                                        <td>{{$data->physical_address}}</td>
+                                        <td>{{$data->phone}}</td>
+                                        <td>{{$data->email}}</td>
+                                        <td>{{$data->status}}</td>
+                                    </tr>
+                                    @php $x++; @endphp
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div> <!-- end .table-responsive-->
+                </div> <!-- end card-box-->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
 
-                            <div class="col-md-6 col-xl-3">
-                                <div class="widget-rounded-circle card-box">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="avatar-lg rounded-circle bg-soft-info border-info border">
-                                                <i class="fe-bar-chart-line- font-22 avatar-title text-info"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="text-right">
-                                                <h3 class="text-dark mt-1"><span data-plugin="counterup">0.58</span>%</h3>
-                                                <p class="text-muted mb-1 text-truncate">Conversion</p>
-                                            </div>
-                                        </div>
-                                    </div> <!-- end row-->
-                                </div> <!-- end widget-rounded-circle-->
-                            </div> <!-- end col-->
+    </div> <!-- container -->
 
-                            <div class="col-md-6 col-xl-3">
-                                <div class="widget-rounded-circle card-box">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="avatar-lg rounded-circle bg-soft-warning border-warning border">
-                                                <i class="fe-eye font-22 avatar-title text-warning"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="text-right">
-                                                <h3 class="text-dark mt-1"><span data-plugin="counterup">78.41</span>k</h3>
-                                                <p class="text-muted mb-1 text-truncate">Today's Visits</p>
-                                            </div>
-                                        </div>
-                                    </div> <!-- end row-->
-                                </div> <!-- end widget-rounded-circle-->
-                            </div> <!-- end col-->
-                        </div>
-                        <!-- end row-->
-
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="card-box">
-                                    <div class="dropdown float-right">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                                            <i class="mdi mdi-dots-vertical"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                        </div>
-                                    </div>
-
-                                    <h4 class="header-title mb-0">Total Revenue</h4>
-
-                                    <div class="widget-chart text-center" dir="ltr">
-
-                                        <div id="total-revenue" class="mt-0"  data-colors="#f1556c"></div>
-
-                                        <h5 class="text-muted mt-0">Total sales made today</h5>
-                                        <h2>$178</h2>
-
-                                        <p class="text-muted w-75 mx-auto sp-line-2">Traditional heading elements are designed to work best in the meat of your page content.</p>
-
-                                        <div class="row mt-3">
-                                            <div class="col-4">
-                                                <p class="text-muted font-15 mb-1 text-truncate">Target</p>
-                                                <h4><i class="fe-arrow-down text-danger mr-1"></i>$7.8k</h4>
-                                            </div>
-                                            <div class="col-4">
-                                                <p class="text-muted font-15 mb-1 text-truncate">Last week</p>
-                                                <h4><i class="fe-arrow-up text-success mr-1"></i>$1.4k</h4>
-                                            </div>
-                                            <div class="col-4">
-                                                <p class="text-muted font-15 mb-1 text-truncate">Last Month</p>
-                                                <h4><i class="fe-arrow-down text-danger mr-1"></i>$15k</h4>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div> <!-- end card-box -->
-                            </div> <!-- end col-->
-
-                            <div class="col-lg-8">
-                                <div class="card-box pb-2">
-                                    <div class="float-right d-none d-md-inline-block">
-                                        <div class="btn-group mb-2">
-                                            <button type="button" class="btn btn-xs btn-light">Today</button>
-                                            <button type="button" class="btn btn-xs btn-light">Weekly</button>
-                                            <button type="button" class="btn btn-xs btn-secondary">Monthly</button>
-                                        </div>
-                                    </div>
-
-                                    <h4 class="header-title mb-3">Sales Analytics</h4>
-
-                                    <div dir="ltr">
-                                        <div id="sales-analytics" class="mt-4" data-colors="#1abc9c,#4a81d4"></div>
-                                    </div>
-                                </div> <!-- end card-box -->
-                            </div> <!-- end col-->
-                        </div>
-                        <!-- end row -->
-
-                    </div> <!-- container -->
-
-                </div> <!-- content -->
+</div> <!-- content -->
 
 
+@endsection
+@section('custom_script')
+<!-- third party js -->
+<script src="{{asset('assets/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.flash.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
+<script src="{{asset('assets/libs/datatables.net-select/js/dataTables.select.min.js')}}"></script>
+<script src="{{asset('assets/libs/pdfmake/build/pdfmake.min.js')}}"></script>
+<script src="{{asset('assets/libs/pdfmake/build/vfs_fonts.js')}}"></script>
+<!-- third party js ends -->
+
+<!-- Datatables init -->
+<script src="{{asset('assets/js/pages/datatables.init.js')}}"></script>
 @endsection
