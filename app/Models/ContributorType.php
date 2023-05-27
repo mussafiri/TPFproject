@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class ContributorType extends Model
 {
     use HasFactory;
+
+
+    protected $guarded=[];
+
+
+    public function created_by() {
+        return $this->belongsTo( User::class, "created_by" );
+    }
+
 }
