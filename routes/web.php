@@ -34,11 +34,17 @@ Route::middleware('auth')->group(function () {
     //::::::::::::::::::::::::::::::::::::::::::::::::ZONES ROUTES :::::::::::::::::::::::::::::::::::::::::
     Route::get('/contributors/zones', [ZoneController::class, 'zones']);
 
-    
+
 
     //START:: Contributor
     Route::get('contributors/category', [ContributorController::class, 'contributorsCategory'])->name('contributors.category');
-    Route::get('contributors/list', [ContributorController::class, 'contributors'])->name('contributors.list');
+    Route::post('submit/add/contributor/category', [ContributorController::class, 'submitNewContributorsCategory']);
+    Route::post('ajax/get/contri/category/data', [ContributorController::class, 'ajaxGetContributorsCategory']);
+    Route::post('submit/edit/contributor/category', [ContributorController::class, 'submitEditContributorsCategory']);
+    Route::post('/ajax/change/category/status', [ContributorController::class, 'changeContributorsCategoryStatus']);
+
+
+    Route::get('contributors', [ContributorController::class, 'contributors'])->name('contributors.list');
     //END:: Contributor
 });
 

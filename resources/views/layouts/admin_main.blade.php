@@ -40,7 +40,7 @@
                 <div class="h-100" data-simplebar>
 
                     <!-- User box -->
-        
+
                     <!--- Sidemenu -->
                     @include('layouts.side_menu')
                     <!-- End Sidebar -->
@@ -76,7 +76,6 @@
         <!-- /Right-bar -->
 
         <!-- Right bar overlay-->
-        <div class="rightbar-overlay"></div>
 
         <!-- Vendor js -->
         <script src="{{asset('assets/js/vendor.min.js')}}"></script>
