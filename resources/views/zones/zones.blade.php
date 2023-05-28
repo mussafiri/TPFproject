@@ -51,17 +51,18 @@
                     <h4 class="header-title mb-3">List of Zones</h4>
 
                     <div class="table-responsive">
-                        <table id="datatable-buttons" class="table table-sm table-striped dt-responsive nowrap w-100">
+                        <table class="table table-sm font-12 table-striped dt-responsive nowrap w-100 datatable-buttons">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Zone code</th>
                                     <th>Name</th>
                                     <th>Postal Address</th>
                                     <th>Physical Address</th>
                                     <th>Phone</th>
                                     <th>Email</th>
+                                    <th>Created</th>
                                     <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -69,13 +70,14 @@
                                 @foreach ($zones as $data)
                                     <tr>
                                         <td>{{$x}}</td>
-                                        <td>{{$data->zone_code}}</td>
                                         <td>{{$data->name}}</td>
                                         <td>{{$data->postal_address}}</td>
                                         <td>{{$data->physical_address}}</td>
                                         <td>{{$data->phone}}</td>
                                         <td>{{$data->email}}</td>
-                                        <td>{{$data->status}}</td>
+                                        <td>{{date('d M Y', strtotime($data->created_at))}}&nbsp;<span class="text-muted font-8">{{date('H:i', strtotime($data->created_at))}}</span></td>
+                                        <td><span class="badge badge-soft-{{$data->status=='ACTIVE'?'success':'danger';}}">{{$data->status}}</span></td>
+                                        <td></td>
                                     </tr>
                                     @php $x++; @endphp
                                 @endforeach

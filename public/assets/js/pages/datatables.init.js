@@ -5,8 +5,8 @@ $(document).ready(function () {
             $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
         },
     });
-    var a = $("#datatable-buttons").DataTable({
-        
+    var a = $(".datatable-buttons").DataTable({
+        scrollX: !0,
         buttons: [
             { extend: "copy", className: "btn-light" },
             { extend: "print", className: "btn-light" },
