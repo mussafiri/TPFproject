@@ -26,6 +26,7 @@ class ZoneController extends Controller
          $valid = Validator::make( $request->all(), [
             'zone_name'=>'required|unique:zones,name|min:4',
             'code'=>'required|unique:zones,name|min:2',
+            'email'=>'email',
             'phy_address'=>'required'
         ] );
 
@@ -35,7 +36,6 @@ class ZoneController extends Controller
         }
 
         # END:: VALIDATION
-
         $zoneObject = new Zone;
         $zoneObject->zone_code = strtoupper($request->code);
         $zoneObject->name=strtoupper($request->zone_name);
@@ -45,12 +45,25 @@ class ZoneController extends Controller
         $zoneObject->email=strtolower($request->email);
         $zoneObject->created_by  = auth()->user()->id;
         $zoneObject->save();
-
+        
+        toastr();
         return redirect('contributors/zones')->with( [ 'success'=>'Zone has been successfully created' ] );
     }
-    public function ajaxZoneGetData() {
-        
+    public function ajaxZoneGetData(Request $ajaxreq) {
+        $id = $ajaxreq[ 'zone_id' ];
 
+        $zoneRow = Zone::find( $id );
+
+        if ( $zoneRow) {
+            $zone_data = Zone::where('id', $id )->first();
+            $zone_data[ 'status' ] = 'success';
+            $zone_data[ 'message' ] = 'Zone data has been Succefully fetched';
+            $zone_data[ 'data' ] = $zone_data;
+        } else {
+            $zone_data[ 'status' ] = 'Errors';
+            $zone_data[ 'message' ] = 'We could not find such Zone in our database';
+        }
+        return response()->json( [ 'zone_data'=>$zone_data ] );
     }
     public function updateZoneStatus(){
 
