@@ -89,9 +89,11 @@
 
         <!-- Dashboar 1 init js-->
         <script src="{{asset('assets/js/pages/dashboard-1.init.js')}}"></script>
+        <script src="../assets/libs/jquery-mask-plugin/jquery.mask.min.js"></script>
+
 
         <!-- App js-->
-        <script src="{{asset('assets/js/app.min.js')}}"></script>
+        <script src="{{{asset('assets/js/app.min.js')}}"></script>
 @yield('custom_script')
     </body>
 </html>

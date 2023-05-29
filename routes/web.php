@@ -33,6 +33,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     //::::::::::::::::::::::::::::::::::::::::::::::::ZONES ROUTES :::::::::::::::::::::::::::::::::::::::::
     Route::get('/contributors/zones', [ZoneController::class, 'zones']);
+    Route::get('/ajax/get/zone/data', [ZoneController::class, 'zoneUpdateAjax']);
+    
+
+
+
+    Route::post('/zone/register', [ZoneController::class, 'submitZones']);
 
     
 

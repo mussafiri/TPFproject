@@ -7,6 +7,7 @@ $(document).ready(function () {
     });
     var a = $(".datatable-buttons").DataTable({
         scrollX: !0,
+        scrollY: !1,
         buttons: [
             { extend: "copy", className: "btn-light" },
             { extend: "print", className: "btn-light" },
