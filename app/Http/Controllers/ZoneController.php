@@ -45,7 +45,7 @@ class ZoneController extends Controller
         $zoneObject->email=strtolower($request->email);
         $zoneObject->created_by  = auth()->user()->id;
         $zoneObject->save();
-        
+
         toastr();
         return redirect('contributors/zones')->with( [ 'success'=>'Zone has been successfully created' ] );
     }
@@ -53,7 +53,6 @@ class ZoneController extends Controller
         $id = $ajaxreq[ 'zone_id' ];
 
         $zoneRow = Zone::find( $id );
-
         if ( $zoneRow) {
             $zone_data = Zone::where('id', $id )->first();
             $zone_data[ 'status' ] = 'success';
