@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contributor;
 use App\Models\ContributorType;
+use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -75,7 +76,6 @@ class ContributorController extends Controller {
     }
 
     public function changeContributorsCategoryStatus( Request $request ) {
-        dd( $request->new_status );
         if ( $request->new_status == 'suspend' ) {
             $new_status = 'SUSPEND';
             $statusText = 'Suspended';
@@ -104,7 +104,78 @@ class ContributorController extends Controller {
     }
 
     public function contributors() {
-        $contributors = Contributor::all();
+        $contributors = Contributor::limit( 50 )->get();
         return view( 'contributor.contributors', [ 'contributors'=>$contributors ] );
+    }
+
+    public function addContributors() {
+        $contrTypes = ContributorType::where( 'status', 'ACTIVE' )->get();
+        $sections = Section::where( 'status', 'ACTIVE' )->get();
+
+        return view( 'contributor.contributor_add', [ 'contrTypes'=>$contrTypes, 'sections'=>$sections ] );
+    }
+
+    public function SubmitAddContributor( Request $request ) {
+        # START:: VALIDATION
+        $valid = Validator::make( $request->all(), [
+            'name' =>[ 'required', 'string' ],
+            'contributorType' =>[ 'required', 'integer' ],
+            'section' => 'required',
+            'postalAddress' => 'required',
+            'physicalAddress' => 'required',
+            'phone' => 'required',
+            'email' => 'required',
+            'regFormAttachment' => 'required'
+
+        ] );
+
+        if ( $valid->fails() ) {
+            return back()->withErrors( $valid, 'editContrCategory' )->withInput();
+        }
+        # END:: VALIDATION
+
+        #START::Handle File Upload Registration Form
+        if ( $request->hasFile( 'regFormAttachment' ) ) {
+            $filenameWithExt = $request->file( 'regFormAttachment' )->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
+            //Get just ext
+            $extension = $request->file( 'regFormAttachment' )->getClientOriginalExtension();
+            // Create new Filename
+            $newfilename = 'REGFRM_' . date( 'y' );
+            // FileName to Store
+            $fileNameToStore = $newfilename . '_' . time() . '.' . $extension;
+            // Upload Image
+            $path = $request->file( 'regFormAttachment' )->storeAs( 'public/contributorRegfrm', $fileNameToStore );
+        } else {
+            $fileNameToStore = 'NULL';
+        }
+        #END::Handle File Upload Registration Form
+
+        $addNewContributor = new Contributor;
+        $addNewContributor->section_id = $request->section;
+        $addNewContributor->contributor_code = $request->name;
+        $addNewContributor->name = $request->name;
+        $addNewContributor->contributor_type_id = $request->contributorType;
+        $addNewContributor->postal_address = $request->postalAddress;
+        $addNewContributor->physical_address = $request->physicalAddress;
+        $addNewContributor->phone = $request->phone;
+        $addNewContributor->email-$request->email;
+        $addNewContributor->status = 'ACTIVE';
+        $addNewContributor->reg_form = $fileNameToStore;
+        $addNewContributor->created_by = Auth::user()->id;
+        $addNewContributor->save();
+
+        if ( $addNewContributor instanceof Model ) {
+            toastr()->success( 'Data has been saved successfully!' );
+
+            return redirect()->route( 'posts.index' );
+        }
+
+        toastr()->error( 'An error has occurred please try again later.' );
+
+        return back();
+
+        return redirect()->route( 'contributor.contributors' )->with( 'success', 'Contributor Successfully Added' );
     }
 }

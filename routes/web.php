@@ -42,6 +42,8 @@ Route::middleware('auth')->group(function () {
     Route::post('ajax/get/contri/category/data', [ContributorController::class, 'ajaxGetContributorsCategory']);
     Route::post('submit/edit/contributor/category', [ContributorController::class, 'submitEditContributorsCategory']);
     Route::post('/ajax/change/category/status', [ContributorController::class, 'changeContributorsCategoryStatus']);
+    Route::get('/add/contributor', [ContributorController::class, 'addContributors']);
+    Route::get('/submit/add/contributor', [ContributorController::class, 'SubmitAddContributor']);
 
 
     Route::get('contributors', [ContributorController::class, 'contributors'])->name('contributors.list');

@@ -12,11 +12,11 @@ class Contributor extends Model {
         return $this->belongsTo( User::class, 'created_by' );
     }
 
-    public function section() {
-        return $this->belongsTo( Section::class, 'section_id' );
-    }
 
-    public function contributor_type() {
+    public function contributorType() {
         return $this->belongsTo( ContributorType::class, 'contributor_type_id' );
+    }
+    public function contributorSection() {
+        return $this->belongsTo( Section::class, 'section_id' );
     }
 }

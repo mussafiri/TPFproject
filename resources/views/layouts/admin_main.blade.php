@@ -22,6 +22,8 @@
         <link href="{{asset('assets/css/bootstrap-dark.min.css')}}" rel="stylesheet" type="text/css" id="bs-dark-stylesheet" />
         <link href="{{asset('assets/css/app-dark.min.css')}}" rel="stylesheet" type="text/css" id="app-dark-stylesheet" />
 
+            <!-- Plugins css -->
+        <link href="{{asset('assets/libs/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
         <!-- icons -->
         <link href="{{asset('assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
     @yield('custom_css')
@@ -89,6 +91,12 @@
         <!-- Dashboar 1 init js-->
         <script src="{{asset('assets/js/pages/dashboard-1.init.js')}}"></script>
 
+        <script src="{{asset('assets/libs/select2/js/select2.min.js')}}"></script>
+        <!-- Datatables init -->
+        <script src="{{asset('assets/js/pages/datatables.init.js')}}"></script>
+        <!-- Init js-->
+        <script src="{{asset('assets/js/pages/form-advanced.init.js')}}"></script>
+        
         <!-- App js-->
         <script src="{{asset('assets/js/app.min.js')}}"></script>
 @yield('custom_script')

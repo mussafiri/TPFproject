@@ -82,7 +82,7 @@
                                         <div class="tab-pane active" id="active">
 
                                                 <div class="table-responsive">
-                                                    <table id="datatable-buttons" class="table font-11 table-striped dt-responsive nowrap w-100">
+                                                    <table class="datatable-buttons table font-11 table-striped dt-responsive nowrap w-100">
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
@@ -103,7 +103,7 @@
                                                                 <td>{{$data->name}}</td>
                                                                 <td><span class="badge badge-outline-{{$data->status=='ACTIVE'?'success':'danger'}} badge-pill">{{$data->status}}</span></td>
                                                                 <td><small>{{$data->createdBy->fname.' '.$data->createdBy->mname.' '.$data->createdBy->lname}}</small></td>
-                                                                <td><small>{{date('D M Y', strtotime($data->created_at))}}</small></td>
+                                                                <td><small>{{date('d M Y', strtotime($data->created_at))}}</small></td>
                                                                 <td>
                                                                     <div class="dropdown float-right">
                                                                         <a href="#" class="dropdown-toggle arrow-none text-muted"
@@ -133,7 +133,7 @@
                                         <div class="tab-pane" id="suspended">
 
                                                 <div class="table-responsive">
-                                                    <table id="datatable-buttons" class="table font-11 table-striped dt-responsive nowrap w-100">
+                                                    <table class="datatable-buttons table font-11 table-striped dt-responsive nowrap w-100">
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
@@ -154,7 +154,7 @@
                                                                     <td>{{$data->name}}</td>
                                                                     <td><span class="badge badge-outline-{{$data->status=='ACTIVE'?'success':'danger'}} badge-pill">{{$data->status}}</span></td>
                                                                     <td><small>{{$data->createdBy->fname.' '.$data->createdBy->mname.' '.$data->createdBy->lname}}</small></td>
-                                                                    <td><small>{{date('D M Y', strtotime($data->created_at))}}</small></td>
+                                                                    <td><small>{{date('d M Y', strtotime($data->created_at))}}</small></td>
                                                                     <td>
                                                                         <div class="dropdown float-right">
                                                                             <a href="#" class="dropdown-toggle arrow-none text-muted"
