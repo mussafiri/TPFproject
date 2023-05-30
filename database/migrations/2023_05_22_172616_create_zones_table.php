@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('email');
             $table->enum('status',['ACTIVE','SUSPENDED']);
             $table->integer('created_by');
-            $table->integer('updated_by');
+            $table->integer('updated_by')->default(0);
             $table->timestamps();
         });
     }
