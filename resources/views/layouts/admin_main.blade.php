@@ -26,6 +26,9 @@
     <!-- icons -->
     <link href="{{asset('assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/fonts/flaticon_tpf_mcc.css')}}" rel="stylesheet" type="text/css" />
+    <!-- Plugins css -->
+    <link href="{{asset('assets/libs/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
+
     @yield('custom_css')
 </head>
 
@@ -64,40 +67,38 @@
             <!-- Footer Start -->
             @include('layouts.footer')
             <!-- end Footer -->
-
         </div>
-        <!-- ============================================================== -->
-        <!-- End Page content -->
-        <!-- ============================================================== -->
+        <!-- END wrapper -->
 
-    </div>
-    <!-- END wrapper -->
+        <!-- Right Sidebar -->
 
-    <!-- Right Sidebar -->
+        <!-- /Right-bar -->
 
-    <!-- /Right-bar -->
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
 
-    <!-- Right bar overlay-->
-    <div class="rightbar-overlay"></div>
+        <!-- Vendor js -->
+        <script src="{{asset('assets/js/vendor.min.js')}}"></script>
 
-    <!-- Vendor js -->
-    <script src="{{asset('assets/js/vendor.min.js')}}"></script>
+        <!-- Plugins js-->
+        <script src="{{asset('assets/libs/flatpickr/flatpickr.min.js')}}"></script>
+        <script src="{{asset('assets/libs/apexcharts/apexcharts.min.js')}}"></script>
 
-    <!-- Plugins js-->
-    <script src="{{asset('assets/libs/flatpickr/flatpickr.min.js')}}"></script>
-    <script src="{{asset('assets/libs/apexcharts/apexcharts.min.js')}}"></script>
+        <script src="{{asset('assets/libs/selectize/js/standalone/selectize.min.js')}}"></script>
 
-    <script src="{{asset('assets/libs/selectize/js/standalone/selectize.min.js')}}"></script>
+        <!-- Dashboar 1 init js-->
+        <script src="{{asset('assets/js/pages/dashboard-1.init.js')}}"></script>
+        <script src="{{asset('assets/libs/jquery-mask-plugin/jquery.mask.min.js')}}"></script>
 
-    <!-- Dashboar 1 init js-->
-    <script src="{{asset('assets/js/pages/dashboard-1.init.js')}}"></script>
-    <script src="{{asset('assets/libs/jquery-mask-plugin/jquery.mask.min.js')}}"></script>
-    <!-- Init js-->
-    <script src="{{asset('assets/js/pages/form-masks.init.js')}}"></script>
+        <script src="{{asset('assets/libs/select2/js/select2.min.js')}}"></script>
+        <!-- Init js-->
+        <script src="{{asset('assets/js/pages/form-advanced.init.js')}}"></script>
+        <!-- Init js-->
+        <script src="{{asset('assets/js/pages/form-masks.init.js')}}"></script>
+        <!-- App js-->
+        <script src="{{asset('assets/js/app.min.js')}}"></script>
 
+        @yield('custom_script')
+</body>
 
-    <!-- App js-->
-    <script src="{{asset('assets/js/app.min.js')}}"></script>
-@yield('custom_script')
-    </body>
 </html>

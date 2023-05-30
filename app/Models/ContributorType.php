@@ -12,9 +12,8 @@ class ContributorType extends Model
 
     protected $guarded=[];
 
-
-    public function created_by() {
-        return $this->belongsTo( User::class, "created_by" );
+    public function createdBy() {
+        return $this->belongsTo( User::class, 'created_by' );
     }
 
 }

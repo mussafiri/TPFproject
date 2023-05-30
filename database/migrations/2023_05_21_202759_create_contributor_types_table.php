@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->enum('status', ['ACTIVE','SUSPENDED'])->default('ACTIVE');
             $table->integer('created_by');
-            $table->integer('updated_by');
+            $table->integer('updated_by')->default(0);
             $table->timestamps();
         });
     }

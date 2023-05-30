@@ -52,10 +52,8 @@
                 </a>
                 <div class="collapse" id="sidebarContributors">
                     <ul class="nav-second-level">
-                        <li><a href="{{url('/contributors')}}">List</a></li>
-                        <li><a href="{{url('/contributors/zones')}}">Zones</a></li>
-                        <li><a href="{{url('/contributors/districts')}}">Districts </a></li>
-                        <li><a href="{{url('/contributors/sections')}}">Section </a></li>
+                        <li><a href="{{url('/contributors')}}">Contributors</a></li>
+                        <li><a href="{{url('/contributors/category')}}">Categories</a></li>
 
                     </ul>
                 </div>
