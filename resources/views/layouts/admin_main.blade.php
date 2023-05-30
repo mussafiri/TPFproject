@@ -91,12 +91,12 @@
         <!-- Dashboar 1 init js-->
         <script src="{{asset('assets/js/pages/dashboard-1.init.js')}}"></script>
 
+
         <script src="{{asset('assets/libs/select2/js/select2.min.js')}}"></script>
-        <!-- Datatables init -->
-        <script src="{{asset('assets/js/pages/datatables.init.js')}}"></script>
+
         <!-- Init js-->
         <script src="{{asset('assets/js/pages/form-advanced.init.js')}}"></script>
-        
+
         <!-- App js-->
         <script src="{{asset('assets/js/app.min.js')}}"></script>
 @yield('custom_script')

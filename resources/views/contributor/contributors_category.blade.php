@@ -133,7 +133,7 @@
                                         <div class="tab-pane" id="suspended">
 
                                                 <div class="table-responsive">
-                                                    <table class="datatable-buttons table font-11 table-striped dt-responsive nowrap w-100">
+                                                   <table class="datatable-buttons table font-11 table-striped dt-responsive nowrap w-100">
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
@@ -148,33 +148,33 @@
                                                         <tbody>
                                                         @php $n=1; @endphp
                                                         @foreach($contrCateg as $data)
-                                                            @if($data->status=="SUSPENDED")
-                                                                <tr>
-                                                                    <td>{{$n}}.</td>
-                                                                    <td>{{$data->name}}</td>
-                                                                    <td><span class="badge badge-outline-{{$data->status=='ACTIVE'?'success':'danger'}} badge-pill">{{$data->status}}</span></td>
-                                                                    <td><small>{{$data->createdBy->fname.' '.$data->createdBy->mname.' '.$data->createdBy->lname}}</small></td>
-                                                                    <td><small>{{date('d M Y', strtotime($data->created_at))}}</small></td>
-                                                                    <td>
-                                                                        <div class="dropdown float-right">
-                                                                            <a href="#" class="dropdown-toggle arrow-none text-muted"
-                                                                                data-toggle="dropdown" aria-expanded="false">
-                                                                                <i class='mdi mdi-dots-horizontal font-18'></i>
+                                                        @if($data->status=='SUSPENDED')
+                                                            <tr>
+                                                                <td>{{$n}}.</td>
+                                                                <td>{{$data->name}}</td>
+                                                                <td><span class="badge badge-outline-{{$data->status=='ACTIVE'?'success':'danger'}} badge-pill">{{$data->status}}</span></td>
+                                                                <td><small>{{$data->createdBy->fname.' '.$data->createdBy->mname.' '.$data->createdBy->lname}}</small></td>
+                                                                <td><small>{{date('d M Y', strtotime($data->created_at))}}</small></td>
+                                                                <td>
+                                                                    <div class="dropdown float-right">
+                                                                        <a href="#" class="dropdown-toggle arrow-none text-muted"
+                                                                            data-toggle="dropdown" aria-expanded="false">
+                                                                            <i class='mdi mdi-dots-horizontal font-18'></i>
+                                                                        </a>
+                                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                                            <a href="javascript:void(0);" class="dropdown-item contrCatEdit"  data-id="{{$data->id}}" data-toggle="modal" data-target="#edit_modal">
+                                                                                <i class='mdi mdi-pencil-outline mr-1'></i>Edit
                                                                             </a>
-                                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                                <a href="javascript:void(0);" class="dropdown-item contrCatEdit"  data-id="{{$data->id}}" data-toggle="modal" data-target="#edit_modal">
-                                                                                    <i class='mdi mdi-pencil-outline mr-1'></i>Edit
-                                                                                </a>
-                                                                                <div class="dropdown-divider"></div>
-                                                                                <!-- item-->
-                                                                                <a href="javascript:void(0);" class="dropdown-item change_category_status_swt_alert" data-id="{{$data->id}}" data-newstatus="activate">
-                                                                                    <i class='mdi mdi-check-bold mr-1'></i>Activate
-                                                                                </a>
-                                                                            </div> <!-- end dropdown menu-->
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            @php $n++; @endphp
+                                                                            <div class="dropdown-divider"></div>
+                                                                            <!-- item-->
+                                                                            <a href="javascript:void(0);" class="dropdown-item change_category_status_swt_alert" data-id="{{$data->id}}" data-newstatus="suspend">
+                                                                                <i class='mdi mdi-close-thick mr-1'></i>Suspend
+                                                                            </a>
+                                                                        </div> <!-- end dropdown menu-->
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        @php $n++; @endphp
                                                         @endif
                                                         @endforeach
                                                         </tbody>

@@ -115,23 +115,43 @@ class ContributorController extends Controller {
         return view( 'contributor.contributor_add', [ 'contrTypes'=>$contrTypes, 'sections'=>$sections ] );
     }
 
+    public function ajaxGetSectionData( Request $request ) {
+        $getSectionData = Section::find( $request->section_id );
+
+        $sectionDataArr = array();
+        if ( $getSectionData ) {
+            $sectionDataArr[ 'code' ] = 201;
+            $sectionDataArr[ 'district' ] = $getSectionData->district->name;
+            $sectionDataArr[ 'zone' ] = $getSectionData->district->zone->name;
+        } else {
+            $sectionDataArr[ 'code' ] = 403;
+            $sectionDataArr[ 'district_message' ] = 'District not found';
+            $sectionDataArr[ 'zone_message' ] = 'Zone not found';
+        }
+
+        return response()->json( [ 'sectionDataArr'=>$sectionDataArr ] );
+
+    }
+
     public function SubmitAddContributor( Request $request ) {
         # START:: VALIDATION
-        $valid = Validator::make( $request->all(), [
-            'name' =>[ 'required', 'string' ],
-            'contributorType' =>[ 'required', 'integer' ],
-            'section' => 'required',
+        $rules = [
+            'name' =>'required|string|unique:contributors,name',
+            'contributorType' =>'required|integer|gt:0',
+            'section' => 'required|integer|gt:0',
             'postalAddress' => 'required',
             'physicalAddress' => 'required',
-            'phone' => 'required',
-            'email' => 'required',
+            'phone' => 'required|unique:contributors,phone',
+            'email' => 'email|required|unique:contributors,email',
             'regFormAttachment' => 'required'
-
-        ] );
-
-        if ( $valid->fails() ) {
-            return back()->withErrors( $valid, 'editContrCategory' )->withInput();
-        }
+        ];
+    
+        $customMessages = [
+            'contributorType.gt:0' => 'You must select Contributor Type',
+            'section.gt:0' => 'Your must select Section',
+        ];
+    
+        $this->validate($request, $rules, $customMessages);
         # END:: VALIDATION
 
         #START::Handle File Upload Registration Form
@@ -146,7 +166,7 @@ class ContributorController extends Controller {
             // FileName to Store
             $fileNameToStore = $newfilename . '_' . time() . '.' . $extension;
             // Upload Image
-            $path = $request->file( 'regFormAttachment' )->storeAs( 'public/contributorRegfrm', $fileNameToStore );
+            $path = $request->file( 'regFormAttachment' )->storeAs( 'public/contributorRegfrms', $fileNameToStore );
         } else {
             $fileNameToStore = 'NULL';
         }
@@ -154,28 +174,38 @@ class ContributorController extends Controller {
 
         $addNewContributor = new Contributor;
         $addNewContributor->section_id = $request->section;
-        $addNewContributor->contributor_code = $request->name;
+        $addNewContributor->contributor_code = 'NULL';
         $addNewContributor->name = $request->name;
         $addNewContributor->contributor_type_id = $request->contributorType;
         $addNewContributor->postal_address = $request->postalAddress;
         $addNewContributor->physical_address = $request->physicalAddress;
         $addNewContributor->phone = $request->phone;
-        $addNewContributor->email-$request->email;
+        $addNewContributor->email=$request->email;
         $addNewContributor->status = 'ACTIVE';
         $addNewContributor->reg_form = $fileNameToStore;
         $addNewContributor->created_by = Auth::user()->id;
         $addNewContributor->save();
 
-        if ( $addNewContributor instanceof Model ) {
-            toastr()->success( 'Data has been saved successfully!' );
+        //START::put contributor code
+        $codeFormat = 'TPF-CN000000';
+        $newContributor =$addNewContributor->id;
+        $nextDig = mb_strlen((string) $newContributor);
+        $createNewCodeSpace=substr($codeFormat,0,-$nextDig);
+        $finalCode=$createNewCodeSpace.$newContributor;
 
-            return redirect()->route( 'posts.index' );
+        $putContributorCode = Contributor::find($addNewContributor->id);
+        $putContributorCode->contributor_code=$finalCode;
+        $putContributorCode->save();
+        //END::put contributor code
+
+        if ( $addNewContributor->save() ) {
+            toastr();
+
+            return redirect( 'contributor.contributors' )->with('success','Contributor Successfully Added!');
         }
 
-        toastr()->error( 'An error has occurred please try again later.' );
+        toastr();
 
-        return back();
-
-        return redirect()->route( 'contributor.contributors' )->with( 'success', 'Contributor Successfully Added' );
+        return redirect('add/contributor')->with('error','Opps! there was a problem to add Contributor, please try again later.');
     }
 }
