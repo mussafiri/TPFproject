@@ -35,10 +35,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/contributors/zones', [ZoneController::class, 'zones']);
     Route::get('/ajax/get/zone/data', [ZoneController::class, 'zoneUpdateAjax']);
     
-
-
-
+    Route::post('/ajax/update/zone/status', [ZoneController::class, 'ajaxUpdateZoneStatus']);
+    Route::post('/ajax/get/zone/data', [ZoneController::class, 'ajaxZoneGetData']);
     Route::post('/zone/register', [ZoneController::class, 'submitZones']);
+    Route::post('/zone/edit', [ZoneController::class, 'submitZoneEdit']);
 
     
 

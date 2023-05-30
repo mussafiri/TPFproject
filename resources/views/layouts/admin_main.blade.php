@@ -4,7 +4,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Dashboard | UBold - Responsive Admin Dashboard Template</title>
+    <title>TPF | Management System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
     <meta content="Coderthemes" name="author" />
@@ -25,6 +25,7 @@
 
     <!-- icons -->
     <link href="{{asset('assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/fonts/flaticon_tpf_mcc.css')}}" rel="stylesheet" type="text/css" />
     @yield('custom_css')
 </head>
 
