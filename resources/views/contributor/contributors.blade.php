@@ -38,7 +38,7 @@
                                             </div>
                                             <div class="col-sm-8">
                                                 <div class="text-sm-right">
-                                                    <a href="{{url('add/contributor')}}" class="btn btn-info mb-2 mr-1"><i class="mdi mdi-plus-circle mr-2"></i> Add Contributors</a>
+                                                    <a href="{{url('add/contributor')}}" class="btn btn-info mb-2 mr-1"><i class="mdi mdi-plus-thick mr-2"></i> Add Contributors</a>
                                                 </div>
                                             </div><!-- end col-->
                                         </div>

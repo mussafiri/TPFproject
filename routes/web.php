@@ -43,11 +43,11 @@ Route::middleware('auth')->group(function () {
 
 
     //START:: Contributor
-    Route::get('contributors/category', [ContributorController::class, 'contributorsCategory'])->name('contributors.category');
+    Route::get('contributor/categories/{status}', [ContributorController::class, 'contributorsCategory'])->name('contributors.category');
     Route::post('submit/add/contributor/category', [ContributorController::class, 'submitNewContributorsCategory']);
     Route::post('ajax/get/contri/category/data', [ContributorController::class, 'ajaxGetContributorsCategory']);
+    Route::post('ajax/change/contri/category/status', [ContributorController::class, 'ajaxUpdateContributorsCategoryStatus']);
     Route::post('submit/edit/contributor/category', [ContributorController::class, 'submitEditContributorsCategory']);
-    Route::post('/ajax/change/category/status', [ContributorController::class, 'changeContributorsCategoryStatus']);
     Route::get('/add/contributor', [ContributorController::class, 'addContributors']);
     Route::post('/ajax/get/section/data', [ContributorController::class, 'ajaxGetSectionData']);
     Route::post('/submit/add/contributor', [ContributorController::class, 'SubmitAddContributor']);

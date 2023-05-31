@@ -2,18 +2,54 @@
 
 namespace App\Http\Controllers;
 
+use App\Lib\Common;
 use App\Models\Contributor;
 use App\Models\ContributorType;
 use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 
 class ContributorController extends Controller {
 
-    public function contributorsCategory() {
-        $contrCateg = ContributorType::all();
-        return view( 'contributor.contributors_category', [ 'contrCateg'=>$contrCateg ] );
+    public function contributorsCategory($status) {
+        $status=Crypt::decryptString($status);
+        $contrCateg = ContributorType::where('status',$status)->get();
+        return view( 'contributor.contributor_categories', [ 'contrCateg'=>$contrCateg, 'status'=>$status ] );
+    }
+
+    public function ajaxUpdateContributorsCategoryStatus(Request $request){
+        #Taking all POST requests from the form
+        $valid = Validator::make($request->all(), [
+            'data_id' => 'required',
+            'new_status' => 'required'
+        ]);
+
+        if ($valid->fails()) {
+            return back()->withErrors($valid)->withInput();
+        }
+        
+        $new_status = $request->new_status == 'Suspend' ? 'SUSPENDED' : 'ACTIVE';
+        $new_message = $request->new_status == 'Suspend' ? 'Suspended' : 'Activated';
+
+        $contributorCategArr = array();
+    
+        $getContributorCateg = ContributorType::find($request->data_id);
+        if ($getContributorCateg) {
+            $updateContributorType = ContributorType::find($request->data_id);
+            $updateContributorType->status = $new_status;
+            $updateContributorType->updated_by = Auth::user()->id;
+            $updateContributorType->save();
+
+            $contributorCategArr['status'] = 'success';
+            $contributorCategArr['message'] = 'Contributors Category has been Successfully &nbsp;' . $new_message;
+        } else {
+            $contributorCategArr['status'] = 'Errors';
+            $contributorCategArr['message'] = 'We could not find such Contributors Category in our database!';
+        }
+
+        return response()->json(['contributorCategArr' => $contributorCategArr]);  
     }
 
     public function submitNewContributorsCategory( Request $request ) {
@@ -32,7 +68,7 @@ class ContributorController extends Controller {
         $addContributorType->created_by = Auth::user()->id;
         $addContributorType->save();
 
-        return redirect( 'contributors/category' )->with( [ 'success'=>'You have Successfully added new Contributor Category' ] );
+        return redirect( 'contributor/categories/'.Crypt::encryptString('ACTIVE') )->with( [ 'success'=>'You have Successfully added new Contributor Category' ] );
     }
 
     public function ajaxGetContributorsCategory( Request $request ) {
@@ -69,38 +105,14 @@ class ContributorController extends Controller {
         $addContributorType = ContributorType::find( $request->data_id );
         $addContributorType->name = strtoupper( $request->name );
         $addContributorType->updated_by = Auth::user()->id;
-        $addContributorType->save();
-
-        return redirect( 'contributors/category' )->with( [ 'success'=>'You have Successfully Updated a Contributor Category' ] );
-
-    }
-
-    public function changeContributorsCategoryStatus( Request $request ) {
-        if ( $request->new_status == 'suspend' ) {
-            $new_status = 'SUSPEND';
-            $statusText = 'Suspended';
-        } else {
-            $new_status = 'ACTIVE';
-            $statusText = 'Activated';
+        if($addContributorType->save()){
+            toastr();
+            return redirect( 'contributor/categories/'.Crypt::encryptString('ACTIVE') )->with('success','You have Successfully Updated a Contributor Category');
+        }else{
+            toastr();
+            return redirect( 'contributor/categories/'.Crypt::encryptString('ACTIVE') )->with('error','Something went wrong, redo the process');
         }
 
-        $dataChangeStatusArr = array();
-
-        $checkCategory = ContributorType::find( $request->data_id );
-        if ( $checkCategory ) {
-            $updateCategory = ContributorType::find( $request->data_id );
-            $updateCategory->status = $new_status;
-            $updateCategory->updated_by = Auth::user()->id;
-            $updateCategory->save();
-
-            $dataChangeStatusArr[ 'status' ] = 'success';
-            $dataChangeStatusArr[ 'message' ] = 'Contributor Category has Successfully '.$statusText;
-        } else {
-            $dataChangeStatusArr[ 'status' ] = 'Errors';
-            $dataChangeStatusArr[ 'message' ] = 'We could not find a Contributor Category in our database, Select a Contributor Category on the list to change status';
-        }
-
-        return response()->json( [ 'dataChangeStatusArr'=>$dataChangeStatusArr ] );
     }
 
     public function contributors() {
@@ -153,6 +165,7 @@ class ContributorController extends Controller {
     
         $this->validate($request, $rules, $customMessages);
         # END:: VALIDATION
+        $cmn= new Common;
 
         #START::Handle File Upload Registration Form
         if ( $request->hasFile( 'regFormAttachment' ) ) {
@@ -184,28 +197,19 @@ class ContributorController extends Controller {
         $addNewContributor->status = 'ACTIVE';
         $addNewContributor->reg_form = $fileNameToStore;
         $addNewContributor->created_by = Auth::user()->id;
-        $addNewContributor->save();
 
-        //START::put contributor code
-        $codeFormat = 'TPF-CN000000';
-        $newContributor =$addNewContributor->id;
-        $nextDig = mb_strlen((string) $newContributor);
-        $createNewCodeSpace=substr($codeFormat,0,-$nextDig);
-        $finalCode=$createNewCodeSpace.$newContributor;
-
-        $putContributorCode = Contributor::find($addNewContributor->id);
-        $putContributorCode->contributor_code=$finalCode;
-        $putContributorCode->save();
         //END::put contributor code
 
         if ( $addNewContributor->save() ) {
-            toastr();
+            $cmn -> contributorCodeGenerator($addNewContributor->id);
 
-            return redirect( 'contributor.contributors' )->with('success','Contributor Successfully Added!');
+            toastr()->success('Contributor Successfully Added!');
+
+            return redirect( 'contributors' );
         }
 
-        toastr();
+        toastr()->error('Opps! there was a problem to add Contributor, please try again later.');
 
-        return redirect('add/contributor')->with('error','Opps! there was a problem to add Contributor, please try again later.');
+        return redirect('add/contributor');
     }
 }

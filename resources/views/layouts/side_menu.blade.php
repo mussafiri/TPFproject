@@ -53,7 +53,7 @@
                 <div class="collapse" id="sidebarContributors">
                     <ul class="nav-second-level">
                         <li><a href="{{url('/contributors')}}">Contributors</a></li>
-                        <li><a href="{{url('/contributors/category')}}">Categories</a></li>
+                        <li><a href="{{url('contributor/categories/'.Crypt::encryptString('ACTIVE'))}}">Categories</a></li>
 
                     </ul>
                 </div>
