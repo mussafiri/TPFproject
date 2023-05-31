@@ -9,37 +9,49 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Zone;
+use App\Models\District;
+use App\Models\Section;
 
 
 class ZoneController extends Controller
 {
     //
+    public function section(){
+        $section = Section::all();
+        return view('zones.sections', ['sections'=>$section]);
+    }
+    public function districts(){
+        $districts = District::all();
+        return view('zones.districts', ['districts'=>$districts]);
+    }
     public function ajaxUpdateZoneStatus(Request $request){
         #Taking all POST requests from the form
         $valid = Validator::make($request->all(), [
             'zone' => 'required',
-            'new_status' => 'required'
+            'status' => 'required'
         ]);
 
         if ($valid->fails()) {
             return back()->withErrors($valid)->withInput();
         }
-        $status = $request->new_status;
-        $new_status = $request->new_status == 'Suspend' ? 'DORMANT' : 'ACTIVE';
-        $new_message = $request->new_status == 'Suspend' ? 'Suspended' : 'Activated';
+        $status = $request['status'];
+        $new_status = $status == 'suspend' ? 'SUSPENDED' : 'ACTIVE';
+        $message_status = $status == 'suspend' ? 'Suspended' : 'Activated';
 
         #Create an object for Database Storage
         $zoneStatusJSON = array();
         //array for ajax response
         $zone_id = $request['zone'];
-        $materialCatRow = Zone::find($zone_id);
-        if ($materialCatRow) {
+        $zoneRow = Zone::find($zone_id);
+        if ($zoneRow) {
             $zoneObj = Zone::find($zone_id);
             $zoneObj->status = $new_status;
             $zoneObj->updated_by = auth()->user()->id;
             $zoneObj->save();
+            
             $zoneStatusJSON['status'] = 'success';
-            $zoneStatusJSON['message'] = 'Zone has been Successfully &nbsp;' . $new_message;
+            $zoneStatusJSON['message'] = 'Zone <span class="text-info">'.$zoneRow->name.'</span> has been successfully &nbsp;';
+            $zoneStatusJSON['message_status'] = $message_status;
         } else {
             $zoneStatusJSON['status'] = 'Errors';
             $zoneStatusJSON['message'] = 'We could not find such Zone in our database!';
@@ -74,8 +86,12 @@ class ZoneController extends Controller
         toastr();
         return redirect('contributors/zones')->with([ 'success'=>'Zone has been updated successfully!' ]);
     }
+    public function suspendedZones(){
+        $zones = Zone::where("status","!=","ACTIVE")->get();
+        return view('zones.zones_suspended', ['zones'=>$zones]);
+    }
     public function zones(){
-        $zones = Zone::all();
+        $zones = Zone::where("status","ACTIVE")->get();
         return view('zones.zones', ['zones'=>$zones]);
     }
     public function submitZones(Request $request){
