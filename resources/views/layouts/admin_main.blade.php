@@ -90,6 +90,7 @@
         <script src="{{asset('assets/js/pages/dashboard-1.init.js')}}"></script>
         <script src="{{asset('assets/libs/jquery-mask-plugin/jquery.mask.min.js')}}"></script>
 
+
         <script src="{{asset('assets/libs/select2/js/select2.min.js')}}"></script>
         <!-- Init js-->
         <script src="{{asset('assets/js/pages/form-advanced.init.js')}}"></script>
