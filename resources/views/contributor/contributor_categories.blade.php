@@ -79,6 +79,7 @@
                                             </a>
                                         </li>
                                     </ul>
+                                    
                                     <div class="tab-content">
                                         <div class="tab-pane active">
 
@@ -105,21 +106,21 @@
                                                                 <td><small>{{$data->createdBy->fname.' '.$data->createdBy->mname.' '.$data->createdBy->lname}}</small></td>
                                                                 <td><small>{{date('d M Y', strtotime($data->created_at))}}</small></td>
                                                                 <td>
-                                                                    <div class="dropdown float-right">
-                                                                        <a href="#" class="dropdown-toggle arrow-none text-muted"
+                                                                    <div class="btn-group dropdown float-right">
+                                                                        <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-light btn-sm"
                                                                             data-toggle="dropdown" aria-expanded="false">
                                                                             <i class='mdi mdi-dots-horizontal font-18'></i>
                                                                         </a>
                                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                                            {{-- @if($status=='ACTIVE') --}}
+                                                                            @if($status=='ACTIVE')
                                                                             <a href="javascript:void(0);" class="dropdown-item contrCatEdit"  data-id="{{$data->id}}" data-toggle="modal" data-target="#edit_modal">
                                                                                 <i class='mdi mdi-pencil-outline mr-1'></i>Edit
                                                                             </a>
-                                                                            {{-- @endif   --}}
+                                                                            @endif  
                                                                             <div class="dropdown-divider"></div>
                                                                             <!-- item-->
                                                                             
-                                                                            <a href="javascript:void(0);" class="dropdown-item change_category_status_swt_alert" data-id="{{$data->id}}" data-newstatus="Suspend" data-name="{{$data->name}}">
+                                                                            <a href="javascript:void(0);" class="dropdown-item change_category_status_swt_alert" data-id="{{$data->id}}" data-newstatus="@if($data->status=='ACTIVE'){{'Suspend'}} @else {{'Activate'}}@endif" data-name="{{$data->name}}">
                                                                                 @if($data->status=='ACTIVE')
                                                                                 <i class='mdi mdi-close-thick mr-1'></i>Suspend
                                                                                 @else 

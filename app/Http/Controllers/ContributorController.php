@@ -9,6 +9,7 @@ use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ContributorController extends Controller {
@@ -95,7 +96,7 @@ class ContributorController extends Controller {
         $valid = Validator::make( $request->all(), [
             'name' =>[ 'required', 'string' ],
             'data_id' =>[ 'required', 'integer' ],
-        ] );
+        ]  );
 
         if ( $valid->fails() ) {
             return back()->withErrors( $valid, 'editContrCategory' )->withInput();
@@ -147,7 +148,7 @@ class ContributorController extends Controller {
 
     public function SubmitAddContributor( Request $request ) {
         # START:: VALIDATION
-        $rules = [
+        $request->validate([
             'name' =>'required|string|unique:contributors,name',
             'contributorType' =>'required|integer|gt:0',
             'section' => 'required|integer|gt:0',
@@ -156,14 +157,12 @@ class ContributorController extends Controller {
             'phone' => 'required|unique:contributors,phone',
             'email' => 'email|required|unique:contributors,email',
             'regFormAttachment' => 'required'
-        ];
-    
-        $customMessages = [
-            'contributorType.gt:0' => 'You must select Contributor Type',
-            'section.gt:0' => 'Your must select Section',
-        ];
-    
-        $this->validate($request, $rules, $customMessages);
+        ],
+        [
+            'contributorType.gt' => 'You must select Contributor Type',
+            'section.gt' => 'Your must select Section',
+        ]);
+
         # END:: VALIDATION
         $cmn= new Common;
 
@@ -211,5 +210,30 @@ class ContributorController extends Controller {
         toastr()->error('Opps! there was a problem to add Contributor, please try again later.');
 
         return redirect('add/contributor');
+    }
+
+    public function editContributors($contriID){
+        $contriID=Crypt::decryptString($contriID);
+
+        $contributorData=Contributor::find($contriID);
+
+        $contrTypes = ContributorType::where( 'status', 'ACTIVE' )->get();
+        $sections = Section::where( 'status', 'ACTIVE' )->get();
+        
+        //START:: Katick file inpunt Data
+        $fileInputArr=array();
+        if($contributorData->reg_form!='NULL'){
+            $fileInputArr["filePath"]=asset( 'storage/contributorRegfrms' ). '/' . $contributorData->reg_form;
+            $fileInputArr["finaleName"]=$contributorData->reg_form;
+            $fileInputArr["fileSize"]=Storage::disk( 'public' )->size( 'contributorRegfrms/' . $contributorData->reg_form );;
+        }else{
+            $fileInputArr["filePath"]='';
+            $fileInputArr["finaleName"]='';
+            $fileInputArr["fileSize"]=0;
+        }
+        // dd($fileInputArr);
+
+        //END:: Katick file inpunt Data
+        return view( 'contributor.contributor_edit', [ 'contrTypes'=>$contrTypes, 'sections'=>$sections, 'contributorData'=>$contributorData, 'fileInputArr'=>$fileInputArr ] );
     }
 }

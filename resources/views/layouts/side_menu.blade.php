@@ -44,17 +44,16 @@
                     </ul>
                 </div>
             </li>
-            <li>
+            <li class="@if(str_contains(url()->current(), 'contributors') || str_contains(url()->current(), 'contributor')){{'menuitem-active'}}@endif">
                 <a href="#sidebarContributors" data-toggle="collapse">
                     <i class="fa fas fa-church "></i>
                     <span> Contributors </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarContributors">
+                <div class="collapse @if(str_contains(url()->current(), 'contributors' || str_contains(url()->current(), 'contributor'))){{'show'}}@endif" id="sidebarContributors">
                     <ul class="nav-second-level">
-                        <li><a href="{{url('/contributors')}}">Contributors</a></li>
-                        <li><a href="{{url('contributor/categories/'.Crypt::encryptString('ACTIVE'))}}">Categories</a></li>
-
+                        <li class="@if(str_contains(url()->current(), 'contributors')){{'menuitem-active'}}@endif"><a href="{{url('contributors')}}">Contributors</a></li>
+                        <li class="@if(str_contains(url()->current(), 'contributor/categories')){{'menuitem-active'}}@endif"><a href="{{url('contributor/categories/'.Crypt::encryptString('ACTIVE'))}}">Categories</a></li>
                     </ul>
                 </div>
             </li>

@@ -38,7 +38,7 @@
                                             </div>
                                             <div class="col-sm-8">
                                                 <div class="text-sm-right">
-                                                    <a href="{{url('add/contributor')}}" class="btn btn-info mb-2 mr-1"><i class="mdi mdi-plus-thick mr-2"></i> Add Contributors</a>
+                                                    <a href="{{url('add/contributors')}}" class="btn btn-info mb-2 mr-1"><i class="mdi mdi-plus-thick mr-2"></i> Add Contributors</a>
                                                 </div>
                                             </div><!-- end col-->
                                         </div>
@@ -110,13 +110,13 @@
                                                                         <td>{{$data->contributorSection->name}}</td>
                                                                         <td><span class="badge badge-outline-{{$data->status=='ACTIVE'?'success':'danger'}} badge-pill">{{$data->status}}</span></td>
                                                                         <td>
-                                                                            <div class="dropdown float-right">
-                                                                                <a href="#" class="dropdown-toggle arrow-none text-muted"
+                                                                            <div class="btn-group dropdown float-right">
+                                                                                <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-light btn-sm"
                                                                                     data-toggle="dropdown" aria-expanded="false">
                                                                                     <i class='mdi mdi-dots-horizontal font-18'></i>
                                                                                 </a>
                                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                                    <a href="javascript:void(0);" class="dropdown-item contrEdit"  data-id="{{$data->id}}" data-toggle="modal" data-target="#edit_modal">
+                                                                                    <a href="{{url('edit/contributors/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
                                                                                         <i class='mdi mdi-pencil-outline mr-1'></i>Edit
                                                                                     </a>
                                                                                     <div class="dropdown-divider"></div>
@@ -134,64 +134,7 @@
                                                                 </tbody>
                                                             </table>
                                                         </div> <!-- end .table-responsive-->
-                                                    </div>
-                                                    <div class="tab-pane" id="suspended">
-
-                                                            <div class="table-responsive">
-                                                                <table class="datatable-buttons table font-11 table-striped dt-responsive nowrap w-100">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>#</th>
-                                                                        <th>Contributor Code</th>
-                                                                        <th>Contributor Name</th>
-                                                                        <th>Contributor Type</th>
-                                                                        {{-- <th>Zone</th>
-                                                                        <th>Distict</th> --}}
-                                                                        <th>Section</th>
-                                                                        <th>Status</th>
-                                                                        <th></th>
-                                                                    </tr>
-                                                                </thead>
-
-                                                                <tbody>
-                                                                @php $n=1; @endphp
-                                                                @foreach($contributors as $data)
-                                                                @if($data->status=='SUSPENDED')
-                                                                    <tr>
-                                                                        <td>{{$n}}.</td>
-                                                                        <td class="text-muted"><small>{{$data->contributor_code}}</small></td>
-                                                                        <td>{{$data->name}}</td>
-                                                                        <td>{{$data->contributorType->name}}</td>
-                                                                        {{-- <td>Zone</td>
-                                                                        <td>District</td> --}}
-                                                                        <td>Section</td>
-                                                                        <td><span class="badge badge-outline-{{$data->status=='ACTIVE'?'success':'danger'}} badge-pill">{{$data->status}}</span></td>
-                                                                        <td>
-                                                                            <div class="dropdown float-right">
-                                                                                <a href="#" class="dropdown-toggle arrow-none text-muted"
-                                                                                    data-toggle="dropdown" aria-expanded="false">
-                                                                                    <i class='mdi mdi-dots-horizontal font-18'></i>
-                                                                                </a>
-                                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                                    <a href="{{url('add/contributor')}}" class="dropdown-item"  data-id="{{$data->id}}">
-                                                                                        <i class='mdi mdi-pencil-outline mr-1'></i>Edit
-                                                                                    </a>
-                                                                                    <div class="dropdown-divider"></div>
-                                                                                    <!-- item-->
-                                                                                    <a href="javascript:void(0);" class="dropdown-item change_category_status_swt_alert" data-id="{{$data->id}}" data-newstatus="activate">
-                                                                                        <i class='mdi mdi-close-thick mr-1'></i>Activate
-                                                                                    </a>
-                                                                                </div> <!-- end dropdown menu-->
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                                @php $n++; @endphp
-                                                                @endif
-                                                                @endforeach
-                                                                </tbody>
-                                                            </table>
-                                                            </div> <!-- end .table-responsive-->
-                                                    </div>
+                                                    </div>>
                                                 </div>
                                                  <!-- end card-box-->
                                         </div> <!-- end col -->
@@ -210,26 +153,6 @@
         </div> <!-- content -->
 @endsection
 @section('custom_script')
-@if($errors->hasBag('addContrCategory'))
-    <script>
-        $(document).ready(function() {
-            $('#add_modal').modal({
-                show: true
-            });
-        });
-    </script>
-@endif
-@if($errors->hasBag('editContrCategory'))
-    <script>
-        $(document).ready(function() {
-            $('#edit_modal').modal({
-                show: true
-            });
-        });
-    </script>
-@endif
-
-
 <script>
     window.setTimeout(function() {
         $(".alert").fadeTo(1000, 0).slideUp(500, function() {
