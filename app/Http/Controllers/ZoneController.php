@@ -20,9 +20,39 @@ class ZoneController extends Controller
         $section = Section::all();
         return view('zones.sections', ['sections'=>$section]);
     }
+    public function submitDistrict(Request $request){
+        #Taking all POST requests from the form
+        $valid = Validator::make($request->all(), [
+            'district_name' => 'required|unique:zones,name|min:4',
+            'zone' => 'required|gt:0',
+            'email' => 'email',
+            'physicalAddress' => 'required'
+        ]);
+
+        if ( $valid->fails() ) {
+            #Returns errors with Error Bag 'registerDistrict'
+            return back()->withErrors( $valid, 'registerDistrict' )->withInput();
+        }
+
+        # END:: VALIDATION
+        $zoneObject = new Zone;
+        $zoneObject->zone_code = strtoupper($request->code);
+        $zoneObject->name=strtoupper($request->zone_name);
+        $zoneObject->postal_address=strtoupper($request->po_address);
+        $zoneObject->physical_address=strtoupper($request->phy_address);
+        $zoneObject->phone=$request->phone;
+        $zoneObject->email=strtolower($request->email);
+        $zoneObject->created_by  = auth()->user()->id;
+        $zoneObject->save();
+
+        toastr();
+        return redirect('contributors/districts')->with(['success'=>'District has been successfully created']);
+
+    }
     public function districts(){
         $districts = District::all();
-        return view('zones.districts', ['districts'=>$districts]);
+        $zones=Zone::where('status',"ACTIVE")->get();
+        return view('zones.districts', ['districts'=>$districts,"zones"=>$zones]);
     }
     public function ajaxUpdateZoneStatus(Request $request){
         #Taking all POST requests from the form
