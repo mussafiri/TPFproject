@@ -22,7 +22,7 @@
                                     <li class="breadcrumb-item active">Categories</li>
                                 </ol>
                             </div>
-                            <h4 class="page-title">Contributors</h4>
+                            <h4 class="page-title">Edit Contributor</h4>
                         </div>
                     </div>
                 </div>
@@ -54,8 +54,8 @@
                                                                     <div class="col-md-12">
                                                                         <div class="form-group">
                                                                             <label for="field-1" class="control-label">Contributor Name</label>
-                                                                            <input type="text" name="name" class="form-control form-control-sm" value="{{old('name')}}" oninput="this.value = this.value.toUpperCase()" id="field-1" placeholder="Contributor Name">
-                                                                            <span class="text-danger" role="alert"> {{ $errors->first('name') }}</span>
+                                                                            <input type="text" name="name" class="form-control form-control-sm" value="{{old('name', $contributorData->name)}}" oninput="this.value = this.value.toUpperCase()" id="field-1" placeholder="Contributor Name">
+                                                                            <span class="text-danger" role="alert"> <strong>{{ $errors->first('name') }}</strong></span>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6">
@@ -64,10 +64,10 @@
                                                                             <select class="form-control" name="contributorType" data-toggle="select2">
                                                                                 <option value="0"> -- Select Contributor Type --</option>
                                                                                 @foreach($contrTypes as $value)
-                                                                                <option  value="{{$value->id}}" {{old ('contributorType') == $value->id ? 'selected' : ''}}>{{$value->name}} </option>
+                                                                                <option  value="{{$value->id}}" {{old ('contributorType') == $value->id ? 'selected' : ''}} @if($contributorData->contributor_type_id==$value->id){{'selected'}} @endif>{{$value->name}} </option>
                                                                                 @endforeach
                                                                             </select>
-                                                                                <span class="text-danger" role="alert"> {{ $errors->first('contributorType') }}</span>
+                                                                            <span class="text-danger" role="alert"> <strong>{{ $errors->first('contributorType') }}</strong></span>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6">
@@ -76,11 +76,11 @@
                                                                             <select class="form-control sectionSelect" name="section" data-toggle="select2">
                                                                                 <option value="0"> -- Select Section --</option>
                                                                                 @foreach($sections as $value)
-                                                                                <option value="{{$value->id}}" {{old ('section') == $value->id ? 'selected' : ''}}>{{$value->name}} </option>
+                                                                                <option value="{{$value->id}}" {{old ('section') == $value->id ? 'selected' : ''}} @if($contributorData->section_id==$value->id){{'selected'}} @endif>{{$value->name}} </option>
                                                                                 @endforeach
                                                                             </select>
                                                                             <span class="text-danger" id="sectionError" role="alert"></span>
-                                                                            <span class="text-danger" role="alert"> {{ $errors->first('section') }}</span>
+                                                                            <span class="text-danger" role="alert"> <strong>{{ $errors->first('section') }}</strong></span>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6">
@@ -100,29 +100,29 @@
                                                                     <div class="col-md-6">
                                                                         <div class="form-group">
                                                                             <label for="field-3" class="control-label">Postal Address</label>
-                                                                            <input type="text" name="postalAddress" class="form-control form-control-sm"  value="{{old('postalAddress')}}" oninput="this.value = this.value.toUpperCase()"  id="field-4" placeholder="Postal Address" required>
-                                                                            <span class="text-danger" role="alert"> {{ $errors->first('postalAddress') }}</span>
+                                                                            <input type="text" name="postalAddress" class="form-control form-control-sm"  value="{{old('postalAddress', $contributorData->postal_address)}}" oninput="this.value = this.value.toUpperCase()"  id="field-4" placeholder="Postal Address" required>
+                                                                            <span class="text-danger" role="alert"> <strong>{{ $errors->first('postalAddress') }}</strong></span>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <div class="form-group">
                                                                             <label for="field-4" class="control-label">Physical Address</label>
-                                                                            <input type="text" name="physicalAddress" class="form-control form-control-sm"  value="{{old('physicalAddress')}}" oninput="this.value = this.value.toUpperCase()"  id="field-4" placeholder="Physical Address" required>
-                                                                            <span class="text-danger" role="alert"> {{ $errors->first('physicalAddress') }}</span>
+                                                                            <input type="text" name="physicalAddress" class="form-control form-control-sm"  value="{{old('physicalAddress', $contributorData->physical_address)}}" oninput="this.value = this.value.toUpperCase()"  id="field-4" placeholder="Physical Address" required>
+                                                                            <span class="text-danger" role="alert"> <strong>{{ $errors->first('physicalAddress') }}</strong></span>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <div class="form-group">
                                                                             <label for="field-5" class="control-label">Phone</label>
-                                                                            <input type="text" name="phone" class="form-control form-control-sm" id="field-5" value="{{old('phone')}}" placeholder="Phone" required>
-                                                                            <span class="text-danger" role="alert"> {{ $errors->first('phone') }}</span>
+                                                                            <input type="text" name="phone" class="form-control form-control-sm" id="field-5" value="{{old('phone', $contributorData->phone)}}" placeholder="Phone" required>
+                                                                            <span class="text-danger" role="alert"> <strong>{{ $errors->first('phone') }}</strong></span>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <div class="form-group">
                                                                             <label for="field-5" class="control-label">Email</label>
-                                                                            <input type="email" name="email" class="form-control form-control-sm" value="{{old('email')}}" oninput="this.value = this.value.toLowerCase()" id="field-5" placeholder="Email" required>
-                                                                            <span class="text-danger" role="alert"> {{ $errors->first('email') }}</span>
+                                                                            <input type="email" name="email" class="form-control form-control-sm" value="{{old('email', $contributorData->email)}}" oninput="this.value = this.value.toLowerCase()" id="field-5" placeholder="Email" required>
+                                                                            <span class="text-danger" role="alert"> <strong>{{ $errors->first('email') }}</strong></span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -132,7 +132,7 @@
                                                                         <div class="form-group">
                                                                             <label for="field-3" class="control-label">Registration Form</label>
                                                                             <input type="file" class="form-control kartik-input-705" name="regFormAttachment" id="field-4" placeholder="District" required>
-                                                                            <span class="text-danger" role="alert"> {{ $errors->first('regFormAttachment') }}</span>
+                                                                            <span class="text-danger" role="alert"> <strong>{{ $errors->first('regFormAttachment') }}</strong></span>
                                                                         </div>
                                                                     </div>
                                                             </div>
@@ -170,30 +170,86 @@
 </script>
 
 <script>
-     $(".kartik-input-705").fileinput({
-        theme: "explorer",
-        uploadUrl: '#',
-        allowedFileExtensions: ['jpg', 'jpeg','png', 'gif'],
-        overwriteInitial: false,
-        initialPreviewAsData: true,
-        maxFileSize: 2000,
-        maxTotalFileCount: 1,
-        showUpload : false,
-        showCancel : false,
-        dropZoneTitle:'<span>Drag & Drop images here to upload</span>',
-        fileActionSettings: {
-                showUpload: false,
-                showRemove: true,
+$(document).ready(function() {
+        var filePath = '{{$fileInputArr["filePath"]}}';
+        var fileName = '{{$fileInputArr["finaleName"]}}';
+        var fileSize = '{{$fileInputArr["fileSize"]}}';
+        if(fileSize > 0){
+            $(".kartik-input-705").fileinput({
+                theme: "explorer",
+                uploadUrl: '#',
+                allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif', 'PDF'],
+                showUpload : false,
+                showCancel : false,
+                showRemove : false,
+                maxFileSize: 2000,
+                maxTotalFileCount: 1,
+                fileActionSettings: {
+                    showUpload: false,
+                    showRemove: true,
                 },
-    });
+                initialPreviewAsData: true,
+                initialPreview: [filePath],
+                initialPreviewConfig: [{ type:"pdf",caption:fileName, downloadUrl:filePath, description: fileName, size: fileSize, width: "70px"}],
+                overwriteInitial: true,
+                maxFileSize: 2000,
+            });
+        }else{
+            $(".kartik-input-705").fileinput({
+                theme: "explorer",
+                uploadUrl: '#',
+                allowedFileExtensions: ['jpg', 'jpeg','png', 'gif'],
+                overwriteInitial: false,
+                initialPreviewAsData: true,
+                maxFileSize: 2000,
+                maxTotalFileCount: 1,
+                showUpload : false,
+                showCancel : false,
+                dropZoneTitle:'<span>Drag & Drop images here to upload</span>',
+                fileActionSettings: {
+                        showUpload: false,
+                        showRemove: true,
+                        },
+            });
+        }
+});
 </script>
 
 <script>
 //START:: On page load set defautl selection
     $(document).ready(function(){
         $('.sectionSelect option[value=0]').prop('selected', true);
-        $('#district').val('');
-        $('#zone').val('');
+         var section_id = $(this).find(":selected").val();
+        if (section_id ==0) {
+            $("#sectionError").html('Kindly, select a Section');
+            $('#district').val('');
+            $('#zone').val('');
+        } else {
+            $("#sectionError").html('');
+            $.ajax({
+                url: "{{url('/ajax/get/section/data')}}",
+                type: 'POST',
+                data: {
+                    section_id: section_id,
+                    _token: '{{ csrf_token() }}'
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if(response.sectionDataArr.code==201){
+                        $('.districtErrorTxt').html('');
+                        $('.zoneErrorTxt').html('');
+                        $('#district').val(response.sectionDataArr.district);
+                        $('#zone').val(response.sectionDataArr.zone);
+                    }else{
+                        $('.districtErrorTxt').html(response.sectionDataArr.district_message)
+                        $('.zoneErrorTxt').html(response.sectionDataArr.zone_message)
+                        $("#sectionError").html('Kindly select a Section');
+                    }
+                }
+            });
+        }
+
+
     });
 //END:: ON PAGE load
 

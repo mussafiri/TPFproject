@@ -7,6 +7,7 @@
         <link href="{{asset('assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
         <link href="{{asset('assets/libs/datatables.net-select-bs4/css//select.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
         <!-- third party css end -->
+        <link href="{{asset('assets/libs/sweetalert2/sweetalert2.min.css')}}" rel="stylesheet" type="text/css"/>
 @endsection
 @section('content')
         <div class="content">
@@ -39,7 +40,7 @@
                                             </div>
                                             <div class="col-sm-8">
                                                 <div class="text-sm-right">
-                                                    <button type="button" class="btn btn-info mb-2 mr-1" data-toggle="modal" data-target="#add_modal"><i class="mdi mdi-plus-circle mr-2"></i> Add Contributor Category</button>
+                                                    <button type="button" class="btn btn-info mb-2 mr-1" data-toggle="modal" data-target="#add_modal"><i class="mdi mdi-plus-thick mr-2"></i> Add Contributor Category</button>
                                                 </div>
                                             </div><!-- end col-->
                                         </div>
@@ -68,18 +69,19 @@
                                         <div class="col-12">
                                          <ul class="nav nav-tabs nav-bordered">
                                         <li class="nav-item">
-                                            <a href="#active" data-toggle="tab" aria-expanded="false" class="nav-link active">
+                                            <a href="{{url('contributor/categories/'.Crypt::encryptString('ACTIVE'))}}" aria-expanded="false" class="nav-link @if($status=='ACTIVE') {{'active'}} @endif">
                                                 Active
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="#suspended" data-toggle="tab" aria-expanded="true" class="nav-link">
+                                            <a href="{{url('contributor/categories/'.Crypt::encryptString('SUSPENDED'))}}" aria-expanded="true" class="nav-link @if($status=='SUSPENDED') {{'active'}} @endif">
                                                 Suspended
                                             </a>
                                         </li>
                                     </ul>
+                                    
                                     <div class="tab-content">
-                                        <div class="tab-pane active" id="active">
+                                        <div class="tab-pane active">
 
                                                 <div class="table-responsive">
                                                     <table class="datatable-buttons table font-11 table-striped dt-responsive nowrap w-100">
@@ -97,7 +99,6 @@
                                                         <tbody>
                                                         @php $n=1; @endphp
                                                         @foreach($contrCateg as $data)
-                                                        @if($data->status=='ACTIVE')
                                                             <tr>
                                                                 <td>{{$n}}.</td>
                                                                 <td>{{$data->name}}</td>
@@ -105,82 +106,38 @@
                                                                 <td><small>{{$data->createdBy->fname.' '.$data->createdBy->mname.' '.$data->createdBy->lname}}</small></td>
                                                                 <td><small>{{date('d M Y', strtotime($data->created_at))}}</small></td>
                                                                 <td>
-                                                                    <div class="dropdown float-right">
-                                                                        <a href="#" class="dropdown-toggle arrow-none text-muted"
+                                                                    <div class="btn-group dropdown float-right">
+                                                                        <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-light btn-sm"
                                                                             data-toggle="dropdown" aria-expanded="false">
                                                                             <i class='mdi mdi-dots-horizontal font-18'></i>
                                                                         </a>
                                                                         <div class="dropdown-menu dropdown-menu-right">
+                                                                            @if($status=='ACTIVE')
                                                                             <a href="javascript:void(0);" class="dropdown-item contrCatEdit"  data-id="{{$data->id}}" data-toggle="modal" data-target="#edit_modal">
                                                                                 <i class='mdi mdi-pencil-outline mr-1'></i>Edit
                                                                             </a>
+                                                                            @endif  
                                                                             <div class="dropdown-divider"></div>
                                                                             <!-- item-->
-                                                                            <a href="javascript:void(0);" class="dropdown-item change_category_status_swt_alert" data-id="{{$data->id}}" data-newstatus="suspend">
+                                                                            
+                                                                            <a href="javascript:void(0);" class="dropdown-item change_category_status_swt_alert" data-id="{{$data->id}}" data-newstatus="@if($data->status=='ACTIVE'){{'Suspend'}} @else {{'Activate'}}@endif" data-name="{{$data->name}}">
+                                                                                @if($data->status=='ACTIVE')
                                                                                 <i class='mdi mdi-close-thick mr-1'></i>Suspend
+                                                                                @else 
+                                                                                <i class='mdi mdi-check-bold mr-1'></i>Activate  
+                                                                                @endif
                                                                             </a>
                                                                         </div> <!-- end dropdown menu-->
                                                                     </div>
                                                                 </td>
                                                             </tr>
                                                         @php $n++; @endphp
-                                                        @endif
                                                         @endforeach
                                                         </tbody>
                                                     </table>
                                                 </div> <!-- end .table-responsive-->
                                         </div>
-                                        <div class="tab-pane" id="suspended">
-
-                                                <div class="table-responsive">
-                                                   <table class="datatable-buttons table font-11 table-striped dt-responsive nowrap w-100">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>#</th>
-                                                                <th>Name</th>
-                                                                <th>Status</th>
-                                                                <th>Created by</th>
-                                                                <th>Created at</th>
-                                                                <th></th>
-                                                            </tr>
-                                                        </thead>
-
-                                                        <tbody>
-                                                        @php $n=1; @endphp
-                                                        @foreach($contrCateg as $data)
-                                                        @if($data->status=='SUSPENDED')
-                                                            <tr>
-                                                                <td>{{$n}}.</td>
-                                                                <td>{{$data->name}}</td>
-                                                                <td><span class="badge badge-outline-{{$data->status=='ACTIVE'?'success':'danger'}} badge-pill">{{$data->status}}</span></td>
-                                                                <td><small>{{$data->createdBy->fname.' '.$data->createdBy->mname.' '.$data->createdBy->lname}}</small></td>
-                                                                <td><small>{{date('d M Y', strtotime($data->created_at))}}</small></td>
-                                                                <td>
-                                                                    <div class="dropdown float-right">
-                                                                        <a href="#" class="dropdown-toggle arrow-none text-muted"
-                                                                            data-toggle="dropdown" aria-expanded="false">
-                                                                            <i class='mdi mdi-dots-horizontal font-18'></i>
-                                                                        </a>
-                                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                                            <a href="javascript:void(0);" class="dropdown-item contrCatEdit"  data-id="{{$data->id}}" data-toggle="modal" data-target="#edit_modal">
-                                                                                <i class='mdi mdi-pencil-outline mr-1'></i>Edit
-                                                                            </a>
-                                                                            <div class="dropdown-divider"></div>
-                                                                            <!-- item-->
-                                                                            <a href="javascript:void(0);" class="dropdown-item change_category_status_swt_alert" data-id="{{$data->id}}" data-newstatus="suspend">
-                                                                                <i class='mdi mdi-close-thick mr-1'></i>Suspend
-                                                                            </a>
-                                                                        </div> <!-- end dropdown menu-->
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        @php $n++; @endphp
-                                                        @endif
-                                                        @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div> <!-- end .table-responsive-->
-                                        </div>
+                                        
                                     </div>
                                                  <!-- end card-box-->
 
@@ -324,47 +281,47 @@
     });
 </script>
 
-<script>
-    //"use strict";  (function (NioApp, $) { 'use strict'; // Basic Sweet Alerts
-
-    $('.change_category_status_swt_alert').on("click", function (e) {
-       var data_id=$(this).attr('data-id');
-       var new_status=$(this).attr('data-newstatus');
-
-        alert(data_id+new_status);
+<script type="text/javascript">
+    $(".change_category_status_swt_alert").click(function() {
+        var data_id = $(this).attr("data-id");
+        var new_status = $(this).attr("data-newstatus");
+        var data_name = $(this).attr("data-name");
         Swal.fire({
-        title: 'Are you sure?',
-        text: 'You want to '+new_status+' this Contributor Category',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, '+new_status+' it !',
-        }).then(function (result) {
-        if (result.value) {
+            title: "Are you sure?",
+            html: 'You want to <span class="text-danger">' + new_status + '</span> <span class="text-info">' + data_name + ' </span>!',
+            type: "warning",
+            showCancelButton: !0,
+            confirmButtonText: "Yes, " + new_status + " it!",
+            cancelButtonText: "No, Cancel!",
+            confirmButtonClass: "btn btn-success mt-2",
+            cancelButtonClass: "btn btn-danger ml-2 mt-2",
+            buttonsStyling: !1,
+        }).then(function(t) {
+            t.value ?
                 $.ajax({
-                    type:'POST',
-                    url:"{{url('/ajax/change/category/status')}}",
-                    data: {data_id:data_id,new_status:new_status,
-                    _token: '{{ csrf_token() }}'
+                    type: 'POST',
+                    url: "{{url('/ajax/change/contri/category/status')}}",
+                    data: {
+                        data_id: data_id,
+                        new_status: new_status,
+                        _token: '{{ csrf_token() }}'
                     },
                     dataType: 'json',
-                    success: function(response) {
-                        if(response.dataChangeStatusArr.status=='success'){
-                            Swal.fire( "Success!", response.dataChangeStatusArr.message, "success" ).then(function(){
+
+                    success: function(t) {
+                        Swal.fire({
+                            title: "Success!",
+                            html: "You have successfully <span class='text-success'> " + new_status + "ed</span> " + data_name + ".",
+                            type: "success"
+                        }).then(function() {
                             location.reload();
-                            });
-                        }else{
-                            Swal.fire("Contributor Category Update Fail ! ", response.dataChangeStatusArr.message, "fail" ).then(function(){
-                            location.reload();
-                            });
-                        }
+                        });
                     }
-                })
-            // Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
-        }
+                }) :
+                t.dismiss === Swal.DismissReason.cancel;
         });
-        e.preventDefault();
+
     });
-   // })(NioApp, jQuery);
 </script>
 
         <!-- third party js -->
@@ -383,6 +340,8 @@
         <script src="{{asset('assets/libs/pdfmake/build/vfs_fonts.js')}}"></script>
         <!-- third party js ends -->
 
+        <!-- Datatables init -->
+        <script src="{{asset('assets/libs/sweetalert2/sweetalert2.min.js')}}"></script>
         <!-- Datatables init -->
         <script src="{{asset('assets/js/pages/datatables.init.js')}}"></script>
 @endsection
