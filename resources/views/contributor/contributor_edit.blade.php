@@ -45,7 +45,7 @@
                                         <!-- end row-->
                                         <div class="row">
                                         <div class="col-12 px-2">
-                                                <form method="POST" enctype="multipart/form-data" action="{{url('submit/add/contributor')}}">
+                                                <form method="POST" enctype="multipart/form-data" action="{{url('submit/edit/contributor/'.$contriID)}}">
                                                 @csrf
                                                     <div class="col-12">
                                                         <div class="row">
@@ -75,12 +75,11 @@
                                                                             <label for="field-3" class="control-label">Section</label>
                                                                             <select class="form-control sectionSelect" name="section" data-toggle="select2">
                                                                                 <option value="0"> -- Select Section --</option>
-                                                                                @foreach($sections as $value)
-                                                                                <option value="{{$value->id}}" {{old ('section') == $value->id ? 'selected' : ''}} @if($contributorData->section_id==$value->id){{'selected'}} @endif>{{$value->name}} </option>
+                                                                                @foreach($sections as $secData)
+                                                                                <option value="{{$secData->id}}" @if($contributorData->section_id==$secData->id){{'selected'}} @endif>{{$secData->name}} </option>
                                                                                 @endforeach
                                                                             </select>
-                                                                            <span class="text-danger" id="sectionError" role="alert"></span>
-                                                                            <span class="text-danger" role="alert"> <strong>{{ $errors->first('section') }}</strong></span>
+                                                                            <span class="text-danger" id="sectionError" role="alert"> <strong>{{ $errors->first('section') }}</strong></span>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6">
@@ -114,14 +113,14 @@
                                                                     <div class="col-md-6">
                                                                         <div class="form-group">
                                                                             <label for="field-5" class="control-label">Phone</label>
-                                                                            <input type="text" name="phone" class="form-control form-control-sm" id="field-5" value="{{old('phone', $contributorData->phone)}}" placeholder="Phone" required>
+                                                                            <input type="text" name="phone" class="form-control form-control-sm" id="input-phone" value="{{old('phone', $contributorData->phone)}}" placeholder="e.g 255 717 000 052" data-toggle="input-mask" data-mask-format="(000) 000-000-000" autocomplete="off" required>
                                                                             <span class="text-danger" role="alert"> <strong>{{ $errors->first('phone') }}</strong></span>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <div class="form-group">
                                                                             <label for="field-5" class="control-label">Email</label>
-                                                                            <input type="email" name="email" class="form-control form-control-sm" value="{{old('email', $contributorData->email)}}" oninput="this.value = this.value.toLowerCase()" id="field-5" placeholder="Email" required>
+                                                                            <input type="text" name="email" class="form-control form-control-sm" id="input-email" value="{{old('email', $contributorData->email)}}" placeholder="e.g xxxxx@gmail.com" autocomplete="off" oninput="this.value = this.value.toLowerCase()" required>
                                                                             <span class="text-danger" role="alert"> <strong>{{ $errors->first('email') }}</strong></span>
                                                                         </div>
                                                                     </div>
@@ -131,7 +130,7 @@
                                                                     <div class="col-md-12">
                                                                         <div class="form-group">
                                                                             <label for="field-3" class="control-label">Registration Form</label>
-                                                                            <input type="file" class="form-control kartik-input-705" name="regFormAttachment" id="field-4" placeholder="District" required>
+                                                                            <input type="file" class="form-control kartik-input-705" name="regFormAttachment" id="field-4" required>
                                                                             <span class="text-danger" role="alert"> <strong>{{ $errors->first('regFormAttachment') }}</strong></span>
                                                                         </div>
                                                                     </div>
@@ -139,7 +138,7 @@
                                                         </div>
                                                         </div>
                                                         <div class="col-md-12 px-4">
-                                                            <button type="submit" class="btn btn-info waves-effect waves-light float-right">Submit</button>
+                                                            <button type="submit" class="btn btn-info waves-effect waves-light float-right">Submit Updates</button>
                                                         </div>
                                                 </form>
                                         </div> <!-- end col -->
@@ -218,7 +217,7 @@ $(document).ready(function() {
 <script>
 //START:: On page load set defautl selection
     $(document).ready(function(){
-        $('.sectionSelect option[value=0]').prop('selected', true);
+        $('.sectionSelect').prop('selected', true);
          var section_id = $(this).find(":selected").val();
         if (section_id ==0) {
             $("#sectionError").html('Kindly, select a Section');

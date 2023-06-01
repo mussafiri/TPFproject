@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MemberAuthController;
 use App\Http\Controllers\ContributorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
@@ -18,12 +20,8 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 Route::get('/defaultpage', [CommonController::class, 'index']);
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -36,7 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/contributors/zones', [ZoneController::class, 'zones']);
     Route::get('/contributors/dormant/zones', [ZoneController::class, 'suspendedZones']);
     Route::get('/ajax/get/zone/data', [ZoneController::class, 'zoneUpdateAjax']);
-    
+
     Route::post('/ajax/update/zone/status', [ZoneController::class, 'ajaxUpdateZoneStatus']);
     Route::post('/ajax/get/zone/data', [ZoneController::class, 'ajaxZoneGetData']);
     Route::post('/zone/register', [ZoneController::class, 'submitZones']);
@@ -52,10 +50,23 @@ Route::middleware('auth')->group(function () {
     Route::post('submit/edit/contributor/category', [ContributorController::class, 'submitEditContributorsCategory']);
     Route::get('/add/contributors', [ContributorController::class, 'addContributors']);
     Route::get('/edit/contributors/{id}', [ContributorController::class, 'editContributors']);
+    Route::post('submit/edit/contributor/{id}', [ContributorController::class, 'submitEditContributor']);
     Route::post('/ajax/get/section/data', [ContributorController::class, 'ajaxGetSectionData']);
     Route::post('/submit/add/contributor', [ContributorController::class, 'SubmitAddContributor']);
-    Route::get('contributors', [ContributorController::class, 'contributors'])->name('contributors.list');
+    Route::get('contributors/{status}', [ContributorController::class, 'contributors'])->name('contributors.list');
+    Route::post('ajax/change/contri/status', [ContributorController::class, 'ajaxUpdateContributorStatus']);
     //END:: Contributor
+
 });
+
+// START:: MEMBERS ROUTES
+Route::get('/member/login', [MemberAuthController::class, 'authenticateMember'])->name('member.login');
+Route::post('/member/login', [MemberAuthController::class, 'authenticateMember'])->name('post.member.login');
+
+Route::middleware(['auth:member'])->group(function () {
+      Route::get('member/dashboard', [MemberController::class, 'dashboard'])->name('members.dashboard');
+});
+// END:: MEMBERS ROUTES
+
 
 require __DIR__.'/auth.php';
