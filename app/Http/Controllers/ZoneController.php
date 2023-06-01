@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Lib\Common;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -16,13 +16,131 @@ use App\Models\Section;
 class ZoneController extends Controller
 {
     //
+    public function __construct(){
+        $this->cmn = new Common;
+    }
+
+    public function ajaxGetZoneOldData(){
+        $getZoneData= Zone::where('status','ACTIVE')->get();
+        $getZoneDataArr=array();
+        if($getZoneData){
+            $getZoneDataArr['status'] ='success';
+            $getZoneDataArr['data'] =$getZoneData;
+        }else{
+            $getZoneDataArr['status'] ='fail';
+            $getZoneDataArr['message'] = 'No data found';
+        }
+        return response()->json(['getZoneDataArr'=>$getZoneDataArr]);
+    }
+
     public function section(){
         $section = Section::all();
         return view('zones.sections', ['sections'=>$section]);
     }
+
+    public function ajaxDistrictGetData(Request $ajaxreq){
+        $id = $ajaxreq['district_id'];
+
+        $zonesArray = Zone::where( "status","ACTIVE")->get();
+        $districtRow = District::find( $id );
+        if ($districtRow) {
+            $districtRowData = District::where('id', $id )->first();
+            $district_data[ 'status' ] = 'success';
+            $district_data[ 'message' ] = 'Distirct data has been Succefully fetched';
+            $district_data[ 'data' ] = $districtRowData;
+            $district_data[ 'zones_collection' ] = $zonesArray;
+        } else {
+            $district_data[ 'status' ] = 'Errors';
+            $district_data[ 'message' ] = 'We could not find such Distirct in our database';
+        }
+        return response()->json(['districtJSONData'=>$district_data]);
+    }
+    public function submitDistrictEdit(Request $request){
+        #Taking all POST requests from the form
+        $valid = Validator::make(
+            $request->all(),[
+                'district_name' => 'required|min:4',
+                'zone_name' => 'required|gt:0',
+                'district_id' => 'required',
+                'email' => 'email',
+                'physicalAddress' => 'required'
+            ],
+
+            ['zone_name.gt' => 'You must select Zone',]
+        );
+
+        if ($valid->fails()) {
+            #Returns errors with Error Bag 'updateDistrict'
+            return back()->withErrors($valid, 'updateDistrict')->withInput();
+        }
+
+        # END:: VALIDATION
+        $districtupdateObj = District::find($request->district_id);
+        $districtupdateObj->zone_id = $request->zone_name;
+        $districtupdateObj->district_code = "NULL";
+        $districtupdateObj->name = strtoupper($request->district_name);
+        $districtupdateObj->postal_address = strtoupper($request->postalAddress);
+        $districtupdateObj->physical_address = strtoupper($request->physicalAddress);
+        $districtupdateObj->phone = $request->phone;
+        $districtupdateObj->email = strtolower($request->email);
+        $districtupdateObj->status = "ACTIVE";
+        $districtupdateObj->created_by  = auth()->user()->id;
+        #Generate district Code
+        if ($districtupdateObj->save()) {
+            $zoneRow = Zone::find($districtupdateObj->zone_id)->first();
+            $zone_code = $zoneRow->zone_code;
+            $this->cmn->districtCodeGenerator($districtupdateObj->id, $districtupdateObj->name, $zone_code);
+
+            toastr();
+            return redirect('contributors/districts')->with(['success' => 'District has been successfully updated!']);
+        }
+        toastr();
+        return redirect('contributors/districts')->with(['error' => 'Oops, District has not been successfully updated!']);
+    }
+    public function submitDistrict(Request $request){
+        
+        #Taking all POST requests from the form
+        $valid = Validator::make($request->all(), [
+            'district_name' => 'required|unique:districts,name|min:4',
+            'zone' => 'required|gt:0',
+            'email' => 'email',
+            'physicalAddress' => 'required'],  
+
+             ['zone.gt' => 'You must select Zone',]
+        );
+
+        if ( $valid->fails() ) {
+            #Returns errors with Error Bag 'registerDistrict'
+            return back()->withErrors( $valid, 'registerDistrict' )->withInput();
+        }
+
+        # END:: VALIDATION
+        $districtregObject = new District;
+        $districtregObject->zone_id = $request->zone;
+        $districtregObject->district_code = "NULL";
+        $districtregObject->name=strtoupper($request->district_name);
+        $districtregObject->postal_address=strtoupper($request->postalAddress);
+        $districtregObject->physical_address=strtoupper($request->physicalAddress);
+        $districtregObject->phone=$request->phone;
+        $districtregObject->email=strtolower($request->email);
+        $districtregObject->status="ACTIVE";
+        $districtregObject->created_by  = auth()->user()->id;
+        #Generate district Code
+        if ( $districtregObject->save() ) {
+            $zoneRow=Zone::find($districtregObject->zone_id)->first();
+            $zone_code=$zoneRow->zone_code;
+            $this->cmn -> districtCodeGenerator($districtregObject->id,$districtregObject->name,$zone_code);
+
+            toastr();
+            return redirect('contributors/districts')->with(['success'=>'District has been successfully created!']);
+        }
+        toastr();
+        return redirect('contributors/districts')->with(['error'=>'Oops, District has not been successfully created!']);
+    }
     public function districts(){
         $districts = District::all();
-        return view('zones.districts', ['districts'=>$districts]);
+        $zones=Zone::where('status',"ACTIVE")->get();
+        return view('zones.districts', ['districts'=>$districts,"zones"=>$zones]);
     }
     public function ajaxUpdateZoneStatus(Request $request){
         #Taking all POST requests from the form

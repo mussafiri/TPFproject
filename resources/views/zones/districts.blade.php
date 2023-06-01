@@ -5,7 +5,7 @@
 <link href="{{asset('assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{asset('assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{asset('assets/libs/datatables.net-select-bs4/css//select.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
-<link href="{{asset('assets/libs/sweetalert2/sweetalert2.min.css')}}" rel="stylesheet" type="text/css"/>
+<link href="{{asset('assets/libs/sweetalert2/sweetalert2.min.css')}}" rel="stylesheet" type="text/css" />
 
 <!-- third party css end -->
 @endsection
@@ -42,13 +42,13 @@
                         </div>
                         <div class="col-sm-8">
                             <div class="text-sm-right">
-                                <button type="button" data-toggle="modal" data-target="#bs-example-modal-lg" class="btn btn-sm btn-blue waves-effect waves-light font-weight-bold"><i class="mdi mdi-plus-thick mr-1  "></i>Add District</button>
+                                <button type="button" data-toggle="modal" data-target="#add-district-modal-lg" class="btn btn-sm btn-blue waves-effect waves-light font-weight-bold"><i class="mdi mdi-plus-thick mr-1  "></i>Add District</button>
                             </div>
                         </div><!-- end col-->
                     </div>
                     <!-- Register District modal content -->
-                    <div id="bs-example-modal-lg" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-                        <form class="" method="POST" action="{{url('/zone/register')}}">
+                    <div id="add-district-modal-lg" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                        <form class="" method="POST" action="{{url('/district/register')}}">
                             @csrf
                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                 <div class="modal-content">
@@ -57,51 +57,50 @@
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-lg-6 col-sm-12">
-                                                <div class="card-box">
-                                                    <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">General Information</h5>
-
+                                        <div class="card-box">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 col-sm-12">
                                                     <div class="form-group mb-3">
                                                         <label for="product-name">District Name <span class="text-danger">*</span></label>
-                                                        <input type="text" id="zone-name" name="zone_name" value="{{old('zone_name')}}" class="form-control form-control-sm" placeholder="e.g : CENTRAL" autocomplete="off">
-                                                        @if ($errors->registerZone->has('zone_name')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerZone->first('zone_name') }}</small></strong></span>@endif
+                                                        <input type="text" name="district_name" value="{{old('district_name')}}" class="form-control form-control-sm" placeholder="e.g : DODOMA KATI " oninput="this.value = this.value.toUpperCase()" autocomplete="off" required>
+                                                        @if ($errors->registerDistrict->has('district_name')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerDistrict->first('district_name') }}</small></strong></span>@endif
                                                     </div>
                                                     <div class="form-group mb-3">
-                                                        <label for="product-name">District Code <span class="text-danger">*</span></label>
-                                                        <input type="text" id="zone-name" name="code" value="{{old('code')}}" class="form-control form-control-sm" placeholder="e.g : CT" autocomplete="off">
-                                                        @if ($errors->registerZone->has('code')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerZone->first('code') }}</small></strong></span>@endif
+                                                        <label for="product-name">Zone <span class="text-danger">*</span></label>
+                                                        <select class="form-control" name="zone" data-toggle="select2" required>
+                                                            <option value="0"> -- Select Zone --</option>
+                                                            @foreach($zones as $value)
+                                                            <option value="{{$value->id}}">{{$value->name}} </option>
+                                                            @endforeach
+                                                        </select>
+                                                        @if ($errors->registerDistrict->has('zone')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerDistrict->first('zone') }}</small></strong></span>@endif
                                                     </div>
                                                     <div class="form-group mb-3">
                                                         <label for="product-reference">Physical Address <span class="text-danger">*</span></label>
-                                                        <input type="text" id="product-reference" name="phy_address" value="{{old('phy_address')}}" class="form-control form-control-sm" placeholder="e.g : KIBAIGWA JUU" autocomplete="off">
-                                                        @if ($errors->registerZone->has('phy_address')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerZone->first('phy_address') }}</small></strong></span>@endif
+                                                        <input type="text" id="physical-address" name="physicalAddress" oninput="this.value = this.value.toUpperCase()" value="{{old('physicalAddress')}}" class="form-control form-control-sm" placeholder="e.g : MIUJI JUU" autocomplete="off" required>
+                                                        @if ($errors->registerDistrict->has('physicalAddress')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerDistrict->first('physicalAddress') }}</small></strong></span>@endif
+                                                    </div>
+                                                </div> <!-- end col -->
+                                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                                    <div class="form-group mb-3">
+                                                        <label for="product-name">Postal Address </label>
+                                                        <input type="text" name="postalAddress" oninput="this.value = this.value.toUpperCase()" value="{{old('postalAddress')}}" class="form-control form-control-sm" placeholder="e.g : P.O.BOX 324566 MIUJI" autocomplete="off">
+                                                        @if ($errors->registerDistrict->has('postalAddress')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerDistrict->first('postalAddress') }}</small></strong></span>@endif
+                                                    </div>
+                                                    <div class="form-group mb-3">
+                                                        <label for="product-name">Phone <span class="text-danger">*</span></label>
+                                                        <input type="text" name="phone" value="{{old('phone')}}" class="form-control form-control-sm" placeholder="e.g : (255)717 000 000" autocomplete="off">
+                                                        @if ($errors->registerDistrict->has('phone')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerDistrict->first('phone') }}</small></strong></span>@endif
+                                                    </div>
+                                                    <div class="form-group mb-3">
+                                                        <label for="product-reference">Email Address<span class="text-danger"></span></label>
+                                                        <input type="text" name="email" value="{{old('email')}}" class="form-control form-control-sm" placeholder="e.g :xxx@gmail.com" autocomplete="off">
+                                                        @if ($errors->registerDistrict->has('email')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerDistrict->first('email') }}</small></strong></span>@endif
                                                     </div>
 
-                                                </div> <!-- end card-box -->
-                                            </div> <!-- end col -->
-                                            <div class="col-lg-6 col-sm-12">
-                                                <div class="card-box">
-                                                    <h5 class="text-uppercase mt-0 mb-3 bg-light p-2">Contact Details</h5>
-                                                    <div class="form-group mb-3">
-                                                        <label for="product-description">Postal Address</label>
-                                                        <input type="text" class="form-control form-control-sm" name="po_address" value="{{old('po_address')}}" placeholder="e.g : P.O.BOX 324566 KIBAIGWA  " autocomplete="off">
-                                                        @if ($errors->registerZone->has('po_address')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerZone->first('po_address') }}</small></strong></span>@endif
-                                                    </div>
-                                                    <div class="form-group mb-3">
-                                                        <label for="product-summary">Phone</label>
-                                                        <input type="text" class="form-control form-control-sm" name="phone" value="{{old('phone')}}" placeholder="e.g 255 717 000 052" data-toggle="input-mask" data-mask-format="(000) 000-000-000" autocomplete="off">
-                                                        @if ($errors->registerZone->has('phone')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerZone->first('phone') }}</small></strong></span>@endif
-                                                    </div>
-                                                    <div class="form-group mb-3">
-                                                        <label for="product-summary">Email address</label>
-                                                        <input type="text" class="form-control form-control-sm" name="email" value="{{old('email')}}" placeholder="e.g xxxxx@gmail.com" autocomplete="off">
-                                                        @if ($errors->registerZone->has('email')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerZone->first('email') }}</small></strong></span>@endif
-                                                    </div>
-                                                </div> <!-- end card-box -->
-                                            </div> <!-- end col-->
-                                        </div>
-                                        <!-- end row -->
+                                                </div> <!-- end col -->
+                                            </div> <!-- end row -->
+                                        </div><!-- end card-box -->
                                     </div>
                                     <div class="modal-footer" style="margin-top:-2rem;">
                                         <button type="submit" class="btn btn-success">Save</button>
@@ -112,8 +111,8 @@
                         </form>
                     </div><!-- /.modal -->
                     <!-- Edit District Modal content -->
-                    <div id="updateZoneModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-                        <form class="" method="POST" action="{{url('/zone/edit')}}">
+                    <div id="updateDistrictModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                        <form class="" method="POST" action="{{url('/district/edit')}}">
                             @csrf
                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                 <div class="modal-content">
@@ -122,54 +121,49 @@
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-lg-6 col-sm-12">
-                                                <div class="card-box">
-                                                    <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">General Information</h5>
-
+                                        <div class="card-box">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 col-sm-12">
                                                     <div class="form-group mb-3">
-                                                        <label for="product-name">District Name <span class="text-danger">*</span></label>
-                                                        <input type="text" id="input-zone" name="zone_name" value="{{old('zone_name')}}" class="form-control form-control-sm" placeholder="e.g : CENTRAL" autocomplete="off">
-                                                        @if ($errors->updateZone->has('zone_name')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->updateZone->first('zone_name') }}</small></strong></span>@endif
+                                                        <label for="product-name">District name <span class="text-danger">*</span></label>
+                                                        <input type="text" name="district_name" value="{{old('district_name')}}" oninput="this.value = this.value.toUpperCase()" class="form-control form-control-sm" placeholder="e.g : DODOMA KATI" id="input-district" autocomplete="off">
+                                                        @if ($errors->updateDistrict->has('district_name')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->updateDistrict->first('district_name') }}</small></strong></span>@endif
                                                     </div>
                                                     <div class="form-group mb-3">
-                                                        <label for="product-name">District Code <span class="text-danger">*</span></label>
-                                                        <input type="text" id="input-zone_code" name="zone_code" value="{{old('zone_code')}}" class="form-control form-control-sm" placeholder="e.g : CT" autocomplete="off">
-                                                        @if ($errors->updateZone->has('zone_code')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->updateZone->first('zone_code') }}</small></strong></span>@endif
+                                                        <label for="zone-name">Zone <span class="text-danger">*</span></label>
+                                                        <select class="form-control zonesSelect" name="zone_name" data-toggle="select2">
+                                                          
+                                                        </select>
+                                                        @if ($errors->updateDistrict->has('zone_name')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->updateDistrict->first('zone_name') }}</small></strong></span>@endif
                                                     </div>
                                                     <div class="form-group mb-3">
                                                         <label for="product-reference">Physical Address <span class="text-danger">*</span></label>
-                                                        <input type="text" id="input-physical_address" name="phy_address" value="{{old('phy_address')}}" class="form-control form-control-sm" placeholder="e.g : KIBAIGWA JUU" autocomplete="off">
-                                                        @if ($errors->updateZone->has('phy_address')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->updateZone->first('phy_address') }}</small></strong></span>@endif
+                                                        <input type="text" id="input-physical_address" name="physicalAddress" value="{{old('phy_address')}}" class="form-control form-control-sm" placeholder="e.g : KIBAIGWA JUU" oninput="this.value = this.value.toUpperCase()" autocomplete="off">
+                                                        @if ($errors->updateDistrict->has('physicalAddress')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->updateDistrict->first('physicalAddress') }}</small></strong></span>@endif
                                                     </div>
-
-                                                </div> <!-- end card-box -->
-                                            </div> <!-- end col -->
-                                            <div class="col-lg-6 col-sm-12">
-                                                <div class="card-box">
-                                                    <h5 class="text-uppercase mt-0 mb-3 bg-light p-2">Contact Details</h5>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-12">
                                                     <div class="form-group mb-3">
                                                         <label for="product-description">Postal Address</label>
-                                                        <input type="text" id="input-postal_address" class="form-control form-control-sm" name="po_address" value="{{old('po_address')}}" placeholder="e.g : P.O.BOX 324566 KIBAIGWA  " autocomplete="off">
-                                                        @if ($errors->updateZone->has('po_address')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->updateZone->first('po_address') }}</small></strong></span>@endif
+                                                        <input type="text" id="input-postal_address" class="form-control form-control-sm" name="postalAddress" value="{{old('po_address')}}" placeholder="e.g : P.O.BOX 324566 KIBAIGWA" oninput="this.value = this.value.toUpperCase()" autocomplete="off">
+                                                        @if ($errors->updateDistrict->has('postalAddress')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->updateDistrict->first('postalAddress') }}</small></strong></span>@endif
                                                     </div>
                                                     <div class="form-group mb-3">
                                                         <label for="product-summary">Phone</label>
                                                         <input type="text" class="form-control form-control-sm" id="input-phone" name="phone" value="{{old('phone')}}" placeholder="e.g 255 717 000 052" data-toggle="input-mask" data-mask-format="(000) 000-000-000" autocomplete="off">
-                                                        @if ($errors->updateZone->has('phone')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->updateZone->first('phone') }}</small></strong></span>@endif
+                                                        @if ($errors->updateDistrict->has('phone')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->updateDistrict->first('phone') }}</small></strong></span>@endif
                                                     </div>
                                                     <div class="form-group mb-3">
                                                         <label for="product-summary">Email address</label>
                                                         <input type="text" class="form-control form-control-sm" id="input-email" name="email" value="{{old('email')}}" placeholder="e.g xxxxx@gmail.com" autocomplete="off">
-                                                        @if ($errors->updateZone->has('email')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->updateZone->first('email') }}</small></strong></span>@endif
+                                                        @if ($errors->updateDistrict->has('email')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->updateDistrict->first('email') }}</small></strong></span>@endif
                                                     </div>
-                                                    <input type="hidden" class="form-control form-control-sm" id="editzone_id" name="zone_id">
+                                                    <input type="hidden" class="form-control form-control-sm" id="editdistrict_id" name="district_id">
 
-                                                </div> <!-- end card-box -->
-                                            </div> <!-- end col-->
-                                        </div>
-                                        <!-- end row -->
-                                    </div>
+                                                </div> <!-- end col-lg-6 -->
+                                            </div> <!-- end row  -->
+                                        </div><!-- end card-box -->
+                                    </div> <!-- end modal-body -->
                                     <div class="modal-footer" style="margin-top:-2rem;">
                                         <button type="submit" class="btn btn-success">Save</button>
                                         <button type="button" class="btn btn-danger ml-auto" data-dismiss="modal">Close</button>
@@ -182,15 +176,15 @@
                     <!-- /.end edit-modal -->
 
                     <div class="">
-                        <table class="table table-sm font-12 table-striped nowrap w-100 datatable-buttons">
+                        <table class="table table-sm font-12 table-striped w-100 datatable-buttons table-responsible">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Name</th>
+                                    <th>District</th>
+                                    <th>Zone</th>
                                     <th>Postal Address</th>
-                                    <th>Physical Address</th>
                                     <th>Phone</th>
-                                    <th>Email</th>
+                                    <th>Created By</th>
                                     <th>Created</th>
                                     <th>Status</th>
                                     <th>Action</th>
@@ -202,17 +196,17 @@
                                 <tr>
                                     <td>{{$x}}</td>
                                     <td>{{$data->name}}</td>
+                                    <td>{{$data->zone->name}}</td>
                                     <td>{{$data->postal_address}}</td>
-                                    <td>{{$data->physical_address}}</td>
                                     <td>{{$data->phone}}</td>
-                                    <td>{{$data->email}}</td>
+                                    <td>{{$data->createdBy->fname." ".$data->createdBy->lname}}</td>
                                     <td>{{date('d M Y', strtotime($data->created_at))}}&nbsp;<span class="text-muted font-8">{{date('H:i', strtotime($data->created_at))}}</span></td>
                                     <td><span class="badge badge-soft-{{$data->status=='ACTIVE'?'success':'danger';}}">{{$data->status}}</span></td>
                                     <td>
                                         <div class="btn-group dropdown">
                                             <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item zoneEditModalDataLink" href="#" data-toggle="modal" data-target="#updateZoneModal" data-zoneid="{{$data->id}}"><i class="mdi mdi-pencil mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
+                                                <a class="dropdown-item districtEditModalDataLink" href="#" data-toggle="modal" data-target="#updateDistrictModal" data-districtid="{{$data->id}}"><i class="mdi mdi-pencil mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
                                                 <a class="dropdown-item zone_statusChangeLink" data-zone="{{$data->id}}" data-new_status="{{$data->status=='ACTIVE' ? 'Suspend':'Activate';}}" data-zone_name="{{$data->name}}" href="#"><i class="mdi mdi-close-thick mr-2 text-muted font-18 vertical-middle"></i>Suspend</a>
                                             </div>
                                         </div>
@@ -258,41 +252,92 @@
 <script src="{{asset('assets/js/pages/datatables.init.js')}}"></script>
 <script>
     $(document).ready(function() {
-        @if($errors -> hasBag('registerZone'))
-        $('#bs-example-modal-lg').modal({
-            show: true
-        });
-        @elseif($errors -> hasBag('updateZone'))
-        $('#updateZoneModal').modal({
-            show: true
-        });
+        @if($errors->hasBag('registerDistrict'))
+            $('#add-district-modal-lg').modal({
+                show: true
+            });
+        @elseif($errors->hasBag('updateDistrict'))
+
+            //START::fetch zone collections
+            var oldZOneID="{{old('zone_name')}}";
+            $.ajax({
+                type: 'GET',
+                url: "{{url('/ajax/get/zone/old/data')}}",
+                data: {},
+                dataType: 'json',
+                success: function(response) {
+                    if(response.getZoneDataArr.status == 'success'){
+                        // Prepare for district selections options
+                        var zones = response.getZoneDataArr.data;
+                        var zones_len = response.getZoneDataArr.data.length;
+                        $(".zonesSelect").empty();
+                        $(".zonesSelect").append("<option value=0> ..Select zones.. </option>");
+                        for( var x = 0; x < zones_len; x++){
+
+                            var zone_id  = zones[x].id;
+                            var zone_name= zones[x].name;
+
+                            if(oldZOneID == zone_id){
+                                $(".zonesSelect").append("<option value='"+zone_id+"' selected >"+zone_name+"</option>");
+                            }else{ 
+                                $(".zonesSelect").append("<option value='"+zone_id+"'>"+zone_name+"</option>");
+                            }
+                        }
+                    } else {
+                        $('#edit_inputMaterial').val('');
+                        $('#edit_fetchError').html(response.getZoneDataArr.message);
+                    }
+                }
+            });
+            //END::fetch zone collections
+            
+            $('#updateDistrictModal').modal({
+                show: true
+            });
         @endif
     });
 </script>
 <script>
-    $('.zoneEditModalDataLink').on('click', function() {
-        var zone = $(this).attr('data-zoneid');
+    $('.districtEditModalDataLink').on('click', function() {
+        var district = $(this).attr('data-districtid');
         $.ajax({
             type: 'POST',
-            url: "{{url('/ajax/get/zone/data')}}",
+            url: "{{url('/ajax/get/district/data')}}",
             data: {
-                zone_id: zone,
+                district_id: district,
                 _token: '{{ csrf_token() }}'
             },
             dataType: 'json',
             success: function(response) {
-                if (response.zoneJSONData.status == 'success') {
+                if(response.districtJSONData.status == 'success'){
                     $('#edit_fetchError').html('');
-                    $('#input-zone').val(response.zoneJSONData.data.name);
-                    $('#input-zone_code').val(response.zoneJSONData.data.zone_code);
-                    $('#input-physical_address').val(response.zoneJSONData.data.physical_address);
-                    $('#input-postal_address').val(response.zoneJSONData.data.postal_address);
-                    $('#input-phone').val(response.zoneJSONData.data.phone);
-                    $('#input-email').val(response.zoneJSONData.data.email);
-                    $('#editzone_id').val(zone);
+                    $('#input-district').val(response.districtJSONData.data.name);
+                    $('#input-physical_address').val(response.districtJSONData.data.physical_address);
+                    $('#input-postal_address').val(response.districtJSONData.data.postal_address);
+                    $('#input-phone').val(response.districtJSONData.data.phone);
+                    $('#input-email').val(response.districtJSONData.data.email);
+                    $('#editdistrict_id').val(district);
+
+                    // Prepare for district selections options
+                    var zones = response.districtJSONData.zones_collection;
+                    var zones_len = response.districtJSONData.zones_collection.length;
+                    $(".zonesSelect").empty();
+                    $(".zonesSelect").append("<option value=0> ..Select zones.. </option>");
+                    var districtZoneID = response.districtJSONData.data.zone_id;
+                    for( var x = 0; x < zones_len; x++){
+
+                        var zone_id  = zones[x].id;
+                        var zone_name= zones[x].name;
+
+                        if(districtZoneID == zone_id){
+                            $(".zonesSelect").append("<option value='"+zone_id+"' selected >"+zone_name+"</option>");
+                        }else{ 
+                            $(".zonesSelect").append("<option value='"+zone_id+"'>"+zone_name+"</option>");
+                        }
+                    }
                 } else {
                     $('#edit_inputMaterial').val('');
-                    $('#edit_fetchError').html(response.zoneJSONData.message);
+                    $('#edit_fetchError').html(response.districtJSONData.message);
                 }
             }
         });
@@ -328,10 +373,10 @@
                     dataType: 'json',
 
                     success: function(t) {
-                       var zone_status = t.statZoneJSONArr.message_status
+                        var zone_status = t.statDistrictJSONArr.message_status
                         Swal.fire({
                             title: "Success!",
-                            html: t.statZoneJSONArr.message + " " + zone_status.toLowerCase(),
+                            html: t.statDistrictJSONArr.message + " " + zone_status.toLowerCase(),
                             type: "success"
                         }).then(function() {
                             location.reload();
