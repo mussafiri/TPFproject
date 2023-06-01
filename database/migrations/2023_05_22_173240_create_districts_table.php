@@ -20,9 +20,9 @@ return new class extends Migration
             $table->string('physical_address');
             $table->string('phone');
             $table->string('email');
-            $table->enum('status',['ACTIVE','SUSPENDED']);
+            $table->enum('status',['ACTIVE','SUSPENDED'])->default('ACTIVE');
             $table->integer('created_by');
-            $table->integer('updated_by');
+            $table->integer('updated_by')->default(0);
             $table->timestamps();
         });
     }
