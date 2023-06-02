@@ -114,14 +114,14 @@
                                                                     <div class="col-md-6">
                                                                         <div class="form-group">
                                                                             <label for="field-5" class="control-label">Phone</label>
-                                                                            <input type="text" name="phone" class="form-control form-control-sm" id="field-5" value="{{old('phone')}}" placeholder="Phone" required>
+                                                                            <input type="text" name="phone" class="form-control form-control-sm" id="input-phone" value="{{old('phone')}}"  placeholder="e.g 255 717 000 052" data-toggle="input-mask" data-mask-format="(000) 000-000-000" autocomplete="off" required>
                                                                             <span class="text-danger" role="alert"> {{ $errors->first('phone') }}</span>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <div class="form-group">
                                                                             <label for="field-5" class="control-label">Email</label>
-                                                                            <input type="email" name="email" class="form-control form-control-sm" value="{{old('email')}}" oninput="this.value = this.value.toLowerCase()" id="field-5" placeholder="Email" required>
+                                                                            <input type="email" name="email" class="form-control form-control-sm" value="{{old('email')}}" oninput="this.value = this.value.toLowerCase()" id="input-email" placeholder="e.g xxxxx@gmail.com" autocomplete="off" required>
                                                                             <span class="text-danger" role="alert"> {{ $errors->first('email') }}</span>
                                                                         </div>
                                                                     </div>
