@@ -185,7 +185,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('contributors/dormant/zones')}}" class="nav-link ">
+                            <a href="{{url('/dormant/zones/list')}}" class="nav-link ">
                                 Dormant
                             </a>
                         </li>

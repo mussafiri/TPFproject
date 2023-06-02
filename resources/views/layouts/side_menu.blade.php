@@ -50,24 +50,24 @@
                     <span> Contributors </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse @if(str_contains(url()->current(), 'contributors' || str_contains(url()->current(), 'contributor'))){{'show'}}@endif" id="sidebarContributors">
+                <div class="collapse @if(str_contains(url()->current(), 'contributors') || str_contains(url()->current(), 'contributor'))){{'show'}}@endif" id="sidebarContributors">
                     <ul class="nav-second-level">
                         <li class="@if(str_contains(url()->current(), 'contributors')){{'menuitem-active'}}@endif"><a href="{{url('contributors')}}">Contributors</a></li>
                         <li class="@if(str_contains(url()->current(), 'contributor/categories')){{'menuitem-active'}}@endif"><a href="{{url('contributor/categories/'.Crypt::encryptString('ACTIVE'))}}">Categories</a></li>
                     </ul>
                 </div>
             </li>
-            <li>
+            <li class="@if(request()->segment(1)=='zones'){{'menuitem-active'}} @endif">
                 <a href="#sidebarZones" data-toggle="collapse">
                     <i class="mdi mdi-map-marker-radius"></i>
                     <span> Zones </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarZones">
+                <div class="collapse @if(request()->segment(1)=='zones'){{'show'}}@endif" id="sidebarZones">
                     <ul class="nav-second-level">
-                        <li><a href="{{url('/contributors/zones')}}">Zones</a></li>
-                        <li><a href="{{url('/contributors/districts')}}">Districts </a></li>
-                        <li><a href="{{url('/contributors/sections')}}">Section </a></li>
+                        <li class="@if(request()->is('zones/list')){{'menuitem-active'}} @endif"><a href="{{url('/zones/list')}}">Zones</a></li>
+                        <li class="@if(request()->is('zones/districts/*')){{'menuitem-active'}} @endif"><a href="{{url('/zones/districts/'.Crypt::encryptString('ACTIVE'))}}">Districts </a></li>
+                        <li class="@if(request()->is('zones/sections/*')){{'menuitem-active'}} @endif"><a href="{{url('/zones/sections/'.Crypt::encryptString('ACTIVE'))}}">Section </a></li>
                     </ul>
                 </div>
             </li>

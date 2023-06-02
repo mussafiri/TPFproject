@@ -22,7 +22,7 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{url('/contributors')}}">Contributors</a></li>
+                            <li class="breadcrumb-item"><a href="{{url('/zones/list')}}">Zones</a></li>
                             <li class="breadcrumb-item active">Zones</li>
                         </ol>
                     </div>
@@ -111,7 +111,7 @@
                     </div><!-- /.modal -->
                     <ul class="nav nav-tabs nav-bordered my-2">
                         <li class="nav-item">
-                            <a href="{{url('contributors/zones')}}" class="nav-link">
+                            <a href="{{url('zones/list')}}" class="nav-link">
                                 Active
                             </a>
                         </li>
