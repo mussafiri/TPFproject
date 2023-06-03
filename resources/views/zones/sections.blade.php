@@ -158,7 +158,7 @@
                                                         <input type="text" class="form-control form-control-sm" id="input-email" name="email" value="{{old('email')}}" placeholder="e.g xxxxx@gmail.com" autocomplete="off">
                                                         @if ($errors->updateSection->has('email')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->updateSection->first('email') }}</small></strong></span>@endif
                                                     </div>
-                                                    <input type="hidden" class="form-control form-control-sm" id="editdistrict_id" name="district_id">
+                                                    <input type="hidden" class="form-control form-control-sm" id="editsection_id" name="section_id">
 
                                                 </div> <!-- end col-lg-6 -->
                                             </div> <!-- end row  -->
@@ -330,7 +330,7 @@
                     $('#input-postal_address').val(response.sectionJSONData.data.postal_address);
                     $('#input-phone').val(response.sectionJSONData.data.phone);
                     $('#input-email').val(response.sectionJSONData.data.email);
-                    $('#editdistrict_id').val(section);
+                    $('#editsection_id').val(section);
 
                     // Prepare for section selections options
                     var districts = response.sectionJSONData.district_collection;

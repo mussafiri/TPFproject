@@ -37,14 +37,13 @@ class ZoneController extends Controller
         }
 
         # END:: VALIDATION
-        $sectioneditObject = Section::find();
-        $sectioneditObject->district_id = $request->district;
+        $sectioneditObject = Section::find( $request->section_id);
+        $sectioneditObject->district_id = $request->district_name;
         $sectioneditObject->name=strtoupper($request->section_name);
         $sectioneditObject->postal_address=strtoupper($request->postalAddress);
         $sectioneditObject->physical_address=strtoupper($request->physicalAddress);
         $sectioneditObject->phone=$request->phone;
         $sectioneditObject->email=strtolower($request->email);
-        $sectioneditObject->status="ACTIVE";
         $sectioneditObject->updated_by  = auth()->user()->id;
         #Generate district Code
         if ( $sectioneditObject->save() ) {
@@ -264,7 +263,6 @@ class ZoneController extends Controller
         $districtupdateObj->physical_address = strtoupper($request->physicalAddress);
         $districtupdateObj->phone = $request->phone;
         $districtupdateObj->email = strtolower($request->email);
-        $districtupdateObj->status = "ACTIVE";
         $districtupdateObj->updated_by  = auth()->user()->id;
         #Generate district Code
         if ($districtupdateObj->save()) {
