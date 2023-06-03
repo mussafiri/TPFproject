@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     //:::::::::::::::::::::::::::::::::::::::::::::::: ZONES ROUTES ::::::::::::::::::::::::::::::::::::::::::::::::
+    Route::get('/ajax/get/district/old/data', [ZoneController::class, 'ajaxGetDistrictOldData']);
     Route::get('/zones/sections/{status}', [ZoneController::class, 'sections'])->name('sections');
     Route::get('/ajax/get/zone/old/data', [ZoneController::class, 'ajaxGetZoneOldData'])->name('ajaxGetZoneOldData');
     Route::get('/zones/districts/{status}', [ZoneController::class, 'districts']);
@@ -37,8 +38,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/dormant/zones/list', [ZoneController::class, 'suspendedZones']);
     Route::get('/ajax/get/zone/data', [ZoneController::class, 'zoneUpdateAjax']);
     
+    Route::post('/section/edit', [ZoneController::class, 'submitSectionEdit']);
+    Route::post('/ajax/get/section/data/edit', [ZoneController::class, 'ajaxSectionGetData']);
     Route::post('/section/register', [ZoneController::class, 'submitSection']);
-    Route::post('/ajax/get/district/old/data', [ZoneController::class, 'ajaxGetDistrictOldData']);
     Route::post('/ajax/update/section/status', [ZoneController::class, 'ajaxUpdateSectionStatus']);
     Route::post('/ajax/update/district/status', [ZoneController::class, 'ajaxUpdateDistrictStatus']);
     Route::post('/district/edit', [ZoneController::class, 'submitDistrictEdit']);

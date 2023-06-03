@@ -19,7 +19,64 @@ class ZoneController extends Controller
     public function __construct(){
         $this->cmn = new Common;
     }
-   
+    public function submitSectionEdit(Request $request){
+         #Taking all POST requests from the form
+         $valid = Validator::make($request->all(), [
+            'section_name' => 'required|min:3',
+            'section_id' => 'required',
+            'district_name' => 'required|gt:0',
+            'email' => 'email',
+            'physicalAddress' => 'required'],  
+
+                ['district_name.gt' => 'You must select District',]
+        );
+
+        if ( $valid->fails() ) {
+            #Returns errors with Error Bag 'registerSection'
+            return back()->withErrors( $valid, 'updateSection' )->withInput();
+        }
+
+        # END:: VALIDATION
+        $sectioneditObject = Section::find();
+        $sectioneditObject->district_id = $request->district;
+        $sectioneditObject->name=strtoupper($request->section_name);
+        $sectioneditObject->postal_address=strtoupper($request->postalAddress);
+        $sectioneditObject->physical_address=strtoupper($request->physicalAddress);
+        $sectioneditObject->phone=$request->phone;
+        $sectioneditObject->email=strtolower($request->email);
+        $sectioneditObject->status="ACTIVE";
+        $sectioneditObject->updated_by  = auth()->user()->id;
+        #Generate district Code
+        if ( $sectioneditObject->save() ) {
+            $districtRow=District::where("id",$sectioneditObject->district_id)->first();
+            $district_code=$districtRow->district_code;
+            $this->cmn -> sectionCodeGenerator($sectioneditObject->id,$sectioneditObject->name,$district_code);
+
+            toastr();
+            return redirect('zones/sections/'.Crypt::encryptString("ACTIVE"))->with(['success'=>'Section has been successfully updated!']);
+        }
+        toastr();
+        return redirect('zones/sections/'.Crypt::encryptString("ACTIVE"))->with(['error'=>'Oops, Section has not been successfully updated!']);
+    }
+    public function ajaxSectionGetData(Request $ajaxreq){
+        $id = $ajaxreq['section_id'];
+        $districtsArray = District::where( "status","ACTIVE")->get();
+        $sectionRow = Section::find( $id );
+        $section_data=array();
+        if ($sectionRow) {
+            $sectionRowData = Section::where('id', $id )->first();
+            $section_data[ 'status' ] = 'success';
+            $section_data[ 'message' ] = 'District data has been Succefully fetched';
+            $section_data[ 'data' ] = $sectionRowData;
+            $section_data[ 'district_collection' ] = $districtsArray;
+        } else {
+            $section_data[ 'status' ] = 'Errors';
+            $section_data[ 'message' ] = 'We could not find such District in our database';
+        }
+        return response()->json(['sectionJSONData'=>$section_data]);
+
+    }
+
     public function ajaxGetDistrictOldData(){
         $getDistrictData = District::where('status','ACTIVE')->get();
         $getDistrictDataArr=array();
@@ -30,7 +87,7 @@ class ZoneController extends Controller
             $getDistrictDataArr['status'] ='fail';
             $getDistrictDataArr['message'] = 'No data found';
         }
-        return response()->json(['getZoneDataArr'=>$getDistrictDataArr]);
+        return response()->json(['getDistrictDataArr'=>$getDistrictDataArr]);
     }
     public function ajaxUpdateSectionStatus(Request $request){ 
         #Taking all POST requests from the form
@@ -98,7 +155,7 @@ class ZoneController extends Controller
         $sectionregObject->created_by  = auth()->user()->id;
         #Generate district Code
         if ( $sectionregObject->save() ) {
-            $districtRow=District::find($sectionregObject->district_id)->first();
+            $districtRow=District::where("id",$sectionregObject->district_id)->first();
             $district_code=$districtRow->district_code;
             $this->cmn -> sectionCodeGenerator($sectionregObject->id,$sectionregObject->name,$district_code);
 
@@ -171,12 +228,12 @@ class ZoneController extends Controller
         if ($districtRow) {
             $districtRowData = District::where('id', $id )->first();
             $district_data[ 'status' ] = 'success';
-            $district_data[ 'message' ] = 'Distirct data has been Succefully fetched';
+            $district_data[ 'message' ] = 'District data has been Succefully fetched';
             $district_data[ 'data' ] = $districtRowData;
             $district_data[ 'zones_collection' ] = $zonesArray;
         } else {
             $district_data[ 'status' ] = 'Errors';
-            $district_data[ 'message' ] = 'We could not find such Distirct in our database';
+            $district_data[ 'message' ] = 'We could not find such District in our database';
         }
         return response()->json(['districtJSONData'=>$district_data]);
     }
@@ -202,14 +259,13 @@ class ZoneController extends Controller
         # END:: VALIDATION
         $districtupdateObj = District::find($request->district_id);
         $districtupdateObj->zone_id = $request->zone_name;
-        $districtupdateObj->district_code = "NULL";
         $districtupdateObj->name = strtoupper($request->district_name);
         $districtupdateObj->postal_address = strtoupper($request->postalAddress);
         $districtupdateObj->physical_address = strtoupper($request->physicalAddress);
         $districtupdateObj->phone = $request->phone;
         $districtupdateObj->email = strtolower($request->email);
         $districtupdateObj->status = "ACTIVE";
-        $districtupdateObj->created_by  = auth()->user()->id;
+        $districtupdateObj->updated_by  = auth()->user()->id;
         #Generate district Code
         if ($districtupdateObj->save()) {
             $zoneRow = Zone::find($districtupdateObj->zone_id)->first();

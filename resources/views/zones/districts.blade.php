@@ -138,14 +138,14 @@
                                                     </div>
                                                     <div class="form-group mb-3">
                                                         <label for="product-reference">Physical Address <span class="text-danger">*</span></label>
-                                                        <input type="text" id="input-physical_address" name="physicalAddress" value="{{old('phy_address')}}" class="form-control form-control-sm" placeholder="e.g : KIBAIGWA JUU" oninput="this.value = this.value.toUpperCase()" autocomplete="off">
+                                                        <input type="text" id="input-physical_address" name="physicalAddress" value="{{old('physicalAddress')}}" class="form-control form-control-sm" placeholder="e.g : KIBAIGWA JUU" oninput="this.value = this.value.toUpperCase()" autocomplete="off">
                                                         @if ($errors->updateDistrict->has('physicalAddress')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->updateDistrict->first('physicalAddress') }}</small></strong></span>@endif
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-12">
                                                     <div class="form-group mb-3">
                                                         <label for="product-description">Postal Address</label>
-                                                        <input type="text" id="input-postal_address" class="form-control form-control-sm" name="postalAddress" value="{{old('po_address')}}" placeholder="e.g : P.O.BOX 324566 KIBAIGWA" oninput="this.value = this.value.toUpperCase()" autocomplete="off">
+                                                        <input type="text" id="input-postal_address" class="form-control form-control-sm" name="postalAddress" value="{{old('postalAddress')}}" placeholder="e.g : P.O.BOX 324566 KIBAIGWA" oninput="this.value = this.value.toUpperCase()" autocomplete="off">
                                                         @if ($errors->updateDistrict->has('postalAddress')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->updateDistrict->first('postalAddress') }}</small></strong></span>@endif
                                                     </div>
                                                     <div class="form-group mb-3">
