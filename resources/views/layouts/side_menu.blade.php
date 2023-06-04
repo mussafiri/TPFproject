@@ -46,45 +46,55 @@
                     </ul>
                 </div>
             </li>
-            <li>
+            <li class="@if(request()->segment(1)=='zones'){{'menuitem-active'}} @endif">
                 <a href="#sidebarZones" data-toggle="collapse">
                     <i class="mdi mdi-map-marker-radius"></i>
                     <span> Zones </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarZones">
+                <div class="collapse @if(request()->segment(1)=='zones'){{'show'}}@endif" id="sidebarZones">
                     <ul class="nav-second-level">
-                        <li><a href="{{url('/contributors/zones')}}">Zones</a></li>
-                        <li><a href="{{url('/contributors/districts')}}">Districts </a></li>
-                        <li><a href="{{url('/contributors/sections')}}">Section </a></li>
+                        <li class="@if(request()->is('zones/list')){{'menuitem-active'}} @endif"><a href="{{url('/zones/list')}}">Zones</a></li>
+                        <li class="@if(request()->is('zones/districts/*')){{'menuitem-active'}} @endif"><a href="{{url('/zones/districts/'.Crypt::encryptString('ACTIVE'))}}">Districts </a></li>
+                        <li class="@if(request()->is('zones/sections/*')){{'menuitem-active'}} @endif"><a href="{{url('/zones/sections/'.Crypt::encryptString('ACTIVE'))}}">Section </a></li>
                     </ul>
                 </div>
             </li>
 
+
+            <li>
+                <a href="#sidebarUsers" data-toggle="collapse">
+                    <i data-feather="pocket"></i>
+                    <span> Users </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarUsers">
+                    <ul class="nav-second-level">
+                        <li> <a href="ui-buttons.html">Departments</a> </li>
+                        <li> <a href="ui-cards.html">Designations</a> </li>
+                    </ul>
+                </div>
+            </li>
             <li class="menu-title mt-2">System Settings</li>
+
+            <li>
+                <a href="#sidebarSettings" data-toggle="collapse">
+                    <i data-feather="pocket"></i>
+                    <span> Users </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarSettings">
+                    <ul class="nav-second-level">
+                        <li> <a href="ui-buttons.html">Configs</a> </li>
+                        <li> <a href="ui-cards.html">Designations</a> </li>
+                    </ul>
+                </div>
+            </li> 
             <li>
                 <a href="{{url('defaultpage')}}">
                     <i data-feather="calendar"></i>
                     <span> Default Page </span>
                 </a>
-            </li>
-
-            <li>
-                <a href="#sidebarBaseui" data-toggle="collapse">
-                    <i data-feather="pocket"></i>
-                    <span> Base UI </span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="sidebarBaseui">
-                    <ul class="nav-second-level">
-                        <li>
-                            <a href="ui-buttons.html">Buttons</a>
-                        </li>
-                        <li>
-                            <a href="ui-cards.html">Cards</a>
-                        </li>
-                    </ul>
-                </div>
             </li>
         </ul>
     </div>

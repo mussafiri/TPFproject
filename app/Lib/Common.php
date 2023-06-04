@@ -3,6 +3,7 @@ namespace App\Lib;
 use App\Models\Contributor;
 use App\Models\Member;
 use App\Models\District;
+use App\Models\Section;
 use Carbon\Carbon;
 
 class Common {
@@ -42,5 +43,21 @@ class Common {
         $districtcodeUpdateobj = District::find($ID);
         $districtcodeUpdateobj->district_code=$finalCode;
         $districtcodeUpdateobj->save();
+    }
+    public function sectionCodeGenerator($ID,$section,$district_code){
+        #substr()function to return the first two characters from the district name
+        $s_code = substr($section,0,2);
+        $codeFormat = $district_code.'-'.$s_code; //format
+        $nextDigLength = mb_strlen($ID, "UTF-8");
+        if($nextDigLength>1){
+            $lastCodePart=$ID;
+        }else{
+            $lastCodePart='0'.$ID;
+        }
+        $finalCode=$codeFormat.$lastCodePart;
+
+        $sectioncodeUpdateobj = Section::find($ID);
+        $sectioncodeUpdateobj->section_code=$finalCode;
+        $sectioncodeUpdateobj->save();
     }
 }
