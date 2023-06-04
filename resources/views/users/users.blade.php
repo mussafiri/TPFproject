@@ -68,12 +68,12 @@
                                         <div class="col-12">
                                          <ul class="nav nav-tabs nav-bordered">
                                             <li class="nav-item">
-                                                <a href="{{url('contributors/list/'.Crypt::encryptString('ACTIVE'))}}" aria-expanded="false" class="nav-link @if($status=='ACTIVE') {{'active'}} @endif">
+                                                <a href="{{url('contributors/'.Crypt::encryptString('ACTIVE'))}}" aria-expanded="false" class="nav-link @if($status=='ACTIVE') {{'active'}} @endif">
                                                     Active
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="{{url('contributors/list/'.Crypt::encryptString('SUSPENDED'))}}" aria-expanded="true" class="nav-link @if($status=='SUSPENDED') {{'active'}} @endif">
+                                                <a href="{{url('contributors/'.Crypt::encryptString('SUSPENDED'))}}" aria-expanded="true" class="nav-link @if($status=='SUSPENDED') {{'active'}} @endif">
                                                     Suspended
                                                 </a>
                                             </li>
@@ -116,7 +116,7 @@
                                                                                     <i class='mdi mdi-dots-horizontal font-18'></i>
                                                                                 </a>
                                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                                    <a href="{{url('contributors/edit/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
+                                                                                    <a href="{{url('edit/contributors/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
                                                                                         <i class='mdi mdi-pencil-outline mr-1'></i>Edit
                                                                                     </a>
                                                                                     <div class="dropdown-divider"></div>
@@ -208,7 +208,7 @@
             t.value ?
                 $.ajax({
                     type: 'POST',
-                    url: "{{url('/ajax/change/contri/status')}}",
+                    url: "{{url('/ajax/change/users/status')}}",
                     data: {
                         data_id: data_id,
                         new_status: new_status,

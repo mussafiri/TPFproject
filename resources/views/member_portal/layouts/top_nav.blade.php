@@ -7,14 +7,8 @@
                             <ul class="navbar-nav">
                                 <li class="nav-item">
                                     <a class="nav-link arrow-none" href="#" id="topnav-dashboard" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fe-airplay mr-1"></i> Dashboards
+                                        <i class="fe-airplay mr-1"></i> Dashboards 
                                     </a>
-                                    {{-- <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
-                                        <a href="index.html" class="dropdown-item">Dashboard 1</a>
-                                        <a href="dashboard-2.html" class="dropdown-item">Dashboard 2</a>
-                                        <a href="dashboard-3.html" class="dropdown-item">Dashboard 3</a>
-                                        <a href="dashboard-4.html" class="dropdown-item">Dashboard 4</a>
-                                    </div> --}}
                                 </li>
 
                                 <li class="nav-item dropdown">

@@ -40,6 +40,15 @@ class User extends Authenticatable
     ];
 
     public function creator(){
-        return $this->hasMany(ContributorType::class, "created_by");
-     }
+        return $this->belongsTo(User::class, "created_by");
+     }  
+    public function updator(){
+        return $this->belongsTo(User::class, "updated_by");
+     }  
+    public function department(){
+        return $this->belongsTo(Department::class, "dept_id");
+    }
+    public function designation(){
+        return $this->belongsTo(Designation::class, "designation_id");
+    }
 }

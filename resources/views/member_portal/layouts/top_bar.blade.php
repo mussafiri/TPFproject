@@ -265,8 +265,8 @@
                         <li class="dropdown notification-list topbar-dropdown">
                             <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                 <img src="{{asset('assets/images/users/user-1.jpg')}}" alt="user-image" class="rounded-circle">
-                                <span class="pro-user-name ml-1">
-                                    Geneva <i class="mdi mdi-chevron-down"></i> 
+                                <span class="pro-user-name ml-1 font-11">
+                                    {{Auth::guard('member')->user()->fname.' '.Auth::guard('member')->user()->lname}} <i class="mdi mdi-chevron-down"></i> 
                                 </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
@@ -281,25 +281,16 @@
                                     <span>My Account</span>
                                 </a>
     
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                    <i class="fe-settings"></i>
-                                    <span>Settings</span>
-                                </a>
-    
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                    <i class="fe-lock"></i>
-                                    <span>Lock Screen</span>
-                                </a>
-    
                                 <div class="dropdown-divider"></div>
     
                                 <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                <form method="POST" action="{{ route('member.logout') }}">
+                                @csrf
+                                <a href="{{route('member.logout')}}" onclick="event.preventDefault(); this.closest('form').submit();" class="dropdown-item notify-item">
                                     <i class="fe-log-out"></i>
                                     <span>Logout</span>
                                 </a>
+                                </form>
     
                             </div>
                         </li>

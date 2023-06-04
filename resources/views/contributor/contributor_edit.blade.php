@@ -45,7 +45,7 @@
                                         <!-- end row-->
                                         <div class="row">
                                         <div class="col-12 px-2">
-                                                <form method="POST" enctype="multipart/form-data" action="{{url('submit/edit/contributor/'.$contriID)}}">
+                                                <form method="POST" enctype="multipart/form-data" action="{{url('contributors/edit/submit'.$contriID)}}">
                                                 @csrf
                                                     <div class="col-12">
                                                         <div class="row">

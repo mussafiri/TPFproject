@@ -54,7 +54,7 @@
                                     <div class="form-group mb-3">
                                         <label for="emailaddress">Email address</label>
                                         <input class="form-control" type="email" id="emailaddress" name="email" :value="old('email')" required autofocus placeholder="Enter your email">
-                                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                                         <x-input-error :messages="$errors->get('email')" class="mt-2 text-dange" />
                                     </div>
 
                                     <div class="form-group mb-0 text-center">
@@ -84,7 +84,7 @@
 
 
         <footer class="footer footer-alt">
-            2019 - <script>document.write(new Date().getFullYear())</script> &copy; Tumaini Pension Fund (TPF) <a href="" class="text-white-50">Powered By Claritas</a> 
+            2019 - <script>document.write(new Date().getFullYear())</script> &copy; Tumaini Pension Fund (TPF) <a href="" class="text-white-50">Claritas International</a> 
         </footer>
 
         <!-- Vendor js -->

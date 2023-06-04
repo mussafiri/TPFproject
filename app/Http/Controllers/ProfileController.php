@@ -11,6 +11,9 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    public function myProfile(){
+        return view('users.user_profile');
+    }
     /**
      * Display the user's profile form.
      */
@@ -58,7 +61,10 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function changePassword(){
-       return view('auth.change-password');
+    public function resetPassword(){
+       return view('auth.user_reset_password');
+    }
+    public function memberResetPassword(){
+       return view('member_portal.auth.member_reset_password');
     }
 }

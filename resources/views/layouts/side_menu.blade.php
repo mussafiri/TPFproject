@@ -5,24 +5,13 @@
             <li class="menu-title">Navigation</li>
 
             <li>
-                <a href="#sidebarDashboards" data-toggle="collapse">
+                <a href="{{url('/dashboard')}}">
                     <i data-feather="airplay"></i>
                     <span> Dashboards </span>
                 </a>
-                <div class="collapse" id="sidebarDashboards">
-                    <ul class="nav-second-level">
-                        <li>
-                            <a href="index.html">Detailed</a>
-                        </li>
-                        <li>
-                            <a href="dashboard-2.html">Summary</a>
-                        </li>
-                    </ul>
-                </div>
             </li>
 
             <li class="menu-title mt-2">Apps</li>
-
 
             <li>
                 <a href="#sidebarMembers" data-toggle="collapse">
@@ -44,16 +33,16 @@
                     </ul>
                 </div>
             </li>
-            <li class="@if(str_contains(url()->current(), 'contributors') || str_contains(url()->current(), 'contributor')){{'menuitem-active'}}@endif">
+            <li class="@if(request()->segment(1)=='contributors'){{'menuitem-active'}}@endif">
                 <a href="#sidebarContributors" data-toggle="collapse">
                     <i class="fa fas fa-church "></i>
-                    <span> Contributors </span>
+                    <span> Contributors</span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse  @if(str_contains(url()->current(), 'contributors' || str_contains(url()->current(), 'contributor'))){{'show'}}@endif" id="sidebarContributors">
+                <div class="collapse  @if(request()->segment(1)=='contributors'){{'show'}}@endif" id="sidebarContributors">
                     <ul class="nav-second-level">
-                        <li class="@if(str_contains(url()->current(), 'contributors')){{'menuitem-active'}}@endif"><a href="{{url('contributors/'.Crypt::encryptString('ACTIVE'))}}">Contributors</a></li>
-                        <li class="@if(str_contains(url()->current(), 'contributor/categories')){{'menuitem-active'}}@endif"><a href="{{url('contributor/categories/'.Crypt::encryptString('ACTIVE'))}}">Categories</a></li>
+                        <li class="@if(request()->is('contributors/list/*')||request()->is('contributors/edit/*')){{'menuitem-active'}}@endif"><a href="{{url('contributors/list/'.Crypt::encryptString('ACTIVE'))}}">Contributors</a></li>
+                        <li class="@if(request()->segment(2)=='categories'){{'menuitem-active'}}@endif"><a href="{{url('contributors/categories/'.Crypt::encryptString('ACTIVE'))}}">Categories</a></li>
                     </ul>
                 </div>
             </li>
@@ -71,7 +60,6 @@
                     </ul>
                 </div>
             </li>
-
 
             <li class="menu-title mt-2">System Settings</li>
             <li>

@@ -4,10 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
-class AuthenticateMember
+class Member
 {
     /**
      * Handle an incoming request.
@@ -16,10 +16,9 @@ class AuthenticateMember
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::guard('member')->check()) {
-            return $next($request);
-        } else {
-            return redirect()->route('member.login');
+        if(!Auth ::guard('member')->check()){
+            return redirect()->route('member.login')->with('error','Please login first');
         }
+        return $next($request);
     }
 }

@@ -23,7 +23,7 @@
                             <div class="col-xl-12">
                                 <div class="card-box">
                         <form method="POST" action="{{ route('password.confirm') }}">
-        @csrf
+                        @csrf
                         <div class="card bg-pattern">
 
                             <div class="card-body p-4">
