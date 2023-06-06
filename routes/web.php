@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dormant/zones/list', [ZoneController::class, 'suspendedZones']);
     Route::get('/ajax/get/zone/data', [ZoneController::class, 'zoneUpdateAjax']);
     
+    Route::post('/ajax/get/section/data/view', [ZoneController::class, 'ajaxSectionViewData']);
     Route::post('/section/edit', [ZoneController::class, 'submitSectionEdit']);
     Route::post('/ajax/get/section/data/edit', [ZoneController::class, 'ajaxSectionGetData']);
     Route::post('/section/register', [ZoneController::class, 'submitSection']);
