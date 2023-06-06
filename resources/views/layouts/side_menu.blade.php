@@ -35,7 +35,7 @@
             </li>
             <li class="@if(request()->segment(1)=='contributors'){{'menuitem-active'}}@endif">
                 <a href="#sidebarContributors" data-toggle="collapse">
-                    <i class="fa fas fa-church "></i>
+                    <i class="flaticon flaticon-donation"></i>
                     <span> Contributors</span>
                     <span class="menu-arrow"></span>
                 </a>
@@ -62,16 +62,17 @@
             </li>
 
 
-            <li>
+            <li class="@if(request()->segment(1)=='users'){{'menuitem-active'}} @endif">
                 <a href="#sidebarUsers" data-toggle="collapse">
-                    <i data-feather="pocket"></i>
-                    <span> Users </span>
+                    <i class="mdi mdi-account-group-outline"></i>
+                    <span> Manage Users </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarUsers">
+                <div class="collapse @if(request()->segment(1)=='users'){{'show'}}@endif" id="sidebarUsers">
                     <ul class="nav-second-level">
-                        <li> <a href="ui-buttons.html">Departments</a> </li>
-                        <li> <a href="ui-cards.html">Designations</a> </li>
+                        <li class="@if(request()->is('users/list/*')||request()->is('users/add')){{'menuitem-active'}} @endif"> <a href="{{url('users/list/'.Crypt::encryptString('ACTIVE'))}}">Users</a> </li>
+                        <li class="@if(request()->is('users/departments/*')){{'menuitem-active'}} @endif"> <a href="{{url('users/departments/'.Crypt::encryptString('ACTIVE'))}}">Departments</a> </li>
+                        <li class="@if(request()->is('users/designations/*')){{'menuitem-active'}} @endif"> <a href="{{url('users/designations/'.Crypt::encryptString('ACTIVE'))}}">Designations</a> </li>
                     </ul>
                 </div>
             </li>
@@ -80,16 +81,16 @@
             <li>
                 <a href="#sidebarSettings" data-toggle="collapse">
                     <i data-feather="pocket"></i>
-                    <span> Users </span>
+                    <span> Configurations </span>
                     <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse" id="sidebarSettings">
                     <ul class="nav-second-level">
-                        <li> <a href="ui-buttons.html">Configs</a> </li>
-                        <li> <a href="ui-cards.html">Designations</a> </li>
+                        <li> <a href="{{url('configs/constantvalues')}}">Default Value</a> </li>
+                        {{-- <li> <a href="ui-cards.html">Designations</a> </li> --}}
                     </ul>
                 </div>
-            </li> 
+            </li>
             <li>
                 <a href="{{url('defaultpage')}}">
                     <i data-feather="calendar"></i>

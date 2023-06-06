@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('dob');
             $table->string('physical_address');
-            $table->integer('dept_id');
+            $table->integer('department_id');
             $table->integer('designation_id');
             $table->integer('created_by')->default(0);
             $table->integer('updated_by')->default(0);

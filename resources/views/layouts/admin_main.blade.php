@@ -28,7 +28,8 @@
     <link href="{{asset('assets/fonts/flaticon_tpf_mcc.css')}}" rel="stylesheet" type="text/css" />
     <!-- Plugins css -->
     <link href="{{asset('assets/libs/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
-
+    <link rel="stylesheet" href="{{asset('assets/libs/daterangepicker/css/daterangepicker.css')}}" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     @yield('custom_css')
 </head>
 
@@ -95,6 +96,8 @@
         <script src="{{asset('assets/js/pages/form-advanced.init.js')}}"></script>
         <!-- Init js-->
         <script src="{{asset('assets/js/pages/form-masks.init.js')}}"></script>
+        <script src="{{asset('assets/libs/daterangetimepicker/moment.js')}}"></script>
+        <script src="{{asset('assets/libs/daterangetimepicker/daterangepicker.js')}}"></script>    
         <!-- App js-->
         <script src="{{asset('assets/js/app.min.js')}}"></script>
 

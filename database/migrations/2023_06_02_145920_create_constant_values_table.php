@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('item_type');
             $table->decimal('amount', 32, 2);
-            $table->enum('unit_type',['PERCENTAGE','DIGIT'])->default('PERCENTAGE');
+            $table->enum('unit_type',['PERCENTAGE', 'DIGIT', 'DAYS', 'MONTHS','TIMES'])->default('PERCENTAGE');
             $table->enum('status',['ACTIVE','DORMANT'])->default('ACTIVE');
             $table->integer('created_by')->default(0);
             $table->timestamps();
