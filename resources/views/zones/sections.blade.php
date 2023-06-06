@@ -46,6 +46,73 @@
                             </div>
                         </div><!-- end col-->
                     </div>
+                    <!-- Section for the MOdal View -->
+                    <div id="view-section-modal-lg" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                        <div class="modal-dialog modal-full-width modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-light">
+                                    <h4 class="modal-title" id="myCenterModalLabel">Section Details</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h4 class="header-title mb-3"> Information</h4>
+                                                        <div class="row">
+                                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                                <h5 class="font-family-primary font-weight-semibold">Section Information</h5>
+                                                                <p class="mb-2"><span class="font-weight-semibold mr-2">Section name:</span><span class="font-12" id="section-name"> </span> </p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Section code:</span> <span id="section-code" class="font-12"></span></p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Physical address:</span> <span id="section-physical_address" class="font-12"></span></p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Postal Address:</span><span id="section-postal_address" class="font-12"></span> </p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Phone:</span><span id="section-phone" class="font-12"></span></p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Email:</span><span id="section-email" class="font-12"></span></p>
+                                                            </div>
+                                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                                <p class="mb-4"></p>
+                                                                <p class="mb-2"><span class="font-weight-semibold mr-2">District name:</span><span class="font-12" id="district-name"> </span> </p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Physical address:</span> <span id="district-physical_address" class="font-12"></span></p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Postal Address:</span><span id="district-postal_address" class="font-12"></span> </p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Phone:</span><span id="district-phone" class="font-12"></span></p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Email:</span><span id="district-email" class="font-12"></span></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div><!-- end card -->
+                                            </div> <!-- end col -->
+                                            <div class="col-4">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h4 class="header-title mb-3 text-center">Summary Info</h4>
+                                                        <div class="text-center">
+                                                            <i class="flaticon flaticon-donation h2"></i>
+                                                            <h5><b><span data-plugin="counterup" class="section-total_contributors"></span></b></h5>
+                                                            <p class="mb-1"><span class="font-weight-semibold">CONTRIBUTORS</span> </p>
+                                                           
+                                                        </div>
+                                                        <div class="dropdown-divider"></div>
+                                                        <div class="text-center">
+                                                            <i class="flaticon flaticon-crowd-of-users h2"></i>
+                                                            <h5><b><span data-plugin="counterup" class="section-total_members"></span></b></h5>
+                                                            <p class="mb-1"><span class="font-weight-semibold">MEMBERS</span> </p>
+                                                          
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end col-4 -->
+                                        </div><!-- end card row -->
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="margin-top:-2rem;">
+                                    <button type="button" class="btn btn-danger ml-auto" data-dismiss="modal">Close</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                    <!-- Section for the MOdal View -->
                     <!-- Register Section modal content -->
                     <div id="add-section-modal-lg" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                         <form class="" method="POST" action="{{url('/section/register')}}">
@@ -132,7 +199,7 @@
                                                     <div class="form-group mb-3">
                                                         <label for="district-name">District <span class="text-danger">*</span></label>
                                                         <select class="form-control districtSelect" name="district_name" data-toggle="select2">
-                                                          
+
                                                         </select>
                                                         @if ($errors->updateSection->has('district_name')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->updateSection->first('district_name') }}</small></strong></span>@endif
                                                     </div>
@@ -187,7 +254,7 @@
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane active" >
+                        <div class="tab-pane active">
                             <div class="table-responsive">
                                 <table class="table table-sm font-12 table-striped w-100 datatable-buttons table-responsible">
                                     <thead>
@@ -219,8 +286,9 @@
                                                 <div class="btn-group dropdown">
                                                     <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-right">
+                                                        <a class="dropdown-item sectionViewModal" href="#" data-toggle="modal" data-target="#view-section-modal-lg" data-sectionid="{{$data->id}}"><i class="mdi mdi-eye-outline mr-2 text-muted font-18 vertical-middle"></i>View</a>
                                                         <a class="dropdown-item sectionEditModalDataLink" href="#" data-toggle="modal" data-target="#UpdateSectionModal" data-sectionid="{{$data->id}}"><i class="mdi mdi-pencil-outline mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
-                                                        <a class="dropdown-item district_statusChangeLink" data-section="{{$data->id}}" data-new_status="{{$data->status=='ACTIVE' ? 'Suspend':'Activate';}}" data-section_name="{{$data->name}}" href="#"><i class="{{$status=='ACTIVE'?'mdi mdi-close-thick':'mdi mdi-check-all';}} mr-2 text-muted font-18 vertical-middle"></i> {{$data->status=='ACTIVE'?'Suspend':'Activate';}}</a>
+                                                        <a class="dropdown-item section_statusChangeLink" data-section="{{$data->id}}" data-new_status="{{$data->status=='ACTIVE' ? 'Suspend':'Activate';}}" data-section_name="{{$data->name}}" href="#"><i class="{{$status=='ACTIVE'?'mdi mdi-close-thick':'mdi mdi-check-all';}} mr-2 text-muted font-18 vertical-middle"></i> {{$data->status=='ACTIVE'?'Suspend':'Activate';}}</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -268,46 +336,46 @@
 <script>
     $(document).ready(function() {
         @if($errors->hasBag('registerSection'))
-            $('#add-section-modal-lg').modal({
-                show: true
-            });
+        $('#add-section-modal-lg').modal({
+            show: true
+        });
         @elseif($errors->hasBag('updateSection'))
 
-            //START::fetch district collections
-            var oldDistrictID="{{old('district_name')}}";
-            $.ajax({
-                type: 'GET',
-                url: "{{url('/ajax/get/district/old/data')}}",
-                dataType: 'json',
-                success: function(response) {
-                    if(response.getDistrictDataArr.status == 'success'){
-                        // Prepare for section selections options
-                        var districts = response.getDistrictDataArr.data;
-                        var district_len = response.getDistrictDataArr.data.length;
-                        $(".districtSelect").empty();
-                        $(".districtSelect").append("<option value=0> ..Select districts.. </option>");
-                        for( var x = 0; x < district_len; x++){
+        //START::fetch district collections
+        var oldDistrictID = "{{old('district_name')}}";
+        $.ajax({
+            type: 'GET',
+            url: "{{url('/ajax/get/district/old/data')}}",
+            dataType: 'json',
+            success: function(response) {
+                if (response.getDistrictDataArr.status == 'success') {
+                    // Prepare for section selections options
+                    var districts = response.getDistrictDataArr.data;
+                    var district_len = response.getDistrictDataArr.data.length;
+                    $(".districtSelect").empty();
+                    $(".districtSelect").append("<option value=0> ..Select districts.. </option>");
+                    for (var x = 0; x < district_len; x++) {
 
-                            var district_id  = districts[x].id;
-                            var district_name= districts[x].name;
+                        var district_id = districts[x].id;
+                        var district_name = districts[x].name;
 
-                            if(oldDistrictID == district_id){
-                                $(".districtSelect").append("<option value='"+district_id+"' selected >"+district_name+"</option>");
-                            }else{ 
-                                $(".districtSelect").append("<option value='"+district_id+"'>"+district_name+"</option>");
-                            }
+                        if (oldDistrictID == district_id) {
+                            $(".districtSelect").append("<option value='" + district_id + "' selected >" + district_name + "</option>");
+                        } else {
+                            $(".districtSelect").append("<option value='" + district_id + "'>" + district_name + "</option>");
                         }
-                    } else {
-                        $('#edit_inputMaterial').val('');
-                        $('#edit_fetchError').html(response.getDistrictDataArr.message);
                     }
+                } else {
+                    $('#edit_inputMaterial').val('');
+                    $('#edit_fetchError').html(response.getDistrictDataArr.message);
                 }
-            });
-            //END::fetch district collections
-            
-            $('#UpdateSectionModal').modal({
-                show: true
-            });
+            }
+        });
+        //END::fetch district collections
+
+        $('#UpdateSectionModal').modal({
+            show: true
+        });
         @endif
     });
 </script>
@@ -323,7 +391,7 @@
             },
             dataType: 'json',
             success: function(response) {
-                if(response.sectionJSONData.status == 'success'){
+                if (response.sectionJSONData.status == 'success') {
                     $('#edit_fetchError').html('');
                     $('#input-section').val(response.sectionJSONData.data.name);
                     $('#input-physical_address').val(response.sectionJSONData.data.physical_address);
@@ -338,15 +406,15 @@
                     $(".districtSelect").empty();
                     $(".districtSelect").append("<option value=0> ..Select districts.. </option>");
                     var districtZoneID = response.sectionJSONData.data.district_id;
-                    for( var x = 0; x < district_len; x++){
+                    for (var x = 0; x < district_len; x++) {
 
-                        var district_id  = districts[x].id;
-                        var district_name= districts[x].name;
+                        var district_id = districts[x].id;
+                        var district_name = districts[x].name;
 
-                        if(districtZoneID == district_id){
-                            $(".districtSelect").append("<option value='"+district_id+"' selected >"+district_name+"</option>");
-                        }else{ 
-                            $(".districtSelect").append("<option value='"+district_id+"'>"+district_name+"</option>");
+                        if (districtZoneID == district_id) {
+                            $(".districtSelect").append("<option value='" + district_id + "' selected >" + district_name + "</option>");
+                        } else {
+                            $(".districtSelect").append("<option value='" + district_id + "'>" + district_name + "</option>");
                         }
                     }
                 } else {
@@ -359,7 +427,7 @@
     });
 </script><!-- SCRIPT FOR Editing Modal  -->
 <script type="text/javascript">
-    $(".district_statusChangeLink").click(function() {
+    $(".section_statusChangeLink").click(function() {
         var section_id = $(this).attr("data-section");
         var new_status = $(this).attr("data-new_status");
         var section_name = $(this).attr("data-section_name");
@@ -402,5 +470,46 @@
 
     });
 </script><!-- ./Status Modal  -->
+<script>
+    $('.sectionViewModal').on('click', function() {
+        $('#view-section-modal-lg').modal({show: true});
+        var section = $(this).attr('data-sectionid');
+        $.ajax({
+            type: 'POST',
+            url: "{{url('/ajax/get/section/data/view')}}",
+            data: {
+                section_id: section,
+                _token: '{{ csrf_token() }}'
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.sectionJSONData.status == 'success') {
+                    // section data fetched 
+                    $('#section-name').html(response.sectionJSONData.data.name);
+                    $('#section-physical_address').html(response.sectionJSONData.data.physical_address);
+                    $('#section-postal_address').html(response.sectionJSONData.data.postal_address);
+                    $('#section-phone').html(response.sectionJSONData.data.phone);
+                    $('#section-email').html(response.sectionJSONData.data.email);
+                    $('#section-code').html(response.sectionJSONData.data.section_code);
+                    $('.section-total_contributors').html(response.sectionJSONData.total_contributors);
+                    $('.section-total_members').html(response.sectionJSONData.total_members);
+
+                    // District data fetched 
+                    $('#district-name').html(response.sectionJSONData.data.district_name);
+                    $('#district-physical_address').html(response.sectionJSONData.data.district_physical_address);
+                    $('#district-postal_address').html(response.sectionJSONData.data.district_postal_address);
+                    $('#district-phone').html(response.sectionJSONData.data.district_phone);
+                    $('#district-email').html(response.sectionJSONData.data.district_email);
+                    $('#district-code').html(response.sectionJSONData.data.district_section_code);
+
+                } else {
+                    $('#edit_inputMaterial').val('');
+                    $('#edit_fetchError').html(response.sectionJSONData.message);
+                }
+            }
+        });
+
+    });
+</script><!-- SCRIPT FOR View Modal  -->
 
 @endsection

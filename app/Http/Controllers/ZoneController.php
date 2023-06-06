@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Lib\Common;
+use App\Models\Contributor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\Zone;
 use App\Models\District;
 use App\Models\Section;
+use App\Models\Member;
 
 
 class ZoneController extends Controller
@@ -18,6 +20,33 @@ class ZoneController extends Controller
     //
     public function __construct(){
         $this->cmn = new Common;
+    }
+    public function ajaxSectionViewData(Request $ajaxreq){
+        $id = $ajaxreq['section_id'];
+
+        $contributors_count = Contributor::where( "section_id",$id)->count();
+        $members_count = Member::join('contributors', 'contributors.id', '=', 'members.contributor_id' )
+                                ->join("sections",'contributors.section_id', '=', 'sections.id')
+                                ->Where("contributors.section_id", $id)
+                                ->count();
+
+        $sectionRow = Section::join('districts', 'sections.district_id', '=', 'districts.id' )
+                                ->Where("sections.id", $id)
+                                ->first( ["sections.*", "districts.name as district_name","districts.district_code","districts.postal_address as district_postal_address","districts.physical_address as district_physical_address","districts.phone as district_phone","districts.email as district_email"]);
+        $section_data=array();
+        if ($sectionRow) {
+            // $sectionRowData = Section::where('id', $id )->first();
+            $section_data[ 'status' ] = 'success';
+            $section_data[ 'message' ] = 'District data has been Succefully fetched';
+            $section_data[ 'data' ] = $sectionRow;
+            $section_data[ 'total_members' ] = $members_count;
+            $section_data[ 'total_contributors'] = $contributors_count;
+        } else {
+            $section_data[ 'status' ] = 'Errors';
+            $section_data[ 'message' ] = 'We could not find such District in our database';
+        }
+        return response()->json(['sectionJSONData'=>$section_data]);
+
     }
     public function submitSectionEdit(Request $request){
          #Taking all POST requests from the form
