@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ConstantValue extends Model
 {
     use HasFactory;
+
+    public function createdBy() {
+        return $this->belongsTo( User::class, 'created_by' );
+    }
 }

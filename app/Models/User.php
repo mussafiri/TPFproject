@@ -46,7 +46,7 @@ class User extends Authenticatable
         return $this->belongsTo(User::class, "updated_by");
      }  
     public function department(){
-        return $this->belongsTo(Department::class, "dept_id");
+        return $this->belongsTo(Department::class, "department_id");
     }
     public function designation(){
         return $this->belongsTo(Designation::class, "designation_id");

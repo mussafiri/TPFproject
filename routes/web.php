@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\MemberController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\MemberDashboardController;
 use App\Http\Controllers\MemberAuthController;
@@ -54,7 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/zone/register', [ZoneController::class, 'submitZones']);
     Route::post('/zone/edit', [ZoneController::class, 'submitZoneEdit']);
 
-    //START:: Contributor 
+    //START:: Contributor
     Route::prefix('contributors')->group(function(){
         Route::get('/categories/{status}', [ContributorController::class, 'contributorsCategory'])->name('contributors.category');
         Route::post('/category/add/submit', [ContributorController::class, 'submitNewContributorsCategory']);
@@ -84,11 +85,47 @@ Route::middleware('auth')->group(function () {
         #Start::section routes
 
         #Start::contributor routes
-        Route::post('/get/contri/category/data', [ContributorController::class, 'ajaxGetContributorsCategory']);
-        Route::post('/change/contri/category/status', [ContributorController::class, 'ajaxUpdateContributorsCategoryStatus']);
-        Route::post('/change/contri/status', [ContributorController::class, 'ajaxUpdateContributorStatus']);
+        Route::post('/get/contributor/category/data', [ContributorController::class, 'ajaxGetContributorsCategory']);
+        Route::post('/change/contributor/category/status', [ContributorController::class, 'ajaxUpdateContributorsCategoryStatus']);
+        Route::post('/change/contributor/status', [ContributorController::class, 'ajaxUpdateContributorStatus']);
         #End::contributor routes
+
+        #Start:: user management routes
+        Route::post('/change/user/status', [UserController::class, 'ajaxChangeUserUserStatus']);
+        Route::post('/change/department/status', [UserController::class, 'ajaxChangeDepartmentStatus']);
+        Route::post('/get/department/data', [UserController::class, 'ajaxGetDepartmentData']);
+        Route::post('/get/designation/data', [UserController::class, 'ajaxGetDesignationData']);
+        Route::post('/change/designation/status', [UserController::class, 'ajaxChangeDesignationStatus']);
+        #End:: user management routes
+
+        #Start:: constsnt value routes
+        Route::post('/get/constantvalue/data',[SettingsController::class, 'ajaxGetConstantvalueData']);
+        #End:: constsnt value routes
     });
+
+    //Start:: users management routes
+    Route::prefix('users')->group(function(){
+        Route::get('/list/{status}', [UserController::class, 'userList']);
+        Route::get('/add', [UserController::class, 'addUser']);
+        Route::post('/add/submit', [UserController::class, 'submitAddUser']);
+        Route::get('/view/{id}', [UserController::class, 'viewUser']);
+        Route::get('/edit/{id}', [UserController::class, 'editUser']);
+        Route::post('/edit/submit/{id}', [UserController::class, 'submitEditUser']);
+        Route::get('/departments/{status}', [UserController::class, 'departments']);
+        Route::post('/departments/add/submit', [UserController::class, 'submitNewDepartment']);
+        Route::post('/department/edit/submit', [UserController::class, 'submitEditDepartment']);
+        Route::get('/designations/{status}', [UserController::class, 'designations']);
+        Route::post('/designations/add/submit', [UserController::class, 'submitNewDesignation']);
+        Route::post('/designations/edit/submit', [UserController::class, 'submitEditDesignation']);
+    });
+    //end:: users management routes
+
+    //Start:: Configurations routes
+    Route::prefix('configs')->group(function(){
+        Route::get('/constantvalues', [SettingsController::class, 'constantValues']);
+        Route::post('/edit/constantvalue/submit', [SettingsController::class, 'submitConstantValues']); 
+    });
+    //Start:: Configurations routes
 });
 
 // START:: MEMBERS ROUTES
@@ -99,7 +136,6 @@ Route::prefix('member')->group(function(){
 
    Route::middleware('member')->group(function(){
        Route::get('/dashboard', [MemberDashboardController::class, 'index'])->name('member.dashboard');
-
    });
 });
 
