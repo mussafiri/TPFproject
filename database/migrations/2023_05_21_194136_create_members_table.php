@@ -37,6 +37,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('password_status', ['DEFAULT','ACTIVE','SUSPENDED'])->default('DEFAULT');
             $table->string('password_changed_at')->default('NULL');
+            $table->string('last_login')->default('NULL');
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->timestamps();

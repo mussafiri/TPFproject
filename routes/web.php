@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\MemberDashboardController;
 use App\Http\Controllers\MemberAuthController;
 use App\Http\Controllers\ContributorController;
 use App\Http\Controllers\ProfileController;
@@ -21,11 +23,14 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 */
 
 Route::get('/defaultpage', [CommonController::class, 'index']);
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/suspended', [AuthenticatedSessionController::class, 'suspendedUser']);
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::get('/change/password', [ProfileController::class, 'changePassword'])->name('change.password');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    // Route::get('/change/password', [ProfileController::class, 'changePassword'])->name('change.password');
+    Route::get('/profile', [ProfileController::class, 'myProfile'])->name('profile');
+    Route::get('/reset/password', [ProfileController::class, 'resetPassword'])->name('profile.reset.password');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -45,39 +50,59 @@ Route::middleware('auth')->group(function () {
     Route::post('/ajax/update/section/status', [ZoneController::class, 'ajaxUpdateSectionStatus']);
     Route::post('/ajax/update/district/status', [ZoneController::class, 'ajaxUpdateDistrictStatus']);
     Route::post('/district/edit', [ZoneController::class, 'submitDistrictEdit']);
-    Route::post('/ajax/get/district/data', [ZoneController::class, 'ajaxDistrictGetData']);
     Route::post('/district/register', [ZoneController::class, 'submitDistrict']);
-    Route::post('/ajax/update/zone/status', [ZoneController::class, 'ajaxUpdateZoneStatus']);
-    Route::post('/ajax/get/zone/data', [ZoneController::class, 'ajaxZoneGetData']);
     Route::post('/zone/register', [ZoneController::class, 'submitZones']);
     Route::post('/zone/edit', [ZoneController::class, 'submitZoneEdit']);
 
-
-
-    //START:: Contributor
-    Route::get('contributor/categories/{status}', [ContributorController::class, 'contributorsCategory'])->name('contributors.category');
-    Route::post('submit/add/contributor/category', [ContributorController::class, 'submitNewContributorsCategory']);
-    Route::post('ajax/get/contri/category/data', [ContributorController::class, 'ajaxGetContributorsCategory']);
-    Route::post('ajax/change/contri/category/status', [ContributorController::class, 'ajaxUpdateContributorsCategoryStatus']);
-    Route::post('submit/edit/contributor/category', [ContributorController::class, 'submitEditContributorsCategory']);
-    Route::get('/add/contributors', [ContributorController::class, 'addContributors']);
-    Route::get('/edit/contributors/{id}', [ContributorController::class, 'editContributors']);
-    Route::post('submit/edit/contributor/{id}', [ContributorController::class, 'submitEditContributor']);
-    Route::post('/ajax/get/section/data', [ContributorController::class, 'ajaxGetSectionData']);
-    Route::post('/submit/add/contributor', [ContributorController::class, 'SubmitAddContributor']);
-    Route::get('contributors/{status}', [ContributorController::class, 'contributors'])->name('contributors.list');
-    Route::post('ajax/change/contri/status', [ContributorController::class, 'ajaxUpdateContributorStatus']);
+    //START:: Contributor 
+    Route::prefix('contributors')->group(function(){
+        Route::get('/categories/{status}', [ContributorController::class, 'contributorsCategory'])->name('contributors.category');
+        Route::post('/category/add/submit', [ContributorController::class, 'submitNewContributorsCategory']);
+        Route::post('/category/edit/submit', [ContributorController::class, 'submitEditContributorsCategory']);
+        Route::get('/add', [ContributorController::class, 'addContributors']);
+        Route::get('/edit/{id}', [ContributorController::class, 'editContributors']);
+        Route::post('/edit/submit{id}', [ContributorController::class, 'submitEditContributor']);
+        Route::post('/add/submit', [ContributorController::class, 'SubmitAddContributor']);
+        Route::get('/list/{status}', [ContributorController::class, 'contributors'])->name('contributors.list');
+    });
     //END:: Contributor
 
+    Route::prefix('ajax')->group(function(){
+        #Start::zones routes
+        Route::get('/get/zone/old/data', [ZoneController::class, 'ajaxGetZoneOldData'])->name('ajaxGetZoneOldData');
+        Route::get('/get/zone/data', [ZoneController::class, 'zoneUpdateAjax']);
+        Route::post('/update/zone/status', [ZoneController::class, 'ajaxUpdateZoneStatus']);
+        Route::post('/get/zone/data', [ZoneController::class, 'ajaxZoneGetData']);
+        #End::zones routes
+
+        #Start::district routes
+        Route::post('/get/district/data', [ZoneController::class, 'ajaxDistrictGetData']);
+        #Start::district routes
+
+        #Start::section routes
+        Route::post('/get/section/data', [ContributorController::class, 'ajaxGetSectionData']);
+        #Start::section routes
+
+        #Start::contributor routes
+        Route::post('/get/contri/category/data', [ContributorController::class, 'ajaxGetContributorsCategory']);
+        Route::post('/change/contri/category/status', [ContributorController::class, 'ajaxUpdateContributorsCategoryStatus']);
+        Route::post('/change/contri/status', [ContributorController::class, 'ajaxUpdateContributorStatus']);
+        #End::contributor routes
+    });
 });
 
 // START:: MEMBERS ROUTES
-Route::get('/member/login', [MemberAuthController::class, 'authenticateMember'])->name('member.login');
-Route::post('/member/login', [MemberAuthController::class, 'authenticateMember'])->name('post.member.login');
+Route::prefix('member')->group(function(){
+    Route::get('/login', [MemberAuthController::class, 'login'])->name('member.login');
+    Route::post('/login', [MemberAuthController::class, 'authenticateMember'])->name('submit.member.login');
+    Route::get('/suspended', [MemberAuthController::class, 'suspendedMember']);
 
-Route::middleware(['auth:member'])->group(function () {
-      Route::get('member/dashboard', [MemberController::class, 'dashboard'])->name('members.dashboard');
+   Route::middleware('member')->group(function(){
+       Route::get('/dashboard', [MemberDashboardController::class, 'index'])->name('member.dashboard');
+
+   });
 });
+
 // END:: MEMBERS ROUTES
 
 

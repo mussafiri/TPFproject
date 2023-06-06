@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
                                 
-                                <form method="post" action="{{ route('member.password.update') }}">
+                                <form method="post" action="{{ route('password.update') }}">
                                 @csrf
                                 @method('put')
 

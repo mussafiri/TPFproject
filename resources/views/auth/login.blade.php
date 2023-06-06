@@ -105,7 +105,7 @@
 
 
         <footer class="footer footer-alt">
-            2019 - <script>document.write(new Date().getFullYear())</script> &copy; Tumaini Pension Fund (TPF) <a href="" class="text-white-50">Powered By Claritas</a> 
+            2019 - <script>document.write(new Date().getFullYear())</script> &copy; Tumaini Pension Fund (TPF) <a href="" class="text-white-50">Claritas International</a> 
         </footer>
 
         <!-- Vendor js -->

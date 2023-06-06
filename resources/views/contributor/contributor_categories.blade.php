@@ -69,17 +69,17 @@
                                         <div class="col-12">
                                          <ul class="nav nav-tabs nav-bordered">
                                         <li class="nav-item">
-                                            <a href="{{url('contributor/categories/'.Crypt::encryptString('ACTIVE'))}}" aria-expanded="false" class="nav-link @if($status=='ACTIVE') {{'active'}} @endif">
+                                            <a href="{{url('contributors/categories/'.Crypt::encryptString('ACTIVE'))}}" aria-expanded="false" class="nav-link @if($status=='ACTIVE') {{'active'}} @endif">
                                                 Active
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{url('contributor/categories/'.Crypt::encryptString('SUSPENDED'))}}" aria-expanded="true" class="nav-link @if($status=='SUSPENDED') {{'active'}} @endif">
+                                            <a href="{{url('contributors/categories/'.Crypt::encryptString('SUSPENDED'))}}" aria-expanded="true" class="nav-link @if($status=='SUSPENDED') {{'active'}} @endif">
                                                 Suspended
                                             </a>
                                         </li>
                                     </ul>
-                                    
+
                                     <div class="tab-content">
                                         <div class="tab-pane active">
 
@@ -116,15 +116,15 @@
                                                                             <a href="javascript:void(0);" class="dropdown-item contrCatEdit"  data-id="{{$data->id}}" data-toggle="modal" data-target="#edit_modal">
                                                                                 <i class='mdi mdi-pencil-outline mr-1'></i>Edit
                                                                             </a>
-                                                                            @endif  
+                                                                            @endif
                                                                             <div class="dropdown-divider"></div>
                                                                             <!-- item-->
-                                                                            
+
                                                                             <a href="javascript:void(0);" class="dropdown-item change_category_status_swt_alert" data-id="{{$data->id}}" data-newstatus="@if($data->status=='ACTIVE'){{'Suspend'}} @else {{'Activate'}}@endif" data-name="{{$data->name}}">
                                                                                 @if($data->status=='ACTIVE')
                                                                                 <i class='mdi mdi-close-thick mr-1'></i>Suspend
-                                                                                @else 
-                                                                                <i class='mdi mdi-check-bold mr-1'></i>Activate  
+                                                                                @else
+                                                                                <i class='mdi mdi-check-bold mr-1'></i>Activate
                                                                                 @endif
                                                                             </a>
                                                                         </div> <!-- end dropdown menu-->
@@ -137,7 +137,7 @@
                                                     </table>
                                                 </div> <!-- end .table-responsive-->
                                         </div>
-                                        
+
                                     </div>
                                                  <!-- end card-box-->
 
@@ -149,7 +149,7 @@
                                                                 <h4 class="modal-title" id="myCenterModalLabel">Adding Contributor Category</h4>
                                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                             </div>
-                                                            <form method="POST" action="{{url('submit/add/contributor/category')}}">
+                                                            <form method="POST" action="{{url('contributors/category/add/submit')}}">
                                                             @csrf
                                                                 <div class="modal-body p-4">
                                                                     <div class="row">
@@ -183,7 +183,7 @@
                                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                             </div>
 
-                                                            <form method="POST" action="{{url('submit/edit/contributor/category')}}">
+                                                            <form method="POST" action="{{url('contributors/category/edit/submit')}}">
                                                             @csrf
                                                                 <div class="modal-body p-4">
                                                                     <div class="row">

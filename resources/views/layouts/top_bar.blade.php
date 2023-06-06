@@ -123,7 +123,7 @@
                                 </div>
 
                                 <!-- item-->
-                                <a href="{{route('profile.edit')}}" class="dropdown-item notify-item">
+                                <a href="{{route('profile')}}" class="dropdown-item notify-item">
                                     <i class="fe-user"></i>
                                     <span>My Profile</span>
                                 </a>

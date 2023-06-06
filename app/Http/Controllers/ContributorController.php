@@ -69,7 +69,7 @@ class ContributorController extends Controller {
         $addContributorType->created_by = Auth::user()->id;
         $addContributorType->save();
 
-        return redirect( 'contributor/categories/'.Crypt::encryptString( 'ACTIVE' ) )->with( [ 'success'=>'You have Successfully added new Contributor Category' ] );
+        return redirect( 'contributors/categories/'.Crypt::encryptString( 'ACTIVE' ) )->with( [ 'success'=>'You have Successfully added new Contributor Category' ] );
     }
 
     public function ajaxGetContributorsCategory( Request $request ) {
@@ -109,10 +109,10 @@ class ContributorController extends Controller {
 
         if ( $addContributorType->save() ) {
             toastr();
-            return redirect( 'contributor/categories/'.Crypt::encryptString( 'ACTIVE' ) )->with( 'success', 'You have Successfully Updated a Contributor Category' );
+            return redirect( 'contributors/categories/'.Crypt::encryptString( 'ACTIVE' ) )->with( 'success', 'You have Successfully Updated a Contributor Category' );
         } else {
             toastr();
-            return redirect( 'contributor/categories/'.Crypt::encryptString( 'ACTIVE' ) )->with( 'error', 'Something went wrong, redo the process' );
+            return redirect( 'contributors/categories/'.Crypt::encryptString( 'ACTIVE' ) )->with( 'error', 'Something went wrong, redo the process' );
         }
 
     }
@@ -331,11 +331,11 @@ class ContributorController extends Controller {
 
             toastr();
 
-            return redirect( 'contributors/'.Crypt::encryptString( 'ACTIVE' ) )->with( 'success', 'Contributor Successfully Updated!' );
+            return redirect( 'contributors/list/'.Crypt::encryptString( 'ACTIVE' ) )->with( 'success', 'Contributor Successfully Updated!' );
         }
 
         toastr();
 
-        return redirect( 'contributors/'.Crypt::encryptString( 'ACTIVE' ) )->with( 'error', 'Opps! there was a problem to add Contributor, please try again later.' );
+        return redirect( 'contributors/list/'.Crypt::encryptString( 'ACTIVE' ) )->with( 'error', 'Opps! there was a problem to add Contributor, please try again later.' );
     }
 }

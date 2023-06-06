@@ -1,8 +1,11 @@
+
+@extends('member_portal.layouts.member_main')
+@section('content')
 <div class="content">
 
                     <!-- Start Content-->
                     <div class="container-fluid">
-                        
+
                         <!-- start page title -->
                         <div class="row">
                             <div class="col-12">
@@ -17,8 +20,8 @@
                                     <h4 class="page-title">Horizontal</h4>
                                 </div>
                             </div>
-                        </div>     
-                        <!-- end page title --> 
+                        </div>
+                        <!-- end page title -->
 
                         <div class="row">
                             <div class="col-md-6 col-xl-3">
@@ -142,7 +145,7 @@
                                         <div id="cardCollpase1" class="collapse pt-3 show">
                                             <div class="text-center">
                                                 <div id="lifetime-sales" data-colors="#00acc1,#f1556c"></div>
-        
+
                                                 <div class="row mt-3">
                                                     <div class="col-4">
                                                         <p class="text-muted font-15 mb-1 text-truncate">Target</p>
@@ -157,7 +160,7 @@
                                                         <h4><i class="fe-arrow-down text-danger mr-1"></i>$9.8k</h4>
                                                     </div>
                                                 </div> <!-- end row -->
-                                                
+
                                             </div>
                                         </div> <!-- collapsed end -->
                                     </div> <!-- end card-body -->
@@ -329,7 +332,8 @@
                             </div> <!-- end col -->
                         </div>
                         <!-- end row -->
-                        
+
                     </div> <!-- container -->
 
                 </div> <!-- content -->
+@endsection

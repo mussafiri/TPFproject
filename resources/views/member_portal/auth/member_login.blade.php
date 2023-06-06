@@ -29,12 +29,12 @@
                 <div class="row justify-content-center">
                     <div class="col-md-8 col-lg-6 col-xl-5">
 
-                        <form method="POST" action="{{ route('submit.member.login') }}">
+                        <form method="POST" action="{{ url('member/login') }}">
                          @csrf
                         <div class="card bg-pattern">
 
                             <div class="card-body p-4">
-                                
+
                                 <div class="text-center w-75 m-auto">
                                     <div class="auth-logo">
                                         <a href="{{ url('/') }}" class="logo logo-dark text-center">
@@ -42,19 +42,35 @@
                                                 <img src="https://www.tpf.or.tz/images/logo.jpg" alt="" height="70">
                                             </span>
                                         </a>
-                    
+
                                         <a href="index.html" class="logo logo-light text-center">
                                             <span class="logo-lg">
                                                 <img src="https://www.tpf.or.tz/images/logo.jpg" alt="" height="70">
                                             </span>
                                         </a>
                                     </div>
-                                    <p class="text-muted mb-4 mt-3">Enter your Membership Code and password to access admin panel.</p>
+                                    <p class="text-muted mb-4 mt-3">Enter your Membership Code and password to access TPF Member Portal.</p>
                                 </div>
+                                 @if ($errors->any())
+                                <div class="example-alert">
+                                    <div class="alert alert-danger alert-icon" role="alert">
+                                        <em class="icon ni ni-cross-circle"></em>
+                                        <strong>{{ $errors->first() }}</strong>
+                                    </div>
+                                </div>
+                                @endif
+                                @if(session()->has('success'))
+                                <div class="example-alert">
+                                    <div class="alert alert-success alert-icon">
+                                        <em class="icon ni ni-check-circle"></em>
+                                        <strong>{{ session()->get('success') }}</strong>
+                                    </div>
+                                </div>
+                                @endif
 
                                     <div class="form-group mb-3">
                                         <label for="emailaddress">Membership Number</label>
-                                        <input class="form-control" type="text" name="memberNumber" :value="old('memberNumber')" required autofocus autocomplete="off"  placeholder="Enter Your Memdership Number">
+                                        <input class="form-control" type="text" name="member_code" :value="old('memberNumber')" required autofocus autocomplete="off"  placeholder="Enter Your Memdership Number">
                                          <x-input-error :messages="$errors->get('memberNumber')" class="mt-2 text-danger" />
                                     </div>
 
@@ -105,7 +121,7 @@
 
 
         <footer class="footer footer-alt">
-            2019 - <script>document.write(new Date().getFullYear())</script> &copy; Tumaini Pension Fund (TPF) <a href="" class="text-white-50">Powered By Claritas</a> 
+            2019 - <script>document.write(new Date().getFullYear())</script> &copy; Tumaini Pension Fund (TPF) <a href="" class="text-white-50">Claritas International</a> 
         </footer>
 
         <!-- Vendor js -->
@@ -113,6 +129,6 @@
 
         <!-- App js -->
         <script src="{{asset('assets/js/app.min.js')}}"></script>
-        
+
     </body>
 </html>

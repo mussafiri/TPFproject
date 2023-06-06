@@ -45,7 +45,7 @@
                                         <!-- end row-->
                                         <div class="row">
                                         <div class="col-12 px-2">
-                                                <form method="POST" enctype="multipart/form-data" action="{{url('submit/add/contributor')}}">
+                                                <form method="POST" enctype="multipart/form-data" action="{{url('contributors/add/submit')}}">
                                                 @csrf
                                                     <div class="col-12">
                                                         <div class="row">
