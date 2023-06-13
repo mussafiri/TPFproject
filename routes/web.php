@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\ContributionController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -43,7 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/zones/list', [ZoneController::class, 'zones']);
     Route::get('/dormant/zones/list', [ZoneController::class, 'suspendedZones']);
     Route::get('/ajax/get/zone/data', [ZoneController::class, 'zoneUpdateAjax']);
-    
+
     Route::post('/ajax/get/section/data/view', [ZoneController::class, 'ajaxSectionViewData']);
     Route::post('/section/edit', [ZoneController::class, 'submitSectionEdit']);
     Route::post('/ajax/get/section/data/edit', [ZoneController::class, 'ajaxSectionGetData']);
@@ -98,9 +98,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/change/designation/status', [UserController::class, 'ajaxChangeDesignationStatus']);
         #End:: user management routes
 
-        #Start:: constsnt value routes
+        #Start:: constant value routes
         Route::post('/get/constantvalue/data',[SettingsController::class, 'ajaxGetConstantvalueData']);
-        #End:: constsnt value routes
+        #End:: constant value routes
     });
 
     //Start:: users management routes
@@ -120,10 +120,17 @@ Route::middleware('auth')->group(function () {
     });
     //end:: users management routes
 
+    //Start:: Contributions
+    Route::prefix('contributions')->group(function(){
+        Route::get('/add', [ContributionController::class, 'addContribution']);
+    });
+    //End:: Contributions
+
     //Start:: Configurations routes
     Route::prefix('configs')->group(function(){
         Route::get('/constantvalues', [SettingsController::class, 'constantValues']);
-        Route::post('/edit/constantvalue/submit', [SettingsController::class, 'submitConstantValues']); 
+        Route::post('/edit/constantvalue/submit', [SettingsController::class, 'submitConstantValues']);
+        Route::get('/schemes', [SettingsController::class, 'schemes']);
     });
     //Start:: Configurations routes
 });

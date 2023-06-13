@@ -115,6 +115,8 @@ class AuthenticatedSessionController extends Controller {
 
             //START:: check Password Status
             if ( $getLastLogin->password_status == 'DEFAULT' ) {
+                Auth::guard( 'web' )->logout();
+                // log out the user
                 toastr();
                 return redirect( '/reset/password' )->with( 'warning', 'You need to change Password. A default password is not secure' );
             }

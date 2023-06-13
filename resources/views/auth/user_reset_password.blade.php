@@ -47,6 +47,7 @@
                                             </span>
                                         </a>
                                     </div>
+                                    <p class="text-muted mb-4 mt-3 text-warning">We kindly advice you to change password, a Default Password isn't secure</p>
                                 </div>
                                 
                                 <form method="post" action="{{ route('password.update') }}">
