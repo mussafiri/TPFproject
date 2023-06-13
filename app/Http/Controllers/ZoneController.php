@@ -21,6 +21,63 @@ class ZoneController extends Controller
     public function __construct(){
         $this->cmn = new Common;
     }
+    public function ajaxZoneViewData(Request $ajaxreq){
+        $id = $ajaxreq['zone_id'];
+        $districts_count = District::where("zone_id",$id)->count();
+        $sections_count = Section::join("districts",'districts.id', '=', 'sections.district_id')
+                                    ->join("zones",'zones.id', '=', 'districts.zone_id')
+                                    ->Where("zones.id", $id)
+                                    ->count();
+
+        $contributors_count = Contributor::join("sections",'contributors.section_id', '=', 'sections.id')
+                                ->join("districts",'districts.id', '=', 'sections.district_id')
+                                ->join("zones",'zones.id', '=', 'districts.zone_id')
+                                ->Where("zones.id", $id)
+                                ->count();
+
+        $zoneRow = Zone::where('id', $id)->first();
+                                
+        $zone_data=array();
+        if ($zoneRow) {
+            // $sectionRowData = Section::where('id', $id )->first();
+            $zone_data[ 'status' ] = 'success';
+            $zone_data[ 'message' ] = 'Zone data has been succefully fetched';
+            $zone_data[ 'data' ] = $zoneRow;
+            $zone_data[ 'total_sections' ] = $sections_count;
+            $zone_data[ 'total_contributors'] = $contributors_count;
+            $zone_data[ 'total_districts'] = $districts_count;
+        } else {
+            $zone_data[ 'status' ] = 'Errors';
+            $zone_data[ 'message' ] = 'We could not find such Zone in our database';
+        }
+        return response()->json(['zoneJSONData'=>$zone_data]);
+    }
+
+    public function ajaxDistrictViewData(Request $ajaxreq){
+        $id = $ajaxreq['district_id'];
+        $sections_count = Section::where("district_id",$id)->count();
+        $contributors_count = Contributor::join("sections",'contributors.section_id', '=', 'sections.id')
+                                ->join("districts",'districts.id', '=', 'sections.district_id')
+                                ->Where("districts.id", $id)
+                                ->count();
+
+        $sectionRow = District::join('zones', 'zones.id', '=', 'districts.zone_id')
+                                ->Where("districts.id", $id)
+                                ->first(["districts.*", "zones.name as district_name","zones.postal_address as zone_postal_address","zones.physical_address as zone_physical_address","zones.phone as district_phone","zones.email as zone_email"]);
+        $section_data=array();
+        if ($sectionRow) {
+            $section_data[ 'status' ] = 'success';
+            $section_data[ 'message' ] = 'District data has been Succefully fetched';
+            $section_data[ 'data' ] = $sectionRow;
+            $section_data[ 'total_sections' ] = $sections_count;
+            $section_data[ 'total_contributors'] = $contributors_count;
+        } else {
+            $section_data[ 'status' ] = 'Errors';
+            $section_data[ 'message' ] = 'We could not find such District in our database';
+        }
+        return response()->json(['districtJSONData'=>$section_data]);
+
+    }
     public function ajaxSectionViewData(Request $ajaxreq){
         $id = $ajaxreq['section_id'];
 

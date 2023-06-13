@@ -46,6 +46,73 @@
                             </div>
                         </div><!-- end col-->
                     </div>
+                    <!-- Zone for the MOdal View -->
+                    <div id="view-zone-modal-lg" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                        <div class="modal-dialog modal-full-width modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-light">
+                                    <h4 class="modal-title" id="myCenterModalLabel">Zone Details</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h4 class="header-title mb-3"> Information</h4>
+                                                        <div class="row">
+                                                            <div class="col-lg-8 col-md-12 col-sm-12">
+                                                                <h5 class="font-family-primary font-weight-semibold">Zone Information</h5>
+                                                                <p class="mb-2"><span class="font-weight-semibold mr-2">Zone name:</span><span class="font-12" id="zone-name"> </span> </p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Zone code:</span> <span id="zone-code" class="font-12"></span></p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Physical address:</span> <span id="zone-physical_address" class="font-12"></span></p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Postal Address:</span><span id="zone-postal_address" class="font-12"></span> </p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Phone:</span><span id="zone-phone" class="font-12"></span></p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Email:</span><span id="zone-email" class="font-12"></span></p>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                                                <div class="mb-1"></div>
+                                                                <div class="text-center">
+                                                                    <i class="flaticon flaticon-address h2" style="color:#5f7d95"></i>
+                                                                    <h5><b><span data-plugin="counterup" class="zone-total_districts"></span></b></h5>
+                                                                    <p class="mb-1"><span class="font-weight-semibold">DISTRICTS</span> </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div><!-- end card -->
+                                            </div> <!-- end col -->
+                                            <div class="col-4">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h4 class="header-title mb-3 text-center">Summary Info</h4>
+                                                        <div class="text-center">
+                                                            <i class="flaticon flaticon-donation h2" style="color:#5f7d95"></i>
+                                                            <h5><b><span data-plugin="counterup" class="zone-total_contributors"></span></b></h5>
+                                                            <p class="mb-1"><span class="font-weight-semibold">CONTRIBUTORS</span> </p>
+
+                                                        </div>
+                                                        <div class="dropdown-divider"></div>
+                                                        <div class="text-center">
+                                                            <i class="flaticon flaticon-notes-1 h2" style="color:#5f7d95"></i>
+                                                            <h5><b><span data-plugin="counterup" class="zone-total_sections"></span></b></h5>
+                                                            <p class="mb-1"><span class="font-weight-semibold">SECTIONS</span> </p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end col-4 -->
+                                        </div><!-- end card row -->
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="margin-top:-2rem;">
+                                    <button type="button" class="btn btn-danger ml-auto" data-dismiss="modal">Close</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                    <!-- Zone for the MOdal View -->
                     <!-- Register Zone modal content -->
                     <div id="bs-example-modal-lg" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                         <form class="" method="POST" action="{{url('/zone/register')}}">
@@ -185,7 +252,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('/dormant/zones/list')}}" class="nav-link ">
+                            <a href="{{url('/zones/dormant/list')}}" class="nav-link ">
                                 Dormant
                             </a>
                         </li>
@@ -224,6 +291,7 @@
                                                 <div class="btn-group dropdown">
                                                     <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-right">
+                                                        <a class="dropdown-item zoneViewModal" href="#" data-toggle="modal" data-target="#view-zone-modal-lg" data-zoneview_id="{{$data->id}}"><i class="mdi mdi-eye-outline mr-2 text-muted font-18 vertical-middle"></i>View</a>
                                                         <a class="dropdown-item zoneEditModalDataLink" href="#" data-toggle="modal" data-target="#updateZoneModal" data-zoneid="{{$data->id}}"><i class="mdi mdi-pencil mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
                                                         <a class="dropdown-item zone_statusChangeLink" data-zone="{{$data->id}}" data-new_status="{{$data->status=='ACTIVE' ? 'Suspend':'Activate';}}" data-zone_name="{{$data->name}}" href="#"><i class="mdi mdi-close-thick mr-2 text-muted font-18 vertical-middle"></i>Suspend</a>
                                                     </div>
@@ -239,48 +307,48 @@
                         </div><!-- end .tab-pane active-->
                         <div class="tab-pane" id="suspended-zones">
                             <!-- <div class="table-responsive"> -->
-                                <table class="table table-sm font-12 table-striped nowrap w-100 datatable-buttons">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Name</th>
-                                            <th>Postal Address</th>
-                                            <th>Physical Address</th>
-                                            <th>Phone</th>
-                                            <th>Email</th>
-                                            <th>Created</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php $sn=1; @endphp
-                                        @foreach ($zones as $data)
-                                        @if($data->status!="ACTIVE")
-                                        <tr>
-                                            <td>{{$sn}}</td>
-                                            <td>{{$data->name}}</td>
-                                            <td>{{$data->postal_address}}</td>
-                                            <td>{{$data->physical_address}}</td>
-                                            <td>{{$data->phone}}</td>
-                                            <td>{{$data->email}}</td>
-                                            <td>{{date('d M Y', strtotime($data->created_at))}}&nbsp;<span class="text-muted font-8">{{date('H:i', strtotime($data->created_at))}}</span></td>
-                                            <td><span class="badge badge-soft-{{$data->status=='ACTIVE'?'success':'danger';}}">{{$data->status}}</span></td>
-                                            <td>
-                                                <div class="btn-group dropdown">
-                                                    <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item zoneEditModalDataLink" href="#" data-toggle="modal" data-target="#updateZoneModal" data-zoneid="{{$data->id}}"><i class="mdi mdi-pencil mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
-                                                        <a class="dropdown-item zone_statusChangeLink" data-zone="{{$data->id}}" data-new_status="{{$data->status=='ACTIVE' ? 'Suspend':'Activate';}}" data-zone_name="{{$data->name}}" href="#"><i class="mdi mdi-close-thick mr-2 text-muted font-18 vertical-middle"></i>Suspend</a>
-                                                    </div>
+                            <table class="table table-sm font-12 table-striped nowrap w-100 datatable-buttons">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th>Postal Address</th>
+                                        <th>Physical Address</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+                                        <th>Created</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php $sn=1; @endphp
+                                    @foreach ($zones as $data)
+                                    @if($data->status!="ACTIVE")
+                                    <tr>
+                                        <td>{{$sn}}</td>
+                                        <td>{{$data->name}}</td>
+                                        <td>{{$data->postal_address}}</td>
+                                        <td>{{$data->physical_address}}</td>
+                                        <td>{{$data->phone}}</td>
+                                        <td>{{$data->email}}</td>
+                                        <td>{{date('d M Y', strtotime($data->created_at))}}&nbsp;<span class="text-muted font-8">{{date('H:i', strtotime($data->created_at))}}</span></td>
+                                        <td><span class="badge badge-soft-{{$data->status=='ACTIVE'?'success':'danger';}}">{{$data->status}}</span></td>
+                                        <td>
+                                            <div class="btn-group dropdown">
+                                                <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item zoneEditModalDataLink" href="#" data-toggle="modal" data-target="#updateZoneModal" data-zoneid="{{$data->id}}"><i class="mdi mdi-pencil mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
+                                                    <a class="dropdown-item zone_statusChangeLink" data-zone="{{$data->id}}" data-new_status="{{$data->status=='ACTIVE' ? 'Suspend':'Activate';}}" data-zone_name="{{$data->name}}" href="#"><i class="mdi mdi-close-thick mr-2 text-muted font-18 vertical-middle"></i>Suspend</a>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                        @php $sn++; @endphp
-                                        @endif
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @php $sn++; @endphp
+                                    @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
                             <!-- </div> end .table-responsive-->
                         </div><!-- end .tab-pane suspended -->
                     </div>
@@ -404,5 +472,43 @@
 
     });
 </script><!-- ./Status Modal  -->
+<script>
+    $('.zoneViewModal').on('click', function() {
+        $('#view-zone-modal-lg').modal({
+            show: true
+        });
+        var zone = $(this).attr('data-zoneview_id');
+        $.ajax({
+            type: 'POST',
+            url: "{{url('/ajax/get/zone/data/view')}}",
+            data: {
+                zone_id: zone,
+                _token: '{{ csrf_token() }}'
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.zoneJSONData.status == 'success') {
+                    // zone data fetched 
+                    var total_contributions = response.zoneJSONData.total_contributors.toLocaleString();
+                    $('#zone-name').html(response.zoneJSONData.data.name);
+                    $('#zone-physical_address').html(response.zoneJSONData.data.physical_address);
+                    $('#zone-postal_address').html(response.zoneJSONData.data.postal_address);
+                    $('#zone-phone').html(response.zoneJSONData.data.phone);
+                    $('#zone-email').html(response.zoneJSONData.data.email);
+                    $('#zone-code').html(response.zoneJSONData.data.district_code);
+                    $('.zone-total_contributors').html(total_contributions);
+                    $('.zone-total_sections').html(response.zoneJSONData.total_sections.toLocaleString());
+                    $('.zone-total_districts').html(response.zoneJSONData.total_districts.toLocaleString());
+                    // District data fetched 
+
+                } else {
+                    $('#edit_inputMaterial').val('');
+                    $('#edit_fetchError').html(response.zoneJSONData.message);
+                }
+            }
+        });
+
+    });
+</script><!-- SCRIPT FOR View Modal  -->
 
 @endsection

@@ -15,6 +15,7 @@
     <!-- Plugins css -->
     <link href="{{asset('assets/libs/flatpickr/flatpickr.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/libs/selectize/css/selectize.bootstrap3.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet" type="text/css" />
 
     <!-- App css -->
     <link href="{{asset('assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" id="bs-default-stylesheet" />
@@ -89,19 +90,25 @@
         <script src="{{asset('assets/libs/apexcharts/apexcharts.min.js')}}"></script>
 
         <script src="{{asset('assets/libs/selectize/js/standalone/selectize.min.js')}}"></script>
-
+        <script src="{{asset('assets/libs/flatpickr/flatpickr.min.js')}}"></script>
+        
+        <script src="{{asset('assets/libs/jquery-mask-plugin/jquery.mask.min.js')}}"></script>
+        <script src="{{asset('assets/libs/autonumeric/autoNumeric-min.js')}}"></script>
+        <script src="{{asset('assets/libs/daterangetimepicker/moment.js')}}"></script>
+        <script src="{{asset('assets/libs/daterangetimepicker/daterangepicker.js')}}"></script>   
+        <script src="{{asset('assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script><!--Bootstrap daterange picker  -->
+        
         <!-- Dashboar 1 init js-->
         <script src="{{asset('assets/js/pages/dashboard-1.init.js')}}"></script>
-        <script src="{{asset('assets/libs/jquery-mask-plugin/jquery.mask.min.js')}}"></script>
-
-
+        
+        
         <script src="{{asset('assets/libs/select2/js/select2.min.js')}}"></script>
         <!-- Init js-->
         <script src="{{asset('assets/js/pages/form-advanced.init.js')}}"></script>
+        <script src="{{asset('assets/js/pages/form-pickers.init.js')}}"></script>
         <!-- Init js-->
         <script src="{{asset('assets/js/pages/form-masks.init.js')}}"></script>
-        <script src="{{asset('assets/libs/daterangetimepicker/moment.js')}}"></script>
-        <script src="{{asset('assets/libs/daterangetimepicker/daterangepicker.js')}}"></script>    
+
         <!-- App js-->
 
         <!-- Start:: custom data range picker -->

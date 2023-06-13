@@ -46,6 +46,73 @@
                             </div>
                         </div><!-- end col-->
                     </div>
+                    <!-- District for the MOdal View -->
+                    <div id="view-district-modal-lg" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                        <div class="modal-dialog modal-full-width modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-light">
+                                    <h4 class="modal-title" id="myCenterModalLabel">District Details</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h4 class="header-title mb-3"> Information</h4>
+                                                        <div class="row">
+                                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                                <h5 class="font-family-primary font-weight-semibold">District Information</h5>
+                                                                <p class="mb-2"><span class="font-weight-semibold mr-2">District name:</span><span class="font-12" id="district-name"> </span> </p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">District code:</span> <span id="district-code" class="font-12"></span></p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Physical address:</span> <span id="district-physical_address" class="font-12"></span></p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Postal Address:</span><span id="district-postal_address" class="font-12"></span> </p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Phone:</span><span id="district-phone" class="font-12"></span></p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Email:</span><span id="district-email" class="font-12"></span></p>
+                                                            </div>
+                                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                                <h5 class="font-family-primary font-weight-semibold">Zone Information</h5>
+                                                                <p class="mb-2"><span class="font-weight-semibold mr-2">Zone:</span><span class="font-12" id="zone-name"> </span> </p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Physical address:</span> <span id="zone-physical_address" class="font-12"></span></p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Postal Address:</span><span id="zone-postal_address" class="font-12"></span> </p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Phone:</span><span id="zone-phone" class="font-12"></span></p>
+                                                                <p class="mb-0"><span class="font-weight-semibold mr-2">Email:</span><span id="zone-email" class="font-12"></span></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div><!-- end card -->
+                                            </div> <!-- end col -->
+                                            <div class="col-4">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h4 class="header-title mb-3 text-center">Summary Info</h4>
+                                                        <div class="text-center">
+                                                            <i class="flaticon flaticon-donation h2"></i>
+                                                            <h5><b><span data-plugin="counterup" class="district-total_contributors"></span></b></h5>
+                                                            <p class="mb-1"><span class="font-weight-semibold">CONTRIBUTORS</span> </p>
+                                                           
+                                                        </div>
+                                                        <div class="dropdown-divider"></div>
+                                                        <div class="text-center">
+                                                            <i class="flaticon flaticon-notes-1 h2"></i>
+                                                            <h5><b><span data-plugin="counterup" class="district-total_sections"></span></b></h5>
+                                                            <p class="mb-1"><span class="font-weight-semibold">SECTIONS</span> </p>
+                                                          
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end col-4 -->
+                                        </div><!-- end card row -->
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="margin-top:-2rem;">
+                                    <button type="button" class="btn btn-danger ml-auto" data-dismiss="modal">Close</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                    <!-- District for the MOdal View -->
                     <!-- Register District modal content -->
                     <div id="add-district-modal-lg" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                         <form class="" method="POST" action="{{url('/district/register')}}">
@@ -219,6 +286,7 @@
                                                 <div class="btn-group dropdown">
                                                     <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-right">
+                                                        <a class="dropdown-item districtViewModal" href="#" data-toggle="modal" data-target="#view-district-modal-lg" data-districtview_id ="{{$data->id}}"><i class="mdi mdi-eye-outline mr-2 text-muted font-18 vertical-middle"></i>View</a>
                                                         <a class="dropdown-item districtEditModalDataLink" href="#" data-toggle="modal" data-target="#updateDistrictModal" data-districtid="{{$data->id}}"><i class="mdi mdi-pencil-outline mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
                                                         <a class="dropdown-item district_statusChangeLink" data-district="{{$data->id}}" data-new_status="{{$data->status=='ACTIVE' ? 'Suspend':'Activate';}}" data-district_name="{{$data->name}}" href="#"><i class="{{$status=='ACTIVE'?'mdi mdi-close-thick':'mdi mdi-check-all';}} mr-2 text-muted font-18 vertical-middle"></i>Suspend</a>
                                                     </div>
@@ -403,5 +471,45 @@
 
     });
 </script><!-- ./Status Modal  -->
+<script>
+    $('.districtViewModal').on('click', function() {
+        $('#view-district-modal-lg').modal({show: true});
+        var district = $(this).attr('data-districtview_id');
+        $.ajax({
+            type: 'POST',
+            url: "{{url('/ajax/get/district/data/view')}}",
+            data: {
+                district_id: district,
+                _token: '{{ csrf_token() }}'
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.districtJSONData.status == 'success') {
+                    // section data fetched 
+                    $('#district-name').html(response.districtJSONData.data.name);
+                    $('#district-physical_address').html(response.districtJSONData.data.physical_address);
+                    $('#district-postal_address').html(response.districtJSONData.data.postal_address);
+                    $('#district-phone').html(response.districtJSONData.data.phone);
+                    $('#district-email').html(response.districtJSONData.data.email);
+                    $('#district-code').html(response.districtJSONData.data.district_code);
+                    $('.district-total_contributors').html(response.districtJSONData.total_contributors);
+                    $('.district-total_sections').html(response.districtJSONData.total_sections);
 
+                    // District data fetched 
+                    $('#zone-name').html(response.districtJSONData.data.name);
+                    $('#zone-physical_address').html(response.districtJSONData.data.zone_physical_address);
+                    $('#zone-postal_address').html(response.districtJSONData.data.zone_postal_address);
+                    $('#zone-phone').html(response.districtJSONData.data.zone_phone);
+                    $('#zone-email').html(response.districtJSONData.data.zone_email);
+                    $('#zone-code').html(response.districtJSONData.data.zone_code);
+
+                } else {
+                    $('#edit_inputMaterial').val('');
+                    $('#edit_fetchError').html(response.districtJSONData.message);
+                }
+            }
+        });
+
+    });
+</script><!-- SCRIPT FOR View Modal  -->
 @endsection
