@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('fname');
             $table->string('mname');
             $table->string('lname');
-            $table->string('gender');
+            $table->enum('gender',['MALE','FEMALE'])->default('MALE');
             $table->string('member_code');
+            $table->enum('occupation',['NONE','FARMER','UNEMPLOYED','EMPLOYED','RETIRED','BUSINESS','PASTOR']);
             $table->integer('id_type_id')->default(0);
             $table->string('id_number')->default('NULL');
             $table->string('dob');
@@ -38,6 +39,7 @@ return new class extends Migration
             $table->enum('password_status', ['DEFAULT','ACTIVE','SUSPENDED'])->default('DEFAULT');
             $table->string('password_changed_at')->default('NULL');
             $table->string('last_login')->default('NULL');
+            $table->enum('vital_status', ['ALIVE','DECEASED'])->default('ALIVE');
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->timestamps();

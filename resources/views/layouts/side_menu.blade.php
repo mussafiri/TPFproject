@@ -13,22 +13,19 @@
 
             <li class="menu-title mt-2">Apps</li>
 
-            <li>
+            <li class="@if(request()->segment(1)=='members'){{'menuitem-active'}}@endif" >
                 <a href="#sidebarMembers" data-toggle="collapse">
                     <i class=" mdi mdi-account-group-outline"></i>
                     <span> Members </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarMembers">
+                <div class="collapse  @if(request()->segment(1)=='members'){{'show'}}@endif" id="sidebarMembers">
                     <ul class="nav-second-level">
-                        <li>
-                            <a href="ecommerce-dashboard.html">Dashboard</a>
+                        <li class="@if(request()->is('members/list')||request()->is('members/registration')){{'menuitem-active'}}@endif">
+                            <a href="{{url('members/list')}}">List</a>
                         </li>
                         <li>
-                            <a href="ecommerce-products.html">Products</a>
-                        </li>
-                        <li>
-                            <a href="ecommerce-product-detail.html">Product Detail</a>
+                            <a href="{{url('members/possible/duplicates')}}">Duplicates</a>
                         </li>
                     </ul>
                 </div>
@@ -36,7 +33,7 @@
             <li class="@if(request()->segment(1)=='contributors'){{'menuitem-active'}}@endif">
                 <a href="#sidebarContributors" data-toggle="collapse">
                     <i class="flaticon flaticon-donation"></i>
-                    <span> Contributors</span>
+                    <span > Contributors</span>
                     <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse  @if(request()->segment(1)=='contributors'){{'show'}}@endif" id="sidebarContributors">
@@ -48,13 +45,13 @@
             </li>
             <li class="@if(request()->segment(1)=='zones'){{'menuitem-active'}} @endif">
                 <a href="#sidebarZones" data-toggle="collapse">
-                    <i class="mdi mdi-map-marker-radius"></i>
-                    <span> Zones </span>
+                    <i class="mdi mdi-map-marker-radius-outline"></i>
+                    <span > Zones </span>
                     <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse @if(request()->segment(1)=='zones'){{'show'}}@endif" id="sidebarZones">
                     <ul class="nav-second-level">
-                        <li class="@if(request()->is('zones/list')){{'menuitem-active'}} @endif"><a href="{{url('/zones/list')}}">Zones</a></li>
+                        <li class="@if(request()->is('zones/list') || request()->is('zones/dormant/list') ){{'menuitem-active'}} @endif"><a href="{{url('/zones/list')}}">Zones</a></li>
                         <li class="@if(request()->is('zones/districts/*')){{'menuitem-active'}} @endif"><a href="{{url('/zones/districts/'.Crypt::encryptString('ACTIVE'))}}">Districts </a></li>
                         <li class="@if(request()->is('zones/sections/*')){{'menuitem-active'}} @endif"><a href="{{url('/zones/sections/'.Crypt::encryptString('ACTIVE'))}}">Section </a></li>
                     </ul>

@@ -39,5 +39,13 @@ class Member extends Authenticatable implements AuthenticatableContract
         'password' => 'hashed',
     ];
 
-
+    public function createdBy() {
+        return $this->belongsTo( User::class, 'created_by' );
+    }
+    public function salutationTitle() {
+        return $this->belongsTo( MemberSalutation::class, 'member_salutation_id' );
+    }
+    public function contributor() {
+        return $this->belongsTo(Contributor::class, 'contributor_id' );
+    }
 }
