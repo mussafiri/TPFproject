@@ -1,7 +1,6 @@
     <div id="sidebar-menu">
 
         <ul id="side-menu">
-
             <li class="menu-title">Navigation</li>
 
             <li>
@@ -30,6 +29,28 @@
                     </ul>
                 </div>
             </li>
+
+             <li>
+                <a href="#sidebarContributions" data-toggle="collapse">
+                    <i class=" mdi mdi-account-group-outline"></i>
+                    <span> Contributions </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarContributions">
+                    <ul class="nav-second-level">
+                        <li>
+                            <a href="{{url('contributions/add')}}">Add Contribution</a>
+                        </li>
+                        <li>
+                            <a href="ecommerce-products.html">Contributions</a>
+                        </li>
+                        <li>
+                            <a href="ecommerce-product-detail.html">Product Detail</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
             <li class="@if(request()->segment(1)=='contributors'){{'menuitem-active'}}@endif">
                 <a href="#sidebarContributors" data-toggle="collapse">
                     <i class="flaticon flaticon-donation"></i>
@@ -59,6 +80,8 @@
             </li>
 
 
+            <li class="menu-title mt-2">System Settings</li>
+
             <li class="@if(request()->segment(1)=='users'){{'menuitem-active'}} @endif">
                 <a href="#sidebarUsers" data-toggle="collapse">
                     <i class="mdi mdi-account-group-outline"></i>
@@ -73,7 +96,6 @@
                     </ul>
                 </div>
             </li>
-            <li class="menu-title mt-2">System Settings</li>
 
             <li>
                 <a href="#sidebarSettings" data-toggle="collapse">
@@ -84,7 +106,7 @@
                 <div class="collapse" id="sidebarSettings">
                     <ul class="nav-second-level">
                         <li> <a href="{{url('configs/constantvalues')}}">Default Value</a> </li>
-                        {{-- <li> <a href="ui-cards.html">Designations</a> </li> --}}
+                        <li> <a href="{{url('configs/schemes')}}">Schemes</a> </li>
                     </ul>
                 </div>
             </li>

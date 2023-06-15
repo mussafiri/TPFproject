@@ -13,6 +13,28 @@ return new class extends Migration
     {
         Schema::create('contributions', function (Blueprint $table) {
             $table->id();
+            $table->integer('section_id')->default(0);
+            $table->string('contribution_period')->default('NULL');
+            $table->integer('total_contributors')->default(0);
+            $table->decimal('contribution_amount', 32,2);
+            $table->integer('payment_mode_id')->default(0);
+            $table->string('payment_ref_no')->default('NULL');
+            $table->string('payment_date')->default('NULL');
+            $table->string('payment_proof')->default('NULL');
+            $table->enum('status',['ACTIVE','SUSPENDED'])->default('NULL');
+            $table->enum('processing_status',['PENDING','APPROVED','POSTED','APPROVAL REJECTED','POSTING REJECTED'])->default('PENDING');
+            $table->string('created_by')->default(0);
+            $table->string('approved_by')->default(0);
+            $table->string('approved_at')->default('NULL');
+            $table->string('approval_rejected_by')->default(0);
+            $table->string('approval_rejected_at')->default('NULL');
+            $table->string('approval_reject_reason')->default('NULL');
+            $table->string('posted_by')->default(0);
+            $table->string('posted_at')->default('NULL');
+            $table->string('posting_rejected_by')->default(0);
+            $table->string('posting_rejected_at')->default('NULL');
+            $table->string('posting_reject_reason')->default('NULL');
+            $table->integer('updated_by')->default(0);
             $table->timestamps();
         });
     }

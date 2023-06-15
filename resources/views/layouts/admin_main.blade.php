@@ -30,7 +30,11 @@
     <!-- Plugins css -->
     <link href="{{asset('assets/libs/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{{asset('assets/libs/daterangepicker/css/daterangepicker.css')}}" type="text/css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+
+    <!-- Start::date range picker -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <!-- End::date range picker -->
+
     @yield('custom_css')
 </head>
 
@@ -106,6 +110,14 @@
         <script src="{{asset('assets/js/pages/form-masks.init.js')}}"></script>
 
         <!-- App js-->
+
+        <!-- Start:: custom data range picker -->
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+        <!-- End:: custom data range picker -->
+
         <script src="{{asset('assets/js/app.min.js')}}"></script>
 
         @yield('custom_script')

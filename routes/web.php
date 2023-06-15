@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\ContributionController;
 
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\SettingsController;
@@ -37,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     //:::::::::::::::::::::::::::::::::::::::::::::::: ZONES ROUTES ::::::::::::::::::::::::::::::::::::::::::::::::
+    
     Route::prefix('ajax')->group(function(){
         Route::get('/get/district/old/data', [ZoneController::class, 'ajaxGetDistrictOldData']);
         Route::get('/get/zone/old/data', [ZoneController::class, 'ajaxGetZoneOldData'])->name('ajaxGetZoneOldData');
@@ -48,6 +50,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/update/section/status', [ZoneController::class, 'ajaxUpdateSectionStatus']);
         Route::post('/update/district/status', [ZoneController::class, 'ajaxUpdateDistrictStatus']);
     });
+
     Route::prefix('zones')->group(function(){
         Route::get('/sections/{status}', [ZoneController::class, 'sections'])->name('sections');
         Route::get('/districts/{status}', [ZoneController::class, 'districts']);
@@ -130,9 +133,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/change/designation/status', [UserController::class, 'ajaxChangeDesignationStatus']);
         #End:: user management routes
 
-        #Start:: constsnt value routes
+        #Start:: constant value routes
         Route::post('/get/constantvalue/data',[SettingsController::class, 'ajaxGetConstantvalueData']);
-        #End:: constsnt value routes
+        #End:: constant value routes
     });
 
     //Start:: users management routes
@@ -152,10 +155,17 @@ Route::middleware('auth')->group(function () {
     });
     //end:: users management routes
 
+    //Start:: Contributions
+    Route::prefix('contributions')->group(function(){
+        Route::get('/add', [ContributionController::class, 'addContribution']);
+    });
+    //End:: Contributions
+
     //Start:: Configurations routes
     Route::prefix('configs')->group(function(){
         Route::get('/constantvalues', [SettingsController::class, 'constantValues']);
-        Route::post('/edit/constantvalue/submit', [SettingsController::class, 'submitConstantValues']); 
+        Route::post('/edit/constantvalue/submit', [SettingsController::class, 'submitConstantValues']);
+        Route::get('/schemes', [SettingsController::class, 'schemes']);
     });
     //Start:: Configurations routes
 });
