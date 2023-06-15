@@ -19,14 +19,14 @@ class Common {
     }
 
     public function memberCodeGenerator($ID){
-        $codeFormat = 'TPF-MB000000'; //format
+        $codeFormat = 'TPF-MN000000'; //format
         $nextDigLength = mb_strlen($ID , "UTF-8");
         $createNewCodeSpace=substr($codeFormat,0,-$nextDigLength);
         $finalCode=$createNewCodeSpace.$ID;
 
-        $putContributorCode = Member::find($ID);
-        $putContributorCode->contributor_code=$finalCode;
-        $putContributorCode->save();
+        $putMemberCode = Member::find($ID);
+        $putMemberCode->member_code = $finalCode;
+        $putMemberCode->save();
     }
     public function districtCodeGenerator($ID,$district,$zone_code){
         #substr()function to return the first two characters from the district name

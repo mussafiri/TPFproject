@@ -13,6 +13,25 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ContributorController extends Controller {
+    public function ajaxGetContributorData( Request $request ) {
+        $getContributorData = Contributor::find( $request->contributor_id );
+
+        $contributorDataArr = array();
+        if ( $getContributorData ) {
+            $contributorDataArr[ 'code' ] = 201;
+            $contributorDataArr[ 'district' ] = $getContributorData->contributorSection->district->name;
+            $contributorDataArr[ 'zone' ] = $getContributorData->contributorSection->district->zone->name;
+            $contributorDataArr[ 'section' ] = $getContributorData->contributorSection->name;
+        } else {
+            $contributorDataArr[ 'code' ] = 403;
+            $contributorDataArr[ 'district_message' ] = 'District not found';
+            $contributorDataArr[ 'zone_message' ] = 'Zone not found';
+            $contributorDataArr[ 'section_message' ] = 'Zone not found';
+        }
+
+        return response()->json( [ 'contributorDataArr'=>$contributorDataArr ] );
+
+    }
 
     public function contributorsCategory( $status ) {
         $status = Crypt::decryptString( $status );

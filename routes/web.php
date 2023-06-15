@@ -116,6 +116,7 @@ Route::middleware('auth')->group(function () {
         #Start::section routes
 
         #Start::contributor routes
+        Route::post('/get/contributor/data', [ContributorController::class, 'ajaxGetContributorData']);
         Route::post('/get/contributor/category/data', [ContributorController::class, 'ajaxGetContributorsCategory']);
         Route::post('/change/contributor/category/status', [ContributorController::class, 'ajaxUpdateContributorsCategoryStatus']);
         Route::post('/change/contributor/status', [ContributorController::class, 'ajaxUpdateContributorStatus']);
