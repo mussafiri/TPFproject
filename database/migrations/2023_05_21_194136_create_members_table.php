@@ -30,18 +30,21 @@ return new class extends Migration
             $table->enum('marital_status',['SINGLE','MARRIED','DIVORCED','WIDOW','SEPARATED']);
             $table->string('phone')->default('NULL');
             $table->string('email')->default('NULL');
-            $table->string('income');
+            $table->decimal('income',32,2);
             $table->string('postal_address')->default('NULL');
             $table->string('physical_address')->default('NULL');
             $table->string('picture')->default('NULL');
-            $table->enum('status',['ACTIVE','BLOCKED']);
+            $table->string('id_attachment')->default('NULL');
+            $table->string('member_signature')->default('NULL');
+            $table->string('regform_attachment')->default('NULL');
+            $table->enum('status',['ACTIVE','BLOCKED'])->default('ACTIVE');
             $table->string('password');
             $table->enum('password_status', ['DEFAULT','ACTIVE','SUSPENDED'])->default('DEFAULT');
             $table->string('password_changed_at')->default('NULL');
             $table->string('last_login')->default('NULL');
             $table->enum('vital_status', ['ALIVE','DECEASED'])->default('ALIVE');
             $table->integer('created_by');
-            $table->integer('updated_by');
+            $table->integer('updated_by')->default(0);
             $table->timestamps();
         });
     }
