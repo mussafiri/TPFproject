@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
         commands\ContributionsUpload::class,
         commands\UsersUpload::class,
         commands\SectionsUpload::class,
+        commands\ContributorMemberUpload::class,
     ];
 
     /**

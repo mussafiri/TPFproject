@@ -33,10 +33,6 @@ class MembersUpload extends Command
 
  //START:: Load bulk Investors' Contracts
     function init(){
-        //START::duplicates
-                /* 2214, 4031
-                */
-        //END::duplicates
         // $path  = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix();
         $path=base_path();
         $path = $path.'/public/datauploads/membersUpload.csv';
@@ -49,7 +45,7 @@ class MembersUpload extends Command
                 $this->info('Loading Members');
                 foreach($data AS $uploadingData){
                             $dt    = explode(",", $uploadingData[0]);
-                    if($count>0){
+                    if($count>99){
 
                             $memberID = $dt[4];
                        //start:: check if Member already exist

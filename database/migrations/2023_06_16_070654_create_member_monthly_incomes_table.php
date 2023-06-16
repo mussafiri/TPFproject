@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contributor_members', function (Blueprint $table) {
+        Schema::create('member_monthly_incomes', function (Blueprint $table) {
             $table->id();
-            $table->integer('contributor_id');
             $table->integer('member_id');
-            $table->string('start_date')->default('NULL');
-            $table->string('end_date')->default('NULL');
-            $table->enum('status', ['ACTIVE', 'DORMANT'])->default('ACTIVE');
+            $table->decimal('member_monthly_income', 32,2);
+            $table->string('contribution_date')->default('NULL');
+            $table->enum('status',['CONTRIBUTED','DORMANT'])->default('CONTRIBUTED');
             $table->integer('created_by');
-            $table->integer('updated_by')->default(0);
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contributor_members');
+        Schema::dropIfExists('member_monthly_incomes');
     }
 };

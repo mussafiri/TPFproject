@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('dob');
             $table->string('service_start_at')->default('NULL');
             $table->string('join_at')->default('NULL');
-            $table->enum('marital_status',['SINGLE','MARRIED','DIVORCED']);
+            $table->enum('marital_status',['SINGLE','MARRIED','DIVORCED','WIDOW','SEPARATED']);
             $table->string('phone')->default('NULL');
             $table->string('email')->default('NULL');
             $table->string('income');

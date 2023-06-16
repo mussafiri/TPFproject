@@ -1,15 +1,5 @@
 
 @extends('layouts.admin_main')
-@section('custom_css')
-<link href="{{asset('assets/libs/sweetalert2/sweetalert2.min.css')}}" rel="stylesheet" type="text/css"/>
-
-<!-- kartik Fileinput-->
-<link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/css/fontawesome-kartik.css')}}" />
-<link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/css/bootstrap-icons.css')}}" />
-<link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/css/fileinput.min.css')}}" />
-<link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/themes/explorer/theme.css')}}" />
-
-@endsection
 @section('content')
         <div class="content">
 
@@ -39,7 +29,7 @@
                                             <div class="col-12">
                                                     <div class="col-12"> </div>
                                                     <div class="row px-3">
-                                                        <div class="col-md-12">
+                                                        <div class="col-md-9">
                                                             <div class="form-group">
                                                                 <label for="field-3" class="control-label">Section</label>
                                                                 <select class="form-control sectionSelect" name="section" data-toggle="select2">
@@ -48,26 +38,21 @@
                                                                     <option value="{{$value->id}}" {{old ('section') == $value->id ? 'selected' : ''}}>{{'District: '.$value->district->name.' Section: '.$value->name}} </option>
                                                                     @endforeach
                                                                 </select>
-                                                                <span class="text-danger" role="alert" id="sectionError"> {{ $errors->first('section') }}</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="field-1" class="control-label">Scheme</label>
-                                                                <select class="form-control" name="scheme" data-toggle="select2">
-                                                                    @foreach($schemes as $value)
-                                                                    <option  value="{{$value->id}}" {{old ('scheme') == $value->id ? 'selected' : ''}}>{{$value->name}} </option>
-                                                                    @endforeach
-                                                                </select>
-                                                                    <span class="text-danger" role="alert"> {{ $errors->first('scheme') }}</span>
+                                                                <span class="text-danger font-9" role="alert" id="sectionError"> {{ $errors->first('section') }}</span>
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-2">
                                                             <div class="form-group">
                                                                 <label for="field-1" class="control-label">Contribution Date</label>
-                                                                <input type="text" name="contributionDate" class="form-control form-control-sm"  id="reportrange" value="{{old('contributionDate')}}">
-                                                                <span class="text-danger" role="alert"> {{ $errors->first('contributionDate') }}</span>
+                                                                <input type="text" name="contributionDate" class="form-control form-control-sm p-1 contributionDate" value="{{old('contributionDate')}}"  data-provide="datepicker" data-date-autoclose="true" data-date-format="M yyyy"  data-date-min-view-mode="1" placeholder="Pick Contribution Date">
+                                                                <span class="text-danger font-9" role="alert" id="contributionDateError"> {{ $errors->first('contributionDate') }}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <div class="form-group">
+                                                                <label for="field-1" class="control-label mt-3"><br></label>
+                                                                <button type="button" class="btn btn-sm btn-success mt-2 waves-effect waves-light searchButton"><i class="fas fa-search"></i></button>
                                                             </div>
                                                         </div>
                                                         
@@ -88,29 +73,31 @@
                                         <div class="row">
                                             <div class="col-12 mb-3 border rounded p-2" style="background-color: #f6fcff;">
                                                 <div class="row">
-                                                    <div class="col-sm-8"><strong>Section Name:</strong> </div> <div class="col-sm-4"> <strong>Section Code:</strong> </div>
+                                                    <div class="col-sm-8"><strong>Section Name:</strong> <span id="sectionName"></span></div> <div class="col-sm-4"> <strong>Section Code:</strong> <span id="sectionCode"></span></div>
                                                     
                                                     <div class="col-sm-12 mt-2">
                                                         <div class="table-responsive">
-                                                            <table class="table table-bordered table-centered mb-0">
+                                                            <table class="table table-sm table-bordered table-centered mb-0">
                                                                 <thead class="thead-light">
                                                                     <tr>
                                                                         <th>Scheme</th>
                                                                         <th>Contribution Date</th>
-                                                                        <th>Total Members</th>
+                                                                        <th>Contributors</th>
+                                                                        <th>Members</th>
                                                                         <th>Monthly Contribution <sup class="text-muted font-10">TZS</sup></th>
-                                                                        <th>Arrears</th>
+                                                                        <th>Arrears <sup class="text-muted font-10">TZS</sup></th>
                                                                         <th>Total Contribution <sup class="text-muted font-10">TZS</sup></th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td>Polo Navy</td>
-                                                                        <td>12</td>
-                                                                        <td>1</td>
-                                                                        <td>39</td>
-                                                                        <td>39</td>
-                                                                        <td>39</td>
+                                                                        <td>TUMAINI PENSION FUND</td>
+                                                                        <td><span id="contributionDate"></span></td>
+                                                                        <td><span id="no_contributors"></span></td>
+                                                                        <td><span id="no_members"></span></td>
+                                                                        <td><span id="monthlyContribution"></span></td>
+                                                                        <td><span id="Arrears"></span></td>
+                                                                        <td><span id="totalContribution"></span></td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -122,53 +109,24 @@
                                             <div class="col-12">
                                                 <div class="row">
                                                     <div class="table-responsive">
-                                                            <table class="datatable-buttons table font-11 table-striped dt-responsive nowrap w-100">
+                                                            <table id="contrinbution_recon_table" class="datatable-buttons table font-11 table-striped dt-responsive nowrap w-100">
                                                                 <thead>
                                                                     <tr>
                                                                         <th>#</th>
                                                                         <th>Contributor</th>
-                                                                        <th>Memmber Name</th>
+                                                                        <th>Member Name</th>
                                                                         <th>Monthly Income</th>
-                                                                        <th>Contribution <sup class="text-muted font-10">Member</sup></th>
-                                                                        <th>Contribution <sup class="text-muted font-10">Contributor</sup></th>
-                                                                        <th>Topup</th>
-                                                                        <th>Contribution<sup class="text-muted font-10">Total</sup></th>
+                                                                        <th>Amount <sup class="text-muted font-10">Member (TZS)</sup></th>
+                                                                        <th>Amount <sup class="text-muted font-10">Contributor (TZS)</sup></th>
+                                                                        <th>Topup<sup class="text-muted font-10">TZS</sup></th>
+                                                                        <th>Total<sup class="text-muted font-10">TZS</sup></th>
                                                                         <th>Status</th>
                                                                         <th></th>
                                                                     </tr>
                                                                 </thead>
 
                                                                 <tbody>
-                                                                    <tr id="contrinbution_recon_table">
-                                                                        <td></td>
-                                                                        <td class="text-muted font-9"></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td>
-                                                                            <div class="btn-group dropdown float-right">
-                                                                                <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-light btn-sm"
-                                                                                    data-toggle="dropdown" aria-expanded="false">
-                                                                                    <i class='mdi mdi-dots-horizontal font-18'></i>
-                                                                                </a>
-                                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                                    <a href="" class="dropdown-item">
-                                                                                        <i class='mdi mdi-pencil-outline mr-1'></i>Edit
-                                                                                    </a>
-                                                                                    <div class="dropdown-divider"></div>
-                                                                                    <!-- item-->
-                                                                                    <a href="javascript:void(0);" class="dropdown-item change_contributor_status_swt_alert" data-id="" data-newstatus="" data-name="">
-                                                                                       
-                                                                                        <i class='mdi mdi-close-thick mr-1'></i>Suspend
-                                                                                    </a>
-                                                                                </div> <!-- end dropdown menu-->
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
+
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -188,44 +146,53 @@
 @endsection
 @section('custom_script')
 
-        <!-- third party js -->
-<script src="{{asset('assets/libs/kartik-v-bootstrap-fileinput/js/fileinput.min.js')}}"></script>
-<script src="{{asset('assets/libs/kartik-v-bootstrap-fileinput/themes/explorer/theme.js')}}"></script>
-
-        <!-- Datatables init -->
- <script src="{{asset('assets/libs/sweetalert2/sweetalert2.min.js')}}"></script>
-
-
 <script type="text/javascript">
-    $(function() {
+$(".searchButton").click(function() {
 
-        var start = moment().subtract(29, 'days');
-        var end = moment();
+     var section_id = $('.sectionSelect').find(":selected").val();
+     var contribution_date = $('.contributionDate').val();
 
-        function cb(start, end) {
-            $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-        }
+        if (section_id !== 0 && contribution_date!== "") {
+            $('#contributionDate').html(contribution_date);
 
-        $('#reportrange').daterangepicker({
-            startDate: start,
-            endDate: end,
-            ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            $("#sectionError").html('');
+            $("#contributionDateError").html('');
+            
+            $.ajax({
+                url: "{{url('/ajax/get/section/contribution/data')}}",
+                type: 'POST',
+                data: {
+                    section_id: section_id,
+                    contribution_date: contribution_date,
+                    _token: '{{ csrf_token() }}'
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.sectionContributionDataArr.code == 201) {
+                        //Start:: put section Data
+                        $('#sectionName').html(response.sectionContributionDataArr.sectionData.name);
+                        $('#sectionCode').html(response.sectionContributionDataArr.sectionData.section_code);
+                        $('#no_contributors').html(response.sectionContributionDataArr.totalContributors);
+                        $('#no_members').html(response.sectionContributionDataArr.totalMembers);
+                        //End:: put section Data
+
+                        $("#contrinbution_recon_table").prepend(response.sectionContributionDataArr.memberList);
+
+                    } else {
+                        console.log('Error');
+                    }
+                }
+            });
+
+        }else{
+            if(section_id==0){
+                $("#sectionError").html('Kindly, select a Section');
             }
-        }, cb);
 
-        cb(start, end);
-
-    });
-</script>
-<script type="text/javascript">
-    $('.sectionSelect').change(function(){
-        alert(' kkkkk');
-    });
+            if(contribution_date==""){
+                $("#contributionDateError").html('Kindly, pick Date');
+            }
+        }
+});
 </script>
 @endsection

@@ -111,13 +111,6 @@
 
         <!-- App js-->
 
-        <!-- Start:: custom data range picker -->
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-        <!-- End:: custom data range picker -->
-
         <script src="{{asset('assets/js/app.min.js')}}"></script>
 
         @yield('custom_script')
