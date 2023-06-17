@@ -21,15 +21,12 @@
                 </div>
                 <!-- end page title -->
                 <!-- end row-->
-
-                    <form method="POST" action="{{url('contributions/add/submit')}}">
-                    @csrf
                         <div class="row">
                             <div class="col-12">
                                 <div class="card-box">
+                                    <h4 class="header-title mb-3 text-muted">Contribution Details</h4>
                                         <div class="row">
                                             <div class="col-12">
-                                                    <h4 class="header-title mb-3 text-muted">Contribution Details</h4>
                                                     <div class="col-12"> </div>
                                                     <div class="row px-3">
                                                         <div class="col-md-9">
@@ -71,10 +68,11 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="card-box">
+                                    <h4 class="header-title mb-3 text-muted">Reconciliation Panel </h4>
+                                        <!-- end row-->
+                                        <form method="POST" action="{{url('contributions/add/submit')}}">
+                                        @csrf
                                         <div class="row">
-
-                                            <h4 class="header-title mb-3 text-muted">Reconciliation Panel </h4>
-
                                             <div class="col-12 mb-3 border rounded p-2" style="background-color: #f6fcff;">
                                                 <div class="row">
                                                     <div class="col-sm-8"><strong>Section Name:</strong> <span id="sectionName"></span></div> <div class="col-sm-4"> <strong>Section Code:</strong> <span id="sectionCode"></span></div>
@@ -99,7 +97,7 @@
                                                                         <td class="text-center"><span id="no_contributors"></span></td>
                                                                         <td class="text-center"><span id="no_members"></span></td>
                                                                         <td class="text-center"><span id="monthlyContribution"></span></td>
-                                                                        <td class="text-center"><span id="totalContribution"></span> <input type="hidden" id="totalContributionInput" value="0"></td>
+                                                                        <td class="text-center"><span id="totalContribution"></span></td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -108,9 +106,6 @@
                                                 </div>
                                             </div>
 
-
-
-                                            <h4 class="header-title mb-3 text-muted">Member Contributions </h4>
                                             <div class="col-12">
                                                 <div class="row">
                                                     <div class="table-responsive">
@@ -163,7 +158,6 @@
                             </div> <!-- content -->
                              <!-- end .table-responsive-->
                         </div> <!-- end card-box-->
-                        </form>
                     </div> <!-- end col -->
                 </div>
                 <!-- end row -->
@@ -198,7 +192,7 @@ $(document).ready(function(){
                 },
                 dataType: 'json',
                 success: function(response) {
-                    if (response.sectionContributionDataArr.memberList !== "") {
+                    if (response.sectionContributionDataArr.code == 201) {
                         //Start:: put section Data
                         $('#sectionName').html(response.sectionContributionDataArr.sectionData.name);
                         $('#sectionCode').html(response.sectionContributionDataArr.sectionData.section_code);
@@ -212,15 +206,54 @@ $(document).ready(function(){
                         calculateItems(); // Prior Items Caluculation
 
                         //START:: Suspend  Member Contribution
-                        $('.suspendContribution').click(function(){
-                            
-                            var rowID=$(this).attr('data-rowID');
-                            suspendMemberContribution(rowID);
+                        $('.editContribution').click(function(){
+                            var rowID=$(this).data('rowID');
+                            $(this).hide();
+
+                            $('.monthlyIncomeSpan'+rowID).hide();
+                            $('.memberContributionSpan'+rowID).hide();
+                            $('.contributorContributionSpan'+rowID).hide();
+                            $('.topupSpan'+rowID).hide();
+                            $('.monthlyIncomeInput'+rowID).show();
+                            $('.memberContributionInput'+rowID).show();
+                            $('.contributorContributionInput'+rowID).show();
+                            $('.topupInput'+rowID).show();
+
+                            $('.confirmEditContributionOptions'+rowID).toggle();
                         });
-                        //END:: Suspend  Member Contribution
+
+
+                       $('.confirmEditButton').click(function(){
+                            var rowID=$(this).dat('rowID');
+                            $(this).hide();
+                            //Start:: Switch the values New Values to inputs
+                            let monthlyIncomeInput = $('.monthlyIncomeInput'+rowID).val();
+                            let memberContributionInput = $('.memberContributionInput'+rowID).val();
+                            let contributorContributionInput = $('.contributorContributionInput'+rowID).val();
+                            let topupInput = $('.topupInput'+rowID).val();
+
+                            $('.monthlyIncomeSpan'+rowID).html(monthlyIncomeInput);
+                            $('.memberContributionSpan'+rowID).html(memberContributionInput);
+                            $('.contributorContributionSpan'+rowID).html(contributorContributionInput);
+                            $('.topupSpan'+rowID).html(topupInput);
+
+                            //End:: Switch the values New Values to inputs
+                            $('.editButton'+rowID).show(); // activate Edit
+
+                            $('.monthlyIncomeSpan'+rowID).show();
+                            $('.memberContributionSpan'+rowID).show();
+                            $('.contributorContributionSpan'+rowID).show();
+                            $('.topupSpan'+rowID).show();
+                            $('.monthlyIncomeInput'+rowID).hide();
+                            $('.memberContributionInput'+rowID).hide();
+                            $('.contributorContributionInput'+rowID).hide();
+                            $('.topupInput'+rowID).hide();
+                        });
+                        //END:: Suspend Member Contribution
+
                         
                     } else {
-                        alert('assss');
+                        console.log('Error');
                     }
                 }
             });
@@ -248,7 +281,7 @@ $(".searchButton").click(function() {
                 },
                 dataType: 'json',
                 success: function(response) {
-                    if (response.sectionContributionDataArr.memberList !== "") {
+                    if (response.sectionContributionDataArr.code == 201) {
                         //Start:: put section Data
                         $('#sectionName').html(response.sectionContributionDataArr.sectionData.name);
                         $('#sectionCode').html(response.sectionContributionDataArr.sectionData.section_code);
@@ -257,20 +290,47 @@ $(".searchButton").click(function() {
                         //End:: put section Data
                         
                         $(".contrinbution_recon_table tbody").empty();
-                        $(".contrinbution_recon_table").prepend(response.sectionContributionDataArr.memberList);
+                        $(". contrinbution_recon_table").prepend(response.sectionContributionDataArr.memberList);
                     
                         calculateItems(); // Prior Items Caluculation
 
                         //START:: Suspend  Member Contribution
-                        $('.suspendContribution').click(function(){
-                            
-                            var rowID=$(this).attr('data-rowID');
-                            suspendMemberContribution(rowID);
+                        $('.editContribution').click(function(){
+                            var rowID=$(this).data('rowID');
+                            $(this).hide();
+                            $('.confirmEditButton'+rowID).show();
+
+                            $('.monthlyIncomeSpan'+rowID).hide();
+                            $('.memberContributionSpan'+rowID).hide();
+                            $('.contributorContributionSpan'+rowID).hide();
+                            $('.topupSpan'+rowID).hide();
+                            $('.monthlyIncomeInput'+rowID).show();
+                            $('.memberContributionInput'+rowID).show();
+                            $('.contributorContributionInput'+rowID).show();
+                            $('.topupInput'+rowID).show();
                         });
-                        //END:: Suspend  Member Contribution
+
+
+                       /* $('.confirmEditContribution').click(function(){
+                            var rowID=$(this).attr('data-rowID');
+                            $(this).hide();
+                            $('.confirmEditButton'+rowID).show();
+
+                            $('.monthlyIncomeSpan'+rowID).hide();
+                            $('.memberContributionSpan'+rowID).hide();
+                            $('.contributorContributionSpan'+rowID).hide();
+                            $('.topupSpan'+rowID).hide();
+                            $('.monthlyIncomeInput'+rowID).show();
+                            $('.memberContributionInput'+rowID).show();
+                            $('.contributorContributionInput'+rowID).show();
+                            $('.topupInput'+rowID).show();
+                        });*/
+                        //END:: Suspend Member Contribution
+
+                        //
                         
                     } else {
-                        alert('no data');
+                        console.log('Error');
                     }
                 }
             });
@@ -282,16 +342,6 @@ $(".searchButton").click(function() {
         }
 });
 
-function suspendMemberContribution(rowID){
-    $('.memberContributionInput'+rowID).val(0);
-    var a = parseInt($('.contributorContributionInput'+rowID).val().replace(/,/g, ''), 10);
-    var b = parseInt($('.topupInput'+rowID).val().replace(/,/g, ''), 10);
-    $('.totalInput'+rowID).val(a+b);
-    $('.totalSpan'+rowID).html((a+b).toLocaleString()+'.00');
-
-    calculateItems(); // reset all the values
-}
-
 function calculateItems(){
     var totalMemberContribution = 0;
     $(".total").each(function() {
@@ -299,12 +349,10 @@ function calculateItems(){
             totalMemberContribution += parseInt($(this).val().replace(/,/g, ''), 10);
         }
     });
-    
     //putting a subtotal
     //alert('monthlyContribution ====> '+totalMemberContribution);
     $('#monthlyContribution').html(totalMemberContribution.toLocaleString());
     $('#totalContribution').html(totalMemberContribution.toLocaleString());
-    $('#totalContributionInput').val(totalMemberContribution);
 }
 </script>
 

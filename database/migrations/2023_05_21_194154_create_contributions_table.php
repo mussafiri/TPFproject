@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('section_id')->default(0);
             $table->string('contribution_period')->default('NULL');
             $table->integer('total_contributors')->default(0);
+            $table->integer('total_members')->default(0);
             $table->decimal('contribution_amount', 32,2);
             $table->integer('payment_mode_id')->default(0);
             $table->string('payment_ref_no')->default('NULL');

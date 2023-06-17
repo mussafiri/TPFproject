@@ -91,7 +91,7 @@
                                                                         <th>Contributor Type</th>
                                                                         {{-- <th>Zone</th>
                                                                         <th>Distict</th> --}}
-                                                                        <th>Section</th>
+                                                                        {{-- <th>Section</th> --}}
                                                                         <th>Status</th>
                                                                         <th></th>
                                                                     </tr>
@@ -107,7 +107,7 @@
                                                                         <td>{{$data->contributorType->name}}</td>
                                                                         {{-- <td>{{$data->contributorSection->district->zone->name}}</td>
                                                                         <td>{{$data->contributorSection->district->name}}</td> --}}
-                                                                        <td>{{$data->contributorSection->name}}</td>
+                                                                        {{-- <td>{{$data->contributorSection->name}}</td> --}}
                                                                         <td><span class="badge badge-outline-{{$data->status=='ACTIVE'?'success':'danger'}} badge-pill">{{$data->status}}</span></td>
                                                                         <td>
                                                                             <div class="btn-group dropdown float-right">
