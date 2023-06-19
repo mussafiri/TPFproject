@@ -49,6 +49,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/get/section/data/edit', [ZoneController::class, 'ajaxSectionGetData']);
         Route::post('/update/section/status', [ZoneController::class, 'ajaxUpdateSectionStatus']);
         Route::post('/update/district/status', [ZoneController::class, 'ajaxUpdateDistrictStatus']);
+        #Member
+        Route::post('/dynamic/validation', [MemberController::class, 'ajaxRowDynamicValidation']);
     });
 
     Route::prefix('zones')->group(function(){

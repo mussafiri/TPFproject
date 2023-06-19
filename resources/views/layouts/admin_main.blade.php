@@ -32,7 +32,6 @@
     <link rel="stylesheet" href="{{asset('assets/libs/daterangepicker/css/daterangepicker.css')}}" type="text/css" />
 
     <!-- Start::date range picker -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <!-- End::date range picker -->
 
     @yield('custom_css')
@@ -90,7 +89,6 @@
         <script src="{{asset('assets/libs/apexcharts/apexcharts.min.js')}}"></script>
 
         <script src="{{asset('assets/libs/selectize/js/standalone/selectize.min.js')}}"></script>
-        <script src="{{asset('assets/libs/flatpickr/flatpickr.min.js')}}"></script>
         
         <script src="{{asset('assets/libs/jquery-mask-plugin/jquery.mask.min.js')}}"></script>
         <script src="{{asset('assets/libs/autonumeric/autoNumeric-min.js')}}"></script>
@@ -112,10 +110,7 @@
         <!-- App js-->
 
         <!-- Start:: custom data range picker -->
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
         <!-- End:: custom data range picker -->
 
         <script src="{{asset('assets/js/app.min.js')}}"></script>
