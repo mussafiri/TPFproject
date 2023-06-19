@@ -138,6 +138,10 @@ Route::middleware('auth')->group(function () {
         #Start:: constant value routes
         Route::post('/get/constantvalue/data',[SettingsController::class, 'ajaxGetConstantvalueData']);
         #End:: constant value routes
+
+        #Start:: Contibutions routes 
+        Route:: post('/get/section/contribution/data', [ContributionController::class, 'ajaxGetSectionContributionData']);
+        #End:: Contibutions routes
     });
 
     //Start:: users management routes

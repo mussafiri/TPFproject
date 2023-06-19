@@ -16,12 +16,13 @@ return new class extends Migration
             $table->integer('section_id')->default(0);
             $table->string('contribution_period')->default('NULL');
             $table->integer('total_contributors')->default(0);
+            $table->integer('total_members')->default(0);
             $table->decimal('contribution_amount', 32,2);
             $table->integer('payment_mode_id')->default(0);
             $table->string('payment_ref_no')->default('NULL');
             $table->string('payment_date')->default('NULL');
             $table->string('payment_proof')->default('NULL');
-            $table->enum('status',['ACTIVE','SUSPENDED'])->default('NULL');
+            $table->enum('status',['ACTIVE','SUSPENDED'])->default('ACTIVE');
             $table->enum('processing_status',['PENDING','APPROVED','POSTED','APPROVAL REJECTED','POSTING REJECTED'])->default('PENDING');
             $table->string('created_by')->default(0);
             $table->string('approved_by')->default(0);
@@ -34,6 +35,7 @@ return new class extends Migration
             $table->string('posting_rejected_by')->default(0);
             $table->string('posting_rejected_at')->default('NULL');
             $table->string('posting_reject_reason')->default('NULL');
+            $table->integer('created_by');
             $table->integer('updated_by')->default(0);
             $table->timestamps();
         });

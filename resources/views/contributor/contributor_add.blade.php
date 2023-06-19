@@ -37,7 +37,7 @@
                                             </div>
                                             <div class="col-sm-8">
                                                 <div class="text-sm-right">
-                                                    <a href="{{url('contributors')}}" class="btn btn-info mb-2 mr-1"><i class="mdi mdi-arrow-left-thick mr-2"></i> Back</a>
+                                                    <a href="{{url('contributors/list/'.Crypt::encryptString('ACTIVE'))}}" class="btn btn-info mb-2 mr-1"><i class="mdi mdi-arrow-left-thick mr-2"></i> Back</a>
                                                 </div>
                                             </div><!-- end col-->
                                         </div>
