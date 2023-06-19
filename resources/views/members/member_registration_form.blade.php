@@ -1,16 +1,13 @@
 @extends('layouts.admin_main')
 @section('custom_css')
 <!-- third party css -->
-<link href="{{asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
-<link href="{{asset('assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
-<link href="{{asset('assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
-<link href="{{asset('assets/libs/datatables.net-select-bs4/css//select.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{asset('assets/libs/sweetalert2/sweetalert2.min.css')}}" rel="stylesheet" type="text/css" />
 <!-- kartik Fileinput-->
 <link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/css/fontawesome-kartik.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/css/bootstrap-icons.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/css/fileinput.min.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/themes/explorer/theme.css')}}" />
+<link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/themes/explorer-fa/theme.css')}}" />
 
 <!-- third party css end -->
 <style>
@@ -50,6 +47,38 @@
         color: red;
         font-family: monospace;
         font-weight: normal;
+    }
+
+    .my-frame-class {
+
+        width: 150px;
+        max-height: 150px important !;
+    }
+
+    .depattachment-file-input {
+
+        /* display: inline-block; */
+        display: table-cell;
+        max-height: 150px;
+        width: 180px;
+    }
+
+    .depattachment-file-input .file-upload-indicator,
+    .file-actions {
+        display: inline-block;
+
+    }
+
+    .depattachment-file-input .file-footer-caption {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: center;
+    }
+
+    .depattachment-file-input .file-actions {
+        margin-left: auto;
+        float: right;
     }
 </style>
 @endsection
@@ -98,7 +127,7 @@
                             </a>
                         </li>
                         <li class="nav-item" id="LimemberDependantsDetails">
-                            <a href="javascript:void(0);" class="nav-link disabled">
+                            <a href="#memberDependantsDetails" class="nav-link" data-toggle="tab" aria-expanded="true">
                                 <i class="flaticon flaticon-community mr-1"></i>
                                 Dependants Details
                             </a>
@@ -188,40 +217,40 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="field-1" class="control-label">Date of Birth</label>
-                                                        <input type="text" name="dob" class="form-control form-control-sm" value="{{old('dob')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd M yyyy" placeholder="Date of Birth">
-                                                        
+                                                        <input type="text" name="dob" class="form-control form-control-sm" id="member_dobdatepicker" value="{{old('dob')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd M yyyy" placeholder="Date of Birth">
+
                                                         @if ($errors->registerMemberDetails->has('dob')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('dob') }}</small></strong></span>@endif
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="field-3" class="control-label">Postal Address</label>
-                                                        <input type="text" name="postalAddress" class="form-control form-control-sm" value="{{old('postalAddress')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Postal Address" >
-                                                        
+                                                        <input type="text" name="postalAddress" class="form-control form-control-sm" value="{{old('postalAddress')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Postal Address">
+
                                                         @if ($errors->registerMemberDetails->has('postalAddress')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('postalAddress') }}</small></strong></span>@endif
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="field-4" class="control-label">Physical Address</label>
-                                                        <input type="text" name="physicalAddress" class="form-control form-control-sm" value="{{old('physicalAddress')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Physical Address" >
-                                                        
+                                                        <input type="text" name="physicalAddress" class="form-control form-control-sm" value="{{old('physicalAddress')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Physical Address">
+
                                                         @if ($errors->registerMemberDetails->has('physicalAddress')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('physicalAddress') }}</small></strong></span>@endif
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="field-5" class="control-label">Phone</label>
-                                                        <input type="text" name="phone" class="form-control form-control-sm" id="input-phone" value="{{old('phone')}}" placeholder="e.g 255 717 000 052" data-toggle="input-mask" data-mask-format="(000) 000-000-000" autocomplete="off" >
-                                                        
+                                                        <input type="text" name="phone" class="form-control form-control-sm" id="input-phone" value="{{old('phone')}}" placeholder="e.g 255 717 000 052" data-toggle="input-mask" data-mask-format="(000) 000-000-000" autocomplete="off">
+
                                                         @if ($errors->registerMemberDetails->has('phone')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('phone') }}</small></strong></span>@endif
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="field-5" class="control-label">Email</label>
-                                                        <input type="email" name="email" class="form-control form-control-sm" value="{{old('email')}}" oninput="this.value = this.value.toLowerCase()" id="input-email" placeholder="e.g xxxxx@gmail.com" autocomplete="off" >
-                                                        
+                                                        <input type="email" name="email" class="form-control form-control-sm" value="{{old('email')}}" oninput="this.value = this.value.toLowerCase()" id="input-email" placeholder="e.g xxxxx@gmail.com" autocomplete="off">
+
                                                         @if ($errors->registerMemberDetails->has('email')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('email') }}</small></strong></span>@endif
                                                     </div>
                                                 </div>
@@ -270,7 +299,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="field-4" class="control-label">ID number</label>
-                                                        <input type="text" name="id_number" id="id-number" class="form-control form-control-sm" value="{{old('id_number')}}" oninput="this.value = this.value.toUpperCase()" placeholder="ID number" >
+                                                        <input type="text" name="id_number" id="id-number" class="form-control form-control-sm" value="{{old('id_number')}}" oninput="this.value = this.value.toUpperCase()" placeholder="ID number">
                                                         @if ($errors->registerMemberDetails->has('id_number')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('id_number') }}</small></strong></span>@endif
                                                     </div>
                                                 </div>
@@ -288,7 +317,7 @@
 
                                                     <div class="kv-avatar">
                                                         <div class="file-loading">
-                                                            <input id="avatar-1" name="member_avatar" type="file" >
+                                                            <input id="avatar-1" name="member_avatar" type="file">
                                                         </div>
                                                     </div>
                                                     <div class="kv-avatar-hint">
@@ -336,13 +365,13 @@
                                                             <option value="{{$contributor->id}}">{{$contributor->name}}</option>
                                                             @endforeach
                                                         </select>
-                                                        @if ($errors->registerMemberDetails->has('contributor_name')) <span class="text-danger" id="contirbutorError" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('contributor_name') }}</small></strong></span>@endif
+                                                        <span class="text-danger" id="contirbutorError" role="alert"> <strong><small>@if ($errors->registerMemberDetails->has('contributor_name')){{ $errors->registerMemberDetails->first('contributor_name') }}@endif</small></strong></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label for="field-4" class="control-label">Section</label>
-                                                        <input type="text" name="section" id="section" class="form-control form-control-sm" value="{{old('section')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="District"  readonly>
+                                                        <input type="text" name="section" id="section" class="form-control form-control-sm" value="{{old('section')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="District" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -354,14 +383,14 @@
                                                 <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label for="field-5" class="control-label">Zone</label>
-                                                        <input type="text" name="zone" id="zone" class="form-control form-control-sm" value="{{old('zone')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Zone"  readonly>
+                                                        <input type="text" name="zone" id="zone" class="form-control form-control-sm" value="{{old('zone')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Zone" readonly>
                                                         <span class="zoneErrorTxt text-danger" role="alert"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label for="field-5" class="control-label">Monthly income</label>
-                                                        <input type="text" name="monthly_income" id="monthly_income" class="form-control form-control-sm autonumber" value="{{old('monthly_income')}}" placeholder="Monthly Income" data-a-sign="TZS. " placeholder="Enter Income" autocomplete="off" >
+                                                        <input type="text" name="monthly_income" id="monthly_income" class="form-control form-control-sm autonumber" value="{{old('monthly_income')}}" placeholder="Monthly Income" data-a-sign="TZS. " placeholder="Enter Income" autocomplete="off">
                                                         @if ($errors->registerMemberDetails->has('monthly_income')) <span class="text-danger" id="contributor" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('monthly_income') }}</small></strong></span>@endif
                                                     </div>
                                                 </div>
@@ -381,130 +410,200 @@
                                 <div class="col-12">
                                     <h5 class="text-uppercase mt-0 mb-3 bg-light p-2 row">Dependants Details</h5>
                                 </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12">
-                                    <table class="w-100">
-                                        <tr>
-                                            <div class="row font-12">
-                                                <div class="col-lg-6">
-                                                    <div class="row">
+                                <form method="POST" id="formDependants" enctype="multipart/form-data" action="{{url('/member/dependants/submit')}}">
+                                    @csrf
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <table class="w-100">
+                                            <tr>
+                                                <td class="form-group col-lg-11 col-md-11 col-sm-12">
+                                                    <div class="row font-12 border rounded pt-2" style="background-color:#fefefe;">
                                                         <div class="col-lg-6">
-                                                            <div class="form-group">
-                                                                <label for="field-1" class="control-label">Relationship</label>
-                                                                <select class="form-control" name="dep_relationship[]" data-toggle="select2">
-                                                                    <option value="0">--Select Relationship--</option>
-                                                                    <option value="SPOUSE">SPOUSE</option>
-                                                                    <option value="CHILD">CHILD</option>
-                                                                </select>
-                                                                <span class="text-danger" role="alert"> {{ $errors->first('contributor_name') }}</span>
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-1" class="control-label">Relationship</label>
+                                                                        <select class="form-control relationshipSelect" name="inputs[0][dep_relationship]" data-toggle="select2">
+                                                                            <option value="0">--Select Relationship--</option>
+                                                                            <option value="SPOUSE">SPOUSE</option>
+                                                                            <option value="CHILD">CHILD</option>
+                                                                        </select>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-4" class="control-label">Gender</label>
+                                                                        <select class="form-control px-0" name="inputs[0][dep_gender]" data-toggle="select2">
+                                                                            <option value="0">--Select Gender--</option>
+                                                                            <option value="MALE">MALE</option>
+                                                                            <option value="FEMALE">FEMALE</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-4" class="control-label">Firstname</label>
+                                                                        <input type="text" name="inputs[0][dep_firstname]" id="dep0" class="form-control form-control-sm" value="{{old('dep_firstname')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-5" class="control-label">Middlename</label>
+                                                                        <input type="text" name="inputs[0][dep_midname]" id="zone" class="form-control form-control-sm" value="{{old('dep_midname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">
+                                                                        <span class="zoneErrorTxt text-danger" role="alert"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-5" class="control-label">Last name</label>
+                                                                        <input type="text" name="inputs[0][dep_lastname]" id="zone" class="form-control form-control-sm" value="{{old('dep_lastname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">
+                                                                        <span class="zoneErrorTxt text-danger" role="alert"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-5" class="control-label">Date of Birth</label>
+                                                                        <input type="text" name="inputs[0][dep_dob]" class="form-control form-control-sm dep_dobdatepicker" value="{{old('dep_dob')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd MM yyyy" placeholder="DOB" autocomplete="off">
+                                                                        <span class="text-danger" role="alert"> </span>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-6">
-                                                            <div class="form-group">
-                                                                <label for="field-4" class="control-label">Gender</label>
-                                                                <select class="form-control px-0" name="dep_gender[]" data-toggle="select2">
-                                                                    <option value="0">--Select Gender--</option>
-                                                                    <option value="MALE">MALE</option>
-                                                                    <option value="FEMALE">FEMALE</option>
-                                                                </select>
-                                                                <span class="text-danger" role="alert"> {{ $errors->first('dep_gender') }}</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6">
-                                                            <div class="form-group">
-                                                                <label for="field-4" class="control-label">Firstname</label>
-                                                                <input type="text" name="dep_firstname[]" id="depFirstname" class="form-control form-control-sm" value="{{old('dep_firstname')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name" >
-                                                                <span class="depFirstnameErrorTxt text-danger" role="alert"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6">
-                                                            <div class="form-group">
-                                                                <label for="field-5" class="control-label">Middlename</label>
-                                                                <input type="text" name="dep_midname[]" id="zone" class="form-control form-control-sm" value="{{old('dep_midname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name" >
-                                                                <span class="zoneErrorTxt text-danger" role="alert"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6">
-                                                            <div class="form-group">
-                                                                <label for="field-5" class="control-label">Last name</label>
-                                                                <input type="text" name="dep_lastname[]" id="zone" class="form-control form-control-sm" value="{{old('dep_lastname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name" >
-                                                                <span class="zoneErrorTxt text-danger" role="alert"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6">
-                                                            <div class="form-group">
-                                                                <label for="field-5" class="control-label">Date of Birth</label>
-                                                                <input type="text" name="dep_dob[]" class="form-control form-control-sm autonumber" value="{{old('dep_dob')}}" placeholder="DOB" autocomplete="off" >
-                                                                <span class="text-danger" role="alert"> </span>
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-1" class="control-label">Dependant Photo</label>
+                                                                        <div class="file-loading">
+                                                                            <input class="dep_attachments" name="dep_photo[]" type="file">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6" id="divBirthCert">
+                                                                    <div class="form-group">
+                                                                        <label for="field-1" class="control-label">Birth Certificate</label>
+                                                                        <div class="file-loading">
+                                                                            <input class="dep_attachments" id="inputBirthCert" name="dep_birthcert[]" type="file">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6" id="divmarriageCert" style="display:none;">
+                                                                    <div class="form-group">
+                                                                        <label for="field-1" class="control-label">Marriage Certificate</label>
+                                                                        <div class="file-loading">
+                                                                            <input class="dep_attachments" id="inputMarriageCert" name="dep_marriagecert[]" type="file">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>   
-                                            </div>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 text-right">
-                                                <a id="addFields" class="btn btn-icon btn-round btn-xs mb-2 btn-success white" style="color:#fff"><em class="mdi mdi-plus"></em></a>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <!-- <table class="w-100">
-                                        <tr>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 pl-0 pr-1">
-                                                <input type="text" class="form-control form-control-sm pl-1" name="relationship[]" value="PARENT" autocomplete="off" readonly >
-                                            </td>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 pl-0">
-                                                <input type="text" class="form-control form-control-sm" name="depgender[]" value="MALE" placeholder="Gender" autocomplete="off" readonly >
-                                            </td>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 pl-0 ">
-                                                <input type="text" class="form-control form-control-sm pl-1" name="depfname[]" placeholder="Father_Firstname" autocomplete="off" >
-                                            </td>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 pl-0">
-                                                <input type="text" class="form-control form-control-sm pl-1" name="depmname[]" placeholder="Father_Middlename" autocomplete="off" >
-                                            </td>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 pl-0">
-                                                <input type="text" class="form-control form-control-sm pl-1" name="deplname[]" placeholder="Father Lastname" autocomplete="off" >
-                                            </td>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 pl-0 pr-1">
-                                                <input type="text" class="form-control form-control-sm pl-1" name="depdob[]" placeholder="DOB" autocomplete="off" >
-                                            </td>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 pl-0 pr-1">
-                                                <input type="text" class="form-control form-control-sm pl-1" name="depphoto[]" placeholder="Photo" autocomplete="off" >
-                                            </td>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 pl-0 pr-1">
-                                                <input type="text" class="form-control form-control-sm pl-1" name="depattachment[]" placeholder="Birth Certificate" autocomplete="off" >
-                                            </td>
+                                                </td>
+                                                <td class="form-group col-lg-1 col-md-1 col-sm-12 text-right ml-auto">
+                                                    <a id="addFields" class="btn btn-icon btn-round btn-xs mb-2 btn-success white" style="color:#fff"><em class="mdi mdi-plus"></em></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="form-group col-lg-11 col-md-11 col-sm-12">
+                                                    <div class="row font-12 border rounded pt-2 mt-2" style="background-color:#fefefe;">
+                                                        <div class="col-lg-6">
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-1" class="control-label">Relationship</label>
+                                                                        <select class="form-control relationshipSelect" name="inputs[1][dep_relationship]" data-toggle="select2">
+                                                                            <option value="0">--Select Relationship--</option>
+                                                                            <option value="SPOUSE">SPOUSE</option>
+                                                                            <option value="CHILD">CHILD</option>
+                                                                        </select>
+                                                                        <div class="invalid-feedback"></div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-4" class="control-label">Gender</label>
+                                                                        <select class="form-control px-0" name="inputs[1][dep_gender]" data-toggle="select2">
+                                                                            <option value="0">--Select Gender--</option>
+                                                                            <option value="MALE">MALE</option>
+                                                                            <option value="FEMALE">FEMALE</option>
+                                                                        </select>
+                                                                        <span class="text-danger" role="alert"> {{ $errors->first('dep_gender') }}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-4" class="control-label">Firstname</label>
+                                                                        <input type="text" name="inputs[1][dep_firstname]" id="depFirstname" class="form-control form-control-sm" value="{{old('dep_firstname')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">
+                                                                        <span class="depFirstnameErrorTxt text-danger" role="alert"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-5" class="control-label">Middlename</label>
+                                                                        <input type="text" name="inputs[1][dep_midname]" id="zone" class="form-control form-control-sm" value="{{old('dep_midname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">
+                                                                        <span class="zoneErrorTxt text-danger" role="alert"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-5" class="control-label">Last name</label>
+                                                                        <input type="text" name="inputs[1][dep_lastname]" id="zone" class="form-control form-control-sm" value="{{old('dep_lastname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">
+                                                                        <span class="zoneErrorTxt text-danger" role="alert"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-5" class="control-label">Date of Birth</label>
+                                                                        <input type="text" name="inputs[1][dep_dob]" class="form-control form-control-sm dep_dobdatepicker" value="{{old('dep_dob')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd M yyyy" placeholder="Date of Birth" autocomplete="off">
+                                                                        <span class="text-danger" role="alert"> </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-1" class="control-label">Dependant Photo</label>
+                                                                        <div class="file-loading">
+                                                                            <input class="dep_attachments" name="dep_photo[]" type="file">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6" id="divBirthCert">
+                                                                    <div class="form-group">
+                                                                        <label for="field-1" class="control-label">Birth Certificate</label>
+                                                                        <div class="file-loading">
+                                                                            <input class="dep_attachments" id="inputBirthCert" name="dep_birthcert[]" type="file">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6" id="divmarriageCert" style="display:none;">
+                                                                    <div class="form-group">
+                                                                        <label for="field-1" class="control-label">Marriage Certificate</label>
+                                                                        <div class="file-loading">
+                                                                            <input class="dep_attachments" id="inputMarriageCert" name="dep_marriagecert[]" type="file">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
-                                        </tr>
-                                        <tr>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 pl-0 pr-1">
-                                                <input type="text" class="form-control form-control-sm pl-1" name="relationship[]" value="PARENT" autocomplete="off" >
-                                            </td>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 pl-0 pr-1">
-                                                <input type="text" class="form-control form-control-sm pl-1" name="depgender[]" value="FEMALE" autocomplete="off" readonly >
-                                            </td>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 pl-0 pr-1">
-                                                <input type="text" class="form-control form-control-sm pl-1" name="depfname[]" placeholder="Mother Firstname" autocomplete="off" >
-                                            </td>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 pl-0 pr-1">
-                                                <input type="text" class="form-control form-control-sm pl-1" name="depmname[]" placeholder="Mother Middle name" autocomplete="off" >
-                                            </td>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 pl-0 pr-1">
-                                                <input type="text" class="form-control form-control-sm pl-1" name="deplname[]" placeholder="Mother Last name" autocomplete="off" >
-                                            </td>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 pl-0 pr-1">
-                                                <input type="text" class="form-control form-control-sm pl-1" name="depdob[]" placeholder="DOB" autocomplete="off" >
-                                            </td>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 pl-0 pr-1">
-                                                <input type="text" class="form-control form-control-sm pl-1" name="depphoto[]" placeholder="Photo" autocomplete="off" >
-                                            </td>
-                                            <td class="form-group col-lg-1 col-md-1 col-sm-12 pl-0 pr-1">
-                                                <input type="text" class="form-control form-control-sm pl-1" name="depattachment[]" placeholder="Birth Certificate" autocomplete="off" >
-                                            </td>
-                                        </tr>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table id="dynamicAddRemove" class="w-100"></table>
+                                        <div class="col-md-12 px-4 dropdown-divider"></div>
+                                        <div class="col-md-12 mb-4">
+                                            <button type="submit" id="submit-button" class="btn btn-info waves-effect waves-light float-right formDependants">Submit</button>
+                                        </div>
+                                    </div>
 
-                                    </table> -->
-                                    <table id="dynamicAddRemove" class="w-100"></table>
-                                </div>
+
+
+                                </form>
                             </div>
-
                         </div><!-- end Dependant tab-pane -->
                     </div><!-- end tab-content -->
                 </div> <!-- end card-box-->
@@ -516,67 +615,257 @@
 @endsection
 @section('custom_script')
 <!-- third party js -->
-<script src="{{asset('assets/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-<script src="{{asset('assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
-<script src="{{asset('assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
-<script src="{{asset('assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js')}}"></script>
-<script src="{{asset('assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
-<script src="{{asset('assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js')}}"></script>
-<script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
-<script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.flash.min.js')}}"></script>
-<script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
-<script src="{{asset('assets/libs/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
-<script src="{{asset('assets/libs/datatables.net-select/js/dataTables.select.min.js')}}"></script>
-<script src="{{asset('assets/libs/pdfmake/build/pdfmake.min.js')}}"></script>
-<script src="{{asset('assets/libs/pdfmake/build/vfs_fonts.js')}}"></script>
 <!-- third party js ends -->
 <script src="{{asset('assets/libs/kartik-v-bootstrap-fileinput/js/fileinput.min.js')}}"></script>
 <script src="{{asset('assets/libs/kartik-v-bootstrap-fileinput/themes/explorer/theme.js')}}"></script>
-
+<script src="{{asset('assets/libs/kartik-v-bootstrap-fileinput/themes/explorer-fa/theme.js')}}"></script>
 
 <!-- Datatables init -->
 <script src="{{asset('assets/libs/sweetalert2/sweetalert2.min.js')}}"></script>
-
-<!-- Datatables init -->
-<script src="{{asset('assets/js/pages/datatables.init.js')}}"></script>
 <script type="text/javascript">
-    $('input[data-provide="datepicker"]').datepicker({
-        endDate: "-18Y"
+    var b = 2;
+    $('#addFieldsBed').on('click', function() {
+        $("#addRemoveBedRow").prepend(
+            // <tr>
+            //     <td class="form-group col-lg-11 col-md-11 col-sm-12">
+            //         <div class="row font-12 border rounded pt-2 mt-2" style="background-color:#fefefe;">
+            //             <div class="col-lg-6">
+            //                 <div class="row">
+            //                     <div class="col-lg-6">
+            //                         <div class="form-group">
+            //                             <label for="field-1" class="control-label">Relationship</label>
+            //                             <select class="form-control relationshipSelect" name="dep_relationship[]" data-toggle="select2">
+            //                                 <option value="0">--Select Relationship--</option>
+            //                                 <option value="SPOUSE">SPOUSE</option>
+            //                                 <option value="CHILD">CHILD</option>
+            //                             </select>
+            //                             <span class="text-danger" role="alert"> {{ $errors->first('contributor_name') }}</span>
+            //                         </div>
+            //                     </div>
+            //                     <div class="col-lg-6">
+            //                         <div class="form-group">
+            //                             <label for="field-4" class="control-label">Gender</label>
+            //                             <select class="form-control px-0" name="dep_gender[]" data-toggle="select2">
+            //                                 <option value="0">--Select Gender--</option>
+            //                                 <option value="MALE">MALE</option>
+            //                                 <option value="FEMALE">FEMALE</option>
+            //                             </select>
+            //                             <span class="text-danger" role="alert"> {{ $errors->first('dep_gender') }}</span>
+            //                         </div>
+            //                     </div>
+            //                     <div class="col-lg-6">
+            //                         <div class="form-group">
+            //                             <label for="field-4" class="control-label">Firstname</label>
+            //                             <input type="text" name="dep_firstname[]" id="depFirstname" class="form-control form-control-sm" value="{{old('dep_firstname')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">
+            //                             <span class="depFirstnameErrorTxt text-danger" role="alert"></span>
+            //                         </div>
+            //                     </div>
+            //                     <div class="col-lg-6">
+            //                         <div class="form-group">
+            //                             <label for="field-5" class="control-label">Middlename</label>
+            //                             <input type="text" name="dep_midname[]" id="zone" class="form-control form-control-sm" value="{{old('dep_midname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">
+            //                             <span class="zoneErrorTxt text-danger" role="alert"></span>
+            //                         </div>
+            //                     </div>
+            //                     <div class="col-lg-6">
+            //                         <div class="form-group">
+            //                             <label for="field-5" class="control-label">Last name</label>
+            //                             <input type="text" name="dep_lastname[]" id="zone" class="form-control form-control-sm" value="{{old('dep_lastname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">
+            //                             <span class="zoneErrorTxt text-danger" role="alert"></span>
+            //                         </div>
+            //                     </div>
+            //                     <div class="col-lg-6">
+            //                         <div class="form-group">
+            //                             <label for="field-5" class="control-label">Date of Birth</label>
+            //                             <input type="text" name="dep_dob[]" class="form-control form-control-sm dep_dobdatepicker" value="{{old('dep_dob')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd M yyyy" placeholder="Date of Birth" autocomplete="off">
+            //                             <span class="text-danger" role="alert"> </span>
+            //                         </div>
+            //                     </div>
+            //                 </div>
+            //             </div>
+            //             <div class="col-lg-6">
+            //                 <div class="row">
+            //                     <div class="col-lg-6">
+            //                         <div class="form-group">
+            //                             <label for="field-1" class="control-label">Dependant Photo</label>
+            //                             <div class="file-loading">
+            //                                 <input class="dep_attachments" name="dep_photo[]" type="file">
+            //                             </div>
+            //                         </div>
+            //                     </div>
+            //                     <div class="col-lg-6" id="divBirthCert">
+            //                         <div class="form-group">
+            //                             <label for="field-1" class="control-label">Birth Certificate</label>
+            //                             <div class="file-loading">
+            //                                 <input class="dep_attachments" id="inputBirthCert" name="dep_birthcert[]" type="file">
+            //                             </div>
+            //                         </div>
+            //                     </div>
+            //                     <div class="col-lg-6" id="divmarriageCert" style="display:none;">
+            //                         <div class="form-group">
+            //                             <label for="field-1" class="control-label">Marriage Certificate</label>
+            //                             <div class="file-loading">
+            //                                 <input class="dep_attachments" id="inputMarriageCert" name="dep_marriagecert[]" type="file">
+            //                             </div>
+            //                         </div>
+            //                     </div>
+            //                 </div>
+            //             </div>
+            //         </div>
+            //     </td>
+            // </tr>
+        );
+
+        $("#addedRowSelect2Input" + b).find(".inputselect2").select2();
+        b++;
     });
 </script>
 <script type="text/javascript">
+    // $("#formDependants").submit(function(e) {
+    // e.preventDefault();
+    // var formIsValid = true;
+
+    // // Check if inputs are valid
+    // var inputCount = $("#formDependants input").length;
+    // var completedRequests = 0;
+    // $("#formDependants input").each(function(index, element) {
+    //     var input = $(element);
+
+    //     $.ajax({
+    //     type: 'POST',
+    //     url: "{{url('/ajax/dynamic/validation')}}",
+    //     data: {
+    //         'rak': input.val(),
+    //         '_token': '{{ csrf_token() }}'
+    //     },
+    //     dataType: 'json',
+    //     success: function(response) {
+    //         input.next(".text-danger").empty();
+    //         completedRequests++;
+    //         if(completedRequests == inputCount) {
+    //         if(formIsValid) {
+    //             $("#formDependants")[0].submit();
+    //         }
+    //         }
+    //     },
+    //     error: function(response) {
+    //         var errors = response.responseJSON.errors;
+    //         alert(errors);
+    //         if (errors[input.attr('name')]) {
+    //         input.next(".text-danger").text(errors[input.attr('name')][0]);
+    //         } else {
+    //         input.next(".text-danger").empty();
+    //         }
+    //         formIsValid = false;
+    //         completedRequests++;
+    //         if(completedRequests == inputCount) {
+    //         if(formIsValid) {
+    //             $("#formDependants")[0].submit();
+    //         }
+    //         }
+    //     },
+    //     async: true
+    //     });
+    // });
+    // });
+    $(document).ready(function() {
+        $('#formDependants').on('submit', function(e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                url: "{{url('/ajax/dynamic/validation')}}",
+                method: 'POST',
+                data:formData,
+                success: function(response) {
+                    // handle successful response
+                    alert("response");
+                    var inputs_errors = response.errors;
+                    if(inputs_errors) {
+                        $.each(inputs_errors, function(field, messages) {
+                        alert(messages[0]);
+                        $('input[name="inputs['+field+'][dep_midname]"]').after('<span class="text-danger" role="alert">Wronga</span>');
+                    });
+                    }
+
+                }
+            });
+        });
+    });
+</script>
+
+
+
+<!-- Datatables init -->
+<script type="text/javascript">
+    $('#member_dobdatepicker').datepicker({
+        endDate: "-18Y"
+    });
+    $('.dep_dobdatepicker').datepicker({
+        startDate: "-21Y",
+        endDate: new Date()
+    });
+</script>
+<script>
+    //START:: On change of the Relationship select 
+    // $(document).ready(function() {
+    $('.relationshipSelect').change(function() {
+        var realationType = $(this).find(":selected").val();
+        if (realationType == "SPOUSE") {
+            $('#divmarriageCert').show();
+            $('#divBirthCert').hide()
+            $('#inputMarriageCert').attr("required", "required");
+            $('#inputbirthCert').removeAttr("required");
+
+        } else if (realationType == "CHILD") {
+            $('#divmarriageCert').hide();
+            $('#divBirthCert').show();
+            $('#inputbirthCert').attr("required", "required");
+            $('#inputMarriageCert').removeAttr("required");
+        } else {
+            $('#divmarriageCert').hide();
+            $('#divBirthCert').hide()
+            $('#inputMarriageCert').removeAttr("required");
+            $('#inputbirthCert').removeAttr("required");
+
+        }
+
+    });
+    // });
+    //END:: Relationship select
+</script>
+<script type="text/javascript">
     // CONTROL TO ACTIVATE THE NAV TABS AFTER REDIRECTION OF THE FORM
-    var formResponse = "<?=$response_message;?>";
-    if (formResponse == "SUCCESS") {
-        // Get the nav item and content element
-        const navItem = document.querySelector('li#LimemberDependantsDetails a');
-        const contentElement = document.querySelector('div.tab-content div#memberDependantsDetails');
+    var formResponse = "<?= $response_message; ?>";
+    // if (formResponse == "SUCCESS") {
+    //      // Get the nav item and content element
+    //     const navItem = document.querySelector('li#LimemberDependantsDetails a');
+    //     const contentElement = document.querySelector('div.tab-content div#memberDependantsDetails');
 
-        // Add the 'active' class to the nav item
-        navItem.classList.add('active');
+    //     // Add the 'active' class to the nav item
+    //     navItem.classList.add('active');
 
-        // Add the 'show' and 'active' classes to the content element
-        contentElement.classList.add('show');
-        contentElement.classList.remove('disabled');
-        contentElement.classList.add('active');
-        // Renove the active class for Member details Tab elements
-        $('li#LimemberDetails a').removeClass("active");
-        $('div.tab-content div#memberDetails').removeClass("active");
-        $('li#LimemberDetails a').addClass("disabled");
+    //     // Add the 'show' and 'active' classes to the content element
+    //     contentElement.classList.add('show');
+    //     contentElement.classList.remove('disabled');
+    //     contentElement.classList.add('active');
+    //     // Renove the active class for Member details Tab elements
+    //     $('li#LimemberDetails a').removeClass("active");
+    //     $('div.tab-content div#memberDetails').removeClass("active");
+    //     $('li#LimemberDetails a').addClass("disabled");
 
-    }else{
-        // Get the nav item and content element
-        const navItem = document.querySelector('li#LimemberDetails a');
-        const contentElement = document.querySelector('div.tab-content div#memberDetails');
+    // }else{
+    //     // Get the nav item and content element
+    //     const navItem = document.querySelector('li#LimemberDetails a');
+    //     const contentElement = document.querySelector('div.tab-content div#memberDetails');
 
-        // Add the 'active' class to the nav item
-        navItem.classList.add('active');
+    //     // Add the 'active' class to the nav item
+    //     navItem.classList.add('active');
 
-        // Add the 'show' and 'active' classes to the content element
-        contentElement.classList.add('show');
-        contentElement.classList.add('active');
+    //     // Add the 'show' and 'active' classes to the content element
+    //     contentElement.classList.add('show');
+    //     contentElement.classList.add('active');
 
-    }
+    // }
 </script>
 <script type="text/javascript">
     $(".district_statusChangeLink").click(function() {
@@ -622,6 +911,7 @@
 
     });
 </script><!-- ./Status Modal  -->
+
 <script>
     //START:: On page load set defautl selection
     $(document).ready(function() {
@@ -631,6 +921,8 @@
     });
     //END:: ON PAGE load
 
+
+
     //START:: On event
     $('.contirbutorSelect').change(function() {
         var contributor = $(this).find(":selected").val();
@@ -638,6 +930,7 @@
             $("#contirbutorError").html('Kindly, select a Contributor');
             $('#district').val('');
             $('#zone').val('');
+            $('#section').val('');
         } else {
             $("#contirbutorError").html('');
             $.ajax({
@@ -718,7 +1011,7 @@
     $(document).ready(function() {
         $("#reg-form").fileinput({
             uploadUrl: "#",
-            allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif', 'pdf'],
+            allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'docx', 'doc'],
             showUpload: false,
             showCancel: false,
             showRemove: false,
@@ -751,6 +1044,18 @@
             },
             maxFileSize: 2000,
             // initialCaption: "The Moon and the Earth"
+        });
+    });
+    $(document).ready(function() {
+        $(".dep_attachments").fileinput({
+            frameClass: 'my-frame-class',
+            previewClass: 'depattachment-file-input',
+            removeLabel: '',
+            initialPreviewAsData: true,
+            showUpload: false,
+            showCaption: false,
+            dropZoneEnabled: false,
+
         });
     });
 </script>

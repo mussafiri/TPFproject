@@ -32,7 +32,6 @@
     <link rel="stylesheet" href="{{asset('assets/libs/daterangepicker/css/daterangepicker.css')}}" type="text/css" />
 
     <!-- Start::date range picker -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <!-- End::date range picker -->
 
     @yield('custom_css')
@@ -59,7 +58,7 @@
                 <div class="clearfix"></div>
 
             </div>
-            <!-- Sidebar -left --> 0612617218 Msukuma
+            <!-- Sidebar -left --> 
 
         </div>
         <!-- Left Sidebar End -->
@@ -90,7 +89,6 @@
         <script src="{{asset('assets/libs/apexcharts/apexcharts.min.js')}}"></script>
 
         <script src="{{asset('assets/libs/selectize/js/standalone/selectize.min.js')}}"></script>
-        <script src="{{asset('assets/libs/flatpickr/flatpickr.min.js')}}"></script>
         
         <script src="{{asset('assets/libs/jquery-mask-plugin/jquery.mask.min.js')}}"></script>
         <script src="{{asset('assets/libs/autonumeric/autoNumeric-min.js')}}"></script>
@@ -110,6 +108,10 @@
         <script src="{{asset('assets/js/pages/form-masks.init.js')}}"></script>
 
         <!-- App js-->
+
+        <!-- Start:: custom data range picker -->
+
+        <!-- End:: custom data range picker -->
 
         <script src="{{asset('assets/js/app.min.js')}}"></script>
 

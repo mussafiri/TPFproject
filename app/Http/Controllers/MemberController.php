@@ -23,6 +23,34 @@ class MemberController extends Controller {
     public function index() {
 
     }
+
+    public function ajaxRowDynamicValidation(Request $ajaxreq){
+        #Taking all POST requests from the form
+        $validator = Validator::make($ajaxreq->all(), [
+            'inputs.*' => 'array',
+            'inputs.*.dep_relationship' => 'not_in:0',
+            'inputs.*.dep_gender' => 'required|not_in:0',
+            'inputs.*.dep_firstname' => 'required',
+            'inputs.*.dep_midname' => 'required',
+            'inputs.*.dep_lastname' => 'required',
+            'inputs.*.dep_dob' => 'required',
+
+        ],  
+        // [   'dep_relationship.not_in' => 'You must select Relationship',
+        //     'dep_gender.not_in' => 'You must select Gender',
+        // ]
+
+
+    );
+    if($validator->fails()){
+        return response()->json(['errors' => $validator->errors()->all()]);
+    }else{
+        return response()->json(['message' => $ajaxreq->all()]);
+
+    }
+
+
+    }
     public function submitMemberRegistration(Request $request) {
         #Taking all POST requests from the form
         $valid = Validator::make($request->all(), [
@@ -153,7 +181,7 @@ class MemberController extends Controller {
         $memberRegObject->marital_status        = $request->marital_status;
         $memberRegObject->phone                 = $request->phone;
         $memberRegObject->email                 = $request->email;
-        $memberRegObject->income                = $request->monthly_income;
+        $memberRegObject->income                = str_replace(['TZS.',',',' '],'',$request->monthly_income);
         $memberRegObject->postal_address        = $request->postalAddress;
         $memberRegObject->physical_address      = $request->physicalAddress;
         $memberRegObject->picture               = $profile_photo;
