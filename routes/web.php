@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     //:::::::::::::::::::::::::::::::::::::::::::::::: ZONES ROUTES ::::::::::::::::::::::::::::::::::::::::::::::::
-    
+
     Route::prefix('ajax')->group(function(){
         Route::get('/get/district/old/data', [ZoneController::class, 'ajaxGetDistrictOldData']);
         Route::get('/get/zone/old/data', [ZoneController::class, 'ajaxGetZoneOldData'])->name('ajaxGetZoneOldData');
@@ -55,7 +55,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/sections/{status}', [ZoneController::class, 'sections'])->name('sections');
         Route::get('/districts/{status}', [ZoneController::class, 'districts']);
         Route::get('/list', [ZoneController::class, 'zones']);
-        Route::get('/dormant/list', [ZoneController::class, 'suspendedZones']);    
+        Route::get('/dormant/list', [ZoneController::class, 'suspendedZones']);
 
         Route::post('/register', [ZoneController::class, 'submitZones']);
         Route::post('/edit', [ZoneController::class, 'submitZoneEdit']);
@@ -77,14 +77,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/registration', [MemberController::class, 'regMemberView']);
         Route::get('/list', [MemberController::class, 'members']);
         Route::get('/possible/duplicates', [MemberController::class, 'duplicateMembers']);
-        
-        
+
+
     });
     Route::prefix('member')->group(function(){
     Route::post('registration/submit', [MemberController::class, 'submitMemberRegistration']);
     });
     //:::::::::::::::::::::::::::::::::::::::::::::::: END MEMBERS ROUTES ::::::::::::::::::::::::::::::::::::::::::::::::
-    
+
 
 
 
@@ -137,8 +137,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/get/constantvalue/data',[SettingsController::class, 'ajaxGetConstantvalueData']);
         #End:: constant value routes
 
-        #Start:: Contibutions routes 
+        #Start:: Contibutions routes
         Route:: post('/get/section/contribution/data', [ContributionController::class, 'ajaxGetSectionContributionData']);
+        Route:: post('/member/contribution/validation', [ContributionController::class, 'ajaxValidateSubmitContribution']);
         #End:: Contibutions routes
     });
 
@@ -162,6 +163,8 @@ Route::middleware('auth')->group(function () {
     //Start:: Contributions
     Route::prefix('contributions')->group(function(){
         Route::get('/add', [ContributionController::class, 'addContribution']);
+        Route::post('/add/submit', [ContributionController::class, 'submitAddContribution']);
+        Route::post('/history', [ContributionController::class, 'contributions']);
     });
     //End:: Contributions
 
@@ -170,6 +173,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/constantvalues', [SettingsController::class, 'constantValues']);
         Route::post('/edit/constantvalue/submit', [SettingsController::class, 'submitConstantValues']);
         Route::get('/schemes', [SettingsController::class, 'schemes']);
+        Route::get('/payment/modes', [SettingsController::class, 'paymentModes']);
     });
     //Start:: Configurations routes
 });

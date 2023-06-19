@@ -18,7 +18,9 @@ return new class extends Migration
             $table->integer('member_id');
             $table->decimal('member_monthly_income', 32,2);
             $table->decimal('member_contribution', 32,2);
+            $table->decimal('contributor_contribution', 32,2);
             $table->string('payment_ref_no')->default('NULL');
+            $table->string('payment_proof')->default('NULL');
             $table->decimal('member_topup', 32,2);
             $table->enum('status',['ACTIVE','WITHDRAWN'])->default('ACTIVE');
             $table->integer('updated_by')->default(0);

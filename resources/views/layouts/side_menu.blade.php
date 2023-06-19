@@ -42,7 +42,7 @@
                             <a href="{{url('contributions/add')}}">Add Contribution</a>
                         </li>
                         <li>
-                            <a href="ecommerce-products.html">Contributions</a>
+                            <a href="{{url('contributions/history')}}">Contributions</a>
                         </li>
                         <li>
                             <a href="ecommerce-product-detail.html">Product Detail</a>
@@ -107,6 +107,7 @@
                     <ul class="nav-second-level">
                         <li> <a href="{{url('configs/constantvalues')}}">Default Value</a> </li>
                         <li> <a href="{{url('configs/schemes')}}">Schemes</a> </li>
+                        <li> <a href="{{url('configs/payment/modes')}}">Payment Modes</a> </li>
                     </ul>
                 </div>
             </li>
