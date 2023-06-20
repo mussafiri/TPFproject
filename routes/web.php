@@ -83,7 +83,8 @@ Route::middleware('auth')->group(function () {
         
     });
     Route::prefix('member')->group(function(){
-    Route::post('registration/submit', [MemberController::class, 'submitMemberRegistration']);
+    Route::post('/registration/submit', [MemberController::class, 'submitMemberRegistration']);
+    Route::post('/dependants/registration/submit', [MemberController::class, 'submitMemberRegistration']);
     });
     //:::::::::::::::::::::::::::::::::::::::::::::::: END MEMBERS ROUTES ::::::::::::::::::::::::::::::::::::::::::::::::
     

@@ -111,7 +111,7 @@
                 <div class="card-box">
                     <div class="row mb-2">
                         <div class="col-sm-4">
-                            <h4 class="header-title mb-3">Member Registration</h4>
+                            <h4 class="header-title mb-3">Member Registration </h4>
                         </div>
                         <div class="col-sm-8">
                             <div class="text-sm-right">
@@ -121,20 +121,20 @@
                     </div>
                     <ul class="nav nav-tabs nav-bordered mb-3">
                         <li class="nav-item" id="LimemberDetails">
-                            <a href="#memberDetails" data-toggle="tab" aria-expanded="true" class="nav-link active">
+                            <a href="#memberDetails" {!! ($response_message != "SUCCESS")? ' data-toggle="tab" aria-expanded="true" class="nav-link active"' : ' class="nav-link disabled" ' ; !!}>
                                 <i class="flaticon flaticon-user-1 mr-1"></i>
                                 Member Details
                             </a>
                         </li>
                         <li class="nav-item" id="LimemberDependantsDetails">
-                            <a href="#memberDependantsDetails" class="nav-link" data-toggle="tab" aria-expanded="true">
+                            <a href="#memberDependantsDetails" {!! ($response_message=='SUCCESS')? ' data-toggle="tab" aria-expanded="true" class="nav-link active"' : ' class="nav-link disabled" ' ; !!}>
                                 <i class="flaticon flaticon-community mr-1"></i>
                                 Dependants Details
                             </a>
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane active" id="memberDetails">
+                        <div class="tab-pane {!! ($response_message !='SUCCESS') ? ' active ' : '' ; !!} " id="memberDetails">
                             <form method="POST" enctype="multipart/form-data" action="{{url('/member/registration/submit')}}">
                                 @csrf
                                 <div class="col-12">
@@ -405,7 +405,35 @@
                             </form>
                         </div><!-- end tab-pane -->
                         <!-- Dependant tab-pane -->
-                        <div class="tab-pane" id="memberDependantsDetails">
+                        <div class="tab-pane {!!($response_message=='SUCCESS') ? ' active ' : '' ;!!}" id="memberDependantsDetails">
+                            @if($member_data)
+                                <!-- MEMBER SUMMARY INFORMATION -->
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="header-title mb-3">Member Information</h4>
+                                            <div class="row">
+                                                <div class="col-lg-8 col-md-12 col-sm-12">
+                                                    <h5 class="font-family-primary font-weight-semibold">Member Information Summary</h5>
+                                                    <p class="mb-2"><span class="font-weight-semibold mr-2">Name:</span><span class="font-12 text-right">{{$member_data? $member_data->title." ".$member_data->fname." ".$member_data->mname." ".$member_data->lname:" ";}} </span> </p>
+                                                    <p class="mb-0"><span class="font-weight-semibold mr-2">Gender:</span> <span class="font-12 text-right">{{$member_data->gender}}</span></p>
+                                                    <p class="mb-0"><span class="font-weight-semibold mr-2">Member code:</span> <span class="font-12 text-right">{{$member_data->member_code}}</span></p>
+                                                    <p class="mb-0"><span class="font-weight-semibold mr-2">Occupation:</span><span class="font-12 text-right">{{$member_data->occupation}}</span> </p>
+                                                    <p class="mb-0"><span class="font-weight-semibold mr-2">Phone:</span><span class="font-12 text-right">{{$member_data->phone}}</span></p>
+                                                    <p class="mb-0"><span class="font-weight-semibold mr-2">DOB:</span><span class="font-12 text-right">{{date('dd M Y', strtotime($member_data->dob))}}</span></p>
+                                                </div>
+                                                <div class="col-lg-4 col-md-6 col-sm-12">
+                                                    <p class="mb-0"><span class="font-weight-semibold mr-2">Contributor:</span><span class="font-12 text-right">{{$member_data->contributor->name}}</span></p>
+                                                    <p class="mb-0"><span class="font-weight-semibold mr-2">Type:</span><span class="font-12 text-right">{{$member_data->contributor->contributorType->name}}</span></p>
+                                                    <p class="mb-0"><span class="font-weight-semibold mr-2">Section:</span><span class="font-12 text-right">{{$member_data->contributor->contributorSection->name}}</span></p>
+                                                    <p class="mb-0"><span class="font-weight-semibold mr-2">Zone:</span><span class="font-12 text-right">{{$member_data->contributor->contributorSection->district->zone->name}}</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!-- end card -->
+                                </div>
+                                <!-- END:: MEMBER SUMMARY INFORMATION -->
+                            @endif
                             <div class="col-12">
                                 <div class="col-12">
                                     <h5 class="text-uppercase mt-0 mb-3 bg-light p-2 row">Dependants Details</h5>
@@ -427,7 +455,7 @@
                                                                             <option value="SPOUSE">SPOUSE</option>
                                                                             <option value="CHILD">CHILD</option>
                                                                         </select>
-
+                                                                        <div><span class="text-danger" role="alert"></span></div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
@@ -438,32 +466,34 @@
                                                                             <option value="MALE">MALE</option>
                                                                             <option value="FEMALE">FEMALE</option>
                                                                         </select>
+                                                                        <div><span class="text-danger" role="alert"></span></div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-4" class="control-label">Firstname</label>
-                                                                        <input type="text" name="inputs[0][dep_firstname]" id="dep0" class="form-control form-control-sm" value="{{old('dep_firstname')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">
+                                                                        <input type="text" name="inputs[0][dep_firstname]" id="dep0" class="form-control form-control-sm" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">
+                                                                        <span class="text-danger" role="alert"></span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-5" class="control-label">Middlename</label>
-                                                                        <input type="text" name="inputs[0][dep_midname]" id="zone" class="form-control form-control-sm" value="{{old('dep_midname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">
-                                                                        <span class="zoneErrorTxt text-danger" role="alert"></span>
+                                                                        <input type="text" name="inputs[0][dep_midname]" id="zone" class="form-control form-control-sm"  oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">
+                                                                        <span class="text-danger" role="alert"></span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-5" class="control-label">Last name</label>
-                                                                        <input type="text" name="inputs[0][dep_lastname]" id="zone" class="form-control form-control-sm" value="{{old('dep_lastname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">
+                                                                        <input type="text" name="inputs[0][dep_lastname]" id="zone" class="form-control form-control-sm" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">
                                                                         <span class="zoneErrorTxt text-danger" role="alert"></span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-5" class="control-label">Date of Birth</label>
-                                                                        <input type="text" name="inputs[0][dep_dob]" class="form-control form-control-sm dep_dobdatepicker" value="{{old('dep_dob')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd MM yyyy" placeholder="DOB" autocomplete="off">
+                                                                        <input type="text" name="inputs[0][dep_dob]" class="form-control form-control-sm dep_dobdatepicker"  data-provide="datepicker" data-date-autoclose="true" data-date-format="dd MM yyyy" placeholder="DOB" autocomplete="off">
                                                                         <span class="text-danger" role="alert"> </span>
                                                                     </div>
                                                                 </div>
@@ -516,7 +546,7 @@
                                                                             <option value="SPOUSE">SPOUSE</option>
                                                                             <option value="CHILD">CHILD</option>
                                                                         </select>
-                                                                        <div class="invalid-feedback"></div>
+                                                                        <div><span class="text-danger" role="alert"></span></div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
@@ -527,7 +557,8 @@
                                                                             <option value="MALE">MALE</option>
                                                                             <option value="FEMALE">FEMALE</option>
                                                                         </select>
-                                                                        <span class="text-danger" role="alert"> {{ $errors->first('dep_gender') }}</span>
+                                                                        <span class="text-danger" role="alert"></span>
+
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
@@ -624,150 +655,103 @@
 <script src="{{asset('assets/libs/sweetalert2/sweetalert2.min.js')}}"></script>
 <script type="text/javascript">
     var b = 2;
-    $('#addFieldsBed').on('click', function() {
+    $('#addFields').on('click', function() {
         $("#addRemoveBedRow").prepend(
-            // <tr>
-            //     <td class="form-group col-lg-11 col-md-11 col-sm-12">
-            //         <div class="row font-12 border rounded pt-2 mt-2" style="background-color:#fefefe;">
-            //             <div class="col-lg-6">
-            //                 <div class="row">
-            //                     <div class="col-lg-6">
-            //                         <div class="form-group">
-            //                             <label for="field-1" class="control-label">Relationship</label>
-            //                             <select class="form-control relationshipSelect" name="dep_relationship[]" data-toggle="select2">
-            //                                 <option value="0">--Select Relationship--</option>
-            //                                 <option value="SPOUSE">SPOUSE</option>
-            //                                 <option value="CHILD">CHILD</option>
-            //                             </select>
-            //                             <span class="text-danger" role="alert"> {{ $errors->first('contributor_name') }}</span>
-            //                         </div>
-            //                     </div>
-            //                     <div class="col-lg-6">
-            //                         <div class="form-group">
-            //                             <label for="field-4" class="control-label">Gender</label>
-            //                             <select class="form-control px-0" name="dep_gender[]" data-toggle="select2">
-            //                                 <option value="0">--Select Gender--</option>
-            //                                 <option value="MALE">MALE</option>
-            //                                 <option value="FEMALE">FEMALE</option>
-            //                             </select>
-            //                             <span class="text-danger" role="alert"> {{ $errors->first('dep_gender') }}</span>
-            //                         </div>
-            //                     </div>
-            //                     <div class="col-lg-6">
-            //                         <div class="form-group">
-            //                             <label for="field-4" class="control-label">Firstname</label>
-            //                             <input type="text" name="dep_firstname[]" id="depFirstname" class="form-control form-control-sm" value="{{old('dep_firstname')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">
-            //                             <span class="depFirstnameErrorTxt text-danger" role="alert"></span>
-            //                         </div>
-            //                     </div>
-            //                     <div class="col-lg-6">
-            //                         <div class="form-group">
-            //                             <label for="field-5" class="control-label">Middlename</label>
-            //                             <input type="text" name="dep_midname[]" id="zone" class="form-control form-control-sm" value="{{old('dep_midname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">
-            //                             <span class="zoneErrorTxt text-danger" role="alert"></span>
-            //                         </div>
-            //                     </div>
-            //                     <div class="col-lg-6">
-            //                         <div class="form-group">
-            //                             <label for="field-5" class="control-label">Last name</label>
-            //                             <input type="text" name="dep_lastname[]" id="zone" class="form-control form-control-sm" value="{{old('dep_lastname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">
-            //                             <span class="zoneErrorTxt text-danger" role="alert"></span>
-            //                         </div>
-            //                     </div>
-            //                     <div class="col-lg-6">
-            //                         <div class="form-group">
-            //                             <label for="field-5" class="control-label">Date of Birth</label>
-            //                             <input type="text" name="dep_dob[]" class="form-control form-control-sm dep_dobdatepicker" value="{{old('dep_dob')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd M yyyy" placeholder="Date of Birth" autocomplete="off">
-            //                             <span class="text-danger" role="alert"> </span>
-            //                         </div>
-            //                     </div>
-            //                 </div>
-            //             </div>
-            //             <div class="col-lg-6">
-            //                 <div class="row">
-            //                     <div class="col-lg-6">
-            //                         <div class="form-group">
-            //                             <label for="field-1" class="control-label">Dependant Photo</label>
-            //                             <div class="file-loading">
-            //                                 <input class="dep_attachments" name="dep_photo[]" type="file">
-            //                             </div>
-            //                         </div>
-            //                     </div>
-            //                     <div class="col-lg-6" id="divBirthCert">
-            //                         <div class="form-group">
-            //                             <label for="field-1" class="control-label">Birth Certificate</label>
-            //                             <div class="file-loading">
-            //                                 <input class="dep_attachments" id="inputBirthCert" name="dep_birthcert[]" type="file">
-            //                             </div>
-            //                         </div>
-            //                     </div>
-            //                     <div class="col-lg-6" id="divmarriageCert" style="display:none;">
-            //                         <div class="form-group">
-            //                             <label for="field-1" class="control-label">Marriage Certificate</label>
-            //                             <div class="file-loading">
-            //                                 <input class="dep_attachments" id="inputMarriageCert" name="dep_marriagecert[]" type="file">
-            //                             </div>
-            //                         </div>
-            //                     </div>
-            //                 </div>
-            //             </div>
-            //         </div>
-            //     </td>
-            // </tr>
+            '<tr>' +
+                '<td class="form-group col-lg-11 col-md-11 col-sm-12">' +
+                '<div class="row font-12 border rounded pt-2 mt-2" style="background-color:#fefefe;">' +
+                '<div class="col-lg-6">' +
+                '<div class="row">' +
+                '<div class="col-lg-6">' +
+                '<div class="form-group">' +
+                '<label for="field-1" class="control-label">Relationship</label>' +
+                '<select class="form-control relationshipSelect" name="inputs['+b+'][dep_relationship]" data-toggle="select2">' +
+                '<option value="0">--Select Relationship--</option>' +
+                '<option value="SPOUSE">SPOUSE</option>' +
+                '<option value="CHILD">CHILD</option>' +
+                '</select>' +
+                '<div><span class="text-danger" role="alert"></span></div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-lg-6">' +
+                '<div class="form-group">' +
+                '<label for="field-4" class="control-label">Gender</label>' +
+                '<select class="form-control px-0" name="inputs['+b+'][dep_gender]" data-toggle="select2">' +
+                '<option value="0">--Select Gender--</option>' +
+                '<option value="MALE">MALE</option>' +
+                '<option value="FEMALE">FEMALE</option>' +
+                '</select>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-lg-6">' +
+                '<div class="form-group">' +
+                '<label for="field-4" class="control-label">Firstname</label>' +
+                '<input type="text" name="inputs['+b+'][dep_firstname]" id="depFirstname" class="form-control form-control-sm" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">' +
+                'span class="depFirstnameErrorTxt text-danger" role="alert"></span>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-lg-6">' +
+                '<div class="form-group">' +
+                '<label for="field-5" class="control-label">Middlename</label>' +
+                '<input type="text" name="inputs['+b+'][dep_midname]" id="zone" class="form-control form-control-sm" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">' +
+                '<span class="text-danger" role="alert"></span>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-lg-6">' +
+                '<div class="form-group">' +
+                '<label for="field-5" class="control-label">Last name</label>' +
+                '<input type="text" name="inputs['+b+'][dep_lastname]" id="zone" class="form-control form-control-sm" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">' +
+                '<span class="text-danger" role="alert"></span>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-lg-6">' +
+                '<div class="form-group">' +
+                '<label for="field-5" class="control-label">Date of Birth</label>' +
+                '<input type="text" name="inputs['+b+'][dep_dob]" class="form-control form-control-sm dep_dobdatepicker" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd M yyyy" placeholder="Date of Birth" autocomplete="off">' +
+                '<span class="text-danger" role="alert"> </span>' +
+                '</div>' +
+                '/div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-lg-6">' +
+                '<div class="row">' +
+                '<div class="col-lg-6">' +
+                '<div class="form-group">' +
+                '<label for="field-1" class="control-label">Dependant Photo</label>' +
+                '<div class="file-loading">' +
+                '<input class="dep_attachments" name="dep_photo[]" type="file">' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-lg-6" id="divBirthCert">' +
+                '<div class="form-group">' +
+                '<label for="field-1" class="control-label">Birth Certificate</label>' +
+                '<div class="file-loading">' +
+                '<input class="dep_attachments" id="inputBirthCert" name="dep_birthcert[]" type="file">' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-lg-6" id="divmarriageCert" style="display:none;">' +
+                '<div class="form-group">' +
+                '<label for="field-1" class="control-label">Marriage Certificate</label>' +
+                '<div class="file-loading">' +
+                '<input class="dep_attachments" id="inputMarriageCert" name="dep_marriagecert[]" type="file">' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</td>' +
+            '</tr>'
         );
 
-        $("#addedRowSelect2Input" + b).find(".inputselect2").select2();
+        $("#addedRowSelect2Input" + b).find(".relationshipSelect").select2();
         b++;
     });
 </script>
 <script type="text/javascript">
-    // $("#formDependants").submit(function(e) {
-    // e.preventDefault();
-    // var formIsValid = true;
-
-    // // Check if inputs are valid
-    // var inputCount = $("#formDependants input").length;
-    // var completedRequests = 0;
-    // $("#formDependants input").each(function(index, element) {
-    //     var input = $(element);
-
-    //     $.ajax({
-    //     type: 'POST',
-    //     url: "{{url('/ajax/dynamic/validation')}}",
-    //     data: {
-    //         'rak': input.val(),
-    //         '_token': '{{ csrf_token() }}'
-    //     },
-    //     dataType: 'json',
-    //     success: function(response) {
-    //         input.next(".text-danger").empty();
-    //         completedRequests++;
-    //         if(completedRequests == inputCount) {
-    //         if(formIsValid) {
-    //             $("#formDependants")[0].submit();
-    //         }
-    //         }
-    //     },
-    //     error: function(response) {
-    //         var errors = response.responseJSON.errors;
-    //         alert(errors);
-    //         if (errors[input.attr('name')]) {
-    //         input.next(".text-danger").text(errors[input.attr('name')][0]);
-    //         } else {
-    //         input.next(".text-danger").empty();
-    //         }
-    //         formIsValid = false;
-    //         completedRequests++;
-    //         if(completedRequests == inputCount) {
-    //         if(formIsValid) {
-    //             $("#formDependants")[0].submit();
-    //         }
-    //         }
-    //     },
-    //     async: true
-    //     });
-    // });
-    // });
+    // Funtion for Validation of the dynamic rows for Dependants
     $(document).ready(function() {
         $('#formDependants').on('submit', function(e) {
             e.preventDefault();
@@ -775,16 +759,19 @@
             $.ajax({
                 url: "{{url('/ajax/dynamic/validation')}}",
                 method: 'POST',
-                data:formData,
+                data: formData,
                 success: function(response) {
                     // handle successful response
                     alert("response");
                     var inputs_errors = response.errors;
-                    if(inputs_errors) {
+                    if (inputs_errors) {
                         $.each(inputs_errors, function(field, messages) {
-                        alert(messages[0]);
-                        $('input[name="inputs['+field+'][dep_midname]"]').after('<span class="text-danger" role="alert">Wronga</span>');
-                    });
+                            // alert(messages);
+                            var name = field.split(".")[0] + "[" + field.split(".")[1] + "][" + field.split(".")[2] + "]";
+                            $('input[name="' + name + '"], select[name="' + name + '"]').closest('div').find('span.text-danger').html(messages);
+                        });
+                    } else {
+                        $(this).unbind('submit');
                     }
 
                 }
