@@ -1,5 +1,13 @@
 
 @extends('layouts.admin_main')
+@section('custom_css')
+<!-- kartik Fileinput-->
+<link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/css/fontawesome-kartik.css')}}" />
+<link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/css/bootstrap-icons.css')}}" />
+<link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/css/fileinput.min.css')}}" />
+<link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/themes/explorer/theme.css')}}" />
+
+@endsection
 @section('content')
         <div class="content">
 
@@ -22,14 +30,14 @@
                 <!-- end page title -->
                 <!-- end row-->
 
-                    <form method="POST" action="{{url('contributions/add/submit')}}">
+                    <form id="contributionForm" method="POST" action="{{url('contributions/add/submit')}}" enctype="multipart/form-data">
                     @csrf
                         <div class="row">
                             <div class="col-12">
                                 <div class="card-box">
                                         <div class="row">
                                             <div class="col-12">
-                                                    <h4 class="header-title mb-3 text-muted">Contribution Details</h4>
+                                                    <h4 class="header-title mb-3 text-muted">Contribution Filters</h4>
                                                     <div class="col-12"> </div>
                                                     <div class="row px-3">
                                                         <div class="col-md-9">
@@ -72,7 +80,6 @@
                             <div class="col-12">
                                 <div class="card-box">
                                         <div class="row">
-
                                             <h4 class="header-title mb-3 text-muted">Reconciliation Panel </h4>
 
                                             <div class="col-12 mb-3 border rounded p-2" style="background-color: #f6fcff;">
@@ -96,10 +103,10 @@
                                                                     <tr>
                                                                         <td>TUMAINI PENSION FUND</td>
                                                                         <td class="text-center"><span id="contributionDate"></span></td>
-                                                                        <td class="text-center"><span id="no_contributors"></span></td>
-                                                                        <td class="text-center"><span id="no_members"></span></td>
-                                                                        <td class="text-center"><span id="monthlyContribution"></span></td>
-                                                                        <td class="text-center"><span id="totalContribution"></span> <input type="hidden" id="totalContributionInput" value="0"></td>
+                                                                        <td class="text-center"><span id="no_contributors"></span><input type="hidden" value="" name="totalContributors" id="totalContributors"></td>
+                                                                        <td class="text-center"><span id="no_members"></span><input type="hidden" value="" name="totalMembers" id="totalMembers"></td>
+                                                                        <td class="text-center"><span class="monthlyContribution"></span></td>
+                                                                        <td class="text-center"><span class="totalContribution"></span></td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -107,8 +114,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
 
                                             <h4 class="header-title mb-3 text-muted">Member Contributions </h4>
                                             <div class="col-12">
@@ -133,32 +138,84 @@
                                                         </table>
                                                     </div>
                                                 </div>
-                                                </form>
 
-                                                <!-- START:: edit contribution -->
-                                                    <div id="editMemberContribution" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-                                                            <div class="modal-dialog modal-lg modal-dialog-centered">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header bg-light">
-                                                                        <h4 class="modal-title" id="myCenterModalLabel">Register New Zone</h4>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div class="row">
+                                            </div>
 
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer" style="margin-top:-2rem;">
-                                                                        <button type="submit" class="btn btn-success">Save</button>
-                                                                        <button type="button" class="btn btn-danger ml-auto" data-dismiss="modal">Close</button>
-                                                                    </div>
-                                                                </div><!-- /.modal-content -->
-                                                            </div><!-- /.modal-dialog -->
+                                            <h4 class="header-title mb-3 text-muted">Transaction Proofs </h4>
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="field-4" class="control-label">Total Contribution Amount</label>
+                                                                    <input type="text" name="contributionAmount" id="contributionAmount" class="form-control form-control-sm totalContributionInput contriInput autonumber" value="{{old('contributionAmount')}}" oninput="this.value = this.value.toUpperCase()"  id="field-4" placeholder="Total Contribution">
+                                                                    <span class="text-danger" role="alert"> {{ $errors->first('contributionAmount') }}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="field-4" class="control-label">Payment Date</label>
+                                                                    <input type="text" name="paymentDate" id="basic-datepicker" data-date-format="d M, Y" class="form-control form-control-sm contriInput"  value="{{old('paymentDate')}}" oninput="this.value = this.value.toUpperCase()"  id="field-4" placeholder="Pick Payment Date" >
+                                                                     <span class="text-danger" role="alert"> {{ $errors->first('paymentDate') }}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="field-1" class="control-label">Payment Mode</label>
+                                                                    <select class="form-control contriInput" name="paymentMode" data-toggle="select2">
+                                                                        @foreach($paymentMode as $value)
+                                                                        <option  value="{{$value->id}}" {{old ('paymentMode') == $value->id ? 'selected' : ''}}>{{$value->name}} </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                   <span class="text-danger" role="alert"> {{ $errors->first('paymentMode') }}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="field-4" class="control-label">Transaction Reference</label>
+                                                                    <input type="text" name="transactionReference" id="transaction" class="form-control form-control-sm contriInput"  value="{{old('transaction')}}" oninput="this.value = this.value.toUpperCase()"  id="field-4" placeholder="Transaction Reference" >
+                                                                   <span class="text-danger" role="alert"> {{ $errors->first('transactionReference') }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                <!-- END:: edit contribution -->
+                                                    <div class="col-md-6">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="field-3" class="control-label">Transaction Proof</label>
+                                                                        <input type="file" class="form-control kartik-input-705 kv-fileinput-dropzone contriInput" name="transactionProof" id="field-4" placeholder="District" required>
+                                                                    <span class="text-danger" role="alert"> {{ $errors->first('transactionProof') }}</span>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12 px-3 pt-2">
+                                                <a href="javascript:void(0);" class="btn btn-info waves-effect waves-light float-right" data-toggle="modal" data-target="#contributionSubmisionAlert">Submit Contribution</a>
+
+                                                <!-- Start:: Warning Alert Modal -->
+                                                <div id="contributionSubmisionAlert" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                                                    <div class="modal-dialog modal-md">
+                                                        <div class="modal-content">
+                                                            <div class="modal-body p-4">
+                                                                <div class="text-center">
+                                                                    <i class="dripicons-warning h1 text-warning"></i>
+                                                                    <h4 class="mt-2">Confirm Contribution Submission</h4>
+                                                                    <p class="mt-3">Are you sure! <br> You are about to submit Section Contribution. You can cancel to review contribtions before submission</p>
+                                                                </div>
+                                                                <button type="submit" class="btn btn-success my-2 float-left">Yes! Submit</button>
+                                                                <button type="button" class="btn btn-danger my-2 float-right" data-dismiss="modal">Cancel</button>
+                                                            </div>
+                                                        </div><!-- /.modal-content -->
+                                                    </div><!-- /.modal-dialog -->
+                                                </div>
+                                                <!-- End:: Warning Alert Modal -->
+
                                             </div> <!-- end col -->
                                         </div> <!-- end row -->
-                                    </form>
+
                                 </div> <!-- container -->
                             </div> <!-- content -->
                              <!-- end .table-responsive-->
@@ -177,8 +234,64 @@
         <!-- Table editable init-->
         <script src="../assets/js/pages/tabledit.init.js"></script>
 
+        <script src="{{asset('assets/libs/kartik-v-bootstrap-fileinput/js/fileinput.min.js')}}"></script>
+        <script src="{{asset('assets/libs/kartik-v-bootstrap-fileinput/themes/explorer/theme.js')}}"></script>
+
+<script>
+    window.setTimeout(function() {
+        $(".alert").fadeTo(1000, 0).slideUp(500, function() {
+            $(this).remove();
+        });
+    }, 6000);
+</script>
+
+<script>
+
+
+     $(".kartik-input-705").fileinput({
+        theme: "explorer",
+        uploadUrl: '#',
+        allowedFileExtensions: ['jpg', 'jpeg','png', 'gif'],
+        overwriteInitial: false,
+        initialPreviewAsData: true,
+        maxFileSize: 2000,
+        maxTotalFileCount: 1,
+        showUpload : false,
+        showCancel : false,
+        dropZoneTitle:'<span>Drag & Drop Proof File here to upload</span>',
+        fileActionSettings: {
+                showUpload: false,
+                showRemove: true,
+                },
+    });
+</script>
+
 <script type="text/javascript">
 $(document).ready(function(){
+    loadingSectionContributorsMembers();
+});
+$('.sectionSelect').change(function(){
+    if($('.contributionDate').val()!==''){
+        loadingSectionContributorsMembers();
+    }else{
+        $('#contributionDateError').html('Kindly, Pick Date');
+    }
+});
+
+$('.contributionDate').change(function(){
+    var section_id = $('.sectionSelect').find(":selected").val();
+    if(section_id > 0){
+        loadingSectionContributorsMembers();
+    }else{
+        $('#sectionError').html('Kindly, Select Section');
+    }
+});
+
+$(".searchButton").click(function() {
+    loadingSectionContributorsMembers();
+});
+
+function loadingSectionContributorsMembers(){
     var section_id = $('.sectionSelect').find(":selected").val();
     var contribution_date = $('.contributionDate').val();
 
@@ -204,8 +317,10 @@ $(document).ready(function(){
                         $('#sectionCode').html(response.sectionContributionDataArr.sectionData.section_code);
                         $('#no_contributors').html(response.sectionContributionDataArr.totalContributors);
                         $('#no_members').html(response.sectionContributionDataArr.totalMembers);
+                        $('#no_contributors').html(response.sectionContributionDataArr.totalContributors);
+                        $('#no_members').html(response.sectionContributionDataArr.totalMembers);
                         //End:: put section Data
-                        
+
                         $(".contrinbution_recon_table tbody").empty();
                         $(".contrinbution_recon_table").prepend(response.sectionContributionDataArr.memberList);
 
@@ -213,12 +328,11 @@ $(document).ready(function(){
 
                         //START:: Suspend  Member Contribution
                         $('.suspendContribution').click(function(){
-                            
                             var rowID=$(this).attr('data-rowID');
                             suspendMemberContribution(rowID);
                         });
                         //END:: Suspend  Member Contribution
-                        
+
                     } else {
                         alert('assss');
                     }
@@ -226,61 +340,7 @@ $(document).ready(function(){
             });
 
         }
-});
-
-$(".searchButton").click(function() {
-     var section_id = $('.sectionSelect').find(":selected").val();
-     var contribution_date = $('.contributionDate').val();
-
-        if (section_id !== 0 && contribution_date!== "") {
-            $('#contributionDate').html(contribution_date);
-
-            $("#sectionError").html('');
-            $("#contributionDateError").html('');
-
-            $.ajax({
-                url: "{{url('/ajax/get/section/contribution/data')}}",
-                type: 'POST',
-                data: {
-                    section_id: section_id,
-                    contribution_date: contribution_date,
-                    _token: '{{ csrf_token() }}'
-                },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.sectionContributionDataArr.memberList !== "") {
-                        //Start:: put section Data
-                        $('#sectionName').html(response.sectionContributionDataArr.sectionData.name);
-                        $('#sectionCode').html(response.sectionContributionDataArr.sectionData.section_code);
-                        $('#no_contributors').html(response.sectionContributionDataArr.totalContributors);
-                        $('#no_members').html(response.sectionContributionDataArr.totalMembers);
-                        //End:: put section Data
-                        
-                        $(".contrinbution_recon_table tbody").empty();
-                        $(".contrinbution_recon_table").prepend(response.sectionContributionDataArr.memberList);
-                    
-                        calculateItems(); // Prior Items Caluculation
-
-                        //START:: Suspend  Member Contribution
-                        $('.suspendContribution').click(function(){
-                            
-                            var rowID=$(this).attr('data-rowID');
-                            suspendMemberContribution(rowID);
-                        });
-                        //END:: Suspend  Member Contribution
-                        
-                    } else {
-                        alert('no data');
-                    }
-                }
-            });
-
-        }else{
-            if(section_id==0){ $("#sectionError").html('Kindly, select a Section'); }
-
-            if(contribution_date==""){ $("#contributionDateError").html('Kindly, pick Date'); }
-        }
-});
+}
 
 function suspendMemberContribution(rowID){
     $('.memberContributionInput'+rowID).val(0);
@@ -299,21 +359,13 @@ function calculateItems(){
             totalMemberContribution += parseInt($(this).val().replace(/,/g, ''), 10);
         }
     });
-    
+
     //putting a subtotal
     //alert('monthlyContribution ====> '+totalMemberContribution);
-    $('#monthlyContribution').html(totalMemberContribution.toLocaleString());
-    $('#totalContribution').html(totalMemberContribution.toLocaleString());
-    $('#totalContributionInput').val(totalMemberContribution);
+    $('.monthlyContribution').html(totalMemberContribution.toLocaleString()+'.00');
+    $('.totalContribution').html(totalMemberContribution.toLocaleString()+'.00');
+    $('.totalContributionInput').val(totalMemberContribution.toLocaleString()+'0.00');
 }
 </script>
 
-
-<script type="text/javascript">
-$(document).ready(function() {
-
-
-
-});
-</script>
 @endsection
