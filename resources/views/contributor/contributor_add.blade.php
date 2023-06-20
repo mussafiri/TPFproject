@@ -51,11 +51,18 @@
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="row">
-                                                                    <div class="col-md-12">
+                                                                    <div class="col-md-6">
                                                                         <div class="form-group">
                                                                             <label for="field-1" class="control-label">Contributor Name</label>
                                                                             <input type="text" name="name" class="form-control form-control-sm" value="{{old('name')}}" oninput="this.value = this.value.toUpperCase()" id="field-1" placeholder="Contributor Name">
                                                                             <span class="text-danger" role="alert"> {{ $errors->first('name') }}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-group">
+                                                                            <label for="field-1" class="control-label">Monthly Income</label>
+                                                                            <input type="text" name="monthlyIncome" class="form-control form-control-sm autonumber" value="{{old('monthlyIncome')}}" id="field-1" placeholder="Monthly Income">
+                                                                            <span class="text-danger" role="alert"> {{ $errors->first('monthlyIncome') }}</span>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-6">

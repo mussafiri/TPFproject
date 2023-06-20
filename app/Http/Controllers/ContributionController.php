@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Contribution;
 use App\Models\ContributionDetail;
 use App\Models\Contributor;
+use App\Models\ContributorCatContrStructure;
 use App\Models\ContributorMember;
 use App\Models\PaymentMode;
 use App\Models\Scheme;
@@ -48,26 +49,26 @@ class ContributionController extends Controller {
 
         foreach ( $getContributorMember AS $memberData ) {
             $statusBadge = ( $memberData->status == 'ACTIVE' )?'success':'danger';
-            $newStatus = ( $memberData->status == 'ACTIVE' )?'DORMANT':'ACTIVE';
-            $statusActions = ( $memberData->status == 'ACTIVE' )?'<i class="mdi mdi-close-thick mr-1"></i>Suspend':'<i class="mdi mdi-mark-thick mr-1"></i>Reinstate';
-            $totalContribution = $memberData->getMemberContributionAmount( $memberData->member->id )+$memberData->getContributorContributionAmount( $memberData->member->id );
+            // $newStatus = ( $memberData->status == 'ACTIVE' )?'DORMANT':'ACTIVE';
+            // $statusActions = ( $memberData->status == 'ACTIVE' )?'<i class="mdi mdi-close-thick mr-1"></i>Suspend':'<i class="mdi mdi-mark-thick mr-1"></i>Reinstate';
+            $totalContribution = $memberData->getMemberContributionAmount( $memberData->contributor_id, $memberData->member_id )+$memberData->getContributorContributionAmount( $memberData->contributor_id, $memberData->member_id );
 
             $memberList .= '<tr><td>'.$counter.'.</td>
-                            <td class="text-muted font-9 px-0">'.$memberData->contributor->name.'<input type="hidden" name="contributor[]" value="'.$memberData->contributor_id.'"></td>
-                            <td>'.$memberData->member->fname.' '.$memberData->member->mname.' '.$memberData->member->lname.'<input type="hidden" name="member[]" value="'.$memberData->member_id.'"></td>
-                            <td> <input type="text" class="monthlyIncomeInput'.$counter.' col-sm-12 px-1 border-1 border-light rounded autonumber" data-id="'.$counter.'" name="memberMonthlyIncome[]" value="'.number_format( $memberData->memberMonthlyIncome( $memberData->member->id ), 2 ).'" required> </td>
-                            <td> <input type="text" class="memberContributionInput'.$counter.' col-sm-12 px-1 border-1 border-light rounded autonumber" data-id="'.$counter.'" name="memberContribution[]" value="'.number_format( $memberData->getMemberContributionAmount( $memberData->member->id ), 2 ).'" required></td>
-                            <td> <input type="text" class="contributorContributionInput'.$counter.' col-sm-12 px-1 border-1 border-light rounded autonumber" data-id="'.$counter.'" name="contributorContribution[]" value="'.number_format( $memberData->getContributorContributionAmount( $memberData->member->id ), 2 ).'" required></td>
-                            <td> <input type="text" class="topupInput'.$counter.' col-sm-12 px-1 border-1 border-light rounded autonumber" data-id="'.$counter.'" name="topup[]" value="'.number_format( 0, 2 ).'" required></td>
-                            <td> <span class="totalSpan'.$counter.'">'.number_format( $totalContribution, 2 ).'</span> <input type="hidden" class="total totalInput'.$counter.' border-light rounded" data-id="'.$counter.'" name="total[]" value="'.number_format( $totalContribution, 2 ).'" required></td>
-                            <td> <span id="status'.$counter.'" class="badge badge-outline-'.$statusBadge.' badge-pill">'.$memberData->status.'</span></td>
-                            <td>
-                                <div class="float-right">
-                                    <a href="javascript:void(0);" class="text-blue btn btn-light btn-sm suspendContribution editButton'.$counter.'" aria-expanded="false" data-rowID="'.$counter.'">
-                                        <i class="mdi mdi-close-thick mr-1"></i>
-                                    </a>
-                                </div>
-                            </td></tr>';
+                        <td class="text-muted font-9 px-0">'.$memberData->contributor->name.'<input type="hidden" name="contributor[]" value="'.$memberData->contributor_id.'"></td>
+                        <td>'.$memberData->member->fname.' '.$memberData->member->mname.' '.$memberData->member->lname.'<input type="hidden" name="member[]" value="'.$memberData->member_id.'"></td>
+                        <td> <input type="text" class="monthlyIncomeInput'.$counter.' col-sm-12 px-1 border-1 border-light rounded autonumber" data-id="'.$counter.'" name="memberMonthlyIncome[]" value="'.number_format( $memberData->getMemberMonthlyIncome( $memberData->member_id ), 2 ).'" required> </td>
+                        <td> <input type="text" class="memberContributionInput'.$counter.' col-sm-12 px-1 border-1 border-light rounded autonumber" data-id="'.$counter.'" name="memberContribution[]" value="'.number_format( $memberData->getMemberContributionAmount( $memberData->contributor_id, $memberData->member_id ), 2 ).'" required></td>
+                        <td> <input type="text" class="contributorContributionInput'.$counter.' col-sm-12 px-1 border-1 border-light rounded autonumber" data-id="'.$counter.'" name="contributorContribution[]" value="'.number_format( $memberData->getContributorContributionAmount( $memberData->contributor_id, $memberData->member_id ), 2 ).'" required></td>
+                        <td> <input type="text" class="topupInput'.$counter.' col-sm-12 px-1 border-1 border-light rounded autonumber" data-id="'.$counter.'" name="topup[]" value="'.number_format( 0, 2 ).'" required></td>
+                        <td> <span class="totalSpan'.$counter.'">'.number_format( $totalContribution, 2 ).'</span> <input type="hidden" class="total totalInput'.$counter.' border-light rounded" data-id="'.$counter.'" name="total[]" value="'.number_format( $totalContribution, 2 ).'" required></td>
+                        <td> <span id="status'.$counter.'" class="badge badge-outline-'.$statusBadge.' badge-pill">'.$memberData->status.'</span></td>
+                        <td>
+                            <div class="float-right">
+                                <a href="javascript:void(0);" class="text-blue btn btn-light btn-sm suspendContribution editButton'.$counter.'" aria-expanded="false" data-rowID="'.$counter.'">
+                                    <i class="mdi mdi-close-thick mr-1"></i>
+                                </a>
+                            </div>
+                        </td></tr>';
             $counter++;
         }
 
@@ -161,6 +162,7 @@ class ContributionController extends Controller {
             $contributorContribution = $request->contributorContribution;
             $topup = $request->topup;
             $totalContribution = $request->total;
+           
             for ( $aa = 0; $aa < count( $totalContribution );
             $aa++ ) {
                 $newContributionDetail = new ContributionDetail;
@@ -185,8 +187,8 @@ class ContributionController extends Controller {
 
         public function contributions( $status ) {
             $status = Crypt::decryptString( $status );
-            $contributions = Contribution::where( 'status', $status )->get();
-            return view( 'contributions.contributions', compact( 'contributions' ) );
+            $contributions = Contribution::where( 'processing_status', $status )->get();
+            return view( 'contributions.contributions', compact( 'contributions','status') );
         }
 
     }

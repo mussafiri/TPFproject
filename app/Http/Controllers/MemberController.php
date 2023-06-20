@@ -27,15 +27,9 @@ class MemberController extends Controller {
     public function ajaxRowDynamicValidation(Request $ajaxreq){
         #Taking all POST requests from the form
         $validator = Validator::make($ajaxreq->all(), [
-            'inputs.*' => 'array',
-            'inputs.*.dep_relationship' => 'not_in:0',
-            'inputs.*.dep_gender' => 'required|not_in:0',
-            'inputs.*.dep_firstname' => 'required',
-            'inputs.*.dep_midname' => 'required',
-            'inputs.*.dep_lastname' => 'required',
-            'inputs.*.dep_dob' => 'required',
+            'inputs[0][dep_firstname]' => 'required',
 
-        ],  
+        ],
         // [   'dep_relationship.not_in' => 'You must select Relationship',
         //     'dep_gender.not_in' => 'You must select Gender',
         // ]
@@ -43,7 +37,7 @@ class MemberController extends Controller {
 
     );
     if($validator->fails()){
-        return response()->json(['errors' => $validator->errors()->all()]);
+        return response()->json(['errors' => $validator->errors()]);
     }else{
         return response()->json(['message' => $ajaxreq->all()]);
 
@@ -75,7 +69,7 @@ class MemberController extends Controller {
             'id_number' => 'required',
             'contributor_name' => 'required|not_in:0',
             'monthly_income' => 'required',
-        ],  
+        ],
 
             ['evengelical_title.gt' => 'You must select Evengelical Title',
             'salutation.not_in' => 'You must select Salutation',
@@ -141,7 +135,7 @@ class MemberController extends Controller {
             $reg_form = 'NULL';
         }
 
-        
+
         // Check for member signature upload
         if ( $request->hasFile( 'member_signature' ) ) {
             $filenameWithExt = $request->file( 'member_signature' )->getClientOriginalName();

@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\ContributionController;
 
+use App\Http\Controllers\ContributorratesController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
@@ -100,6 +101,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/edit/submit{id}', [ContributorController::class, 'submitEditContributor']);
         Route::post('/add/submit', [ContributorController::class, 'SubmitAddContributor']);
         Route::get('/list/{status}', [ContributorController::class, 'contributors'])->name('contributors.list');
+
+        //Start: contribution structure
+        Route::get('/structure/{status}', [ContributorratesController::class, 'contributionStructure'])->name('contributors.category.structure');
+        //End: contribution structure
     });
     //END:: Contributor
 
@@ -166,7 +171,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('contributions')->group(function(){
         Route::get('/add', [ContributionController::class, 'addContribution']);
         Route::post('/add/submit', [ContributionController::class, 'submitAddContribution']);
-        Route::post('/history', [ContributionController::class, 'contributions']);
+        Route::get('/transactions/{status}', [ContributionController::class, 'contributions']);
     });
     //End:: Contributions
 

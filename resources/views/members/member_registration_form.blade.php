@@ -422,7 +422,7 @@
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Relationship</label>
-                                                                        <select class="form-control relationshipSelect" name="inputs[0][dep_relationship]" data-toggle="select2">
+                                                                        <select class="form-control relationshipSelect commonInputClass" name="inputs[0][dep_relationship]" data-toggle="select2">
                                                                             <option value="0">--Select Relationship--</option>
                                                                             <option value="SPOUSE">SPOUSE</option>
                                                                             <option value="CHILD">CHILD</option>
@@ -433,7 +433,7 @@
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-4" class="control-label">Gender</label>
-                                                                        <select class="form-control px-0" name="inputs[0][dep_gender]" data-toggle="select2">
+                                                                        <select class="form-control px-0 commonInputClass" name="inputs[0][dep_gender]" data-toggle="select2">
                                                                             <option value="0">--Select Gender--</option>
                                                                             <option value="MALE">MALE</option>
                                                                             <option value="FEMALE">FEMALE</option>
@@ -443,27 +443,27 @@
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-4" class="control-label">Firstname</label>
-                                                                        <input type="text" name="inputs[0][dep_firstname]" id="dep0" class="form-control form-control-sm" value="{{old('dep_firstname')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">
+                                                                        <input type="text" name="inputs[0][dep_firstname]" id="dep0" class="form-control form-control-sm commonInputClass" value="{{old('dep_firstname')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-5" class="control-label">Middlename</label>
-                                                                        <input type="text" name="inputs[0][dep_midname]" id="zone" class="form-control form-control-sm" value="{{old('dep_midname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">
+                                                                        <input type="text" name="inputs[0][dep_midname]" id="zone" class="form-control form-control-sm commonInputClass" value="{{old('dep_midname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">
                                                                         <span class="zoneErrorTxt text-danger" role="alert"></span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-5" class="control-label">Last name</label>
-                                                                        <input type="text" name="inputs[0][dep_lastname]" id="zone" class="form-control form-control-sm" value="{{old('dep_lastname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">
+                                                                        <input type="text" name="inputs[0][dep_lastname]" id="zone" class="form-control form-control-sm commonInputClass" value="{{old('dep_lastname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">
                                                                         <span class="zoneErrorTxt text-danger" role="alert"></span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-5" class="control-label">Date of Birth</label>
-                                                                        <input type="text" name="inputs[0][dep_dob]" class="form-control form-control-sm dep_dobdatepicker" value="{{old('dep_dob')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd MM yyyy" placeholder="DOB" autocomplete="off">
+                                                                        <input type="text" name="inputs[0][dep_dob]" class="form-control form-control-sm dep_dobdatepicker commonInputClass" value="{{old('dep_dob')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd MM yyyy" placeholder="DOB" autocomplete="off">
                                                                         <span class="text-danger" role="alert"> </span>
                                                                     </div>
                                                                 </div>
@@ -475,7 +475,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Dependant Photo</label>
                                                                         <div class="file-loading">
-                                                                            <input class="dep_attachments" name="dep_photo[]" type="file">
+                                                                            <input class="dep_attachments commonInputClass" name="dep_photo[]" type="file">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -483,7 +483,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Birth Certificate</label>
                                                                         <div class="file-loading">
-                                                                            <input class="dep_attachments" id="inputBirthCert" name="dep_birthcert[]" type="file">
+                                                                            <input class="dep_attachments commonInputClass" id="inputBirthCert" name="dep_birthcert[]" type="file">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -491,7 +491,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Marriage Certificate</label>
                                                                         <div class="file-loading">
-                                                                            <input class="dep_attachments" id="inputMarriageCert" name="dep_marriagecert[]" type="file">
+                                                                            <input class="dep_attachments commonInputClass" id="inputMarriageCert" name="dep_marriagecert[]" type="file">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -511,7 +511,7 @@
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Relationship</label>
-                                                                        <select class="form-control relationshipSelect" name="inputs[1][dep_relationship]" data-toggle="select2">
+                                                                        <select class="form-control relationshipSelect commonInputClass" name="inputs[1][dep_relationship]" data-toggle="select2">
                                                                             <option value="0">--Select Relationship--</option>
                                                                             <option value="SPOUSE">SPOUSE</option>
                                                                             <option value="CHILD">CHILD</option>
@@ -522,7 +522,7 @@
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-4" class="control-label">Gender</label>
-                                                                        <select class="form-control px-0" name="inputs[1][dep_gender]" data-toggle="select2">
+                                                                        <select class="form-control px-0 commonInputClass" name="inputs[1][dep_gender]" data-toggle="select2">
                                                                             <option value="0">--Select Gender--</option>
                                                                             <option value="MALE">MALE</option>
                                                                             <option value="FEMALE">FEMALE</option>
@@ -533,28 +533,28 @@
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-4" class="control-label">Firstname</label>
-                                                                        <input type="text" name="inputs[1][dep_firstname]" id="depFirstname" class="form-control form-control-sm" value="{{old('dep_firstname')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">
+                                                                        <input type="text" name="inputs[1][dep_firstname]" id="depFirstname" class="form-control form-control-sm commonInputClass" value="{{old('dep_firstname')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">
                                                                         <span class="depFirstnameErrorTxt text-danger" role="alert"></span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-5" class="control-label">Middlename</label>
-                                                                        <input type="text" name="inputs[1][dep_midname]" id="zone" class="form-control form-control-sm" value="{{old('dep_midname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">
+                                                                        <input type="text" name="inputs[1][dep_midname]" id="zone" class="form-control form-control-sm commonInputClass" value="{{old('dep_midname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">
                                                                         <span class="zoneErrorTxt text-danger" role="alert"></span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-5" class="control-label">Last name</label>
-                                                                        <input type="text" name="inputs[1][dep_lastname]" id="zone" class="form-control form-control-sm" value="{{old('dep_lastname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">
+                                                                        <input type="text" name="inputs[1][dep_lastname]" id="zone" class="form-control form-control-sm commonInputClass" value="{{old('dep_lastname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">
                                                                         <span class="zoneErrorTxt text-danger" role="alert"></span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-5" class="control-label">Date of Birth</label>
-                                                                        <input type="text" name="inputs[1][dep_dob]" class="form-control form-control-sm dep_dobdatepicker" value="{{old('dep_dob')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd M yyyy" placeholder="Date of Birth" autocomplete="off">
+                                                                        <input type="text" name="inputs[1][dep_dob]" class="form-control form-control-sm dep_dobdatepicker commonInputClass" value="{{old('dep_dob')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd M yyyy" placeholder="Date of Birth" autocomplete="off">
                                                                         <span class="text-danger" role="alert"> </span>
                                                                     </div>
                                                                 </div>
@@ -566,7 +566,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Dependant Photo</label>
                                                                         <div class="file-loading">
-                                                                            <input class="dep_attachments" name="dep_photo[]" type="file">
+                                                                            <input class="dep_attachments commonInputClass" name="dep_photo[]" type="file">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -574,7 +574,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Birth Certificate</label>
                                                                         <div class="file-loading">
-                                                                            <input class="dep_attachments" id="inputBirthCert" name="dep_birthcert[]" type="file">
+                                                                            <input class="dep_attachments commonInputClass" id="inputBirthCert" name="dep_birthcert[]" type="file">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -582,7 +582,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Marriage Certificate</label>
                                                                         <div class="file-loading">
-                                                                            <input class="dep_attachments" id="inputMarriageCert" name="dep_marriagecert[]" type="file">
+                                                                            <input class="dep_attachments commonInputClass" id="inputMarriageCert" name="dep_marriagecert[]" type="file">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -771,23 +771,30 @@
     $(document).ready(function() {
         $('#formDependants').on('submit', function(e) {
             e.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                url: "{{url('/ajax/dynamic/validation')}}",
-                method: 'POST',
-                data:formData,
-                success: function(response) {
-                    // handle successful response
-                    alert("response");
-                    var inputs_errors = response.errors;
-                    if(inputs_errors) {
-                        $.each(inputs_errors, function(field, messages) {
-                        alert(messages[0]);
-                        $('input[name="inputs['+field+'][dep_midname]"]').after('<span class="text-danger" role="alert">Wronga</span>');
-                    });
-                    }
 
-                }
+        $('.commonInputClass').each(function(index, element){
+                //var formData = $(this).serialize();
+                var inputValue=$(this).val();
+
+                alert(inputValue);
+                $.ajax({
+                    url: '/ajax/dynamic/validation',
+                    type: 'POST',
+                    data: {
+                        inputValue : inputValue,
+                        '_token' : '_token': '{{ csrf_token() }}'
+                    },
+                    success: function(response){
+                        alert('aaaa');
+                        // If the validation is successful, remove any previous error messages
+
+                    },
+                    error: function(xhr){
+                        // If the validation fails, display the error message next to the corresponding input
+                        alert('bbbb');
+                    }
+                    alert('cccc');
+                });
             });
         });
     });
@@ -806,7 +813,7 @@
     });
 </script>
 <script>
-    //START:: On change of the Relationship select 
+    //START:: On change of the Relationship select
     // $(document).ready(function() {
     $('.relationshipSelect').change(function() {
         var realationType = $(this).find(":selected").val();

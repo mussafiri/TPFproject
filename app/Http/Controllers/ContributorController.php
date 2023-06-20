@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Lib\Common;
+use App\Models\ContributorIncomeTracker;
 use App\Models\Contributor;
 use App\Models\ContributorType;
 use App\Models\Section;
@@ -204,6 +205,7 @@ class ContributorController extends Controller {
         # START:: VALIDATION
         $request->validate( [
             'name'              =>'required|string|unique:contributors,name',
+            'monthlyIncome'     =>'required|string|unique:contributors,name',
             'contributorType'   =>'required|integer|gt:0',
             'section'           => 'required|integer|gt:0',
             'postalAddress'     => 'required',
@@ -240,7 +242,7 @@ class ContributorController extends Controller {
 
         $addNewContributor = new Contributor;
         $addNewContributor->section_id = $request->section;
-        $addNewContributor->contributor_code = 'NULL';
+        $addNewContributor->contributor_code = 'NULL'; // will be put next time
         $addNewContributor->name = $request->name;
         $addNewContributor->contributor_type_id = $request->contributorType;
         $addNewContributor->postal_address = $request->postalAddress;
@@ -250,10 +252,19 @@ class ContributorController extends Controller {
         $addNewContributor->status = 'ACTIVE';
         $addNewContributor->reg_form = $fileNameToStore;
         $addNewContributor->created_by = Auth::user()->id;
-
         //END::put contributor code
 
         if ( $addNewContributor->save() ) {
+            //START:: register contributor income
+            $registerContributorIncome = new ContributorIncomeTracker;
+            $registerContributorIncome->contributor_id= $addNewContributor->id;
+            $registerContributorIncome->contributor_monthly_income=str_replace( ',', '', $request->monthlyIncome);
+            $registerContributorIncome->income_month=date('Y-m');
+            $registerContributorIncome->status='ACTIVE';
+            $registerContributorIncome->status='ACTIVE';
+            $registerContributorIncome->save();
+            //END:: register contributor income
+
             $cmn -> contributorCodeGenerator( $addNewContributor->id );
 
             toastr();
