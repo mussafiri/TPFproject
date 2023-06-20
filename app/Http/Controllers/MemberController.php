@@ -20,24 +20,103 @@ class MemberController extends Controller {
         $this->cmn      = new Common;
         $this->carbonDateObj     = new Carbon('Africa/Dar_es_Salaam');
     }
-    public function index() {
+    public function index() {}
+    
+    public function submitMemberDependants(Request $request){
+         #START::Handle Files Upload Registration Form
+        // Check for member Dependant Profile photo upload
+        if ( $request->hasFile( 'member_avatar' ) ) {
+            $filenameWithExt = $request->file( 'member_avatar' )->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
+            //Get just ext
+            $extension = $request->file( 'member_avatar' )->getClientOriginalExtension();
+            // Create new Filename
+            $newfilename = 'MEMPHOTO_' . date( 'y' );
+            // FileName to Store
+            $profile_photo = $newfilename . '_' . time() . '.' . $extension;
+            // Upload Image
+            $path = $request->file( 'member_avatar' )->storeAs( 'public/members/photo', $profile_photo );
+        } else {
+            $profile_photo = 'NULL';
+        }
+        // Check for member individual ID photo upload
+        if ( $request->hasFile( 'member_id' ) ) {
+            $filenameWithExt = $request->file( 'member_id' )->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
+            //Get just ext
+            $extension = $request->file( 'member_id' )->getClientOriginalExtension();
+            // Create new Filename
+            $newfilename = 'MEMIDS_' . date( 'y' );
+            // FileName to Store
+            $id_attachment = $newfilename . '_' . time() . '.' . $extension;
+            // Upload Image
+            $path = $request->file( 'member_id' )->storeAs( 'public/members/ids', $id_attachment );
+        } else {
+            $id_attachment = 'NULL';
+        }
+        if ( $request->hasFile( 'regform_attachment' ) ) {
+            $filenameWithExt = $request->file( 'regform_attachment' )->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
+            //Get just ext
+            $extension = $request->file( 'regform_attachment' )->getClientOriginalExtension();
+            // Create new Filename
+            $newfilename = 'MEMREGFRM_' . date( 'y' );
+            // FileName to Store
+            $reg_form = $newfilename . '_' . time() . '.' . $extension;
+            // Upload Image
+            $path = $request->file( 'regform_attachment' )->storeAs( 'public/members/reg_forms', $reg_form );
+        } else {
+            $reg_form = 'NULL';
+        }
+
+        
+        // Check for member signature upload
+        if ( $request->hasFile( 'member_signature' ) ) {
+            $filenameWithExt = $request->file( 'member_signature' )->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
+            //Get just ext
+            $extension = $request->file( 'member_signature' )->getClientOriginalExtension();
+            // Create new Filename
+            $newfilename = 'MEMPHOTO_' . date( 'y' );
+            // FileName to Store
+            $signature = $newfilename . '_' . time() . '.' . $extension;
+            // Upload Image
+            $path = $request->file( 'member_signature' )->storeAs( 'public/members/signatures', $signature );
+        } else {
+            $signature = 'NULL';
+        }
+        #END::Handle File Upload Registration Form
 
     }
-
     public function ajaxRowDynamicValidation(Request $ajaxreq){
         #Taking all POST requests from the form
         $validator = Validator::make($ajaxreq->all(), [
-            'inputs[0][dep_firstname]' => 'required',
+            'inputs.*' => 'array',
+            'inputs.*.dep_relationship' => 'required|not_in:0',
+            'inputs.*.dep_gender' => 'required|not_in:0',
+            'inputs.*.dep_firstname' => 'required',
+            'inputs.*.dep_midname' => 'required',
+            'inputs.*.dep_lastname' => 'required',
+            'inputs.*.dep_dob' => 'required',
 
-        ],
-        // [   'dep_relationship.not_in' => 'You must select Relationship',
-        //     'dep_gender.not_in' => 'You must select Gender',
-        // ]
+        ],  
+        [   'inputs.*.dep_firstname.required' => 'First name is required',
+            'inputs.*.dep_gender.required','inputs.*.dep_gender.not_in' => 'Gender is required',
+            'inputs.*.dep_midname.required' => 'Middle name is required',
+            'inputs.*.dep_relationship.required','inputs.*.dep_relationship.not_in' => 'Relationship is required',
+            'inputs.*.dep_dob.required' => 'Date of Birth is required',
+            'inputs.*.dep_lastname.required' => 'Last name is required',
+
+        ]
 
 
     );
     if($validator->fails()){
-        return response()->json(['errors' => $validator->errors()]);
+        return response()->json(['errors' => $validator->errors()->toArray()]);
     }else{
         return response()->json(['message' => $ajaxreq->all()]);
 
@@ -191,10 +270,10 @@ class MemberController extends Controller {
             $this->cmn -> memberCodeGenerator($memberRegObject->id);
 
             toastr();
-            return redirect('members/registration/')->with(['success'=>'Member has been successfully created!','member_data'=>$memberRegObject,'response_message'=>'SUCCESS']);
+            return redirect('members/registration/')->with(['success'=>'Member has been successfully created!','member_data'=>$memberRegObject,"response_message"=>"SUCCESS"]);
         }
         toastr();
-        return redirect('members/registration/'.Crypt::encryptString("ACTIVE"))->with(['error'=>'Oops, Member has not been successfully created!','response_message'=>'FAIL']);
+        return redirect('members/registration/'.Crypt::encryptString("ACTIVE"))->with(['error'=>'Oops, Member has not been successfully created!','response_message'=>"FAIL"]);
 
     }
     public function members() {
