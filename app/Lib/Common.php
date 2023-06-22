@@ -11,135 +11,172 @@ use App\Models\Section;
 use Carbon\Carbon;
 
 class Common {
-    public function contributorCodeGenerator($ID){
-        $codeFormat = 'TPF-CN000000'; //format
-        $nextDigLength = mb_strlen($ID , "UTF-8");
-        $createNewCodeSpace=substr($codeFormat,0,-$nextDigLength);
-        $finalCode=$createNewCodeSpace.$ID;
+    public function contributorCodeGenerator( $ID ) {
+        $codeFormat = 'TPF-CN000000';
+        //format
+        $nextDigLength = mb_strlen( $ID, 'UTF-8' );
+        $createNewCodeSpace = substr( $codeFormat, 0, -$nextDigLength );
+        $finalCode = $createNewCodeSpace.$ID;
 
-        $putContributorCode = Contributor::find($ID);
-        $putContributorCode->contributor_code=$finalCode;
+        $putContributorCode = Contributor::find( $ID );
+        $putContributorCode->contributor_code = $finalCode;
         $putContributorCode->save();
     }
 
-    public function memberCodeGenerator($ID){
-        $codeFormat = 'TPF-MN000000'; //format
-        $nextDigLength = mb_strlen($ID , "UTF-8");
-        $createNewCodeSpace=substr($codeFormat,0,-$nextDigLength);
-        $finalCode=$createNewCodeSpace.$ID;
+    public function memberCodeGenerator( $ID ) {
+        $codeFormat = 'TPF-MN000000';
+        //format
+        $nextDigLength = mb_strlen( $ID, 'UTF-8' );
+        $createNewCodeSpace = substr( $codeFormat, 0, -$nextDigLength );
+        $finalCode = $createNewCodeSpace.$ID;
 
-        $putMemberCode = Member::find($ID);
+        $putMemberCode = Member::find( $ID );
         $putMemberCode->member_code = $finalCode;
         $putMemberCode->save();
     }
-    public function districtCodeGenerator($ID,$district,$zone_code){
-        #substr()function to return the first two characters from the district name
-        $d_code = substr($district,0,2);
-        $codeFormat = $zone_code.'-'.$d_code; //format
-        $nextDigLength = mb_strlen($ID, "UTF-8");
-        if($nextDigLength>1){
-            $lastCodePart=$ID;
-        }else{
-            $lastCodePart='0'.$ID;
-        }
-        $finalCode=$codeFormat.$lastCodePart;
 
-        $districtcodeUpdateobj = District::find($ID);
-        $districtcodeUpdateobj->district_code=$finalCode;
+    public function districtCodeGenerator( $ID, $district, $zone_code ) {
+        #substr()function to return the first two characters from the district name
+        $d_code = substr( $district, 0, 2 );
+        $codeFormat = $zone_code.'-'.$d_code;
+        //format
+        $nextDigLength = mb_strlen( $ID, 'UTF-8' );
+        if ( $nextDigLength>1 ) {
+            $lastCodePart = $ID;
+        } else {
+            $lastCodePart = '0'.$ID;
+        }
+        $finalCode = $codeFormat.$lastCodePart;
+
+        $districtcodeUpdateobj = District::find( $ID );
+        $districtcodeUpdateobj->district_code = $finalCode;
         $districtcodeUpdateobj->save();
     }
-    public function sectionCodeGenerator($ID,$section,$district_code){
-        #substr()function to return the first two characters from the district name
-        $s_code = substr($section,0,2);
-        $codeFormat = $district_code.'-'.$s_code; //format
-        $nextDigLength = mb_strlen($ID, "UTF-8");
-        if($nextDigLength>1){
-            $lastCodePart=$ID;
-        }else{
-            $lastCodePart='0'.$ID;
-        }
-        $finalCode=$codeFormat.$lastCodePart;
 
-        $sectioncodeUpdateobj = Section::find($ID);
-        $sectioncodeUpdateobj->section_code=$finalCode;
+    public function sectionCodeGenerator( $ID, $section, $district_code ) {
+        #substr()function to return the first two characters from the district name
+        $s_code = substr( $section, 0, 2 );
+        $codeFormat = $district_code.'-'.$s_code;
+        //format
+        $nextDigLength = mb_strlen( $ID, 'UTF-8' );
+        if ( $nextDigLength>1 ) {
+            $lastCodePart = $ID;
+        } else {
+            $lastCodePart = '0'.$ID;
+        }
+        $finalCode = $codeFormat.$lastCodePart;
+
+        $sectioncodeUpdateobj = Section::find( $ID );
+        $sectioncodeUpdateobj->section_code = $finalCode;
         $sectioncodeUpdateobj->save();
     }
 
-    public function contributorMonthlyIncome($contributorID){
-        $income=0;
-        $getIncome = ContributorIncomeTracker::where('contributor_id',$contributorID)->where('status','ACTIVE')->first();
-        if($getIncome){
-            $income = $getIncome->getIncome;
-        }
-        return $income;
-    } 
-
-    public function memberMonthlyIncome($memberID){
+    public function contributorMonthlyIncome( $contributorID ) {
         $income = 0;
-        $getIncome = MemberMonthlyIncome::where('member_id',$memberID)->where('status','ACTIVE')->first();
-        if($getIncome){
+        $getIncome = ContributorIncomeTracker::where( 'contributor_id', $contributorID )->where( 'status', 'ACTIVE' )->first();
+        if ( $getIncome ) {
+            $income = $getIncome->getIncome;
+        }
+        return $income;
+    }
+
+    public function memberMonthlyIncome( $memberID ) {
+        $income = 0;
+        $getIncome = MemberMonthlyIncome::where( 'member_id', $memberID )->where( 'status', 'ACTIVE' )->first();
+        if ( $getIncome ) {
 
             $income = $getIncome->getIncome;
         }
-     
+
         return $income;
-    } 
-    
-    public function memberContributionAmount($contributorID, $memberID){
+    }
+
+    public function memberContributionAmount( $contributorID, $memberID ) {
         $memberIncome = 0;
         #start:: get member income
-        $memberIncomeData = MemberMonthlyIncome::where('member_id',$memberID)->where('status','ACTIVE')->first();
-        if($memberIncomeData){
+        $memberIncomeData = MemberMonthlyIncome::where( 'member_id', $memberID )->where( 'status', 'ACTIVE' )->first();
+        if ( $memberIncomeData ) {
             $memberIncome = $memberIncomeData->member_monthly_income;
         }
         #End:: get member income
-        
-        #Start:: get contribution 
-        $memberData = Member::find($memberID);
-        $contributorData = Contributor::find($contributorID);
+
+        #Start:: get contribution
+        $memberData = Member::find( $memberID );
+        $contributorData = Contributor::find( $contributorID );
 
         $memberContrRate = 0;
         $contributionAmount = 0;
 
-        $getcontributionRate = ContributorCatContrStructure::where('member_salutation_id', $memberData->salutation_id)->where('contributor_category_id', $contributorData->contributor_type_id)-> where('status','ACTIVE')->first();
-        
-        if($getcontributionRate){
+        $getcontributionRate = ContributorCatContrStructure::where( 'member_salutation_id', $memberData->salutation_id )->where( 'contributor_category_id', $contributorData->contributor_type_id )-> where( 'status', 'ACTIVE' )->first();
+
+        if ( $getcontributionRate ) {
             $memberContrRate = $getcontributionRate->member_contribution_rate;
         }
 
-        #End:: get contribution 
-        if($memberData->salutation_id==1){ // Seniour Pastor
-            $contributionAmount = $memberIncome; // income is 5% of church income
-        }else{
-            $contributionAmount = $memberIncome*($memberContrRate/100);
+        #End:: get contribution
+        if ( $memberData->salutation_id == 1 ) {
+            // Seniour Pastor
+            $contributionAmount = $memberIncome;
+            // income is 5% of church income
+        } else {
+            $contributionAmount = $memberIncome*( $memberContrRate/100 );
         }
 
         return $contributionAmount;
     }
 
-    public function contributorContributionAmount($contributorID, $memberID){
-       
+    public function contributorContributionAmount( $contributorID, $memberID ) {
+
         $memberIncome = 0;
         #start:: get member income
-        $memberIncomeData = MemberMonthlyIncome::where('member_id',$memberID)->where('status','ACTIVE')->first();
-        if($memberIncomeData){
+        $memberIncomeData = MemberMonthlyIncome::where( 'member_id', $memberID )->where( 'status', 'ACTIVE' )->first();
+        if ( $memberIncomeData ) {
             $memberIncome = $memberIncomeData->member_monthly_income;
         }
+
         #End:: get member income
 
-        #Start:: get contribution 
-        $memberData = Member::find($memberID);
-        $contributorData = Contributor::find($contributorID);
-        
+        #Start:: get contribution
+        $memberData = Member::find( $memberID );
+        $contributorData = Contributor::find( $contributorID );
+
         $contributorContrRate = 0;
         $contributionAmount   = 0;
-        $getcontributionRate = ContributorCatContrStructure::where('member_salutation_id', $memberData->salutation_id)->where('contributor_category_id', $contributorData->contributor_type_id)-> where('status','ACTIVE')->first();
-        if($getcontributionRate){
+        $getcontributionRate = ContributorCatContrStructure::where( 'member_salutation_id', $memberData->salutation_id )->where( 'contributor_category_id', $contributorData->contributor_type_id )-> where( 'status', 'ACTIVE' )->first();
+        if ( $getcontributionRate ) {
             $contributorContrRate = $getcontributionRate->contributor_contribution_rate;
-            $contributionAmount = $memberIncome * ($contributorContrRate/100);
+            $contributionAmount = $memberIncome * ( $contributorContrRate/100 );
         }
-        #End:: get contribution 
+        #End:: get contribution
 
         return $contributionAmount;
+    }
+
+    public function contributionReverseComputation( $newContribution, $memberID, $contributorID ) {
+        $memberData = Member::find( $memberID );
+        $contributorData = Contributor::find( $contributorID );
+
+        $memberIncome = 0;
+        $contributor_contribution = 0;
+
+        $contributorMonthlyIncome = $this->contributorMonthlyIncome( $contributorID );
+        // get old contributor Monthly Income
+
+        $getcontributionRate = ContributorCatContrStructure::where( 'member_salutation_id', $memberData->member_salutation_id )->where( 'contributor_category_id', $contributorData->contributor_type_id )-> where( 'status', 'ACTIVE' )->first();
+        if ( $memberData->salutation_id == 1 ) {
+            //Senior Pastor
+            $memberIncome = $newContribution;
+            $contributor_contribution = $memberIncome;
+        } else {
+            $memberIncome = $newContribution/( $getcontributionRate->member_contribution_rate/100 );
+            $contributor_contribution = $newContribution;
+        }
+
+        $returnDataArr = array();
+        $returnDataArr[ 'monthly_income' ] = $memberIncome;
+        $returnDataArr[ 'contributor_monthly_income' ] = $contributorMonthlyIncome;
+        $returnDataArr[ 'contributor_contribution' ] = $contributor_contribution;
+
+        return $returnDataArr;
     }
 }
