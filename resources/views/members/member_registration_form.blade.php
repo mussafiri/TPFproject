@@ -273,14 +273,14 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="field-1" class="control-label">Scheme joining date</label>
-                                                        <input type="text" name="joining_date" class="form-control form-control-sm humanfd-datepicker" value="{{old('joining_date')}}" placeholder="Date of Birth">
+                                                        <input type="text" name="joining_date" class="form-control form-control-sm humanfd-datepicker" value="{{old('joining_date')}}" placeholder="Scheme joining of date">
                                                         @if ($errors->registerMemberDetails->has('joining_date')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('joining_date') }}</small></strong></span>@endif
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="field-1" class="control-label">Service start Date</label>
-                                                        <input type="text" name="service_date" class="form-control form-control-sm humanfd-datepicker" value="{{old('service_date')}}" placeholder="Date of Birth">
+                                                        <input type="text" name="service_date" class="form-control form-control-sm humanfd-datepicker" value="{{old('service_date')}}" placeholder="Date of Service start date">
                                                         @if ($errors->registerMemberDetails->has('service_date')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('service_date') }}</small></strong></span>@endif
                                                     </div>
                                                 </div>
@@ -451,7 +451,6 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Relationship</label>
                                                                         <select class="form-control relationshipSelect commonInputClass" name="inputs[0][dep_relationship]" data-toggle="select2">
-                                                                            <option value="0">--Select Relationship--</option>
                                                                             <option value="FATHER" selected>FATHER</option>
                                                                         </select>
                                                                         <div><span class="text-danger" role="alert"></span></div>
@@ -574,9 +573,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Relationship</label>
                                                                         <select class="form-control relationshipSelect commonInputClass" name="inputs[1][dep_relationship]" data-toggle="select2">
-                                                                            <option value="0">--Select Relationship--</option>
-                                                                            <option value="SPOUSE">SPOUSE</option>
-                                                                            <option value="CHILD">CHILD</option>
+                                                                            <option value="MOTHER">MOTHER</option>
                                                                         </select>
                                                                         <div><span class="text-danger" role="alert"></span></div>
                                                                     </div>
@@ -843,33 +840,8 @@
                             var name = field.split(".")[0] + "[" + field.split(".")[1] + "][" + field.split(".")[2] + "]";
                             $('input[name="' + name + '"], select[name="' + name + '"]').closest('div').find('span.text-danger').html(messages);
                         });
-                    } else {
-                        $('#formDependants').unbind('submit');
-                    }
-
-        $('.commonInputClass').each(function(index, element){
-                //var formData = $(this).serialize();
-                var inputValue=$(this).val();
-
-                alert(inputValue);
-                $.ajax({
-                    url: '/ajax/dynamic/validation',
-                    type: 'POST',
-                    data: {
-                        inputValue : inputValue,
-                        '_token' : '_token': '{{ csrf_token() }}'
-                    },
-                    success: function(response){
-                        alert('aaaa');
-                        // If the validation is successful, remove any previous error messages
-
-                    },
-                    error: function(xhr){
-                        // If the validation fails, display the error message next to the corresponding input
-                        alert('bbbb');
-                    }
-                    alert('cccc');
-                });
+                    } else { $('#formDependants').unbind('submit');}
+                }
             });
         });
     });
