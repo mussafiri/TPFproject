@@ -126,8 +126,8 @@
                                                                     <th style="width:19%;">Contributor</th>
                                                                     <th style="width:18%;">Member Name</th>
                                                                     <th style="width:10%;">Monthly Income <sup class="text-muted font-10">TZS</sup></th>
-                                                                    <th style="width:10%;">Amount <sup class="text-muted font-10">Member (TZS)</sup></th>
-                                                                    <th style="width:10%;">Amount <sup class="text-muted font-10">Contributor (TZS)</sup></th>
+                                                                    <th style="width:10%;">Amount <sup class="text-muted font-10">Member TZS</sup></th>
+                                                                    <th style="width:10%;">Amount <sup class="text-muted font-10">Contributor TZS</sup></th>
                                                                     <th style="width:10%;">Topup <sup class="text-muted font-10">TZS</sup></th>
                                                                     <th style="width:10%;">Total <sup class="text-muted font-10">TZS</sup></th>
                                                                     <th style="width:6%;">Status</th>
@@ -149,7 +149,7 @@
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="field-4" class="control-label">Total Contribution Amount</label>
-                                                                    <input type="text" name="contributionAmount" id="contributionAmount" class="form-control form-control-sm totalContributionInput contriInput autonumber" value="{{old('contributionAmount')}}" oninput="this.value = this.value.toUpperCase()"  id="field-4" placeholder="Total Contribution">
+                                                                    <input type="text" name="contributionAmount" id="contributionAmount" class="form-control form-control-sm totalContributionInput contriInput autonumber" value="{{old('contributionAmount')}}" id="field-4" placeholder="Total Contribution">
                                                                     <span class="text-danger" role="alert"> {{ $errors->first('contributionAmount') }}</span>
                                                                 </div>
                                                             </div>

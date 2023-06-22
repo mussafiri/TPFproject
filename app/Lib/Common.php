@@ -1,8 +1,12 @@
 <?php
 namespace App\Lib;
+
+use App\Models\ContributorCatContrStructure;
 use App\Models\Contributor;
+use App\Models\ContributorIncomeTracker;
 use App\Models\Member;
 use App\Models\District;
+use App\Models\MemberMonthlyIncome;
 use App\Models\Section;
 use Carbon\Carbon;
 
@@ -59,5 +63,83 @@ class Common {
         $sectioncodeUpdateobj = Section::find($ID);
         $sectioncodeUpdateobj->section_code=$finalCode;
         $sectioncodeUpdateobj->save();
+    }
+
+    public function contributorMonthlyIncome($contributorID){
+        $income=0;
+        $getIncome = ContributorIncomeTracker::where('contributor_id',$contributorID)->where('status','ACTIVE')->first();
+        if($getIncome){
+            $income = $getIncome->getIncome;
+        }
+        return $income;
+    } 
+
+    public function memberMonthlyIncome($memberID){
+        $income = 0;
+        $getIncome = MemberMonthlyIncome::where('member_id',$memberID)->where('status','ACTIVE')->first();
+        if($getIncome){
+
+            $income = $getIncome->getIncome;
+        }
+     
+        return $income;
+    } 
+    
+    public function memberContributionAmount($contributorID, $memberID){
+        $memberIncome = 0;
+        #start:: get member income
+        $memberIncomeData = MemberMonthlyIncome::where('member_id',$memberID)->where('status','ACTIVE')->first();
+        if($memberIncomeData){
+            $memberIncome = $memberIncomeData->member_monthly_income;
+        }
+        #End:: get member income
+        
+        #Start:: get contribution 
+        $memberData = Member::find($memberID);
+        $contributorData = Contributor::find($contributorID);
+
+        $memberContrRate = 0;
+        $contributionAmount = 0;
+
+        $getcontributionRate = ContributorCatContrStructure::where('member_salutation_id', $memberData->salutation_id)->where('contributor_category_id', $contributorData->contributor_type_id)-> where('status','ACTIVE')->first();
+        
+        if($getcontributionRate){
+            $memberContrRate = $getcontributionRate->member_contribution_rate;
+        }
+
+        #End:: get contribution 
+        if($memberData->salutation_id==1){ // Seniour Pastor
+            $contributionAmount = $memberIncome; // income is 5% of church income
+        }else{
+            $contributionAmount = $memberIncome*($memberContrRate/100);
+        }
+
+        return $contributionAmount;
+    }
+
+    public function contributorContributionAmount($contributorID, $memberID){
+       
+        $memberIncome = 0;
+        #start:: get member income
+        $memberIncomeData = MemberMonthlyIncome::where('member_id',$memberID)->where('status','ACTIVE')->first();
+        if($memberIncomeData){
+            $memberIncome = $memberIncomeData->member_monthly_income;
+        }
+        #End:: get member income
+
+        #Start:: get contribution 
+        $memberData = Member::find($memberID);
+        $contributorData = Contributor::find($contributorID);
+        
+        $contributorContrRate = 0;
+        $contributionAmount   = 0;
+        $getcontributionRate = ContributorCatContrStructure::where('member_salutation_id', $memberData->salutation_id)->where('contributor_category_id', $contributorData->contributor_type_id)-> where('status','ACTIVE')->first();
+        if($getcontributionRate){
+            $contributorContrRate = $getcontributionRate->contributor_contribution_rate;
+            $contributionAmount = $memberIncome * ($contributorContrRate/100);
+        }
+        #End:: get contribution 
+
+        return $contributionAmount;
     }
 }

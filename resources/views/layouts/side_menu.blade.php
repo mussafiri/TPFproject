@@ -30,23 +30,16 @@
                 </div>
             </li>
 
-             <li>
+             <li class="@if(request()->segment(1)=='contributions'){{'menuitem-active'}}@endif">
                 <a href="#sidebarContributions" data-toggle="collapse">
                     <i class=" mdi mdi-account-group-outline"></i>
                     <span> Contributions </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarContributions">
+                <div class="collapse @if(request()->segment(1)=='contributions'){{'show'}}@endif" id="sidebarContributions">
                     <ul class="nav-second-level">
-                        <li>
-                            <a href="{{url('contributions/add')}}">Add Contribution</a>
-                        </li>
-                        <li>
-                            <a href="{{url('contributions/history')}}">Contributions</a>
-                        </li>
-                        <li>
-                            <a href="ecommerce-product-detail.html">Product Detail</a>
-                        </li>
+                        <li  class="@if(request()->is('contributions/add'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/add')}}">Add Contribution</a> </li>
+                        <li  class="@if(request()->is('contributions/transactions/*')){{'menuitem-active'}}@endif"> <a href="{{url('contributions/transactions/'.Crypt::encryptString('PENDING'))}}">Contributions</a> </li>
                     </ul>
                 </div>
             </li>
@@ -60,14 +53,15 @@
                 <div class="collapse  @if(request()->segment(1)=='contributors'){{'show'}}@endif" id="sidebarContributors">
                     <ul class="nav-second-level">
                         <li class="@if(request()->is('contributors/list/*')||request()->is('contributors/edit/*')){{'menuitem-active'}}@endif"><a href="{{url('contributors/list/'.Crypt::encryptString('ACTIVE'))}}">Contributors</a></li>
-                        <li class="@if(request()->segment(2)=='categories'){{'menuitem-active'}}@endif"><a href="{{url('contributors/categories/'.Crypt::encryptString('ACTIVE'))}}">Categories</a></li>
+                        <li class="@if(request()->is('contributors/categories/*')){{'menuitem-active'}}@endif"><a href="{{url('contributors/categories/'.Crypt::encryptString('ACTIVE'))}}">Categories</a></li>
+                        <li class="@if(request()->is('contributors/structure/*')){{'menuitem-active'}}@endif"><a href="{{url('contributors/structure/'.Crypt::encryptString('ACTIVE'))}}">Contribution Structure</a></li>
                     </ul>
                 </div>
             </li>
             <li class="@if(request()->segment(1)=='zones'){{'menuitem-active'}} @endif">
                 <a href="#sidebarZones" data-toggle="collapse">
                     <i class="mdi mdi-map-marker-radius-outline"></i>
-                    <span > Zones </span>
+                    <span> Zones </span>
                     <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse @if(request()->segment(1)=='zones'){{'show'}}@endif" id="sidebarZones">

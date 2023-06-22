@@ -450,7 +450,7 @@
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Relationship</label>
-                                                                        <select class="form-control relationshipSelect" name="inputs[0][dep_relationship]" data-toggle="select2">
+                                                                        <select class="form-control relationshipSelect commonInputClass" name="inputs[0][dep_relationship]" data-toggle="select2">
                                                                             <option value="0">--Select Relationship--</option>
                                                                             <option value="FATHER" selected>FATHER</option>
                                                                         </select>
@@ -460,7 +460,7 @@
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-4" class="control-label">Gender</label>
-                                                                        <select class="form-control px-0" name="inputs[0][dep_gender]" data-toggle="select2">
+                                                                        <select class="form-control px-0 commonInputClass" name="inputs[0][dep_gender]" data-toggle="select2">
                                                                             <option value="0">--Select Gender--</option>
                                                                             <option value="MALE" selected>MALE</option>
                                                                             <option value="FEMALE">FEMALE</option>
@@ -537,7 +537,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Dependant Photo</label>
                                                                         <div class="file-loading">
-                                                                            <input class="dep_attachments" name="dep_photo[]" type="file">
+                                                                            <input class="dep_attachments commonInputClass" name="dep_photo[]" type="file">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -545,7 +545,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Birth Certificate</label>
                                                                         <div class="file-loading">
-                                                                            <input class="dep_attachments" id="inputBirthCert" name="dep_birthcert[]" type="file">
+                                                                            <input class="dep_attachments commonInputClass" id="inputBirthCert" name="dep_birthcert[]" type="file">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -553,7 +553,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Marriage Certificate</label>
                                                                         <div class="file-loading">
-                                                                            <input class="dep_attachments" id="inputMarriageCert" name="dep_marriagecert[]" type="file">
+                                                                            <input class="dep_attachments commonInputClass" id="inputMarriageCert" name="dep_marriagecert[]" type="file">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -573,7 +573,7 @@
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Relationship</label>
-                                                                        <select class="form-control relationshipSelect" name="inputs[1][dep_relationship]" data-toggle="select2">
+                                                                        <select class="form-control relationshipSelect commonInputClass" name="inputs[1][dep_relationship]" data-toggle="select2">
                                                                             <option value="0">--Select Relationship--</option>
                                                                             <option value="SPOUSE">SPOUSE</option>
                                                                             <option value="CHILD">CHILD</option>
@@ -584,7 +584,7 @@
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-4" class="control-label">Gender</label>
-                                                                        <select class="form-control px-0" name="inputs[1][dep_gender]" data-toggle="select2">
+                                                                        <select class="form-control px-0 commonInputClass" name="inputs[1][dep_gender]" data-toggle="select2">
                                                                             <option value="0">--Select Gender--</option>
                                                                             <option value="MALE">MALE</option>
                                                                             <option value="FEMALE">FEMALE</option>
@@ -596,21 +596,21 @@
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-4" class="control-label">Firstname</label>
-                                                                        <input type="text" name="inputs[1][dep_firstname]" id="depFirstname" class="form-control form-control-sm" value="{{old('dep_firstname')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">
+                                                                        <input type="text" name="inputs[1][dep_firstname]" id="depFirstname" class="form-control form-control-sm commonInputClass" value="{{old('dep_firstname')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">
                                                                         <span class="depFirstnameErrorTxt text-danger" role="alert"></span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-5" class="control-label">Middlename</label>
-                                                                        <input type="text" name="inputs[1][dep_midname]" id="zone" class="form-control form-control-sm" value="{{old('dep_midname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">
+                                                                        <input type="text" name="inputs[1][dep_midname]" id="zone" class="form-control form-control-sm commonInputClass" value="{{old('dep_midname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">
                                                                         <span class="zoneErrorTxt text-danger" role="alert"></span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-5" class="control-label">Last name</label>
-                                                                        <input type="text" name="inputs[1][dep_lastname]" id="zone" class="form-control form-control-sm" value="{{old('dep_lastname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">
+                                                                        <input type="text" name="inputs[1][dep_lastname]" id="zone" class="form-control form-control-sm commonInputClass" value="{{old('dep_lastname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">
                                                                         <span class="zoneErrorTxt text-danger" role="alert"></span>
                                                                     </div>
                                                                 </div>
@@ -661,7 +661,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Dependant Photo</label>
                                                                         <div class="file-loading">
-                                                                            <input class="dep_attachments" name="dep_photo[]" type="file">
+                                                                            <input class="dep_attachments commonInputClass" name="dep_photo[]" type="file">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -669,7 +669,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Birth Certificate</label>
                                                                         <div class="file-loading">
-                                                                            <input class="dep_attachments" id="inputBirthCert" name="dep_birthcert[]" type="file">
+                                                                            <input class="dep_attachments commonInputClass" id="inputBirthCert" name="dep_birthcert[]" type="file">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -677,7 +677,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Marriage Certificate</label>
                                                                         <div class="file-loading">
-                                                                            <input class="dep_attachments" id="inputMarriageCert" name="dep_marriagecert[]" type="file">
+                                                                            <input class="dep_attachments commonInputClass" id="inputMarriageCert" name="dep_marriagecert[]" type="file">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -847,7 +847,29 @@
                         $('#formDependants').unbind('submit');
                     }
 
-                }
+        $('.commonInputClass').each(function(index, element){
+                //var formData = $(this).serialize();
+                var inputValue=$(this).val();
+
+                alert(inputValue);
+                $.ajax({
+                    url: '/ajax/dynamic/validation',
+                    type: 'POST',
+                    data: {
+                        inputValue : inputValue,
+                        '_token' : '_token': '{{ csrf_token() }}'
+                    },
+                    success: function(response){
+                        alert('aaaa');
+                        // If the validation is successful, remove any previous error messages
+
+                    },
+                    error: function(xhr){
+                        // If the validation fails, display the error message next to the corresponding input
+                        alert('bbbb');
+                    }
+                    alert('cccc');
+                });
             });
         });
     });
@@ -867,7 +889,7 @@
     });
 </script>
 <script>
-    //START:: On change of the Relationship select 
+    //START:: On change of the Relationship select
     // $(document).ready(function() {
     $('.relationshipSelect').change(function() {
         var realationType = $(this).find(":selected").val();
@@ -893,41 +915,7 @@
     });
     // });
     //END:: Relationship select
-</script>
-<script type="text/javascript">
-    // CONTROL TO ACTIVATE THE NAV TABS AFTER REDIRECTION OF THE FORM
-    var formResponse = "<?= $response_message; ?>";
-    // if (formResponse == "SUCCESS") {
-    //      // Get the nav item and content element
-    //     const navItem = document.querySelector('li#LimemberDependantsDetails a');
-    //     const contentElement = document.querySelector('div.tab-content div#memberDependantsDetails');
 
-    //     // Add the 'active' class to the nav item
-    //     navItem.classList.add('active');
-
-    //     // Add the 'show' and 'active' classes to the content element
-    //     contentElement.classList.add('show');
-    //     contentElement.classList.remove('disabled');
-    //     contentElement.classList.add('active');
-    //     // Renove the active class for Member details Tab elements
-    //     $('li#LimemberDetails a').removeClass("active");
-    //     $('div.tab-content div#memberDetails').removeClass("active");
-    //     $('li#LimemberDetails a').addClass("disabled");
-
-    // }else{
-    //     // Get the nav item and content element
-    //     const navItem = document.querySelector('li#LimemberDetails a');
-    //     const contentElement = document.querySelector('div.tab-content div#memberDetails');
-
-    //     // Add the 'active' class to the nav item
-    //     navItem.classList.add('active');
-
-    //     // Add the 'show' and 'active' classes to the content element
-    //     contentElement.classList.add('show');
-    //     contentElement.classList.add('active');
-
-    // }
-</script>
 <script type="text/javascript">
     $(".district_statusChangeLink").click(function() {
         var district_id = $(this).attr("data-district");

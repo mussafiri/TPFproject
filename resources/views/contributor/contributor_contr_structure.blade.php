@@ -21,10 +21,10 @@
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
                                     <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Categories</li>
+                                    <li class="breadcrumb-item active">Contribution Structure</li>
                                 </ol>
                             </div>
-                            <h4 class="page-title">Contributors</h4>
+                            <h4 class="page-title">Contribution Structure</h4>
                         </div>
                     </div>
                 </div>
@@ -39,42 +39,24 @@
                                             </div>
                                             <div class="col-sm-8">
                                                 <div class="text-sm-right">
-                                                    <a href="{{url('contributors/add')}}" class="btn btn-info mb-2 mr-1"><i class="mdi mdi-plus-thick mr-2"></i> Add Contributors</a>
+                                                
                                                 </div>
                                             </div><!-- end col-->
                                         </div>
 
                                         <!-- end row-->
                                         <div class="row">
-                                            <div class="col-lg-12">
-                                                @if ($errors->any())
-                                                <div class="example-alert">
-                                                    <div class="alert alert-danger alert-icon" role="alert">
-                                                        <em class="icon ni ni-cross-circle"></em>
-                                                        <strong>{{ $errors->first() }}</strong>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                                @if(session()->has('success'))
-                                                <div class="example-alert">
-                                                    <div class="alert alert-success alert-icon">
-                                                        <em class="icon ni ni-check-circle"></em>
-                                                        <strong>{{ session()->get('success') }}</strong>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                            </div>
 
                                         <div class="col-12">
                                          <ul class="nav nav-tabs nav-bordered">
                                             <li class="nav-item">
-                                                <a href="{{url('contributors/list/'.Crypt::encryptString('ACTIVE'))}}" aria-expanded="false" class="nav-link @if($status=='ACTIVE') {{'active'}} @endif">
+                                                <a href="{{url('contributors/structure/'.Crypt::encryptString('ACTIVE'))}}" aria-expanded="false" class="nav-link @if($status=='ACTIVE') {{'active'}} @endif">
                                                     Active
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="{{url('contributors/list/'.Crypt::encryptString('SUSPENDED'))}}" aria-expanded="true" class="nav-link @if($status=='SUSPENDED') {{'active'}} @endif">
-                                                    Suspended
+                                                <a href="{{url('contributors/structure/'.Crypt::encryptString('DORMANT'))}}" aria-expanded="true" class="nav-link @if($status=='DORMANT') {{'active'}} @endif">
+                                                    Dormant
                                                 </a>
                                             </li>
                                         </ul>
@@ -86,53 +68,28 @@
                                                                 <thead>
                                                                     <tr>
                                                                         <th>#</th>
-                                                                        <th>Code</th>
-                                                                        <th>Contributor Name</th>
-                                                                        <th>Income</th>
-                                                                        <th>Contributor Type</th>
-                                                                        <!-- <th>Zone</th>
-                                                                        <th>Distict</th> --> 
-                                                                        <th>Section</th>
+                                                                        <th>Contributor Category</th>
+                                                                        <th>Member Salutation</th>
+                                                                        <th>Contributor Rate <sup class="text-muted font-11">%</sup></th>
+                                                                        <th>Member Rate <sup class="text-muted font-11">%</sup></th>
+                                                                        <th>Created By</th>
+                                                                        <th>Created At</th>
                                                                         <th>Status</th>
-                                                                        <th></th>
                                                                     </tr>
                                                                 </thead>
 
                                                                 <tbody>
                                                                 @php $n=1; @endphp
-                                                                @foreach($contributors as $data)
+                                                                @foreach($contributorRates as $data)
                                                                     <tr>
                                                                         <td>{{$n}}.</td>
-                                                                        <td class="text-muted font-9">{{$data->contributor_code}}</td>
-                                                                        <td>{{$data->name}}</td>
-                                                                        <td>{{number_format($data->getContributorIncome($data->id),2)}}</td>
-                                                                        <td>{{$data->contributorType->name}}</td>
-                                                                       <!-- <td class="font-9">{{$data->contributorSection->district->zone->name}}</td>
-                                                                        <td class="font-9">{{$data->contributorSection->district->name}}</td> -->
-                                                                        <td class="font-9">{{$data->contributorSection->name}}</td> 
+                                                                        <td class="text-muted font-9">{{$data->contributorType->name}}</td>
+                                                                        <td>{{$data->memberSalutation->name}}</td>
+                                                                        <td>{{number_format($data->contributor_contribution_rate,2)}}</td>
+                                                                        <td>{{number_format($data->member_contribution_rate,2)}}</td>
+                                                                        <td class="font-10">{{$data->createdBy->fname.' '.$data->createdBy->mname.' '.$data->createdBy->lname}}</td>
+                                                                        <td class="font-10">{{date('d M, Y', strtotime($data->created_at))}}</td> 
                                                                         <td><span class="badge badge-outline-{{$data->status=='ACTIVE'?'success':'danger'}} badge-pill">{{$data->status}}</span></td>
-                                                                        <td>
-                                                                            <div class="btn-group dropdown float-right">
-                                                                                <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-light btn-sm"
-                                                                                    data-toggle="dropdown" aria-expanded="false">
-                                                                                    <i class='mdi mdi-dots-horizontal font-18'></i>
-                                                                                </a>
-                                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                                    <a href="{{url('contributors/edit/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
-                                                                                        <i class='mdi mdi-pencil-outline mr-1'></i>Edit
-                                                                                    </a>
-                                                                                    <div class="dropdown-divider"></div>
-                                                                                    <!-- item-->
-                                                                                    <a href="javascript:void(0);" class="dropdown-item change_contributor_status_swt_alert" data-id="{{$data->id}}" data-newstatus="@if($data->status=='ACTIVE'){{'Suspend'}} @else {{'Activate'}}@endif" data-name="{{$data->name}}">
-                                                                                        @if($data->status=='ACTIVE')
-                                                                                        <i class='mdi mdi-close-thick mr-1'></i>Suspend
-                                                                                        @else
-                                                                                        <i class='mdi mdi-check-bold mr-1'></i>Activate
-                                                                                        @endif
-                                                                                    </a>
-                                                                                </div> <!-- end dropdown menu-->
-                                                                            </div>
-                                                                        </td>
                                                                     </tr>
                                                                 @php $n++; @endphp
                                                                 @endforeach

@@ -39,7 +39,7 @@
                                             </div>
                                             <div class="col-sm-8">
                                                 <div class="text-sm-right">
-                                                    <a href="{{url('contributions/add')}}" class="btn btn-info mb-2 mr-1"><i class="mdi mdi-plus-thick mr-2"></i> Add Contributors</a>
+                                                    <a href="{{url('contributions/add')}}" class="btn btn-info mb-2 mr-1"><i class="mdi mdi-plus-thick mr-2"></i> Add Contribution</a>
                                                 </div>
                                             </div><!-- end col-->
                                         </div>
@@ -50,13 +50,28 @@
                                         <div class="col-12">
                                          <ul class="nav nav-tabs nav-bordered">
                                             <li class="nav-item">
-                                                <a href="{{url('contributions/list/'.Crypt::encryptString('PENDING'))}}" aria-expanded="false" class="nav-link @if($status=='ACTIVE') {{'active'}} @endif">
-                                                    Active
+                                                <a href="{{url('contributions/transactions/'.Crypt::encryptString('PENDING'))}}" aria-expanded="false" class="nav-link @if($status=='PENDING') {{'active'}} @endif">
+                                                    Pending
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="{{url('contributions/list/'.Crypt::encryptString('SUSPENDED'))}}" aria-expanded="true" class="nav-link @if($status=='SUSPENDED') {{'active'}} @endif">
-                                                    Suspended
+                                                <a href="{{url('contributions/transactions/'.Crypt::encryptString('APPROVED'))}}" aria-expanded="true" class="nav-link @if($status=='APPROVED') {{'active'}} @endif">
+                                                    Approved
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="{{url('contributions/transactions/'.Crypt::encryptString('POSTED'))}}" aria-expanded="true" class="nav-link @if($status=='POSTED') {{'active'}} @endif">
+                                                    Posted
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="{{url('contributions/transactions/'.Crypt::encryptString('APPROVAL REJECTED'))}}" aria-expanded="true" class="nav-link @if($status=='APPROVAL REJECTED') {{'active'}} @endif">
+                                                    Approval Rejected
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="{{url('contributions/transactions/'.Crypt::encryptString('POSTING REJECTED'))}}" aria-expanded="true" class="nav-link @if($status=='POSTING REJECTED') {{'active'}} @endif">
+                                                    Approved
                                                 </a>
                                             </li>
                                         </ul>

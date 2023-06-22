@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('contributor_id');
             $table->decimal('contributor_monthly_income', 32,2);
-            $table->string('start_date')->default('NULL');
-            $table->string('end_date')->default('NULL');
+            $table->string('income_month')->default('NULL');
             $table->enum('status',['ACTIVE','DORMANT'])->default('ACTIVE');
             $table->integer('updated_by')->default(0);
             $table->timestamps();

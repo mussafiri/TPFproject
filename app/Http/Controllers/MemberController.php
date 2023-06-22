@@ -93,7 +93,7 @@ class MemberController extends Controller {
             $dependant->lname           = $input['dep_lastname'];
             $dependant->gender          = $input['dep_gender'];
             $dependant->dob             = $input['dep_dob'];
-            $dependant->phone       = "(255)765-300-208";
+            $dependant->phone           = ;
             $dependant->occupation      = $input['dep_occupation'];
             $dependant->vital_status    = $input['dep_vital_status'];
             $dependant->picture         = $profile_photo;
@@ -154,7 +154,7 @@ class MemberController extends Controller {
             'id_number' => 'required',
             'contributor_name' => 'required|not_in:0',
             'monthly_income' => 'required',
-        ],  
+        ],
 
             ['evengelical_title.gt' => 'You must select Evengelical Title',
             'salutation.not_in' => 'You must select Salutation',
@@ -220,7 +220,7 @@ class MemberController extends Controller {
             $reg_form = 'NULL';
         }
 
-        
+
         // Check for member signature upload
         if ( $request->hasFile( 'member_signature' ) ) {
             $filenameWithExt = $request->file( 'member_signature' )->getClientOriginalName();
