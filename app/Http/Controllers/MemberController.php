@@ -93,7 +93,7 @@ class MemberController extends Controller {
             $dependant->lname           = $input['dep_lastname'];
             $dependant->gender          = $input['dep_gender'];
             $dependant->dob             = $input['dep_dob'];
-            $dependant->phone           = ;
+            $dependant->phone           = $input['dep_phone'];
             $dependant->occupation      = $input['dep_occupation'];
             $dependant->vital_status    = $input['dep_vital_status'];
             $dependant->picture         = $profile_photo;
