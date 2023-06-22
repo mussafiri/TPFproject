@@ -51,12 +51,11 @@
                                         <tr>
                                             <th style="width:4%;">#</th>
                                             <th style="width:13%;">TPF-Number</th>
-                                            <th style="width:18%;">Member</th>
+                                            <th style="width:28%;">Member</th>
                                             <th style="width:12%;">Title</th>
                                             <th style="width:13%;">Contributor</th>
                                             <th style="width:12%;">Vital Status</th>
-                                            <th style="width:13%;">Created By</th>
-                                            <th style="width:11%;">Created</th>
+                                            <th style="width:14%;">Created</th>
                                             <th style="width:4%;">Action</th>
                                         </tr>
                                     </thead>
@@ -70,9 +69,7 @@
                                             <td><span class="badge badge-outline-{{$data->salutationTitle->name=='SENIOR PASTOR'?'info':'secondary';}}">{{$data->salutationTitle->name}}</span></td>
                                             <td ><small><span>{{$data->contributor->name}}</span></small></td>
                                             <td><span class="badge badge-outline-{{$data->vital_status=='ALIVE'?'success':'danger';}}">{{$data->vital_status}}</span></td>
-                                            <td>{{$data->createdBy->fname." ".$data->createdBy->lname}}</td>
                                             <td>{{date('d M Y', strtotime($data->created_at))}}&nbsp;<span class="text-muted font-10"><small>{{date('H:i', strtotime($data->created_at))}}</small></span></td>
-                                            
                                             <td>
                                                 <div class="btn-group dropdown">
                                                     <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>

@@ -21,12 +21,14 @@ return new class extends Migration
             $table->string('dob');
             $table->string('phone')->default('NULL');
             $table->enum('relationship',['SPOUSE','CHILD','FATHER','MOTHER']);
-            $table->enum('occupation',['NONE','FARMER','UNEMPLOYED','EMPLOYED','RETIRED','BUSINESS','PASTOR']);
+            $table->enum('occupation',['NONE','STUDENT','FARMER','UNEMPLOYED','EMPLOYED','RETIRED','BUSINESS','PASTOR'])->default('NONE');
             $table->string('picture')->default('NULL');
+            $table->string('marriagecert')->default('NULL');
+            $table->string('birthcert')->default('NULL');
+            $table->enum('status',['ACTIVE','SUSPENDED'])->default('ACTIVE');
             $table->enum('vital_status',['ALIVE','DECEASED'])->default('ALIVE');
-            $table->enum('status',['ACTIVE','SUSPENDED','DECEASED']);
             $table->integer('created_by');
-            $table->integer('updated_by');
+            $table->integer('updated_by')->default(0);
             $table->timestamps();
         });
     }

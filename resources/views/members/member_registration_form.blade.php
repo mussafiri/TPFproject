@@ -452,8 +452,7 @@
                                                                         <label for="field-1" class="control-label">Relationship</label>
                                                                         <select class="form-control relationshipSelect" name="inputs[0][dep_relationship]" data-toggle="select2">
                                                                             <option value="0">--Select Relationship--</option>
-                                                                            <option value="SPOUSE">SPOUSE</option>
-                                                                            <option value="CHILD">CHILD</option>
+                                                                            <option value="FATHER" selected>FATHER</option>
                                                                         </select>
                                                                         <div><span class="text-danger" role="alert"></span></div>
                                                                     </div>
@@ -463,7 +462,7 @@
                                                                         <label for="field-4" class="control-label">Gender</label>
                                                                         <select class="form-control px-0" name="inputs[0][dep_gender]" data-toggle="select2">
                                                                             <option value="0">--Select Gender--</option>
-                                                                            <option value="MALE">MALE</option>
+                                                                            <option value="MALE" selected>MALE</option>
                                                                             <option value="FEMALE">FEMALE</option>
                                                                         </select>
                                                                         <div><span class="text-danger" role="alert"></span></div>
@@ -473,6 +472,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-4" class="control-label">Firstname</label>
                                                                         <input type="text" name="inputs[0][dep_firstname]" id="dep0" class="form-control form-control-sm" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">
+                                                                        <input type="text" name="member_id" value="{{$member_data?$member_data->id:0;}}" class="form-control form-control-sm" hidden>
                                                                         <span class="text-danger" role="alert"></span>
                                                                     </div>
                                                                 </div>
@@ -492,8 +492,40 @@
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
+                                                                        <label for="field-5" class="control-label">Phone</label>
+                                                                        <input type="text" name="inputs[0][dep_phone]" class="form-control form-control-sm" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Phone">
+                                                                        <span class="text-danger" role="alert"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-5" class="control-label">Occupation</label>
+                                                                        <select class="form-control px-0" name="inputs[0][dep_occupation]" data-toggle="select2">
+                                                                            <option value="0">--Select Gender--</option>
+                                                                            <option value="FARMER">FARMER</option>
+                                                                            <option value="UNEMPLOYED">UNEMPLOYED</option>
+                                                                            <option value="RETIRED">RETIRED</option>
+                                                                            <option value="EMPLOYED">EMPLOYED</option>
+                                                                            <option value="BUSINESS">BUSINESS</option>
+                                                                            <option value="PASTOR">PASTOR</option>
+                                                                            <option value="NONE">NONE</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-5" class="control-label">Vital Status</label>
+                                                                        <select class="form-control px-0" name="inputs[0][dep_vital_status]" data-toggle="select2">
+                                                                            <option value="0">--Select Status--</option>
+                                                                            <option value="ALIVE">ALIVE</option>
+                                                                            <option value="DECEASED">DECEASED</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
                                                                         <label for="field-5" class="control-label">Date of Birth</label>
-                                                                        <input type="text" name="inputs[0][dep_dob]" class="form-control form-control-sm dep_dobdatepicker"  data-provide="datepicker" data-date-autoclose="true" data-date-format="dd MM yyyy" placeholder="DOB" autocomplete="off">
+                                                                        <input type="text" name="inputs[0][dep_dob]" class="form-control form-control-sm dep_parentdobdatepicker"  data-provide="datepicker" data-date-autoclose="true" data-date-format="dd MM yyyy" placeholder="DOB" autocomplete="off">
                                                                         <span class="text-danger" role="alert"> </span>
                                                                     </div>
                                                                 </div>
@@ -584,8 +616,40 @@
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
+                                                                        <label class="control-label">Phone</label>
+                                                                        <input type="text" name="inputs[1][dep_phone]" class="form-control form-control-sm" placeholder="Phone">
+                                                                        <span class="text-danger" role="alert"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-5" class="control-label">Occupation</label>
+                                                                        <select class="form-control px-0" name="inputs[1][dep_occupation]" data-toggle="select2">
+                                                                            <option value="0">--Select Gender--</option>
+                                                                            <option value="FARMER">FARMER</option>
+                                                                            <option value="UNEMPLOYED">UNEMPLOYED</option>
+                                                                            <option value="RETIRED">RETIRED</option>
+                                                                            <option value="EMPLOYED">EMPLOYED</option>
+                                                                            <option value="BUSINESS">BUSINESS</option>
+                                                                            <option value="PASTOR">PASTOR</option>
+                                                                            <option value="NONE">NONE</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-5" class="control-label">Vital Status</label>
+                                                                        <select class="form-control px-0" name="inputs[1][dep_vital_status]" data-toggle="select2">
+                                                                            <option value="0">--Select Status--</option>
+                                                                            <option value="ALIVE">ALIVE</option>
+                                                                            <option value="DECEASED">DECEASED</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
                                                                         <label for="field-5" class="control-label">Date of Birth</label>
-                                                                        <input type="text" name="inputs[1][dep_dob]" class="form-control form-control-sm dep_dobdatepicker" value="{{old('dep_dob')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd M yyyy" placeholder="Date of Birth" autocomplete="off">
+                                                                        <input type="text" name="inputs[1][dep_dob]" class="form-control form-control-sm dep_parentdobdatepicker" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd M yyyy" placeholder="Date of Birth" autocomplete="off">
                                                                         <span class="text-danger" role="alert"> </span>
                                                                     </div>
                                                                 </div>
@@ -704,6 +768,16 @@
                 '<span class="text-danger" role="alert"></span>' +
                 '</div>' +
                 '</div>' +
+                '<div class="col-lg-6"><div class="form-group"><label class="control-label">Phone</label>'+
+                    '<input type="text" name="inputs['+b+'][dep_phone]" class="form-control form-control-sm" placeholder="Phone">'+
+                    '<span class="text-danger" role="alert"></span>'+
+                '</div></div>'+
+                '<div class="col-lg-6"><div class="form-group"><label for="field-5" class="control-label">Occupation</label>' +
+                    '<select class="form-control px-0" name="inputs['+b+'][dep_occupation]" data-toggle="select2">' +
+                        '<option value="0">--Select Gender--</option>'+
+                        '<option value="UNEMPLOYED">UNEMPLOYED</option><option value="STUDENT">STUDENT</option><option value="FARMER">FARMER</option><option value="RETIRED">RETIRED</option><option value="EMPLOYED">EMPLOYED</option><option value="BUSINESS">BUSINESS</option><option value="PASTOR">PASTOR</option><option value="NONE">NONE</option>'+
+                    '</select>'+
+                '</div></div>'+
                 '<div class="col-lg-6">' +
                 '<div class="form-group">' +
                 '<label for="field-5" class="control-label">Date of Birth</label>' +
@@ -762,7 +836,6 @@
                 data: formData,
                 success: function(response) {
                     // handle successful response
-                    alert("response");
                     var inputs_errors = response.errors;
                     if (inputs_errors) {
                         $.each(inputs_errors, function(field, messages) {
@@ -771,7 +844,7 @@
                             $('input[name="' + name + '"], select[name="' + name + '"]').closest('div').find('span.text-danger').html(messages);
                         });
                     } else {
-                        $(this).unbind('submit');
+                        $('#formDependants').unbind('submit');
                     }
 
                 }
@@ -779,8 +852,6 @@
         });
     });
 </script>
-
-
 
 <!-- Datatables init -->
 <script type="text/javascript">
@@ -790,6 +861,9 @@
     $('.dep_dobdatepicker').datepicker({
         startDate: "-21Y",
         endDate: new Date()
+    });
+    $('.dep_parentdobdatepicker').datepicker({
+        endDate: "-21Y",
     });
 </script>
 <script>

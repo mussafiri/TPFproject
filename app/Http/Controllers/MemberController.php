@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Models\MemberDependant;
 use App\Models\Member;
 use App\Models\Contributor;
 use App\Models\MemberIdentityType;
@@ -20,77 +22,88 @@ class MemberController extends Controller {
         $this->cmn      = new Common;
         $this->carbonDateObj     = new Carbon('Africa/Dar_es_Salaam');
     }
-    public function index() {}
+    public function index() { }
     
     public function submitMemberDependants(Request $request){
          #START::Handle Files Upload Registration Form
         // Check for member Dependant Profile photo upload
-        if ( $request->hasFile( 'member_avatar' ) ) {
-            $filenameWithExt = $request->file( 'member_avatar' )->getClientOriginalName();
-            // Get just filename
-            $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
-            //Get just ext
-            $extension = $request->file( 'member_avatar' )->getClientOriginalExtension();
-            // Create new Filename
-            $newfilename = 'MEMPHOTO_' . date( 'y' );
-            // FileName to Store
-            $profile_photo = $newfilename . '_' . time() . '.' . $extension;
-            // Upload Image
-            $path = $request->file( 'member_avatar' )->storeAs( 'public/members/photo', $profile_photo );
-        } else {
-            $profile_photo = 'NULL';
-        }
-        // Check for member individual ID photo upload
-        if ( $request->hasFile( 'member_id' ) ) {
-            $filenameWithExt = $request->file( 'member_id' )->getClientOriginalName();
-            // Get just filename
-            $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
-            //Get just ext
-            $extension = $request->file( 'member_id' )->getClientOriginalExtension();
-            // Create new Filename
-            $newfilename = 'MEMIDS_' . date( 'y' );
-            // FileName to Store
-            $id_attachment = $newfilename . '_' . time() . '.' . $extension;
-            // Upload Image
-            $path = $request->file( 'member_id' )->storeAs( 'public/members/ids', $id_attachment );
-        } else {
-            $id_attachment = 'NULL';
-        }
-        if ( $request->hasFile( 'regform_attachment' ) ) {
-            $filenameWithExt = $request->file( 'regform_attachment' )->getClientOriginalName();
-            // Get just filename
-            $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
-            //Get just ext
-            $extension = $request->file( 'regform_attachment' )->getClientOriginalExtension();
-            // Create new Filename
-            $newfilename = 'MEMREGFRM_' . date( 'y' );
-            // FileName to Store
-            $reg_form = $newfilename . '_' . time() . '.' . $extension;
-            // Upload Image
-            $path = $request->file( 'regform_attachment' )->storeAs( 'public/members/reg_forms', $reg_form );
-        } else {
-            $reg_form = 'NULL';
-        }
+        $dep_photo     = $request->file('dep_photo');
+        $dep_birthcert = $request->file('dep_birthcert');
+        $dep_marriagecert = $request->file('dep_marriagecert');
 
-        
-        // Check for member signature upload
-        if ( $request->hasFile( 'member_signature' ) ) {
-            $filenameWithExt = $request->file( 'member_signature' )->getClientOriginalName();
-            // Get just filename
-            $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
-            //Get just ext
-            $extension = $request->file( 'member_signature' )->getClientOriginalExtension();
-            // Create new Filename
-            $newfilename = 'MEMPHOTO_' . date( 'y' );
-            // FileName to Store
-            $signature = $newfilename . '_' . time() . '.' . $extension;
-            // Upload Image
-            $path = $request->file( 'member_signature' )->storeAs( 'public/members/signatures', $signature );
-        } else {
-            $signature = 'NULL';
-        }
-        #END::Handle File Upload Registration Form
+        foreach ($request->inputs as $index => $input) {
+            if ($request->hasFile('dep_photo')) {
+                // foreach ($dep_photos as $index => $dep_photo) {
+                    $filenameWithExt = $dep_photo[$index]->getClientOriginalName();
+                    // Get just filename
+                    $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
+                    //Get just ext
+                    $extension = $dep_photo[$index]->getClientOriginalExtension();
+                    // Create new Filename
+                    $newfilename = 'MEMDEPPHOTO_' . date( 'y' );
+                    // FileName to Store
+                    $profile_photo = $newfilename . '_' . time() . '.' . $extension;
+                    // Upload Image
+                    $path = $dep_photo[$index]->storeAs( 'public/members/dependants/photo', $profile_photo );
+                // }
+                
+            } else {
+                $profile_photo = 'NULL';
+            }
+            // Check for member Dependant individual ID photo upload
+            if ( $request->hasFile( 'dep_birthcert' ) ) {
+                $filenameWithExt = $dep_birthcert[$index]->getClientOriginalName();
+                // Get just filename
+                $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
+                //Get just ext
+                $extension = $dep_birthcert[$index]->getClientOriginalExtension();
+                // Create new Filename
+                $newfilename = 'MEMDEPCERT_' . date( 'y' );
+                // FileName to Store
+                $depbirthcert_attachment = $newfilename . '_' . time() . '.' . $extension;
+                // Upload Image
+                $path = $dep_photo[$index]->storeAs( 'public/members/dependants/certificates', $depbirthcert_attachment );
+            } else {
+                $depbirthcert_attachment = 'NULL';
+            }
+            // Check for member individual ID photo upload
+            if ( $request->hasFile( 'dep_marriagecert' ) ) {
+                $filenameWithExt = $dep_marriagecert[$index]->getClientOriginalName();
+                // Get just filename
+                $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
+                //Get just ext
+                $extension = $dep_marriagecert[$index]->getClientOriginalExtension();
+                // Create new Filename
+                $newfilename = 'MEMDEPMCERT_' . date( 'y' );
+                // FileName to Store
+                $marriagecert_attachment = $newfilename . '_' . time() . '.' . $extension;
+                // Upload Image
+                $path = $dep_marriagecert[$index]->storeAs( 'public/members/dependants/certificates', $marriagecert_attachment );
+            } else {
+                $marriagecert_attachment = 'NULL';
+            }
+           
+            #END::Handle File Upload Registration Form
 
+            $dependant = new MemberDependant;
+            $dependant->member_id       = $request->member_id;
+            $dependant->relationship    = $input['dep_relationship'];
+            $dependant->fname           = $input['dep_firstname'];
+            $dependant->mname           = $input['dep_midname'];
+            $dependant->lname           = $input['dep_lastname'];
+            $dependant->gender          = $input['dep_gender'];
+            $dependant->dob             = $input['dep_dob'];
+            $dependant->phone       = "(255)765-300-208";
+            $dependant->occupation      = $input['dep_occupation'];
+            $dependant->vital_status    = $input['dep_vital_status'];
+            $dependant->picture         = $profile_photo;
+            $dependant->marriagecert    = $marriagecert_attachment;
+            $dependant->birthcert       = $depbirthcert_attachment;
+            $dependant->created_by      = auth()->user()->id;
+            $dependant->save();
+        }
+        toastr();
+        return redirect('members/list')->with(['success'=>'Member with Dependants have been successfully created!']);
     }
     public function ajaxRowDynamicValidation(Request $ajaxreq){
         #Taking all POST requests from the form
@@ -98,31 +111,24 @@ class MemberController extends Controller {
             'inputs.*' => 'array',
             'inputs.*.dep_relationship' => 'required|not_in:0',
             'inputs.*.dep_gender' => 'required|not_in:0',
+            'inputs.*.dep_vital_status' => 'required|not_in:0',
+            'inputs.*.dep_occupation' => 'required|not_in:0',
             'inputs.*.dep_firstname' => 'required',
             'inputs.*.dep_midname' => 'required',
             'inputs.*.dep_lastname' => 'required',
-            'inputs.*.dep_dob' => 'required',
-
-        ],  
-        [   'inputs.*.dep_firstname.required' => 'First name is required',
+            'inputs.*.dep_dob' => 'required',],  
+            ['inputs.*.dep_firstname.required' => 'First name is required',
             'inputs.*.dep_gender.required','inputs.*.dep_gender.not_in' => 'Gender is required',
+            'inputs.*.dep_vital_status.required','inputs.*.dep_vital_status.not_in' => 'Vital Status is required',
+            'inputs.*.dep_occupation.required','inputs.*.dep_occupation.not_in' => 'Occupation is required',
             'inputs.*.dep_midname.required' => 'Middle name is required',
             'inputs.*.dep_relationship.required','inputs.*.dep_relationship.not_in' => 'Relationship is required',
             'inputs.*.dep_dob.required' => 'Date of Birth is required',
-            'inputs.*.dep_lastname.required' => 'Last name is required',
-
-        ]
-
-
-    );
-    if($validator->fails()){
-        return response()->json(['errors' => $validator->errors()->toArray()]);
-    }else{
-        return response()->json(['message' => $ajaxreq->all()]);
-
-    }
-
-
+            'inputs.*.dep_lastname.required' => 'Last name is required',]
+        );
+        if($validator->fails()){
+            return response()->json(['errors' => $validator->errors()->toArray()]);
+        }
     }
     public function submitMemberRegistration(Request $request) {
         #Taking all POST requests from the form
@@ -277,7 +283,7 @@ class MemberController extends Controller {
 
     }
     public function members() {
-        $members = Member::limit(500)->get();
+        $members = Member::latest()->take(500)->get();
         return view('members.members_list', ['members'=>$members]);
     }
     public function regMemberView() {
