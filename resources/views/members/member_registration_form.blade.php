@@ -273,14 +273,14 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="field-1" class="control-label">Scheme joining date</label>
-                                                        <input type="text" name="joining_date" class="form-control form-control-sm humanfd-datepicker" value="{{old('joining_date')}}" placeholder="Date of Birth">
+                                                        <input type="text" name="joining_date" class="form-control form-control-sm humanfd-datepicker" value="{{old('joining_date')}}" placeholder="Scheme joining of date">
                                                         @if ($errors->registerMemberDetails->has('joining_date')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('joining_date') }}</small></strong></span>@endif
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="field-1" class="control-label">Service start Date</label>
-                                                        <input type="text" name="service_date" class="form-control form-control-sm humanfd-datepicker" value="{{old('service_date')}}" placeholder="Date of Birth">
+                                                        <input type="text" name="service_date" class="form-control form-control-sm humanfd-datepicker" value="{{old('service_date')}}" placeholder="Date of Service start date">
                                                         @if ($errors->registerMemberDetails->has('service_date')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('service_date') }}</small></strong></span>@endif
                                                     </div>
                                                 </div>
@@ -441,6 +441,7 @@
                                 <form method="POST" id="formDependants" enctype="multipart/form-data" action="{{url('/member/dependants/submit')}}">
                                     @csrf
                                     <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <table id="dynamicAddRemove" class="w-100"></table>
                                         <table class="w-100">
                                             <tr>
                                                 <td class="form-group col-lg-11 col-md-11 col-sm-12">
@@ -451,9 +452,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Relationship</label>
                                                                         <select class="form-control relationshipSelect commonInputClass" name="inputs[0][dep_relationship]" data-toggle="select2">
-                                                                            <option value="0">--Select Relationship--</option>
-                                                                            <option value="SPOUSE">SPOUSE</option>
-                                                                            <option value="CHILD">CHILD</option>
+                                                                            <option value="FATHER" selected>FATHER</option>
                                                                         </select>
                                                                         <div><span class="text-danger" role="alert"></span></div>
                                                                     </div>
@@ -463,8 +462,7 @@
                                                                         <label for="field-4" class="control-label">Gender</label>
                                                                         <select class="form-control px-0 commonInputClass" name="inputs[0][dep_gender]" data-toggle="select2">
                                                                             <option value="0">--Select Gender--</option>
-                                                                            <option value="MALE">MALE</option>
-                                                                            <option value="FEMALE">FEMALE</option>
+                                                                            <option value="MALE" selected>MALE</option>
                                                                         </select>
                                                                         <div><span class="text-danger" role="alert"></span></div>
                                                                     </div>
@@ -472,45 +470,61 @@
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-4" class="control-label">Firstname</label>
-<<<<<<< HEAD
-                                                                        <input type="text" name="inputs[0][dep_firstname]" id="dep0" class="form-control form-control-sm commonInputClass" value="{{old('dep_firstname')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">
-=======
                                                                         <input type="text" name="inputs[0][dep_firstname]" id="dep0" class="form-control form-control-sm" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">
+                                                                        <input type="text" name="member_id" value="{{$member_data?$member_data->id:0;}}" class="form-control form-control-sm" hidden>
                                                                         <span class="text-danger" role="alert"></span>
->>>>>>> 3a8980e496b7078eee3e1cebf6c23e6bc8573335
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-5" class="control-label">Middlename</label>
-<<<<<<< HEAD
-                                                                        <input type="text" name="inputs[0][dep_midname]" id="zone" class="form-control form-control-sm commonInputClass" value="{{old('dep_midname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">
-                                                                        <span class="zoneErrorTxt text-danger" role="alert"></span>
-=======
                                                                         <input type="text" name="inputs[0][dep_midname]" id="zone" class="form-control form-control-sm"  oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">
                                                                         <span class="text-danger" role="alert"></span>
->>>>>>> 3a8980e496b7078eee3e1cebf6c23e6bc8573335
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
                                                                         <label for="field-5" class="control-label">Last name</label>
-<<<<<<< HEAD
-                                                                        <input type="text" name="inputs[0][dep_lastname]" id="zone" class="form-control form-control-sm commonInputClass" value="{{old('dep_lastname')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">
-=======
                                                                         <input type="text" name="inputs[0][dep_lastname]" id="zone" class="form-control form-control-sm" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">
->>>>>>> 3a8980e496b7078eee3e1cebf6c23e6bc8573335
                                                                         <span class="zoneErrorTxt text-danger" role="alert"></span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
+                                                                        <label for="field-5" class="control-label">Phone</label>
+                                                                        <input type="text" name="inputs[0][dep_phone]" class="form-control form-control-sm" placeholder="e.g 255 717 000 052" data-toggle="input-mask" data-mask-format="(000) 000-000-000" >
+                                                                        <span class="text-danger" role="alert"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-5" class="control-label">Occupation</label>
+                                                                        <select class="form-control px-0" name="inputs[0][dep_occupation]" data-toggle="select2">
+                                                                            <option value="0">--Select Gender--</option>
+                                                                            <option value="FARMER">FARMER</option>
+                                                                            <option value="UNEMPLOYED">UNEMPLOYED</option>
+                                                                            <option value="RETIRED">RETIRED</option>
+                                                                            <option value="EMPLOYED">EMPLOYED</option>
+                                                                            <option value="BUSINESS">BUSINESS</option>
+                                                                            <option value="PASTOR">PASTOR</option>
+                                                                            <option value="NONE">NONE</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-5" class="control-label">Vital Status</label>
+                                                                        <select class="form-control px-0" name="inputs[0][dep_vital_status]" data-toggle="select2">
+                                                                            <option value="0">--Select Status--</option>
+                                                                            <option value="ALIVE">ALIVE</option>
+                                                                            <option value="DECEASED">DECEASED</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
                                                                         <label for="field-5" class="control-label">Date of Birth</label>
-<<<<<<< HEAD
-                                                                        <input type="text" name="inputs[0][dep_dob]" class="form-control form-control-sm dep_dobdatepicker commonInputClass" value="{{old('dep_dob')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd MM yyyy" placeholder="DOB" autocomplete="off">
-=======
-                                                                        <input type="text" name="inputs[0][dep_dob]" class="form-control form-control-sm dep_dobdatepicker"  data-provide="datepicker" data-date-autoclose="true" data-date-format="dd MM yyyy" placeholder="DOB" autocomplete="off">
->>>>>>> 3a8980e496b7078eee3e1cebf6c23e6bc8573335
+                                                                        <input type="text" name="inputs[0][dep_dob]" class="form-control form-control-sm dep_parentdobdatepicker"  data-provide="datepicker" data-date-autoclose="true" data-date-format="dd MM yyyy" placeholder="DOB" autocomplete="off">
                                                                         <span class="text-danger" role="alert"> </span>
                                                                     </div>
                                                                 </div>
@@ -559,9 +573,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Relationship</label>
                                                                         <select class="form-control relationshipSelect commonInputClass" name="inputs[1][dep_relationship]" data-toggle="select2">
-                                                                            <option value="0">--Select Relationship--</option>
-                                                                            <option value="SPOUSE">SPOUSE</option>
-                                                                            <option value="CHILD">CHILD</option>
+                                                                            <option value="MOTHER" selected>MOTHER</option>
                                                                         </select>
                                                                         <div><span class="text-danger" role="alert"></span></div>
                                                                     </div>
@@ -571,11 +583,9 @@
                                                                         <label for="field-4" class="control-label">Gender</label>
                                                                         <select class="form-control px-0 commonInputClass" name="inputs[1][dep_gender]" data-toggle="select2">
                                                                             <option value="0">--Select Gender--</option>
-                                                                            <option value="MALE">MALE</option>
-                                                                            <option value="FEMALE">FEMALE</option>
+                                                                            <option value="FEMALE" selected>FEMALE</option>
                                                                         </select>
                                                                         <span class="text-danger" role="alert"></span>
-
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-lg-6">
@@ -601,8 +611,40 @@
                                                                 </div>
                                                                 <div class="col-lg-6">
                                                                     <div class="form-group">
+                                                                        <label class="control-label">Phone</label>
+                                                                        <input type="text" name="inputs[1][dep_phone]" class="form-control form-control-sm" placeholder="e.g 255 717 000 052" data-toggle="input-mask" data-mask-format="(000) 000-000-000">
+                                                                        <span class="text-danger" role="alert"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-5" class="control-label">Occupation</label>
+                                                                        <select class="form-control px-0" name="inputs[1][dep_occupation]" data-toggle="select2">
+                                                                            <option value="0">--Select Gender--</option>
+                                                                            <option value="FARMER">FARMER</option>
+                                                                            <option value="UNEMPLOYED">UNEMPLOYED</option>
+                                                                            <option value="RETIRED">RETIRED</option>
+                                                                            <option value="EMPLOYED">EMPLOYED</option>
+                                                                            <option value="BUSINESS">BUSINESS</option>
+                                                                            <option value="PASTOR">PASTOR</option>
+                                                                            <option value="NONE">NONE</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-5" class="control-label">Vital Status</label>
+                                                                        <select class="form-control px-0" name="inputs[1][dep_vital_status]" data-toggle="select2">
+                                                                            <option value="0">--Select Status--</option>
+                                                                            <option value="ALIVE">ALIVE</option>
+                                                                            <option value="DECEASED">DECEASED</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="form-group">
                                                                         <label for="field-5" class="control-label">Date of Birth</label>
-                                                                        <input type="text" name="inputs[1][dep_dob]" class="form-control form-control-sm dep_dobdatepicker commonInputClass" value="{{old('dep_dob')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd M yyyy" placeholder="Date of Birth" autocomplete="off">
+                                                                        <input type="text" name="inputs[1][dep_dob]" class="form-control form-control-sm dep_parentdobdatepicker" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd M yyyy" placeholder="Date of Birth" autocomplete="off">
                                                                         <span class="text-danger" role="alert"> </span>
                                                                     </div>
                                                                 </div>
@@ -641,7 +683,6 @@
                                                 </td>
                                             </tr>
                                         </table>
-                                        <table id="dynamicAddRemove" class="w-100"></table>
                                         <div class="col-md-12 px-4 dropdown-divider"></div>
                                         <div class="col-md-12 mb-4">
                                             <button type="submit" id="submit-button" class="btn btn-info waves-effect waves-light float-right formDependants">Submit</button>
@@ -671,100 +712,145 @@
 <!-- Datatables init -->
 <script src="{{asset('assets/libs/sweetalert2/sweetalert2.min.js')}}"></script>
 <script type="text/javascript">
-    var b = 2;
-    $('#addFields').on('click', function() {
-        $("#addRemoveBedRow").prepend(
-            '<tr>' +
-                '<td class="form-group col-lg-11 col-md-11 col-sm-12">' +
-                '<div class="row font-12 border rounded pt-2 mt-2" style="background-color:#fefefe;">' +
-                '<div class="col-lg-6">' +
-                '<div class="row">' +
-                '<div class="col-lg-6">' +
-                '<div class="form-group">' +
-                '<label for="field-1" class="control-label">Relationship</label>' +
-                '<select class="form-control relationshipSelect" name="inputs['+b+'][dep_relationship]" data-toggle="select2">' +
-                '<option value="0">--Select Relationship--</option>' +
-                '<option value="SPOUSE">SPOUSE</option>' +
-                '<option value="CHILD">CHILD</option>' +
-                '</select>' +
-                '<div><span class="text-danger" role="alert"></span></div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="col-lg-6">' +
-                '<div class="form-group">' +
-                '<label for="field-4" class="control-label">Gender</label>' +
-                '<select class="form-control px-0" name="inputs['+b+'][dep_gender]" data-toggle="select2">' +
-                '<option value="0">--Select Gender--</option>' +
-                '<option value="MALE">MALE</option>' +
-                '<option value="FEMALE">FEMALE</option>' +
-                '</select>' +
-                '</div>' +
-                '</div>' +
-                '<div class="col-lg-6">' +
-                '<div class="form-group">' +
-                '<label for="field-4" class="control-label">Firstname</label>' +
-                '<input type="text" name="inputs['+b+'][dep_firstname]" id="depFirstname" class="form-control form-control-sm" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="First name">' +
-                'span class="depFirstnameErrorTxt text-danger" role="alert"></span>' +
-                '</div>' +
-                '</div>' +
-                '<div class="col-lg-6">' +
-                '<div class="form-group">' +
-                '<label for="field-5" class="control-label">Middlename</label>' +
-                '<input type="text" name="inputs['+b+'][dep_midname]" id="zone" class="form-control form-control-sm" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">' +
-                '<span class="text-danger" role="alert"></span>' +
-                '</div>' +
-                '</div>' +
-                '<div class="col-lg-6">' +
-                '<div class="form-group">' +
-                '<label for="field-5" class="control-label">Last name</label>' +
-                '<input type="text" name="inputs['+b+'][dep_lastname]" id="zone" class="form-control form-control-sm" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">' +
-                '<span class="text-danger" role="alert"></span>' +
-                '</div>' +
-                '</div>' +
-                '<div class="col-lg-6">' +
-                '<div class="form-group">' +
-                '<label for="field-5" class="control-label">Date of Birth</label>' +
-                '<input type="text" name="inputs['+b+'][dep_dob]" class="form-control form-control-sm dep_dobdatepicker" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd M yyyy" placeholder="Date of Birth" autocomplete="off">' +
-                '<span class="text-danger" role="alert"> </span>' +
-                '</div>' +
-                '/div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="col-lg-6">' +
-                '<div class="row">' +
-                '<div class="col-lg-6">' +
-                '<div class="form-group">' +
-                '<label for="field-1" class="control-label">Dependant Photo</label>' +
-                '<div class="file-loading">' +
-                '<input class="dep_attachments" name="dep_photo[]" type="file">' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="col-lg-6" id="divBirthCert">' +
-                '<div class="form-group">' +
-                '<label for="field-1" class="control-label">Birth Certificate</label>' +
-                '<div class="file-loading">' +
-                '<input class="dep_attachments" id="inputBirthCert" name="dep_birthcert[]" type="file">' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="col-lg-6" id="divmarriageCert" style="display:none;">' +
-                '<div class="form-group">' +
-                '<label for="field-1" class="control-label">Marriage Certificate</label>' +
-                '<div class="file-loading">' +
-                '<input class="dep_attachments" id="inputMarriageCert" name="dep_marriagecert[]" type="file">' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</td>' +
-            '</tr>'
-        );
+    $(document).ready(function(){
 
-        $("#addedRowSelect2Input" + b).find(".relationshipSelect").select2();
-        b++;
+        var b = 2;
+        $('#addFields').on('click', function() {
+            $("#dynamicAddRemove").prepend(
+                '<tr>' +
+                    '<td class="form-group col-lg-11 col-md-11 col-sm-12">' +
+                    '<div class="row font-12 border rounded pt-2 my-2" style="background-color:#fefefe;">' +
+                    '<div class="col-lg-6">' +
+                    '<div class="row">' +
+                    '<div class="col-lg-6">' +
+                    '<div class="form-group">' +
+                    '<label for="field-1" class="control-label">Relationship</label>' +
+                    '<select class="form-control SelectRow" name="inputs['+b+'][dep_relationship]" data-toggle="select2">' +
+                    '<option value="0">--Select Relationship--</option>' +
+                    '<option value="SPOUSE">SPOUSE</option>' +
+                    '<option value="CHILD">CHILD</option>' +
+                    '</select>' +
+                    '<div><span class="text-danger" role="alert"></span></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-lg-6">' +
+                    '<div class="form-group">' +
+                    '<label for="field-4" class="control-label">Gender</label>' +
+                    '<select class="form-control px-0 SelectRow" name="inputs['+b+'][dep_gender]" data-toggle="select2">' +
+                    '<option value="0">--Select Gender--</option>' +
+                    '<option value="MALE">MALE</option>' +
+                    '<option value="FEMALE">FEMALE</option>' +
+                    '</select>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-lg-6">' +
+                    '<div class="form-group">' +
+                    '<label for="field-4" class="control-label">Firstname</label>' +
+                    '<input type="text" name="inputs['+b+'][dep_firstname]" id="depFirstname" class="form-control form-control-sm" oninput="this.value = this.value.toUpperCase()" placeholder="First name">' +
+                    '<span class="depFirstnameErrorTxt text-danger" role="alert"></span>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-lg-6">' +
+                    '<div class="form-group">' +
+                    '<label for="field-5" class="control-label">Middlename</label>' +
+                    '<input type="text" name="inputs['+b+'][dep_midname]" id="zone" class="form-control form-control-sm" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Middle name">' +
+                    '<span class="text-danger" role="alert"></span>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-lg-6">' +
+                    '<div class="form-group">' +
+                    '<label for="field-5" class="control-label">Last name</label>' +
+                    '<input type="text" name="inputs['+b+'][dep_lastname]" id="zone" class="form-control form-control-sm" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Last name">' +
+                    '<span class="text-danger" role="alert"></span>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-lg-6"><div class="form-group"><label class="control-label">Phone</label>'+
+                        '<input type="text" name="inputs['+b+'][dep_phone]" class="form-control form-control-sm" placeholder="e.g 255 717 000 052" data-toggle="input-mask" data-mask-format="(000) 000-000-000">'+
+                        '<span class="text-danger" role="alert"></span>'+
+                    '</div></div>'+
+                    '<div class="col-lg-6"><div class="form-group"><label for="field-5" class="control-label">Occupation</label>' +
+                        '<select class="form-control px-0 SelectRow" name="inputs['+b+'][dep_occupation]" data-toggle="select2">' +
+                            '<option value="0">--Select Gender--</option>'+
+                            '<option value="UNEMPLOYED">UNEMPLOYED</option><option value="STUDENT">STUDENT</option><option value="FARMER">FARMER</option><option value="RETIRED">RETIRED</option><option value="EMPLOYED">EMPLOYED</option><option value="BUSINESS">BUSINESS</option><option value="PASTOR">PASTOR</option><option value="NONE">NONE</option>'+
+                        '</select>'+
+                    '</div></div>'+
+                    '<div class="col-lg-6">' +
+                    '<div class="form-group">' +
+                    '<label for="field-5" class="control-label">Date of Birth</label>' +
+                    '<input type="text" name="inputs['+b+'][dep_dob]" class="form-control form-control-sm nonParentDep" placeholder="Date of Birth"  autocomplete="off">' +
+                    '<span class="text-danger" role="alert"> </span>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-lg-6">' +
+                    '<div class="row">' +
+                    '<div class="col-lg-6">' +
+                    '<div class="form-group">' +
+                    '<label for="field-1" class="control-label">Dependant Photo</label>' +
+                    '<div class="file-loading">' +
+                    '<input class="dep_attachments" name="dep_photo[]" type="file">' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-lg-6" id="divBirthCert">' +
+                    '<div class="form-group">' +
+                    '<label for="field-1" class="control-label">Birth Certificate</label>' +
+                    '<div class="file-loading">' +
+                    '<input class="dep_attachments" id="inputBirthCert" name="dep_birthcert[]" type="file">' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-lg-6" id="divmarriageCert" style="display:none;">' +
+                    '<div class="form-group">' +
+                    '<label for="field-1" class="control-label">Marriage Certificate</label>' +
+                    '<div class="file-loading">' +
+                    '<input class="dep_attachments" id="inputMarriageCert" name="dep_marriagecert[]" type="file">' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</td>' +
+                    '<td class="form-group col-lg-1 col-md-1 col-sm-12 text-right ml-auto">'+
+                        '<a id="removeFields" class="btn btn-icon btn-round btn-xs mb-2 btn-danger white" style="color:#fff"><em class="mdi mdi-close"></em></a>'+
+                   '</td>'+
+                '</tr>'
+            );
+           $(".SelectRow").select2();
+                       // Dynamic row Attachments JS
+            $(".dep_attachments").fileinput({
+                frameClass: 'my-frame-class',
+                previewClass: 'depattachment-file-input',
+                removeLabel: '',
+                initialPreviewAsData: true,
+                showUpload: false,
+                showCaption: false,
+                dropZoneEnabled: false,
+            });
+
+            let enddate="-18Y";
+            var input ='[name="inputs['+b+'][dep_dob]"]';
+           $('select[name="inputs['+b+'][dep_relationship]"]').change(function() {
+                var realationType = $(this).find(":selected").val();
+                if (realationType == "SPOUSE") {
+                    initDatepicker(enddate,null,input );
+    
+                }if(realationType == "CHILD") {
+                    enddate='today';
+                    var startdate="-21Y";
+                    initDatepicker(enddate,startdate,input );
+
+                }
+            });
+ 
+
+
+    
+            b++;
+        });
+
     });
 </script>
 <script type="text/javascript">
@@ -779,7 +865,6 @@
                 data: formData,
                 success: function(response) {
                     // handle successful response
-                    alert("response");
                     var inputs_errors = response.errors;
                     if (inputs_errors) {
                         $.each(inputs_errors, function(field, messages) {
@@ -787,48 +872,33 @@
                             var name = field.split(".")[0] + "[" + field.split(".")[1] + "][" + field.split(".")[2] + "]";
                             $('input[name="' + name + '"], select[name="' + name + '"]').closest('div').find('span.text-danger').html(messages);
                         });
-                    } else {
-                        $(this).unbind('submit');
-                    }
-
-        $('.commonInputClass').each(function(index, element){
-                //var formData = $(this).serialize();
-                var inputValue=$(this).val();
-
-                alert(inputValue);
-                $.ajax({
-                    url: '/ajax/dynamic/validation',
-                    type: 'POST',
-                    data: {
-                        inputValue : inputValue,
-                        '_token' : '_token': '{{ csrf_token() }}'
-                    },
-                    success: function(response){
-                        alert('aaaa');
-                        // If the validation is successful, remove any previous error messages
-
-                    },
-                    error: function(xhr){
-                        // If the validation fails, display the error message next to the corresponding input
-                        alert('bbbb');
-                    }
-                    alert('cccc');
-                });
+                    } else { $('#formDependants').unbind('submit');}
+                }
             });
         });
     });
 </script>
 
-
-
 <!-- Datatables init -->
 <script type="text/javascript">
+
+    function initDatepicker(end_date,start_date, inputName){
+        $(inputName).datepicker('destroy');
+        $(inputName).datepicker({
+                            startDate:start_date,
+                            endDate:end_date,
+                            format: "dd MM yyyy",
+                            autoclose: true,
+                        });
+
+    }
+
     $('#member_dobdatepicker').datepicker({
         endDate: "-18Y"
     });
-    $('.dep_dobdatepicker').datepicker({
-        startDate: "-21Y",
-        endDate: new Date()
+
+    $('.dep_parentdobdatepicker').datepicker({
+        endDate: "-21Y",
     });
 </script>
 <script>
@@ -858,41 +928,7 @@
     });
     // });
     //END:: Relationship select
-</script>
-<script type="text/javascript">
-    // CONTROL TO ACTIVATE THE NAV TABS AFTER REDIRECTION OF THE FORM
-    var formResponse = "<?= $response_message; ?>";
-    // if (formResponse == "SUCCESS") {
-    //      // Get the nav item and content element
-    //     const navItem = document.querySelector('li#LimemberDependantsDetails a');
-    //     const contentElement = document.querySelector('div.tab-content div#memberDependantsDetails');
 
-    //     // Add the 'active' class to the nav item
-    //     navItem.classList.add('active');
-
-    //     // Add the 'show' and 'active' classes to the content element
-    //     contentElement.classList.add('show');
-    //     contentElement.classList.remove('disabled');
-    //     contentElement.classList.add('active');
-    //     // Renove the active class for Member details Tab elements
-    //     $('li#LimemberDetails a').removeClass("active");
-    //     $('div.tab-content div#memberDetails').removeClass("active");
-    //     $('li#LimemberDetails a').addClass("disabled");
-
-    // }else{
-    //     // Get the nav item and content element
-    //     const navItem = document.querySelector('li#LimemberDetails a');
-    //     const contentElement = document.querySelector('div.tab-content div#memberDetails');
-
-    //     // Add the 'active' class to the nav item
-    //     navItem.classList.add('active');
-
-    //     // Add the 'show' and 'active' classes to the content element
-    //     contentElement.classList.add('show');
-    //     contentElement.classList.add('active');
-
-    // }
-</script>
 <script type="text/javascript">
     $(".district_statusChangeLink").click(function() {
         var district_id = $(this).attr("data-district");
