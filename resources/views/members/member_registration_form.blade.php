@@ -127,8 +127,7 @@
                             </a>
                         </li>
                         <li class="nav-item" id="LimemberDependantsDetails">
-                            {{--<a href="#memberDependantsDetails" {!! ($response_message=='SUCCESS')? ' data-toggle="tab" aria-expanded="true" class="nav-link active"' : ' class="nav-link disabled" ' ; !!}>--}}
-                            <a href="#memberDependantsDetails" data-toggle="tab" aria-expanded="true" class="nav-link ">
+                            <a href="#memberDependantsDetails" {!! ($response_message=='SUCCESS')? ' data-toggle="tab" aria-expanded="true" class="nav-link active"' : ' class="nav-link disabled" ' ; !!}>
                                 <i class="flaticon flaticon-community mr-1"></i>
                                 Dependants Details
                             </a>
