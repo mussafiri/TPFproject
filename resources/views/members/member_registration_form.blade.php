@@ -573,7 +573,7 @@
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Relationship</label>
                                                                         <select class="form-control relationshipSelect commonInputClass" name="inputs[1][dep_relationship]" data-toggle="select2">
-                                                                            <option value="MOTHER">MOTHER</option>
+                                                                            <option value="MOTHER" selected>MOTHER</option>
                                                                         </select>
                                                                         <div><span class="text-danger" role="alert"></span></div>
                                                                     </div>
