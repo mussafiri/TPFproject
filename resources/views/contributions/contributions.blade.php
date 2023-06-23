@@ -79,20 +79,19 @@
                                         <div class="tab-content">
                                             <div class="tab-pane active" id="active">
                                                 <div class="table-responsive">
-                                                    <table class="datatable-buttons table font-11 table-striped dt-responsive nowrap w-100">
+                                                    <table class="datatable-buttons table font-11 table-striped w-100">
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
-                                                                <th>Section</th>
-                                                                <th>Contributor Period</th>
+                                                                <th style="width:14%">Section</th>
+                                                                <th style="width:10%">Date</th>
+                                                                <th>Amount <sup class="text-muted"><small>TZS</small></sup></th>
+                                                                <th>Pay Mode</th>
                                                                 <th>Contributors</th>
                                                                 <th>Members</th>
-                                                                <th>Amount <sup class="text-muted"><small>TZS</small></sup></th>
                                                                 <th>Pay Proof</th>
                                                                 <th>Process Status</th>
-                                                                <th>Created at</th>
-                                                                <th>Created by</th>
-                                                                <th></th>
+                                                                <th>Action</th>
                                                             </tr>
                                                         </thead>
 
@@ -102,12 +101,13 @@
                                                             <tr>
                                                                 <td>{{$n}}.</td>
                                                                 <td class="text-muted font-9">{{$data->section->name}}</td>
-                                                                <td>{{$data->name}}</td>
-                                                                <td>{{$data->contributorType->name}}</td>
-                                                                {{-- <td>{{$data->contributorSection->district->zone->name}}</td>
-                                                                <td>{{$data->contributorSection->district->name}}</td> --}}
-                                                                {{-- <td>{{$data->contributorSection->name}}</td> --}}
-                                                                <td><span class="badge badge-outline-{{$data->status=='ACTIVE'?'success':'danger'}} badge-pill">{{$data->status}}</span></td>
+                                                                <td>{{date('d M, Y', strtotime($data->contribution_period))}}</td>
+                                                                <td>{{number_format($data->contribution_amount,2)}}</td>
+                                                                <td><small>{{$data->payMode->name}}</small></td>
+                                                                <td class="text-center">{{$data->total_contributors}}</td>
+                                                                <td class="text-center">{{$data->total_members}}</td>
+                                                                <td class="text-center"> <a class="font-14" href="{{Storage::url('contributionPaymentProof/'.$data->payment_proof)}}" download="{{Storage::url('contributionPaymentProof/'.$data->payment_proof)}}" download title="Download Payment Proof" target="_blank"><i class="mdi mdi-cloud-download-outline"></i></a></td>
+                                                                <td><span class="badge badge-outline-{{$data->processing_status=='ACTIVE'?'success':'info'}} badge-pill">{{$data->processing_status}}</span></td>
                                                                 <td>
                                                                     <div class="btn-group dropdown float-right">
                                                                         <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-light btn-sm"
@@ -115,6 +115,9 @@
                                                                             <i class='mdi mdi-dots-horizontal font-18'></i>
                                                                         </a>
                                                                         <div class="dropdown-menu dropdown-menu-right">
+                                                                            <a href="{{url('contributions/details/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
+                                                                                <i class='mdi mdi-eye-outline mr-1'></i>View
+                                                                            </a>
                                                                             <a href="{{url('contributions/edit/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
                                                                                 <i class='mdi mdi-pencil-outline mr-1'></i>Edit
                                                                             </a>

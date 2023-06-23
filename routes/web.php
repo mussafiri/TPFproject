@@ -110,7 +110,6 @@ Route::middleware('auth')->group(function () {
     //END:: Contributor
 
     Route::prefix('ajax')->group(function(){
-
         #Start::zones routes
         Route::get('/get/zone/old/data', [ZoneController::class, 'ajaxGetZoneOldData'])->name('ajaxGetZoneOldData');
         Route::get('/get/zone/data', [ZoneController::class, 'zoneUpdateAjax']);
@@ -148,6 +147,7 @@ Route::middleware('auth')->group(function () {
         #Start:: Contibutions routes
         Route:: post('/get/section/contribution/data', [ContributionController::class, 'ajaxGetSectionContributionData']);
         Route:: post('/member/contribution/validation', [ContributionController::class, 'ajaxValidateSubmitContribution']);
+        Route:: post('/compute/edit/membercontribution', [ContributionController::class, 'ajaxComputeEditMemberContribution']);
         #End:: Contibutions routes
     });
 

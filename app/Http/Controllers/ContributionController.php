@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Lib\Common;
 use App\Models\Contribution;
 use App\Models\ContributionDetail;
 use App\Models\Contributor;
 use App\Models\ContributorCatContrStructure;
+use App\Models\ContributorIncomeTracker;
 use App\Models\ContributorMember;
+use App\Models\MemberMonthlyIncome;
 use App\Models\PaymentMode;
 use App\Models\Scheme;
 use App\Models\Section;
@@ -54,21 +57,22 @@ class ContributionController extends Controller {
             $totalContribution = $memberData->getMemberContributionAmount( $memberData->contributor_id, $memberData->member_id )+$memberData->getContributorContributionAmount( $memberData->contributor_id, $memberData->member_id );
 
             $memberList .= '<tr><td>'.$counter.'.</td>
-                        <td class="text-muted font-9 px-0">'.$memberData->contributor->name.'<input type="hidden" name="contributor[]" value="'.$memberData->contributor_id.'"></td>
-                        <td>'.$memberData->member->fname.' '.$memberData->member->mname.' '.$memberData->member->lname.'<input type="hidden" name="member[]" value="'.$memberData->member_id.'"></td>
-                        <td> <input type="text" class="monthlyIncomeInput'.$counter.' col-sm-12 px-1 border-1 border-light rounded autonumber" data-id="'.$counter.'" name="memberMonthlyIncome[]" value="'.number_format( $memberData->getMemberMonthlyIncome( $memberData->member_id ), 2 ).'" required> </td>
-                        <td> <input type="text" class="memberContributionInput'.$counter.' col-sm-12 px-1 border-1 border-light rounded autonumber" data-id="'.$counter.'" name="memberContribution[]" value="'.number_format( $memberData->getMemberContributionAmount( $memberData->contributor_id, $memberData->member_id ), 2 ).'" required></td>
-                        <td> <input type="text" class="contributorContributionInput'.$counter.' col-sm-12 px-1 border-1 border-light rounded autonumber" data-id="'.$counter.'" name="contributorContribution[]" value="'.number_format( $memberData->getContributorContributionAmount( $memberData->contributor_id, $memberData->member_id ), 2 ).'" required></td>
-                        <td> <input type="text" class="topupInput'.$counter.' col-sm-12 px-1 border-1 border-light rounded autonumber" data-id="'.$counter.'" name="topup[]" value="'.number_format( 0, 2 ).'" required></td>
-                        <td> <span class="totalSpan'.$counter.'">'.number_format( $totalContribution, 2 ).'</span> <input type="hidden" class="total totalInput'.$counter.' border-light rounded" data-id="'.$counter.'" name="total[]" value="'.number_format( $totalContribution, 2 ).'" required></td>
-                        <td> <span id="status'.$counter.'" class="badge badge-outline-'.$statusBadge.' badge-pill">'.$memberData->status.'</span></td>
-                        <td>
-                            <div class="float-right">
-                                <a href="javascript:void(0);" class="text-blue btn btn-light btn-sm suspendContribution editButton'.$counter.'" aria-expanded="false" data-rowID="'.$counter.'">
-                                    <i class="mdi mdi-close-thick mr-1"></i>
-                                </a>
-                            </div>
-                        </td></tr>';
+                                <td class="text-muted font-9 px-0">'.$memberData->contributor->name.'<input type="hidden" name="contributor[]" value="'.$memberData->contributor_id.'"></td>
+                                <td>'.$memberData->member->fname.' '.$memberData->member->mname.' '.$memberData->member->lname.'<input type="hidden" name="member[]" value="'.$memberData->member_id.'"></td>
+                                <td> <span class="monthlyIncomeSpan'.$counter.'">'.number_format( $memberData->getMemberMonthlyIncome( $memberData->member_id ), 2 ).'</span> <input type="hidden" class="monthlyIncomeInput'.$counter.'" data-id="'.$counter.'" name="memberMonthlyIncome[]" value="'.number_format( $memberData->getMemberMonthlyIncome( $memberData->member_id ), 2 ).'" required>  <input type="hidden" class="contributorMonthlyIncomeInput'.$counter.'" data-id="'.$counter.'" name="contributorMonthlyIncome[]" value="'.$memberData->getContributorMonthlyIncome( $memberData->contributor_id ).'" required></td>
+                                <td> <span class="contributorContributionSpan'.$counter.'">'.number_format( $memberData->getContributorContributionAmount( $memberData->contributor_id, $memberData->member_id ), 2 ).'</span> <input type="hidden" class="contributorContributionInput'.$counter.' col-sm-12 px-1 border-1 border-light rounded contributorContrInput autonumber" data-id="'.$counter.'" data-memberID="'.$memberData->member_id.'" data-contributorID="'.$memberData->contributor_id.'" name="contributorContribution[]" value="'.number_format( $memberData->getContributorContributionAmount( $memberData->contributor_id, $memberData->member_id ), 2 ).'" required></td>
+                                <td> <input type="text" class="memberContributionInput'.$counter.' col-sm-12 px-1 border-1 border-light rounded memberContrInput autonumber" data-id="'.$counter.'" data-memberID="'.$memberData->member_id.'" data-contributorID="'.$memberData->contributor_id.'" name="memberContribution[]" value="'.number_format( $memberData->getMemberContributionAmount( $memberData->contributor_id, $memberData->member_id ), 2 ).'" required></td>
+                                <td> <input type="text" class="topupInput'.$counter.' col-sm-12 px-1 border-1 border-light rounded contrInputsTopup autonumber" data-id="'.$counter.'" data-memberID="'.$memberData->member_id.'" data-contributorID="'.$memberData->contributor_id.'" name="topup[]" value="'.number_format( 0, 2 ).'" required></td>
+                                <td> <span class="totalSpan'.$counter.'">'.number_format( $totalContribution, 2 ).'</span> <input type="hidden" class="total totalInput'.$counter.' border-light rounded" data-id="'.$counter.'" name="total[]" value="'.number_format( $totalContribution, 2 ).'" required></td>
+                                <td> <span id="status'.$counter.'" class="badge badge-outline-'.$statusBadge.' badge-pill">'.$memberData->status.'</span></td>
+                                <td>
+                                    <div class="float-right">
+                                        <a href="javascript:void(0);" class="text-blue btn btn-light btn-sm suspendContribution editButton'.$counter.'" aria-expanded="false" data-rowID="'.$counter.'">
+                                            <i class="mdi mdi-close-thick mr-1"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>';
             $counter++;
         }
 
@@ -98,6 +102,8 @@ class ContributionController extends Controller {
             'paymentDate'         => 'required',
             'paymentMode'         => 'required',
             'transactionReference'=> 'required',
+            'totalContributors'   => 'required',
+            'totalMembers'        => 'required',
         ], [ 'section.gt' => 'You must select Section' ] );
 
         if ( $valid->fails() ) {
@@ -139,18 +145,18 @@ class ContributionController extends Controller {
 
             //Start: insert into contribution
             $newContribution =  new Contribution;
-            $newContribution->section             = $request->section;
-            $newContribution->contribution_period = date( 'Y-m-d', strtotime( $request->contributionDate ) );
+            $newContribution->section_id          = $request->section;
+            $newContribution->contribution_period = date( 'Y-m', strtotime( $request->contributionDate ) );
             $newContribution->total_contributors  = $request->totalContributors;
             $newContribution->total_members       = $request->totalMembers;
-            $newContribution->contribution_amount = $request->contributionAmount;
+            $newContribution->contribution_amount = str_replace( ',', '', $request->contributionAmount );
             $newContribution->payment_mode_id     = $request->paymentMode;
             $newContribution->payment_ref_no      = $request->transactionReference;
             $newContribution->payment_proof       = $payment_proof;
             $newContribution->payment_date        = date( 'Y-m-d', strtotime( $request->paymentDate ) );
             $newContribution->processing_status   = 'PENDING';
             $newContribution->status              = 'ACTIVE';
-            $newContribution->create_by           = Auth::user()->id;
+            $newContribution->created_by           = Auth::user()->id;
             $newContribution->save();
             //End: insert into contribution
 
@@ -162,33 +168,67 @@ class ContributionController extends Controller {
             $contributorContribution = $request->contributorContribution;
             $topup = $request->topup;
             $totalContribution = $request->total;
-           
-            for ( $aa = 0; $aa < count( $totalContribution );
+
+            for ( $aa = 0; $aa < count( $memberMonthlyIncome );
             $aa++ ) {
                 $newContributionDetail = new ContributionDetail;
                 $newContributionDetail->contribution_id      = $newContribution->id;
                 $newContributionDetail->contributor_id       = $contributor[ $aa ];
                 $newContributionDetail->member_id            = $member[ $aa ];
-                $newContributionDetail->member_monthly_income = $memberMonthlyIncome[ $aa ];
-                $newContributionDetail->member_contribution  = $memberContribution[ $aa ];
-                $newContributionDetail->contributor_contribution  = $contributorContribution[ $aa ];
+                $newContributionDetail->member_monthly_income = str_replace( ',', '', $memberMonthlyIncome[ $aa ] );
+                $newContributionDetail->member_contribution  = str_replace( ',', '', $memberContribution[ $aa ] );
+                $newContributionDetail->contributor_contribution  = str_replace( ',', '', $contributorContribution[ $aa ] );
                 $newContributionDetail->payment_ref_no       = $request->transactionReference;
                 $newContributionDetail->payment_proof        = $payment_proof;
                 $newContributionDetail->member_topup         = $topup[ $aa ];
                 $newContributionDetail->status               = 'ACTIVE';
                 $newContributionDetail->created_by           = Auth::user()->id;
                 $newContributionDetail->save();
+
+                //Start:: Save new member monthly income
+
+                # start: update Old monthly income
+                ///
+                # end: update Old monthly income
+
+                $newMemberIncome = new MemberMonthlyIncome;
+                $newMemberIncome->member_id = $member[ $aa ];
+                $newMemberIncome->member_monthly_income = str_replace( ',', '', $memberMonthlyIncome[ $aa ] );
+                $newMemberIncome->contribution_date =  date( 'Y-m-d', strtotime( $request->contributionDate ) );
+                $newMemberIncome->status = 'CONTRIBUTED';
+                $newMemberIncome->created_by = Auth::user()->id;
+                $newMemberIncome->save();
+                //END:: Save new member monthly income
+
+                //start:: insert new Contributor an member income
+                //$newContributorIncome = new ContributorIncomeTracker;
+                //$newContributorIncome-> contributor_id =
+                //end:: insert new Contributor an member income
+
             }
+
             //End:: Insert contribution details
             toastr();
-            return redirect( 'contributions/history' )->with( [ 'success'=>'You have Successfully added new Contribution for '.$request->contributionDate ] );
+            return redirect( 'contributions/transactions/'.Crypt::encryptString( 'PENDING' ) )->with( [ 'success'=>'You have Successfully added new Contribution for '.$request->contributionDate ] );
 
         }
 
         public function contributions( $status ) {
             $status = Crypt::decryptString( $status );
             $contributions = Contribution::where( 'processing_status', $status )->get();
-            return view( 'contributions.contributions', compact( 'contributions','status') );
+            return view( 'contributions.contributions', compact( 'contributions', 'status' ) );
+        }
+
+        public function ajaxComputeEditMemberContribution( Request $request ) {
+            $cmn = new Common();
+
+            $newContribution = $request->newContribution;
+            $memberID = $request->memberID;
+            $contributorID = $request->contributorID;
+
+            $getContributionStructure = $cmn->contributionReverseComputation( $newContribution, $memberID, $contributorID );
+
+            return response()->json( [ 'getContributionStructure'=>$getContributionStructure ] );
         }
 
     }

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('payment_proof')->default('NULL');
             $table->decimal('member_topup', 32,2);
             $table->enum('status',['ACTIVE','WITHDRAWN'])->default('ACTIVE');
+            $table->integer('created_by');
             $table->integer('updated_by')->default(0);
             $table->timestamps();
         });
