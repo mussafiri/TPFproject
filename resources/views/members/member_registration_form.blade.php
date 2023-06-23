@@ -128,6 +128,7 @@
                         </li>
                         <li class="nav-item" id="LimemberDependantsDetails">
                             <a href="#memberDependantsDetails" {!! ($response_message=='SUCCESS')? ' data-toggle="tab" aria-expanded="true" class="nav-link active"' : ' class="nav-link disabled" ' ; !!}>
+                            <!-- <a href="#memberDependantsDetails" data-toggle="tab" aria-expanded="true" class="nav-link" class="nav-link disabled" > -->
                                 <i class="flaticon flaticon-community mr-1"></i>
                                 Dependants Details
                             </a>
@@ -225,7 +226,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="field-3" class="control-label">Postal Address</label>
-                                                        <input type="text" name="postalAddress" class="form-control form-control-sm" value="{{old('postalAddress')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Postal Address">
+                                                        <input type="text" name="postalAddress" class="form-control form-control-sm" value="{{old('postalAddress')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Postal Address" autocomplete="off">
 
                                                         @if ($errors->registerMemberDetails->has('postalAddress')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('postalAddress') }}</small></strong></span>@endif
                                                     </div>
@@ -233,7 +234,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="field-4" class="control-label">Physical Address</label>
-                                                        <input type="text" name="physicalAddress" class="form-control form-control-sm" value="{{old('physicalAddress')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Physical Address">
+                                                        <input type="text" name="physicalAddress" class="form-control form-control-sm" value="{{old('physicalAddress')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Physical Address" autocomplete="off">
 
                                                         @if ($errors->registerMemberDetails->has('physicalAddress')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('physicalAddress') }}</small></strong></span>@endif
                                                     </div>
@@ -814,7 +815,7 @@
                     '</div>' +
                     '</td>' +
                     '<td class="form-group col-lg-1 col-md-1 col-sm-12 text-right ml-auto">'+
-                        '<a id="removeFields" class="btn btn-icon btn-round btn-xs mb-2 btn-danger white" style="color:#fff"><em class="mdi mdi-close"></em></a>'+
+                        '<a  class="btn btn-icon btn-round btn-xs mb-2 btn-danger white removeFields" style="color:#fff"><em class="mdi mdi-close"></em></a>'+
                    '</td>'+
                 '</tr>'
             );
@@ -830,27 +831,32 @@
                 dropZoneEnabled: false,
             });
 
-            let enddate="-18Y";
+            
             var input ='[name="inputs['+b+'][dep_dob]"]';
            $('select[name="inputs['+b+'][dep_relationship]"]').change(function() {
-                var realationType = $(this).find(":selected").val();
-                if (realationType == "SPOUSE") {
+
+                var relationType = $(this).find(":selected").val();
+
+                if (relationType == "SPOUSE") {
+                    var enddate="-18Y";
                     initDatepicker(enddate,null,input );
-    
-                }if(realationType == "CHILD") {
-                    enddate='today';
+                }
+                if(relationType == "CHILD") {
+                    var newenddate='today';
                     var startdate="-21Y";
-                    initDatepicker(enddate,startdate,input );
+                    initDatepicker(newenddate,startdate,input);
 
                 }
             });
- 
-
-
     
             b++;
         });
 
+    });
+
+    // codes for Removing the dynamic Input Fields
+    $(document).on('click', '.removeFields', function() {
+        $(this).parents('tr').remove();
     });
 </script>
 <script type="text/javascript">
@@ -883,13 +889,14 @@
 <script type="text/javascript">
 
     function initDatepicker(end_date,start_date, inputName){
-        $(inputName).datepicker('destroy');
+        $(inputName).datepicker('setDate', null);
+        $(inputName).datepicker("destroy");
         $(inputName).datepicker({
-                            startDate:start_date,
-                            endDate:end_date,
-                            format: "dd MM yyyy",
-                            autoclose: true,
-                        });
+            startDate:start_date,
+            endDate:end_date,
+            format: "dd MM yyyy",
+            autoclose: true,
+        });
 
     }
 
