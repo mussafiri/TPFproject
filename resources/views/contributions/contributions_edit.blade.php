@@ -19,10 +19,10 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Edit Contribution</li>
+                            <li class="breadcrumb-item active">Add Contribution</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Edit Contributions</h4>
+                    <h4 class="page-title">Add Contributions</h4>
                 </div>
             </div>
         </div>
@@ -88,20 +88,20 @@
 
                                     <div class="col-sm-12 mt-2">
                                         <div class="table-responsive">
-                                            <table class="table table-sm table-bordered table-centered mb-0">
+                                            <table class="table table-sm font-11 table-bordered table-centered mb-0">
                                                 <thead class="thead-light">
                                                     <tr>
-                                                        <th>Scheme</th>
-                                                        <th>Contribution Date</th>
-                                                        <th>Contributors</th>
-                                                        <th>Members</th>
-                                                        <th>Monthly Contribution <sup class="text-muted font-10">TZS</sup></th>
-                                                        <th>Total Contribution <sup class="text-muted font-10">TZS</sup></th>
+                                                        <th class="text-center">Scheme</th>
+                                                        <th class="text-center">Contribution Date</th>
+                                                        <th class="text-center">Contributors</th>
+                                                        <th class="text-center">Members</th>
+                                                        <th class="text-center">Monthly Contribution <sup class="text-muted font-10">TZS</sup></th>
+                                                        <th class="text-center">Total Contribution <sup class="text-muted font-10">TZS</sup></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td>TUMAINI PENSION FUND</td>
+                                                        <td class="text-center">TUMAINI PENSION FUND</td>
                                                         <td class="text-center"><span id="contributionDate"></span></td>
                                                         <td class="text-center"><span id="no_contributorsSpan"></span><input type="hidden" value="" name="totalContributors" id="no_contributorsInput"></td>
                                                         <td class="text-center"><span id="no_membersSpan"></span><input type="hidden" value="" name="totalMembers" id="no_membersInput"></td>
@@ -114,7 +114,34 @@
                                     </div>
                                 </div>
                             </div>
+                            </div>
 
+                            <!-- START:: Existing Contributions -->
+                            <div class="row"> 
+
+                                <div class="col-12 mb-3 border rounded p-2" style="background-color:  #fbfbfb;">
+                                <h4 class="header-title mb-3 text-muted">Posted Contributions </h4>
+                                        <div class="table-responsive">
+                                        <table id="existing-contributions" class="table table-sm font-11 table-bordered table-centered mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th class="text-center">Section</th>
+                                                    <th class="text-center">Contribution Month</th>
+                                                    <th class="text-center">Contributors</th>
+                                                    <th class="text-center">Members</th>
+                                                    <th class="text-center">Total Contribution <sup class="text-muted font-10">TZS</sup></th>
+                                                    <th class="text-center">Process Status</th>
+                                                    <th class="text-center">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody> </tbody>
+                                        </table>
+                                    </div>
+                            </div>
+                            <!-- END:: Existing Contributions -->
+
+                            <div class="row" style="display:none;">
                             <h4 class="header-title mb-3 text-muted">Member Contributions </h4>
                             <div class="col-12">
                                 <div class="row">
@@ -123,14 +150,14 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width:3%;">#</th>
-                                                    <th style="width:19%;">Contributor</th>
+                                                    <th style="width:20%;">Contributor</th>
                                                     <th style="width:18%;">Member Name</th>
                                                     <th style="width:10%;">Monthly Income <sup class="text-muted font-10">TZS</sup></th>
                                                     <th style="width:10%;">Amount <sup class="text-muted font-10">Contributor TZS</sup></th>
                                                     <th style="width:10%;">Amount <sup class="text-muted font-10">Member TZS</sup></th>
                                                     <th style="width:10%;">Topup <sup class="text-muted font-10">TZS</sup></th>
-                                                    <th style="width:10%;">Total <sup class="text-muted font-10">TZS</sup></th>
-                                                    <th style="width:6%;">Status</th>
+                                                    <th class="text-center" style="width:10%;">Total <sup class="text-muted font-10">TZS</sup></th>
+                                                    <th style="width:5%;">Status</th>
                                                     <th style="width:4%;">Action</th>
                                                 </tr>
                                             </thead>
@@ -333,7 +360,42 @@
                             let newMemberContribution = $(this).val();
                             let memberID      = $(this).attr('data-memberID');
                             let contributorID = $(this).attr('data-contributorID');
-                            
+
+                            reverseContributioComputation(rowID,newMemberContribution,memberID, contributorID);
+
+                        });
+                        //End:: Contribution Inputs
+
+                        //Start:: contrInputsTopup edit
+                        $('.contrInputsTopup').on('keyup', function() {
+                            var rowID = $(this).attr('data-id');
+                            var topupVal = parseInt($(this).val().replace(/,/g, ''), 10);
+                            var memberContributionInput = parseInt(($('.memberContributionInput' + rowID).val()).replace(/,/g, ''), 10);
+                            var contributorContributionInput = parseInt(($('.contributorContributionInput' + rowID).val()).replace(/,/g, ''), 10);
+                            var total = memberContributionInput + contributorContributionInput + topupVal;
+                            $('.totalSpan' + rowID).html(total.toLocaleString() + '.00');
+                            $('.totalInput' + rowID).val(total);
+
+                            calculateItems(); // reset all the values
+                        });
+                        //End:: contrInputsTopup edit
+
+                        //START:: Suspend  Member Contribution
+                        $('.suspendContribution').click(function() {
+                            let rowID = $(this).attr('data-id');
+                            $('.memberContributionInput'+rowID).val('0.00');
+                            let newMemberContribution = $('.memberContributionInput'+rowID).val();
+                            let memberID      = $(this).attr('data-memberID');
+                            let contributorID = $(this).attr('data-contributorID');
+
+                            reverseContributioComputation(rowID,newMemberContribution,memberID, contributorID);
+
+                        });
+                        //END:: Suspend  Member Contribution
+
+                        //START:: reverser Computation
+                        function reverseContributioComputation(rowID,newMemberContribution,memberID, contributorID){
+
                                 //START:: reverse computation
                                 $.ajax({
                                         url: "{{url('/ajax/compute/edit/membercontribution')}}",
@@ -352,7 +414,8 @@
 
                                             var total = memberContribution+contributorContribution+topupValue;
                                             $('.monthlyIncomeSpan'+rowID).html((response.getContributionStructure.monthly_income).toLocaleString() + '.00');
-                                            $('.contributorContributionSpan'+rowID).html((response.getContributionStructure.contributor_contribution).toLocaleString() + '.00');
+                                            $('.contributorContributionSpan'+rowID).html(parseInt(response.getContributionStructure.contributor_contribution.replace(/,/g, ''), 10).toLocaleString() + '.00');
+                                            $('.contributorContributionInput'+rowID).val(contributorContribution);
                                             $('.totalSpan'+rowID).html(total.toLocaleString() + '.00');
                                             $('.totalInput'+rowID).val(total);
                                             
@@ -360,30 +423,8 @@
                                         }
                                     });
                                 //START:: reverse computation
-
-                        });
-                        //End:: Contribution Inputs
-
-                        //Start:: contrInputsTopup edit
-                        $('.contrInputsTopup').on('keyup', function() {
-                            var rowID = $(this).attr('data-id');
-                            var topupVal = parseInt($(this).val().replace(/,/g, ''), 10);
-                            var memberContributionInput = parseInt($('.memberContributionInput' + rowID).val().replace(/,/g, ''), 10);
-                            var contributorContributionInput = parseInt($('.contributorContributionInput' + rowID).val().replace(/,/g, ''), 10);
-                            $('.totalSpan' + rowID).html((memberContributionInput + contributorContributionInput + topupVal).toLocaleString() + '.00');
-                            $('.totalInput' + rowID).val(memberContributionInput + contributorContributionInput + topupVal);
-
-                            calculateItems(); // reset all the values
-                        });
-                        //End:: contrInputsTopup edit
-
-                        //START:: Suspend  Member Contribution
-                        $('.suspendContribution').click(function() {
-                            var rowID = $(this).attr('data-rowID');
-                            suspendMemberContribution(rowID);
-                        });
-                        //END:: Suspend  Member Contribution
-
+                        }
+                        //END:: reverser Computation
                     } else {
                         alert('no member Found');
                     }
@@ -394,7 +435,7 @@
     }
 
     function suspendMemberContribution(rowID) {
-        $('.memberContributionInput' + rowID).val(0);
+        $('.memberContributionInput' + rowID).val(0.00);
         var a = parseInt($('.contributorContributionInput' + rowID).val().replace(/,/g, ''), 10);
         var b = parseInt($('.topupInput' + rowID).val().replace(/,/g, ''), 10);
         $('.totalInput' + rowID).val(a + b);
@@ -412,7 +453,6 @@
         });
 
         //putting a subtotal
-        //alert('monthlyContribution ====> '+totalMemberContribution);
         $('.monthlyContribution').html(totalMemberContribution.toLocaleString() + '.00');
         $('.totalContribution').html(totalMemberContribution.toLocaleString() + '.00');
         $('.totalContributionInput').val(totalMemberContribution.toLocaleString() + '.00');

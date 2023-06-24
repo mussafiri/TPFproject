@@ -37,12 +37,26 @@ class ContributionController extends Controller {
         ->count();
 
         $contributionDate = date( 'Y-m', strtotime( $request->contribution_date ) );
-
         //START:: contribution check
-        $oldContributions = 'NULL';
+        $oldContributions = '';
         $checkContribtuions = Contribution::where( 'section_id', $request->section_id )->where( 'contribution_period', 'LIKE', '%'.$contributionDate.'%' )->get();
+       
         if ( $checkContribtuions->count() > 0 ) {
-            $oldContributions = 'NULL NOT';
+            $count = 1;
+            foreach ( $checkContribtuions as $contriData ) {
+                $action = 'contributions/view/'.Crypt::encryptString( $contriData->id ).'/'.Crypt::encryptString( $contriData->id );
+                $oldContributions .= '<tr>
+                                        <td>'.$count.'</td>
+                                        <td class="text-center">'.$contriData->section->name.'</td>
+                                        <td class="text-center">'.$contriData->contribution_period.'</td>
+                                        <td class="text-center">'.$contriData->total_contributors.'</td>
+                                        <td class="text-center">'.$contriData->total_members.'</td>
+                                        <td class="text-center">'.$contriData->contribution_amount.'</td>
+                                        <td class="text-center">'.$contriData->processing_status.'</td>
+                                        <td class="text-center"> <a href="{{url('.$action.')}}"> <i class="mdi mdi-eye-outline"></i></a></td>
+                                    </tr>';
+                $count++;
+            }
         }
         //END:: contribution check
 
@@ -63,7 +77,7 @@ class ContributionController extends Controller {
             $totalContribution = $memberData->getMemberContributionAmount( $memberData->contributor_id, $memberData->member_id )+$memberData->getContributorContributionAmount( $memberData->contributor_id, $memberData->member_id );
 
             $memberList .= '<tr><td>'.$counter.'.</td>
-                                <td class="text-muted font-9 px-0">'.$memberData->contributor->name.'<input type="hidden" name="contributor[]" value="'.$memberData->contributor_id.'"></td>
+                                <td class="font-9 px-0">'.$memberData->contributor->name.'<input type="hidden" name="contributor[]" value="'.$memberData->contributor_id.'"></td>
                                 <td>'.$memberData->member->fname.' '.$memberData->member->mname.' '.$memberData->member->lname.'<input type="hidden" name="member[]" value="'.$memberData->member_id.'"></td>
                                 <td> <span class="monthlyIncomeSpan'.$counter.'">'.number_format( $memberData->getMemberMonthlyIncome( $memberData->member_id ), 2 ).'</span> <input type="hidden" class="monthlyIncomeInput'.$counter.'" data-id="'.$counter.'" name="memberMonthlyIncome[]" value="'.number_format( $memberData->getMemberMonthlyIncome( $memberData->member_id ), 2 ).'" required>  <input type="hidden" class="contributorMonthlyIncomeInput'.$counter.'" data-id="'.$counter.'" name="contributorMonthlyIncome[]" value="'.$memberData->getContributorMonthlyIncome( $memberData->contributor_id ).'" required></td>
                                 <td> <span class="contributorContributionSpan'.$counter.'">'.number_format( $memberData->getContributorContributionAmount( $memberData->contributor_id, $memberData->member_id ), 2 ).'</span> <input type="hidden" class="contributorContributionInput'.$counter.' col-sm-12 px-1 border-1 border-light rounded contributorContrInput autonumber" data-id="'.$counter.'" data-memberID="'.$memberData->member_id.'" data-contributorID="'.$memberData->contributor_id.'" name="contributorContribution[]" value="'.$memberData->getContributorContributionAmount( $memberData->contributor_id, $memberData->member_id ).'" required></td>
@@ -92,9 +106,11 @@ class ContributionController extends Controller {
             $sectionContributionDataArr[ 'totalContributors' ] = $countContributors;
             $sectionContributionDataArr[ 'totalMembers' ]      = $totalMembers;
             $sectionContributionDataArr[ 'memberList' ]        = $memberList;
+            $sectionContributionDataArr[ 'oldContributions' ]  = $oldContributions;
         } else {
             $sectionContributionDataArr[ 'code' ] = 403;
             $sectionContributionDataArr[ 'memberList' ]        = '';
+            $sectionContributionDataArr[ 'oldContributions' ]  = $oldContributions;
         }
 
         return response()->json( [ 'sectionContributionDataArr'=>$sectionContributionDataArr ] );

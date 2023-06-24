@@ -78,7 +78,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card-box">
-                        <div class="row">
+                        <div class="row reconciliationBlock">
                             <h4 class="header-title mb-3 text-muted">Reconciliation Panel </h4>
 
                             <div class="col-12 mb-3 border rounded p-2" style="background-color: #f6fcff;">
@@ -88,20 +88,20 @@
 
                                     <div class="col-sm-12 mt-2">
                                         <div class="table-responsive">
-                                            <table class="table table-sm table-bordered table-centered mb-0">
+                                            <table class="table table-sm font-11 table-bordered table-centered mb-0">
                                                 <thead class="thead-light">
                                                     <tr>
-                                                        <th>Scheme</th>
-                                                        <th>Contribution Date</th>
-                                                        <th>Contributors</th>
-                                                        <th>Members</th>
-                                                        <th>Monthly Contribution <sup class="text-muted font-10">TZS</sup></th>
-                                                        <th>Total Contribution <sup class="text-muted font-10">TZS</sup></th>
-                                                    </tr>
+                                                        <th class="text-center">Scheme</th>
+                                                        <th class="text-center">Contribution Date</th>
+                                                        <th class="text-center">Contributors</th>
+                                                        <th class="text-center">Members</th>
+                                                        <th class="text-center">Monthly Contribution <sup class="text-muted font-10">TZS</sup></th>
+                                                        <th class="text-center">Total Contribution <sup class="text-muted font-10">TZS</sup></th>
+                                                    </tr> 
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td>TUMAINI PENSION FUND</td>
+                                                        <td class="text-center">TUMAINI PENSION FUND</td>
                                                         <td class="text-center"><span id="contributionDate"></span></td>
                                                         <td class="text-center"><span id="no_contributorsSpan"></span><input type="hidden" value="" name="totalContributors" id="no_contributorsInput"></td>
                                                         <td class="text-center"><span id="no_membersSpan"></span><input type="hidden" value="" name="totalMembers" id="no_membersInput"></td>
@@ -114,12 +114,50 @@
                                     </div>
                                 </div>
                             </div>
+                            </div>
 
+                            <!-- START:: Existing Contributions -->
+                            <div class="row existingContrinbutionBlock" style="display:none; background-color: #fbfbfb;"> 
+                                <div class="col-12 mb-3 border rounded p-2">
+                                        <h4 class="header-title mb-3 text-muted">Posted Contributions </h4>
+                                        <div class="table-responsive">
+                                        <table class="existing_contrinbution_recon_table table table-sm font-11 table-bordered table-centered mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th class="text-center">Section</th>
+                                                    <th class="text-center">Contribution Month</th>
+                                                    <th class="text-center">Contributors</th>
+                                                    <th class="text-center">Members</th>
+                                                    <th class="text-center">Total Contribution <sup class="text-muted font-10">TZS</sup></th>
+                                                    <th class="text-center">Process Status</th>
+                                                    <th class="text-center">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody> </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="mt-2">
+                                        <a href="javascript:void(0);" class="btn btn-success my-2 float-right addContribution">Continue Adding Another Contribution</a>
+                                        <a href="javascript:void(0);" class="btn btn-warning my-2 float-right mr-2">Cancel</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END:: Existing Contributions -->
+                            <!-- START:: noDataErrorBlock-->
+                            <div class="row noDataErrorBlock">
+                                 <div class="col-12 alert alert-danger" role="alert">
+                                        <i class="mdi mdi-block-helper mr-2"></i> Ooops! <strong>No data found.</strong> Section has neither Contributors  nor members assigned on a date specified
+                                </div>
+                            </div>
+                            <!-- END:: noDataErrorBlock-->
+
+                            <div class="row newContributionBlock" style="display:none;">
                             <h4 class="header-title mb-3 text-muted">Member Contributions </h4>
                             <div class="col-12">
                                 <div class="row">
                                     <div class="table-responsive">
-                                        <table id="btn-editable" class="contrinbution_recon_table table table-sm font-11 table-striped w-100 table-responsible">
+                                        <table id="btn-editable" class="new_contrinbution_recon_table table table-sm font-11 table-striped w-100 table-responsible">
                                             <thead>
                                                 <tr>
                                                     <th style="width:3%;">#</th>
@@ -141,7 +179,7 @@
 
                             </div>
 
-                            <h4 class="header-title mb-3 text-muted">Transaction Proofs </h4>
+                            <h4 class="header-title mb-3 text-muted">Transaction Proofs</h4>
                             <div class="col-12">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -165,7 +203,7 @@
                                                     <label for="field-1" class="control-label">Payment Mode</label>
                                                     <select class="form-control contriInput" name="paymentMode" data-toggle="select2">
                                                         @foreach($paymentMode as $value)
-                                                        <option value="{{$value->id}}" {{old ('paymentMode') == $value->id ? 'selected' : ''}}>{{$value->name}} </option>
+                                                        <option value="{{$value->id}}" {{old ('paymentMode') == $value->id ? 'selected' : ''}}>{{$value->name}}</option>
                                                         @endforeach
                                                     </select>
                                                     <span class="text-danger" role="alert"> {{ $errors->first('paymentMode') }}</span>
@@ -228,23 +266,9 @@
 </div> <!-- content -->
 @endsection
 @section('custom_script')
-<!-- Table Editable plugin-->
-<script src="../assets/libs/jquery-tabledit/jquery.tabledit.min.js"></script>
-
-<!-- Table editable init-->
-<script src="../assets/js/pages/tabledit.init.js"></script>
 
 <script src="{{asset('assets/libs/kartik-v-bootstrap-fileinput/js/fileinput.min.js')}}"></script>
 <script src="{{asset('assets/libs/kartik-v-bootstrap-fileinput/themes/explorer/theme.js')}}"></script>
-
-<script>
-    window.setTimeout(function() {
-        $(".alert").fadeTo(1000, 0).slideUp(500, function() {
-            $(this).remove();
-        });
-    }, 6000);
-
-</script>
 
 <script>
     $(".kartik-input-705").fileinput({
@@ -263,7 +287,13 @@
             , showRemove: true
         , }
     , });
+</script>
 
+<script type="text/javascript">
+$('.addContribution').on('click', function(){ // adding new contribution
+    $('.existingContrinbutionBlock').hide();
+    $('.newContributionBlock').show();
+});
 </script>
 
 <script type="text/javascript">
@@ -313,6 +343,7 @@
                 , dataType: 'json'
                 , success: function(response) {
                     if (response.sectionContributionDataArr.memberList !== "") {
+                        $('.reconciliationBlock').show();
                         //Start:: put section Data
                         $('#sectionName').html(response.sectionContributionDataArr.sectionData.name);
                         $('#sectionCode').html(response.sectionContributionDataArr.sectionData.section_code);
@@ -321,9 +352,25 @@
                         $('#no_membersInput').val(response.sectionContributionDataArr.totalMembers);
                         $('#no_contributorsInput').val(response.sectionContributionDataArr.totalContributors);
                         //End:: put section Data
+                        
+                        if(response.sectionContributionDataArr.oldContributions!==''){ 
+                           $(".existing_contrinbution_recon_table tbody").empty();
+                           $(".existing_contrinbution_recon_table").prepend(response.sectionContributionDataArr.oldContributions);
 
-                        $(".contrinbution_recon_table tbody").empty();
-                        $(".contrinbution_recon_table").prepend(response.sectionContributionDataArr.memberList);
+                            //Start:: block display control
+                            $('.existingContrinbutionBlock').show();
+                            $('.newContributionBlock').hide();
+                            //End:: block display control
+
+                        }else{
+                            $(".new_contrinbution_recon_table tbody").empty();
+                            $(".new_contrinbution_recon_table").prepend(response.sectionContributionDataArr.memberList);
+
+                            //Start:: block display control
+                            $('.existingContrinbutionBlock').hide();
+                            $('.newContributionBlock').show();
+                            //End:: block display control
+                        }
 
                         calculateItems(); // Prior Items Caluculation
 
@@ -335,7 +382,6 @@
                             let contributorID = $(this).attr('data-contributorID');
 
                             reverseContributioComputation(rowID,newMemberContribution,memberID, contributorID);
-
                         });
                         //End:: Contribution Inputs
 
@@ -366,9 +412,9 @@
                         });
                         //END:: Suspend  Member Contribution
 
+
                         //START:: reverser Computation
                         function reverseContributioComputation(rowID,newMemberContribution,memberID, contributorID){
-
                                 //START:: reverse computation
                                 $.ajax({
                                         url: "{{url('/ajax/compute/edit/membercontribution')}}",
@@ -398,8 +444,12 @@
                                 //START:: reverse computation
                         }
                         //END:: reverser Computation
+
                     } else {
-                        alert('no member Found');
+                        $('.reconciliationBlock').hide();
+                        $('.noDataErrorBlock').show();
+                        $('.existingContrinbutionBlock').hide();
+                        $('.newContributionBlock').hide();
                     }
                 }
             });

@@ -101,7 +101,7 @@
                                                             <tr>
                                                                 <td>{{$n}}.</td>
                                                                 <td class="text-muted font-9">{{$data->section->name}}</td>
-                                                                <td>{{date('d M, Y', strtotime($data->contribution_period))}}</td>
+                                                                <td>{{date('M, Y', strtotime($data->contribution_period))}}</td>
                                                                 <td>{{number_format($data->contribution_amount,2)}}</td>
                                                                 <td><small>{{$data->payMode->name}}</small></td>
                                                                 <td class="text-center">{{$data->total_contributors}}</td>
