@@ -38,8 +38,8 @@
                 </a>
                 <div class="collapse @if(request()->segment(1)=='contributions'){{'show'}}@endif" id="sidebarContributions">
                     <ul class="nav-second-level">
-                        <li  class="@if(request()->is('contributions/add'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/add')}}">Add Contribution</a> </li>
-                        <li  class="@if(request()->is('contributions/transactions/*')){{'menuitem-active'}}@endif"> <a href="{{url('contributions/transactions/'.Crypt::encryptString('PENDING'))}}">Contributions</a> </li>
+                        <li  class="@if(request()->segment(2)=='add'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/add')}}">Add Contribution</a> </li>
+                        <li  class="@if(request()->segment(2)=='transactions' || request()->segment(2)=='process'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/transactions/'.Crypt::encryptString('PENDING'))}}">Contributions</a> </li>
                     </ul>
                 </div>
             </li>

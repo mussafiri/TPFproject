@@ -150,7 +150,7 @@ Route::middleware('auth')->group(function () {
         Route:: post('/compute/edit/membercontribution', [ContributionController::class, 'ajaxComputeEditMemberContribution']);
         #End:: Contibutions routes
     });
-
+    
     //Start:: users management routes
     Route::prefix('users')->group(function(){
         Route::get('/list/{status}', [UserController::class, 'userList']);
@@ -167,12 +167,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/designations/edit/submit', [UserController::class, 'submitEditDesignation']);
     });
     //end:: users management routes
-
+    
     //Start:: Contributions
     Route::prefix('contributions')->group(function(){
         Route::get('/add', [ContributionController::class, 'addContribution']);
         Route::post('/add/submit', [ContributionController::class, 'submitAddContribution']);
         Route::get('/transactions/{status}', [ContributionController::class, 'contributions']);
+        Route::get('/process/{id}/{status}', [ContributionController::class , 'contributionProcessing']);
     });
     //End:: Contributions
 

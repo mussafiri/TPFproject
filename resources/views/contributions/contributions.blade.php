@@ -106,7 +106,7 @@
                                                                 <td><small>{{$data->payMode->name}}</small></td>
                                                                 <td class="text-center">{{$data->total_contributors}}</td>
                                                                 <td class="text-center">{{$data->total_members}}</td>
-                                                                <td class="text-center"> <a class="font-14" href="{{Storage::url('contributionPaymentProof/'.$data->payment_proof)}}" download="{{Storage::url('contributionPaymentProof/'.$data->payment_proof)}}" download title="Download Payment Proof" target="_blank"><i class="mdi mdi-cloud-download-outline"></i></a></td>
+                                                                <td class="text-center"> <a class="font-14" href="{{Storage::url('contributionPaymentProof/'.$data->payment_proof)}}" download="{{Storage::url('contributionPaymentProof/'.$data->payment_proof)}}" download title="Download Payment Proof" target="_blank"><i class="mdi mdi-cloud-download-outline"></i></a> </td>
                                                                 <td><span class="badge badge-outline-{{$data->processing_status=='ACTIVE'?'success':'info'}} badge-pill">{{$data->processing_status}}</span></td>
                                                                 <td>
                                                                     <div class="btn-group dropdown float-right">
@@ -118,9 +118,21 @@
                                                                             <a href="{{url('contributions/details/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
                                                                                 <i class='mdi mdi-eye-outline mr-1'></i>View
                                                                             </a>
+                                                                            @if($data->processing_status =='PENDING')
+                                                                            <a href="{{url('contributions/process/'.Crypt::encryptString($data->id).'/'.Crypt::encryptString('APPROVE'))}}" class="dropdown-item">
+                                                                                <i class='mdi mdi-check-bold mr-1'></i>Approve
+                                                                            </a>
+                                                                            @endif
+                                                                            @if($data->processing_status =='PENDING'|| $data->processing_status =='APPROVAL REJECTED' || $data->processing_status =='POSTING REJECTED')
                                                                             <a href="{{url('contributions/edit/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
                                                                                 <i class='mdi mdi-pencil-outline mr-1'></i>Edit
                                                                             </a>
+                                                                            @endif
+                                                                            @if($data->processing_status =='APPROVED')
+                                                                            <a href="{{url('contributions/process/'.Crypt::encryptString($data->id).'/'.Crypt::encryptString('APPROVE'))}}" class="dropdown-item">
+                                                                                <i class='mdi mdi-file-check-outline mr-1'></i>Post
+                                                                            </a>
+                                                                            @endif
                                                                             <div class="dropdown-divider"></div>
                                                                             <!-- item-->
                                                                             <a href="javascript:void(0);" class="dropdown-item change_contributor_status_swt_alert" data-id="{{$data->id}}" data-newstatus="@if($data->status=='ACTIVE'){{'Suspend'}} @else {{'Activate'}}@endif" data-name="{{$data->name}}">

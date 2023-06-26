@@ -40,7 +40,7 @@ class ContributionController extends Controller {
         //START:: contribution check
         $oldContributions = '';
         $checkContribtuions = Contribution::where( 'section_id', $request->section_id )->where( 'contribution_period', 'LIKE', '%'.$contributionDate.'%' )->get();
-       
+
         if ( $checkContribtuions->count() > 0 ) {
             $count = 1;
             foreach ( $checkContribtuions as $contriData ) {
@@ -275,6 +275,17 @@ class ContributionController extends Controller {
             $getContributionStructure = $cmn->contributionReverseComputation( $newContribution, $memberID, $contributorID );
 
             return response()->json( [ 'getContributionStructure'=>$getContributionStructure ] );
+        }
+
+        public function contributionProcessing( $contributionID, $contributionStatus ) {
+            $contributionID = Crypt::decryptString( $contributionID );
+            $contributionStatus = Crypt::decryptString( $contributionStatus );
+
+            $contributionData = Contribution::find( $contributionID );
+            $contributionDetails = ContributionDetail::where( 'contribution_id', $contributionID )->get();
+
+            return view( 'contributions/contributions_processing', compact( 'contributionData', 'contributionDetails' ) );
+
         }
 
     }

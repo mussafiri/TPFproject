@@ -19,18 +19,15 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Add Contribution</li>
+                            <li class="breadcrumb-item active">View Contribution</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Add Contributions</h4>
+                    <h4 class="page-title">View Contributions</h4>
                 </div>
             </div>
         </div>
         <!-- end page title -->
         <!-- end row-->
-
-        <form id="contributionForm" method="POST" action="{{url('contributions/add/submit')}}" enctype="multipart/form-data">
-            @csrf
             <div class="row">
                 <div class="col-12">
                     <div class="card-box">
@@ -116,43 +113,8 @@
                             </div>
                             </div>
 
-                            <!-- START:: Existing Contributions -->
-                            <div class="row existingContrinbutionBlock" style="display:none; background-color: #fbfbfb;">
-                                <div class="col-12 mb-3 border rounded p-2">
-                                        <h4 class="header-title mb-3 text-muted">Posted Contributions </h4>
-                                        <div class="table-responsive">
-                                            <table class="existing_contrinbution_recon_table table table-sm font-11 table-bordered table-centered mb-0">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th class="text-center">Section</th>
-                                                        <th class="text-center">Contribution Month</th>
-                                                        <th class="text-center">Contributors</th>
-                                                        <th class="text-center">Members</th>
-                                                        <th class="text-center">Total Contribution <sup class="text-muted font-10">TZS</sup></th>
-                                                        <th class="text-center">Process Status</th>
-                                                        <th class="text-center">Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody> </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="mt-2">
-                                            <a href="javascript:void(0);" class="btn btn-success my-2 float-right addContribution">Continue Adding Another Contribution</a>
-                                            <a href="javascript:void(0);" class="btn btn-warning my-2 float-right mr-2">Cancel</a>
-                                        </div>
-                                </div>
-                            </div>
-                            <!-- END:: Existing Contributions -->
-                            <!-- START:: noDataErrorBlock-->
-                            <div class="row noDataErrorBlock">
-                                 <div class="col-12 alert alert-danger" role="alert">
-                                        <i class="mdi mdi-block-helper mr-2"></i> <strong>No data found! </strong> <span class="noDataErrorSpan"></span>
-                                </div>
-                            </div>
-                            <!-- END:: noDataErrorBlock-->
 
-                            <div class="row newContributionBlock" style="display:none;">
+                            <div class="row newContributionBlock"
                             <h4 class="header-title mb-3 text-muted">Member Contributions </h4>
                             <div class="col-12">
                                 <div class="row">
@@ -169,10 +131,21 @@
                                                     <th style="width:10%;">Topup <sup class="text-muted font-10">TZS</sup></th>
                                                     <th class="text-center" style="width:10%;">Total <sup class="text-muted font-10">TZS</sup></th>
                                                     <th style="width:5%;">Status</th>
-                                                    <th style="width:4%;">Action</th>
                                                 </tr>
                                             </thead>
-                                            <tbody></tbody>
+                                            <tbody>
+                                            <tr><td>'.$counter.'.</td>
+                                                <td class="font-9 px-0">{{$memberData->contributor->name}}</td>
+                                                <td>{{$memberData->member->fname.' '.$memberData->member->mname.' '.$memberData->member->lname}}</td>
+                                                <td> {{number_format( $memberData->getMemberMonthlyIncome( $memberData->member_id ), 2 )}}</td>
+                                                <td> {{number_format( $memberData->getContributorContributionAmount( $memberData->contributor_id, $memberData->member_id ), 2 )}}</td>
+                                                <td> {{number_format( $memberData->getMemberContributionAmount( $memberData->contributor_id, $memberData->member_id ), 2 )}}</td>
+                                                <td> </td>
+                                                <td {{number_format( $totalContribution, 2 )}}</td>
+                                                <td> <span class="badge badge-outline-'.$statusBadge.' badge-pill">{{$memberData->status}}</span></td>
+
+                                            </tr>
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -228,29 +201,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="col-md-12 px-3 pt-2">
-                                <a href="javascript:void(0);" class="btn btn-info waves-effect waves-light float-right" data-toggle="modal" data-target="#contributionSubmisionAlert">Submit Contribution</a>
-
-                                <!-- Start:: Warning Alert Modal -->
-                                <div id="contributionSubmisionAlert" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-                                    <div class="modal-dialog modal-md">
-                                        <div class="modal-content">
-                                            <div class="modal-body p-4">
-                                                <div class="text-center">
-                                                    <i class="dripicons-warning h1 text-warning"></i>
-                                                    <h4 class="mt-2">Confirm Contribution Submission</h4>
-                                                    <p class="mt-3">Are you sure! <br> You are about to submit Section Contribution. You can cancel to review contribtions before submission</p>
-                                                </div>
-                                                <button type="submit" class="btn btn-success my-2 float-left">Yes! Submit</button>
-                                                <button type="button" class="btn btn-danger my-2 float-right" data-dismiss="modal">Cancel</button>
-                                            </div>
-                                        </div><!-- /.modal-content -->
-                                    </div><!-- /.modal-dialog -->
-                                </div>
-                                <!-- End:: Warning Alert Modal -->
-
                             </div> <!-- end col -->
                         </div> <!-- end row -->
 
@@ -258,7 +208,6 @@
                 </div> <!-- content -->
                 <!-- end .table-responsive-->
             </div> <!-- end card-box-->
-        </form>
     </div> <!-- end col -->
 </div>
 <!-- end row -->
@@ -325,8 +274,8 @@ $('.addContribution').on('click', function(){ // adding new contribution
     function loadingSectionContributorsMembers() {
         var section_id = $('.sectionSelect').find(":selected").val();
         var contribution_date = $('.contributionDate').val();
-        if (section_id !== 0 && contribution_date !== "") {
 
+        if (section_id !== 0 && contribution_date !== "") {
             $('#contributionDate').html(contribution_date);
 
             $("#sectionError").html('');
@@ -342,24 +291,6 @@ $('.addContribution').on('click', function(){ // adding new contribution
                 }
                 , dataType: 'json'
                 , success: function(response) {
-                    //Start:: check old contribution first
-                    if(response.sectionContributionDataArr.oldContributions!==''){
-                        $('.noDataErrorBlock').hide();
-                        $(".existing_contrinbution_recon_table tbody").empty();
-                        $(".existing_contrinbution_recon_table").prepend(response.sectionContributionDataArr.oldContributions);
-
-                        //Start:: block display control
-                        $('.existingContrinbutionBlock').show();
-                        $('.newContributionBlock').hide();
-                        //End:: block display control
-                    }else{
-                        //Start:: block display control
-                        $('.existingContrinbutionBlock').hide();
-                        $('.newContributionBlock').show();
-                        //End:: block display control
-                    }
-                    //End:: check old contribution first
-
                     if (response.sectionContributionDataArr.memberList !== "") {
                         $('.noDataErrorBlock').hide();
                         $('.reconciliationBlock').show();
@@ -371,6 +302,21 @@ $('.addContribution').on('click', function(){ // adding new contribution
                         $('#no_membersInput').val(response.sectionContributionDataArr.totalMembers);
                         $('#no_contributorsInput').val(response.sectionContributionDataArr.totalContributors);
                         //End:: put section Data
+
+                        if(response.sectionContributionDataArr.oldContributions!==''){
+                           $(".existing_contrinbution_recon_table tbody").empty();
+                           $(".existing_contrinbution_recon_table").prepend(response.sectionContributionDataArr.oldContributions);
+
+                            //Start:: block display control
+                            $('.existingContrinbutionBlock').show();
+                            $('.newContributionBlock').hide();
+                            //End:: block display control
+                        }else{
+                            //Start:: block display control
+                            $('.existingContrinbutionBlock').hide();
+                            $('.newContributionBlock').show();
+                            //End:: block display control
+                        }
 
                         $(".new_contrinbution_recon_table tbody").empty();
                         $(".new_contrinbution_recon_table").prepend(response.sectionContributionDataArr.memberList);
@@ -450,7 +396,6 @@ $('.addContribution').on('click', function(){ // adding new contribution
 
                     } else {
                         $('.reconciliationBlock').hide();
-                        $('.noDataErrorSpan').html(' Section has neither Contributors nor members assigned on a specified date.');
                         $('.noDataErrorBlock').show();
                         $('.existingContrinbutionBlock').hide();
                         $('.newContributionBlock').hide();
@@ -458,12 +403,6 @@ $('.addContribution').on('click', function(){ // adding new contribution
                 }
             });
 
-        }else{
-            $('.reconciliationBlock').hide();
-            $('.noDataErrorSpan').html(' Kindly, Select <u>Section</u> and pick <u>Contribtuion Date</u> to get the data.');
-            $('.noDataErrorBlock').show();
-            $('.existingContrinbutionBlock').hide();
-            $('.newContributionBlock').hide();
         }
     }
 
