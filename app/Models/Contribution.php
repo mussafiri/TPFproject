@@ -40,6 +40,13 @@ class Contribution extends Model {
         return $this->belongsTo( User::class, 'updated_by' );
     }
 
+    public function approvalRejectReason() {
+        return $this->belongsTo( ContributionRejectReason::class, 'approval_rejected_reason_id' );
+    }
+
+    public function postingRejectReason() {
+        return $this->belongsTo( ContributionRejectReason::class, 'posting_rejected_reason_id' );
+    }
 
     public function sumTransaction( $contritbutionID ) {
         $totalTopup = ContributionDetail::where( 'contribution_id', $contritbutionID )->sum( 'member_contribution' );

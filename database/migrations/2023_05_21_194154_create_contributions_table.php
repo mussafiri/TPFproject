@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('created_by')->default(0);
             $table->string('approved_by')->default(0);
             $table->string('approved_at')->default('NULL');
+            $table->integer('approval_rejected_reason_id')->default(0);
             $table->string('approval_rejected_by')->default(0);
             $table->string('approval_rejected_at')->default('NULL');
             $table->string('approval_reject_reason')->default('NULL');
@@ -35,6 +36,7 @@ return new class extends Migration
             $table->string('posting_rejected_by')->default(0);
             $table->string('posting_rejected_at')->default('NULL');
             $table->string('posting_reject_reason')->default('NULL');
+            $table->integer('posting_rejected_reason_id')->default(0);
             $table->integer('created_by');
             $table->integer('updated_by')->default(0);
             $table->timestamps();

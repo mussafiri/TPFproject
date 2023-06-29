@@ -148,6 +148,7 @@ Route::middleware('auth')->group(function () {
         Route:: post('/get/section/contribution/data', [ContributionController::class, 'ajaxGetSectionContributionData']);
         Route:: post('/member/contribution/validation', [ContributionController::class, 'ajaxValidateSubmitContribution']);
         Route:: post('/compute/edit/membercontribution', [ContributionController::class, 'ajaxComputeEditMemberContribution']);
+        Route:: post('/get/old/membercontribution', [ContributionController::class, 'ajaxGetOldContributionData']);
         #End:: Contibutions routes
     });
     
@@ -172,8 +173,14 @@ Route::middleware('auth')->group(function () {
     Route::prefix('contributions')->group(function(){
         Route::get('/add', [ContributionController::class, 'addContribution']);
         Route::post('/add/submit', [ContributionController::class, 'submitAddContribution']);
-        Route::get('/transactions/{status}', [ContributionController::class, 'contributions']);
-        Route::get('/process/{id}/{status}', [ContributionController::class , 'contributionProcessing']);
+        Route::get('/details/{id}', [ContributionController::class, 'viewContributionDetails']);
+        Route::get('/processing/{status}', [ContributionController::class, 'contributions']);
+        Route::get('/processing/{id}/{status}', [ContributionController::class , 'contributionProcessing']);
+        Route::post('/submit/approval/{id}', [ContributionController::class , 'submitContributionApproval']);
+        Route::post('/submit/rejection/{id}', [ContributionController::class , 'submitContributionRejection']);
+        Route::get('/search', [ContributionController::class , 'searchContributions']);
+        Route::get('/topup/{id}', [ContributionController::class, 'topupContribution']);
+        Route::get('/edit/{id}', [ContributionController::class, 'editContribution']);
     });
     //End:: Contributions
 

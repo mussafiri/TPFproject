@@ -32,6 +32,17 @@
         <div class="row">
             <div class="col-12">
                 <div class="card-box">
+
+                    <div class="row">
+                        <div class="col-sm-4">
+
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="text-sm-right">
+                                <a href="{{url()->previous()}}" class="btn btn-info mb-2 mr-1"><i class="mdi mdi-arrow-left-thick mr-2"></i> Back</a>
+                            </div>
+                        </div><!-- end col-->
+                    </div>
                     <div class="row reconciliationBlock">
                         <h4 class="header-title mb-3 text-muted">Reconciliation Panel </h4>
                         <div class="col-12"> 
@@ -95,14 +106,14 @@
                                 <div class="col-md-2 font-11"> <strong>Created At</strong>
                                     <p>{{date('d M, Y', strtotime($contributionData->created_at))}} <small class="text-muted">{{date('H:i', strtotime($contributionData->created_at))}}</small></p>
                                 </div>
-                                <div class="col-md-2 font-11"> <strong>Approval Status</strong>
-                                    <p>@if($contributionData->approved_by==0) <span class="badge badge-outline-info badge-pill">PENDING</span>@else  <i class="mdi mdi-check-bold text-success"></i> @endif</span></p>
+                                <div class="col-md-2 font-11"> <strong>Approval</strong>
+                                    <p>@if($contributionData->approved_at=='NULL') <span class="badge badge-outline-info badge-pill">PENDING</span>@else  {{date('d M, Y', strtotime($contributionData->approved_at))}} <small class="text-muted">{{date('H:i', strtotime($contributionData->approved_at))}}</small> @endif</p>
                                 </div>
                                 <div class="col-md-2 font-11"> <strong>Approved By</strong>
                                     <p>@if($contributionData->approved_by==0){{'None'}} @else {{ucfirst(strtolower($contributionData->approvedBy->fname)).' '.ucfirst(strtolower($contributionData->approvedBy->mname)).' '.ucfirst(strtolower($contributionData->approvedBy->lname))}} @endif</p>
                                 </div>
-                                <div class="col-md-2 font-11"> <strong>Posting Status</strong>
-                                    <p>@if($contributionData->posted_by==0)<span class="badge badge-outline-info badge-pill">PENDING</span> @else <i class="mdi mdi-check-bold text-success"></i> @endif</span></p>
+                                <div class="col-md-2 font-11"> <strong>Posted </strong>
+                                    <p>@if($contributionData->posted_at=='NULL')<span class="badge badge-outline-info badge-pill">PENDING</span> @else {{date('d M, Y', strtotime($contributionData->posted_at))}} <small class="text-muted">{{date('H:i', strtotime($contributionData->posted_at))}}</small> @endif</p>
                                 </div>
                                 <div class="col-md-2 font-11"> <strong>Posted By</strong>
                                     <p>@if($contributionData->posted_by==0){{'None'}} @else {{ucfirst(strtolower($contributionData->postedBy->fname)).' '.ucfirst(strtolower($contributionData->postedBy->mname)).' '.ucfirst(strtolower($contributionData->postedBy->lname))}} @endif</p>
@@ -139,8 +150,8 @@
                                                 <th style="width:10%;">Amount <sup class="text-muted font-10">Member TZS</sup></th>
                                                 <th style="width:10%;">Topup <sup class="text-muted font-10">TZS</sup></th>
                                                 <th class="text-center" style="width:10%;">Total <sup class="text-muted font-10">TZS</sup></th>
+                                                <th style="width:7%;">Pay Proof</th>
                                                 <th style="width:5%;">Status</th>
-                                                <th style="width:5%;">Confirm</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -155,13 +166,10 @@
                                                     <td>{{number_format($value->member_contribution,2)}}</td>
                                                     <td>{{number_format($value->member_topup,2)}}</td>
                                                     <td>{{number_format($value->contributor_contribution+$value->member_contribution+$value->member_topup,2)}}</td>
-                                                    <td><span class="badge badge-outline-{{$value->status=='ACTIVE'?'success':'primary'}}">{{$value->status}}</span></td>
                                                     <td class="text-center">
-                                                        <div class="custom-control custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="customCheck{{$n}}" name="confirmMembers[]">
-                                                            <label class="custom-control-label" for="customCheck{{$n}}"></label>
-                                                        </div>
+                                                    <a class="font-14" href="{{Storage::url('contributionPaymentProof/'.$value->payment_proof)}}" download="{{Storage::url('contributionPaymentProof/'.$value->payment_proof)}}" download title="Download Payment Proof" target="_blank"><i class="mdi mdi-cloud-download-outline"></i></a>
                                                     </td>
+                                                    <td><span class="badge badge-outline-{{$value->status=='ACTIVE'?'success':'primary'}}">{{$value->status}}</span></td>
                                                 </tr>
                                             @php $n++;@endphp
                                             @endforeach
@@ -169,77 +177,9 @@
                                     </table>
                                 </div>
 
-                            <!-- Start:: Rejection Warning Alert Modal -->
-                                <div id="approvalModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-                                    <div class="modal-dialog modal-md">
-                                        <div class="modal-content">
-                                            <div class="modal-body p-4">
-                                                <div class="text-center">
-                                                    <i class="dripicons-warning h1 text-warning"></i>
-                                                    <h4 class="mt-2">Confirm Contribution <span class="approvalSpanTextTitle">Approval</span></h4>
-                                                    <p class="mt-3">Are you sure! <br> You are about to <span class="approvalSpanTextBody">Approve</span> Contribution Submission </p>
-                                                    <input type="hidden" name="approvalType" id="approvalType" value="">
-                                                    <input type="hidden" name="totalMembers" value="{{$contributionData->total_members}}">
-                                                     @if ($errors->approveContribution->has('confirmMembers')) <span class="text-danger" role="alert"> <strong>{{ $errors->approveContribution->first('confirmMembers') }}</strong></span>@endif
-                                                </div>
-
-                                                <button type="submit" class="btn btn-success my-2 float-left">Yes! <span class="approvalSpanButton">Submit Approval</button>
-                                                <button type="button" class="btn btn-danger my-2 float-right" data-dismiss="modal">Cancel</button>
-                                            </div>
-                                        </div><!-- /.modal-content -->
-                                    </div><!-- /.modal-dialog -->
-                                </div>
-                            <!-- End:: Rejection Warning Alert Modal -->
-
                             </div>
                             </form>
                         </div>
-
-                        <div class="col-md-12 px-3 pt-2">
-
-                            <a href="javascript:void(0);" class="btn btn-danger waves-effect waves-light float-right rejectionButton" data-toggle="modal" data-target="#rejectModal" data-rejectionType="@if($contributionData->approved_by==0){{'Reject Approval'}}@endif @if($contributionData->approved_by > 0 && $contributionData->posted_by==0){{'Reject Posting'}}@endif">@if($contributionData->approved_by==0){{'Reject Approval'}}@endif @if($contributionData->approved_by > 0 && $contributionData->posted_by==0){{'Reject Posting'}}@endif</a>
-                            <a href="javascript:void(0);" class="btn btn-info waves-effect waves-light float-right mr-2 approvalButton" data-toggle="modal" data-target="#approvalModal"  data-approvalType="@if($contributionData->approved_by==0){{'Approve Contribution'}}@endif @if($contributionData->posted_by==0 && $contributionData->approved_by > 0){{'Post Contribution'}}@endif"> @if($contributionData->approved_by==0){{'Approve Contribution'}}@endif @if($contributionData->approved_by > 0 && $contributionData->posted_by==0){{'Post Posting'}}@endif</a>
-
-                            <!-- Start:: Rejection Warning Alert Modal -->
-                                <div id="rejectModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-                                    <div class="modal-dialog modal-md">
-                                        <div class="modal-content">
-                                            <form method="POST" action="{{url('contributions/submit/rejection/'.$contributionData->id)}}">
-                                            @csrf
-                                                <div class="modal-body p-4 mb-3">
-                                                    <div class="text-center">
-                                                        <i class="dripicons-warning h1 text-warning"></i>
-                                                        <h4 class="mt-2">Confirm Contribution <span class="rejectionSpanTextTitle text-success">Approval </span>Rejection</h4>
-                                                        <p class="mt-3">Are you sure! <br> You are about to <span class="rejectionSpanTextBody text-success">Reject Approval </span> of the Contribution. Kindly write a rejection reason</p>
-                                                        <input type="hidden" name="rejectionType" id="rejectionType" value="">
-                                                    </div>
-                                                    <div class="form-group mb-3">
-                                                        <label for="example-textarea">Select Rejection Reason</label>
-                                                        <select class="form-control reasonSelect" name="reasonSelection" data-toggle="select2" required>
-                                                            @foreach($rectionReasons as $value)
-                                                                <option value="{{$value->id}}"> {{$value->reason}}</option>
-                                                            @endforeach
-                                                                <option value="0"> Other Reason...</option>
-                                                        </select>
-                                                        @if ($errors->rejectionValidation->has('reasonSelection')) <span class="text-danger" role="alert"> <strong>{{ $errors->rejectionValidation->first('reasonSelection') }}</strong></span>@endif
-                                                    </div>
-                                                    
-                                                    <div class="form-group mb-3 otherRectionReason" style="display:none;">
-                                                        <label for="example-textarea">Write Rejection Reason</label>
-                                                        <textarea class="form-control otherRectionReasonInput" name="rejectionReason" id="example-textarea" rows="4" placeholder="Write Rejection Reason"></textarea>
-                                                        @if ($errors->rejectionValidation->has('rejectionReason')) <span class="text-danger" role="alert"> <strong>{{ $errors->rejectionValidation->first('rejectionReason') }}</strong></span>@endif
-                                                    </div>
-
-                                                    <button type="submit" class="btn btn-success my-2 float-left">Yes! Submit <span class="rejectionSpanButton">Approval  Rejection</span></button>
-                                                    <button type="button" class="btn btn-danger my-2 float-right mb-3" data-dismiss="modal">Cancel</button>
-                                                </div>
-                                            </form>
-                                        </div><!-- /.modal-content -->
-                                    </div><!-- /.modal-dialog -->
-                                </div>
-                            <!-- End:: Rejection Warning Alert Modal -->
-
-                        </div> <!-- end col -->
                     </div> <!-- end row -->
         </div>
         </div>
@@ -264,14 +204,6 @@
     </script>
 @endif
 
-@if($errors->hasBag('rejectionValidation'))
-    <script>
-        $(document).ready(function(){
-            $('#rejectModal').modal({show: true});
-        });
-    </script>
-@endif
-
 <script>
     $(".kartik-input-705").fileinput({
         theme: "explorer"
@@ -292,50 +224,5 @@
 
 </script>
 
-<script>
-$('.approvalButton').on('click',function(){
-   var approvalType = $(this).attr('data-approvalType');
-   $('#approvalType').val(approvalType);
-
-    if(approvalType =='Approve Contribution'){
-        $('.approvalSpanTextTitle').html('Approval');
-        $('.approvalSpanTextBody').html('Approve');
-        $('.approvalSpanButton').html('Submit Approval');
-
-    }else{
-        $('.approvalSpanTextTitle').html('Posting');
-        $('.approvalSpanTextBody').html('Post');
-        $('.approvalSpanButton').html('Post Contribution');
-    }
-});
-
-$('.rejectionButton').on('click',function(){
-   var rejectionType = $(this).attr('data-rejectionType');
-   $('#rejectionType').val(rejectionType);
-    if(rejectionType =='Reject Approval'){
-        $('rejectionSpanTextTitle').html('Approval');
-        $('rejectionSpanTextBody').html('Reject Approval of');
-        $('rejectionSpanButton').html('Approval  Rejection');
-
-    }else{
-        $('rejectionSpanTextTitle').html('Posting');
-        $('rejectionSpanTextBody').html('Reject Posting of');
-        $('rejectionSpanButton').html('Positing  Rejection');
-    }
-});
-
-$('.reasonSelect').change(function(){
-    var reason = $(this).find(":selected").val();
-    
-    if(reason == 0){
-        $('.otherRectionReasonInput').prop('required', true);
-        $('.otherRectionReason').show();
-    }else{
-        $('.otherRectionReasonInput').removeAttr('required');
-        $('.otherRectionReason').hide();
-    }
-});
-
-</script>
 
 @endsection

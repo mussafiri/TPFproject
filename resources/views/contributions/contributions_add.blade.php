@@ -55,7 +55,7 @@
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label for="field-1" class="control-label">Contribution Date</label>
-                                            <input type="text" name="contributionDate" class="form-control form-control-sm p-1 contributionDate" value="{{old('contributionDate')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="M yyyy" data-date-min-view-mode="1" placeholder="Pick Contribution Date">
+                                            <input type="text" name="contributionDate" class="form-control form-control-sm p-1 contributionDate" value="{{old('contributionDate')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="M yyyy" data-date-min-view-mode="1" data-date-end-date="0d" data-date-orientation="bottom" onkeydown="return false" placeholder="Pick Contribution Date">
                                             <span class="text-danger font-9" role="alert" id="contributionDateError"> {{ $errors->first('contributionDate') }}</span>
                                         </div>
                                     </div>
@@ -78,42 +78,42 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card-box">
-                        <div class="row reconciliationBlock">
-                            <h4 class="header-title mb-3 text-muted">Reconciliation Panel </h4>
+                            <div class="row reconciliationBlock">
+                                <h4 class="header-title mb-3 text-muted">Reconciliation Panel </h4>
 
-                            <div class="col-12 mb-3 border rounded p-2" style="background-color: #f6fcff;">
-                                <div class="row">
-                                    <div class="col-sm-8"><strong>Section Name:</strong> <span id="sectionName"></span></div>
-                                    <div class="col-sm-4"> <strong>Section Code:</strong> <span id="sectionCode"></span></div>
+                                <div class="col-12 mb-3 border rounded p-2" style="background-color: #f6fcff;">
+                                    <div class="row">
+                                        <div class="col-sm-8"><strong>Section Name:</strong> <span id="sectionName"></span></div>
+                                        <div class="col-sm-4"> <strong>Section Code:</strong> <span id="sectionCode"></span></div>
 
-                                    <div class="col-sm-12 mt-2">
-                                        <div class="table-responsive">
-                                            <table class="table table-sm font-11 table-bordered table-centered mb-0">
-                                                <thead class="thead-light">
-                                                    <tr>
-                                                        <th class="text-center">Scheme</th>
-                                                        <th class="text-center">Contribution Date</th>
-                                                        <th class="text-center">Contributors</th>
-                                                        <th class="text-center">Members</th>
-                                                        <th class="text-center">Monthly Contribution <sup class="text-muted font-10">TZS</sup></th>
-                                                        <th class="text-center">Total Contribution <sup class="text-muted font-10">TZS</sup></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td class="text-center">TUMAINI PENSION FUND</td>
-                                                        <td class="text-center"><span id="contributionDate"></span></td>
-                                                        <td class="text-center"><span id="no_contributorsSpan"></span><input type="hidden" value="" name="totalContributors" id="no_contributorsInput"></td>
-                                                        <td class="text-center"><span id="no_membersSpan"></span><input type="hidden" value="" name="totalMembers" id="no_membersInput"></td>
-                                                        <td class="text-center"><span class="monthlyContribution"></span></td>
-                                                        <td class="text-center"><span class="totalContribution"></span></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                        <div class="col-sm-12 mt-2">
+                                            <div class="table-responsive">
+                                                <table class="table table-sm font-11 table-bordered table-centered mb-0">
+                                                    <thead class="thead-light">
+                                                        <tr>
+                                                            <th class="text-center">Scheme</th>
+                                                            <th class="text-center">Contribution Date</th>
+                                                            <th class="text-center">Contributors</th>
+                                                            <th class="text-center">Members</th>
+                                                            <th class="text-center">Monthly Contribution <sup class="text-muted font-10">TZS</sup></th>
+                                                            <th class="text-center">Total Contribution <sup class="text-muted font-10">TZS</sup></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="text-center">TUMAINI PENSION FUND</td>
+                                                            <td class="text-center"><span id="contributionDate"></span></td>
+                                                            <td class="text-center"><span id="no_contributorsSpan"></span><input type="hidden" value="" name="totalContributors" id="no_contributorsInput"></td>
+                                                            <td class="text-center"><span id="no_membersSpan"></span><input type="hidden" value="" name="totalMembers" id="no_membersInput"></td>
+                                                            <td class="text-center"><span class="monthlyContribution"></span></td>
+                                                            <td class="text-center"><span class="totalContribution"></span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             </div>
 
                             <!-- START:: Existing Contributions -->
@@ -138,14 +138,22 @@
                                             </table>
                                         </div>
                                         <div class="mt-2">
-                                            <a href="javascript:void(0);" class="btn btn-success my-2 float-right addContribution">Continue Adding Another Contribution</a>
-                                            <a href="javascript:void(0);" class="btn btn-warning my-2 float-right mr-2">Cancel</a>
+                                            <a href="javascript:void(0);" class="btn btn-success my-2 float-right addContribution">Add Another Contribution</a>
+                                            {{-- <a href="javascript:void(0);" class="btn btn-warning my-2 float-right mr-2">Cancel</a> --}}
                                         </div>
                                 </div>
                             </div>
                             <!-- END:: Existing Contributions -->
+                            <!-- START:: blocked New Transaction -->
+                            <div class="row addNewContributoionErrorBlock"  style="display:none;">
+                                 <div class="col-12 alert alert-danger" role="alert">
+                                        <i class="mdi mdi-block-helper mr-2"></i> <span class="addNewContributoionErrorSpan"></span>
+                                </div>
+                            </div>
+                            <!-- END:: blocked New Transaction -->
+                            
                             <!-- START:: noDataErrorBlock-->
-                            <div class="row noDataErrorBlock">
+                            <div class="row noDataErrorBlock"  style="display:none;">
                                  <div class="col-12 alert alert-danger" role="alert">
                                         <i class="mdi mdi-block-helper mr-2"></i> <strong>No data found! </strong> <span class="noDataErrorSpan"></span>
                                 </div>
@@ -292,6 +300,7 @@
 <script type="text/javascript">
 $('.addContribution').on('click', function(){ // adding new contribution
     $('.existingContrinbutionBlock').hide();
+    $('.reconciliationBlock').show();
     $('.newContributionBlock').show();
 });
 </script>
@@ -344,6 +353,18 @@ $('.addContribution').on('click', function(){ // adding new contribution
                 , success: function(response) {
                     //Start:: check old contribution first
                     if(response.sectionContributionDataArr.oldContributions!==''){
+                        $('.addNewContributoionErrorBlock').hide();
+                        
+                        // START:: control new contributio entry
+                             $('.addContribution').show(); 
+                            if(response.sectionContributionDataArr.onProcessContributions > 0){
+                                $('.addNewContributoionErrorSpan').html('You still have <b>Unattended Contribution(s)</b> on the same <b>Contribtuion Date</b> Kindly! Process it to be able to add a new contribution.');
+                                $('.addNewContributoionErrorBlock').show();
+                                $('.addContribution').hide(); // prevent Adding new contribution
+                            }
+
+                        // END:: control new contributio entry
+
                         $('.noDataErrorBlock').hide();
                         $(".existing_contrinbution_recon_table tbody").empty();
                         $(".existing_contrinbution_recon_table").prepend(response.sectionContributionDataArr.oldContributions);
@@ -351,11 +372,14 @@ $('.addContribution').on('click', function(){ // adding new contribution
                         //Start:: block display control
                         $('.existingContrinbutionBlock').show();
                         $('.newContributionBlock').hide();
+                        $('.reconciliationBlock').hide();
                         //End:: block display control
+
                     }else{
                         //Start:: block display control
                         $('.existingContrinbutionBlock').hide();
                         $('.newContributionBlock').show();
+                        $('.addNewContributoionErrorBlock').hide();
                         //End:: block display control
                     }
                     //End:: check old contribution first
@@ -460,7 +484,7 @@ $('.addContribution').on('click', function(){ // adding new contribution
 
         }else{
             $('.reconciliationBlock').hide();
-            $('.noDataErrorSpan').html(' Kindly, Select <u>Section</u> and pick <u>Contribtuion Date</u> to get the data.');
+            $('.noDataErrorSpan').html(' Kindly, select <b>Section</b> and pick <b>Contribtuion Date</b> to get the data.');
             $('.noDataErrorBlock').show();
             $('.existingContrinbutionBlock').hide();
             $('.newContributionBlock').hide();
