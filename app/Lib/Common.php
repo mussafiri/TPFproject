@@ -75,17 +75,16 @@ class Common {
         $income = 0;
         $getIncome = ContributorIncomeTracker::where( 'contributor_id', $contributorID )->where( 'status', 'ACTIVE' )->first();
         if ( $getIncome ) {
-            $income = $getIncome->getIncome;
+            $income = $getIncome->contributor_monthly_income;
         }
         return $income;
     }
 
     public function memberMonthlyIncome( $memberID ) {
         $income = 0;
-        $getIncome = MemberMonthlyIncome::where( 'member_id', $memberID )->where( 'status', 'ACTIVE' )->first();
+        $getIncome = MemberMonthlyIncome::where( 'member_id', $memberID )->where( 'status', 'CONTRIBUTED' )->first();
         if ( $getIncome ) {
-
-            $income = $getIncome->getIncome;
+            $income = $getIncome->member_monthly_income;
         }
 
         return $income;
@@ -94,7 +93,7 @@ class Common {
     public function memberContributionAmount( $contributorID, $memberID ) {
         $memberIncome = 0;
         #start:: get member income
-        $memberIncomeData = MemberMonthlyIncome::where( 'member_id', $memberID )->where( 'status', 'ACTIVE' )->first();
+        $memberIncomeData = MemberMonthlyIncome::where( 'member_id', $memberID )->where( 'status', 'CONTRIBUTED' )->first();
         if ( $memberIncomeData ) {
             $memberIncome = $memberIncomeData->member_monthly_income;
         }
@@ -107,7 +106,7 @@ class Common {
         $memberContrRate = 0;
         $contributionAmount = 0;
 
-        $getcontributionRate = ContributorCatContrStructure::where( 'member_salutation_id', $memberData->salutation_id )->where( 'contributor_category_id', $contributorData->contributor_type_id )-> where( 'status', 'ACTIVE' )->first();
+        $getcontributionRate = ContributorCatContrStructure::where( 'member_salutation_id', $memberData->member_salutation_id )->where( 'contributor_category_id', $contributorData->contributor_type_id )-> where( 'status', 'ACTIVE' )->first();
 
         if ( $getcontributionRate ) {
             $memberContrRate = $getcontributionRate->member_contribution_rate;
@@ -119,9 +118,10 @@ class Common {
             $contributionAmount = $memberIncome;
             // income is 5% of church income
         } else {
-            $contributionAmount = $memberIncome*( $memberContrRate/100 );
+            $contributionAmount = ( $memberIncome * $memberContrRate )/100 ;
         }
 
+        //$contributionAmount = $memberData->salutation_id;
         return $contributionAmount;
     }
 
@@ -129,7 +129,7 @@ class Common {
 
         $memberIncome = 0;
         #start:: get member income
-        $memberIncomeData = MemberMonthlyIncome::where( 'member_id', $memberID )->where( 'status', 'ACTIVE' )->first();
+        $memberIncomeData = MemberMonthlyIncome::where( 'member_id', $memberID )->where( 'status', 'CONTRIBUTED' )->first();
         if ( $memberIncomeData ) {
             $memberIncome = $memberIncomeData->member_monthly_income;
         }
@@ -140,12 +140,11 @@ class Common {
         $memberData = Member::find( $memberID );
         $contributorData = Contributor::find( $contributorID );
 
-        $contributorContrRate = 0;
         $contributionAmount   = 0;
-        $getcontributionRate = ContributorCatContrStructure::where( 'member_salutation_id', $memberData->salutation_id )->where( 'contributor_category_id', $contributorData->contributor_type_id )-> where( 'status', 'ACTIVE' )->first();
+        $getcontributionRate  = ContributorCatContrStructure::where( 'member_salutation_id', $memberData->member_salutation_id )->where( 'contributor_category_id', $contributorData->contributor_type_id )-> where( 'status', 'ACTIVE' )->first();
+
         if ( $getcontributionRate ) {
-            $contributorContrRate = $getcontributionRate->contributor_contribution_rate;
-            $contributionAmount = $memberIncome * ( $contributorContrRate/100 );
+            $contributionAmount   = ( $memberIncome * $getcontributionRate->contributor_contribution_rate )/100;
         }
         #End:: get contribution
 
@@ -157,23 +156,33 @@ class Common {
         $contributorData = Contributor::find( $contributorID );
 
         $memberIncome = 0;
-        $contributor_contribution = 0;
-
-        $contributorMonthlyIncome = $this->contributorMonthlyIncome( $contributorID );
+        #start:: get member income
+        $memberIncomeData = MemberMonthlyIncome::where( 'member_id', $memberID )->where( 'status', 'CONTRIBUTED' )->first();
+        if ( $memberIncomeData ) {
+            $memberIncome = $memberIncomeData->member_monthly_income;
+        }
         // get old contributor Monthly Income
 
+        $contributor_contribution = 0;
+        $newDerivedMonhtlyIncome = 0;
         $getcontributionRate = ContributorCatContrStructure::where( 'member_salutation_id', $memberData->member_salutation_id )->where( 'contributor_category_id', $contributorData->contributor_type_id )-> where( 'status', 'ACTIVE' )->first();
+
+        if ( $getcontributionRate ) {
+            $newDerivedMonhtlyIncome  = ( 100* $newContribution )/$getcontributionRate->member_contribution_rate;
+            $contributor_contribution = ( $newDerivedMonhtlyIncome * $getcontributionRate->contributor_contribution_rate )/100 ;
+        }
+        
+
         if ( $memberData->salutation_id == 1 ) {
-            //Senior Pastor
-            $memberIncome = $newContribution;
-            $contributor_contribution = $memberIncome;
+            // Seniour Pastor
+            $contributorMonthlyIncome = ( 100* $newContribution )/$getcontributionRate->contributor_contribution_rate;
+            // income is 5% of church income
         } else {
-            $memberIncome = $newContribution/( $getcontributionRate->member_contribution_rate/100 );
-            $contributor_contribution = $newContribution;
+            $contributorMonthlyIncome = $this->contributorMonthlyIncome( $contributorID );
         }
 
         $returnDataArr = array();
-        $returnDataArr[ 'monthly_income' ] = $memberIncome;
+        $returnDataArr[ 'monthly_income' ] = $newDerivedMonhtlyIncome;
         $returnDataArr[ 'contributor_monthly_income' ] = $contributorMonthlyIncome;
         $returnDataArr[ 'contributor_contribution' ] = $contributor_contribution;
 

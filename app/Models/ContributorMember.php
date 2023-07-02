@@ -33,7 +33,6 @@ class ContributorMember extends Model {
         $cmn = new Common();
         $memberContribution = $cmn->memberContributionAmount( $contributorID, $memberID );
         return $memberContribution;
-        ;
     }
 
     public function getContributorContributionAmount( $contributorID, $memberID ) {

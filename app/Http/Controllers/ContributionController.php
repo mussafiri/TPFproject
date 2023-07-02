@@ -18,6 +18,7 @@ use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ContributionController extends Controller {
@@ -222,8 +223,9 @@ class ContributionController extends Controller {
             $newContribution->payment_proof       = $payment_proof;
             $newContribution->payment_date        = date( 'Y-m-d', strtotime( $request->paymentDate ) );
             $newContribution->processing_status   = 'PENDING';
+            $newContribution->type                = 'CONTRIBUTION';
             $newContribution->status              = 'ACTIVE';
-            $newContribution->created_by           = Auth::user()->id;
+            $newContribution->created_by          = Auth::user()->id;
             $newContribution->save();
             //End: insert into contribution
 
@@ -237,13 +239,20 @@ class ContributionController extends Controller {
             $topup = $request->topup;
             //$totalContribution = $request->total;
 
-            for ( $aa = 0; $aa < count( $memberMonthlyIncome );
+            for ( $aa = 0; $aa < count( $memberContribution );
             $aa++ ) {
+
+                $getContributorData = Contributor::find($contributor[ $aa ]);
+                $getContriRate = ContributorCatContrStructure:: where('contributor_category_id', $getContributorData->contributor_type_id)->where('status','ACTIVE')->first();
+
+                
+                $member_monthly_income = str_replace( ',', '', (100 * str_replace( ',', '', $memberContribution[ $aa ] )) / $getContriRate->member_contribution_rate);
+                
                 $newContributionDetail = new ContributionDetail;
                 $newContributionDetail->contribution_id      = $newContribution->id;
                 $newContributionDetail->contributor_id       = $contributor[ $aa ];
                 $newContributionDetail->member_id            = $member[ $aa ];
-                $newContributionDetail->member_monthly_income = str_replace( ',', '', $memberMonthlyIncome[ $aa ] );
+                $newContributionDetail->member_monthly_income = $member_monthly_income;
                 $newContributionDetail->member_contribution  = str_replace( ',', '', $memberContribution[ $aa ] );
                 $newContributionDetail->contributor_contribution  = str_replace( ',', '', $contributorContribution[ $aa ] );
                 $newContributionDetail->payment_ref_no       = $request->transactionReference;
@@ -254,46 +263,63 @@ class ContributionController extends Controller {
                 $newContributionDetail->created_by           = Auth::user()->id;
                 $newContributionDetail->save();
                 //Start:: Save new member monthly income
-
+                
                 # Start: update Old monthly income
-                $getMemberIncome = MemberMonthlyIncome::where( 'member_id', $member[ $aa ] )->where( 'status', 'CONTRIBUTED' )->first();
-                if ( $getMemberIncome ) {
-                    $updateMemberIncome = MemberMonthlyIncome::find( $getMemberIncome->id );
-                    $updateMemberIncome->status = 'DORMANT';
-                    $updateMemberIncome->save();
+                
+                $getThisMonthMemberIncome = MemberMonthlyIncome::where( 'member_id', $member[ $aa ] )->where( 'status', 'CONTRIBUTED' )->where('contribution_date',date( 'Y-m', strtotime( $request->contributionDate ) ))->first();
+                if($getThisMonthMemberIncome){
+                    $updateMemberIncome = MemberMonthlyIncome::find( $getThisMonthMemberIncome->id );
+                    $updateMemberIncome->member_monthly_income = str_replace( ',', '', $member_monthly_income );
+                        $updateMemberIncome->save();
+                }else{
+                        $getMemberIncome = MemberMonthlyIncome::where( 'member_id', $member[ $aa ] )->where( 'status', 'CONTRIBUTED' )->first();
+                        if ( $getMemberIncome ) {
+                            $updateMemberIncome = MemberMonthlyIncome::find( $getMemberIncome->id );
+                            $updateMemberIncome->status = 'DORMANT';
+                            $updateMemberIncome->save();
+                        }
+                        
+                        $newMemberIncome = new MemberMonthlyIncome;
+                        $newMemberIncome->member_id = $member[ $aa ];
+                        $newMemberIncome->member_monthly_income = str_replace( ',', '', $member_monthly_income );
+                        $newMemberIncome->contribution_date =  date( 'Y-m', strtotime( $request->contributionDate ) );
+                        $newMemberIncome->status = 'CONTRIBUTED';
+                        $newMemberIncome->created_by = Auth::user()->id;
+                        $newMemberIncome->save();
                 }
-                # End: update Old monthly income
-
-                $newMemberIncome = new MemberMonthlyIncome;
-                $newMemberIncome->member_id = $member[ $aa ];
-                $newMemberIncome->member_monthly_income = str_replace( ',', '', $memberMonthlyIncome[ $aa ] );
-                $newMemberIncome->contribution_date =  date( 'Y-m', strtotime( $request->contributionDate ) );
-                $newMemberIncome->status = 'CONTRIBUTED';
-                $newMemberIncome->created_by = Auth::user()->id;
-                $newMemberIncome->save();
                 //END:: Save new member monthly income
-
+                
                 //Start:: Insert new Contributor an member income
                 #start::Check member salutation because only senior pastor contribution change affects contributor income
-                $getMemberData = Member::find( $member[ $aa ] );
+                $getMemberData = Member::find( $member[ $aa ] ); // check for member
+                
                 if ( $getMemberData->member_salutation_id == 1 ) {
 
                     # Start: update Old Contributor  monthly income
-                    $getContributorIncome = ContributorIncomeTracker::where( 'contributor_id' )->where( 'status', 'ACTIVE' )->first();
-                    if ( $getContributorIncome ) {
+                    $getThisMonthContributorIncome = ContributorIncomeTracker::where( 'contributor_id', $contributor[ $aa ] )->where( 'status', 'CONTRIBUTED' )->where('income_month',date( 'Y-m', strtotime( $request->contributionDate ) ))->first();
+                    if($getThisMonthContributorIncome){
                         $updateContributorIncome = ContributorIncomeTracker::find( $getContributorIncome->id );
                         $updateContributorIncome->status = 'DORMANT';
                         $updateContributorIncome->updated_by = Auth::user()->id;
                         $updateContributorIncome->save();
-                    }
-                    # End: update Old Contributor  monthly income
+                    }else{
+                            $getContributorIncome = ContributorIncomeTracker::where( 'contributor_id', $contributor[ $aa ] )->where( 'status', 'ACTIVE' )->first();
+                            if ( $getContributorIncome ) {
+                                $updateContributorIncome = ContributorIncomeTracker::find( $getContributorIncome->id );
+                                $updateContributorIncome->status = 'DORMANT';
+                                $updateContributorIncome->updated_by = Auth::user()->id;
+                                $updateContributorIncome->save();
+                            }
+                            # End: update Old Contributor  monthly income
 
-                    $newContributorIncome = new ContributorIncomeTracker;
-                    $newContributorIncome->contributor_id = $contributor[ $aa ];
-                    $newContributorIncome->contributor_monthly_income = str_replace( ',', '', $contributorMonthlyIncome[ $aa ] );
-                    $newContributorIncome->income_month = date( 'Y-m-d', strtotime( $request->contributionDate ) );
-                    $newContributorIncome->status = 'ACTIVE';
-                    $newContributorIncome->save();
+                            $contributorMonthlyIncome = (100 * str_replace( ',', '', $memberContribution[ $aa ] ))/$getContriRate->member_contribution_rate;
+                            $newContributorIncome = new ContributorIncomeTracker;
+                            $newContributorIncome->contributor_id = $contributor[ $aa ];
+                            $newContributorIncome->contributor_monthly_income = str_replace( ',', '', $contributorMonthlyIncome);
+                            $newContributorIncome->income_month = date( 'Y-m-d', strtotime( $request->contributionDate ) );
+                            $newContributorIncome->status = 'ACTIVE';
+                            $newContributorIncome->save();
+                    }
                 }
                 #End:: Check member salutation
                 //end:: insert new Contributor an member income
@@ -410,7 +436,11 @@ class ContributionController extends Controller {
                 if($contriData->processing_status == "PENDING"|| $contriData->processing_status =="APPROVAL REJECTED" || $contriData->processing_status =="POSTING REJECTED"){
                     $ditLink = '<a href="'.url("contributions/edit/".Crypt::encryptString($contriData->id)).'" class="dropdown-item"> <i class="mdi mdi-pencil-outline mr-1"></i> Edit </a>';
                 }
-
+               
+                $topUpLink ='<a href="'.url("contributions/topup/".Crypt::encryptString($contriData->id)).'" class="dropdown-item"> <i class="mdi mdi-account-cash-outline mr-1"></i> Topup </a>';
+                
+                if($contriData->processing_status=="PENDING"){ $badgeState="info";} elseif($contriData->processing_status=="APPROVED"){ $badgeState="primary";} elseif($contriData->processing_status=="POSTED"){ $badgeState="success";} elseif($contriData->processing_status=="APPROVAL REJECTED"){ $badgeState="danger";} elseif($contriData->processing_status=="POSTING REJECTED"){ $badgeState="pink";} else{ $badgeState="secondary";}
+                
                 $oldContributions .= '<tr>
                                         <td>'.$count.'</td>
                                         <td class="text-center">'.$contriData->section->name.'</td>
@@ -418,7 +448,7 @@ class ContributionController extends Controller {
                                         <td class="text-center">'.$contriData->total_contributors.'</td>
                                         <td class="text-center">'.$contriData->total_members.'</td>
                                         <td class="text-center">'.number_format($contriData->contribution_amount,2).'</td>
-                                        <td class="text-center">'.$contriData->processing_status.'</td>
+                                        <td class="text-center"><span class="badge badge-outline-'.$badgeState.' badge-pill">'.$contriData->processing_status.'</span></td>
                                         <td class="text-center"> 
                                             <div class="btn-group dropdown float-right">
                                                 <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-light btn-sm"
@@ -428,10 +458,8 @@ class ContributionController extends Controller {
                                                 <div class="dropdown-menu dropdown-menu-right">
                                                     <a href="'.url("contributions/details/".Crypt::encryptString($contriData->id)).'" class="dropdown-item">
                                                         <i class="mdi mdi-eye-outline mr-1"></i> View
-                                                    </a>'.$ditLink.' 
-                                                    <a href="'.url("contributions/topup/".Crypt::encryptString($contriData->id)).'" class="dropdown-item">
-                                                        <i class="mdi mdi-account-cash-outline mr-1"></i> Topup
-                                                    </a>
+                                                    </a>'.$ditLink.$topUpLink.' 
+                                                    
                                                 </div> <!-- end dropdown menu-->
                                             </div>
                                         </td>
@@ -462,8 +490,9 @@ class ContributionController extends Controller {
 
         $contributionData = Contribution::find( $contributionID );
         $contributionDetails = ContributionDetail::where( 'contribution_id', $contributionID )->get();
+        $paymentMode= PaymentMode::where('status','ACTIVE')->get();
 
-        return view( 'contributions/contributions_topup', compact( 'contributionData', 'contributionDetails' ) );
+        return view( 'contributions/contributions_topup', compact( 'contributionData', 'contributionDetails','paymentMode' ) );
     }
     
     public function submitContributionRejection(Request $request, $contributionID){
@@ -508,8 +537,259 @@ class ContributionController extends Controller {
         return redirect('contributions/processing/'.Crypt::encryptString('PENDING'))->with(['success'=>'You have Successfully Rejected a Section Contribution']);
     }
 
-    public function editContribution($contributionID){
+    
+    public function submitContributionTopup(Request $request){
+        $valid = Validator::make( $request->all(), [
+            'contriDetailID'      => 'required',
+            'topupAmount'         =>'required',
+            'paymentDate'         =>'required',
+            'paymentMode'         =>'required',
+            'transactionReference'=>'required',
+        ]);
 
+        if ( $valid->fails() ) {
+            return back()->withErrors( $valid, 'topupValidation' )->withInput();
+        }
+
+        $contriDetails = ContributionDetail::find($request->contriDetailID);
+
+                    //Start:: Get Payment Proof
+                    if ( $request->hasFile( 'transactionProof' ) ) {
+                        $filenameWithExt = $request->file( 'transactionProof' )->getClientOriginalName();
+                        // Get just filename
+                        $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
+                        //Get just ext
+                        $extension = $request->file( 'transactionProof' )->getClientOriginalExtension();
+                        // Create new Filename
+                        $newfilename = 'CONTR_' . date( 'y' );
+                        // FileName to Store
+                        $payment_proof = $newfilename . '_' . time() . '.' . $extension;
+                        // Upload Image
+                        $path = $request->file( 'transactionProof' )->storeAs( 'public/contributionPaymentProof', $payment_proof );
+                    } else {
+                        $payment_proof = 'NULL';
+                    }
+                    //End:: Get Payment Proof
+        
+                    //Start: insert into contribution
+                    $newContribution =  new Contribution;
+                    $newContribution->section_id          = $contriDetails->contribution->section_id;
+                    $newContribution->contribution_period = $contriDetails->contribution->contribution_period;
+                    $newContribution->total_contributors  = 1;
+                    $newContribution->total_members       = 1;
+                    $newContribution->contribution_amount = 0;
+                    $newContribution->payment_mode_id     = $request->paymentMode;
+                    $newContribution->payment_ref_no      = $request->transactionReference;
+                    $newContribution->payment_proof       = $payment_proof;
+                    $newContribution->payment_date        = date( 'Y-m-d', strtotime( $request->paymentDate ) );
+                    $newContribution->processing_status   = 'PENDING';
+                    $newContribution->status              = 'ACTIVE';
+                    $newContribution->type                = 'TOPUP';
+                    $newContribution->created_by          = Auth::user()->id;
+                    $newContribution->save();
+                    //End: insert into contribution
+
+                    $newContributionDetail = new ContributionDetail;
+                    $newContributionDetail->contribution_id      = $newContribution->id;
+                    $newContributionDetail->contributor_id       = $contriDetails->contributor_id;
+                    $newContributionDetail->member_id            = $contriDetails->member_id;
+                    $newContributionDetail->member_monthly_income = 0;
+                    $newContributionDetail->member_contribution   = 0;
+                    $newContributionDetail->contributor_contribution  = 0;
+                    $newContributionDetail->payment_ref_no       = $request->transactionReference;
+                    $newContributionDetail->pay_mode_id          = $request->paymentMode;
+                    $newContributionDetail->payment_proof        = $payment_proof;
+                    $newContributionDetail->member_topup         = str_replace( ',', '', $request->topupAmount);
+                    $newContributionDetail->status               = 'ACTIVE';
+                    $newContributionDetail->created_by           = Auth::user()->id;
+                    $newContributionDetail->save();
+                //Start:: Save new member monthly income
+                
+            toastr();
+            return redirect( 'contributions/processing/'.Crypt::encryptString( 'PENDING' ) )->with( [ 'success'=>'You have Successfully added new Contribution Topup' ] );
     }
+    
+    public function editContribution($contributionID){
+        $contributionID = Crypt::decryptString($contributionID);
+
+        $sections    = Section::where( 'status', 'ACTIVE' )->get();
+        $schemes     = Scheme::where( 'status', 'ACTIVE' )->get();
+        $paymentMode = PaymentMode::where( 'status', 'ACTIVE' )->get();
+
+        $contributionData   = Contribution::find($contributionID);
+        $contributionDetail = ContributionDetail::where('contribution_id', $contributionID)->get();
+        
+        $paymentProofArr = array();
+        $paymentProofArr['filePath'] = asset( 'storage/contributionPaymentProof' ). '/' . $contributionData->payment_proof;
+        $paymentProofArr['fileName'] = $contributionData->payment_proof;
+        $paymentProofArr['fileSize'] = Storage::disk( 'public' )->size( 'contributionPaymentProof/' . $contributionData->payment_proof );
+        
+        return view( 'contributions.contributions_edit', compact('sections', 'schemes', 'paymentMode', 'contributionData', 'contributionDetail','paymentProofArr'));
+    }
+
+    public function submitContributionEdit(Request $request, $contributionID){
+        $valid = Validator::make( $request->all(), [
+            'contributionAmount'  => 'required',
+            'paymentDate'         => 'required',
+            'paymentMode'         => 'required',
+            'transactionReference'=> 'required',
+            'totalContributors'   => 'required',
+            'totalMembers'        => 'required',]);
+
+        if ( $valid->fails() ) {
+            return back()->withErrors( $valid )->withInput();
+        }
+
+        //START:: Validation of Array Inputs
+        $valid = Validator::make( $request->all(), [
+            'contributor'             =>'required',
+            'member'                  =>'required',
+            'memberMonthlyIncome'     =>'required',
+            'memberContribution'      =>'required',
+            'contributorContribution' =>'required',
+            'topup'                   =>'required',
+            'total'                   =>'required' ] );
+
+            if ( $valid->fails() ) {
+                return back()->withErrors( $valid, 'dynamicInputsValidation' )->withInput();
+            }
+        //END:: Validation of Array Inputs
+
+            //Start:: Get Payment Proof
+            if ( $request->hasFile( 'transactionProof' ) ) {
+                $filenameWithExt = $request->file( 'transactionProof' )->getClientOriginalName();
+                // Get just filename
+                $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
+                //Get just ext
+                $extension = $request->file( 'transactionProof' )->getClientOriginalExtension();
+                // Create new Filename
+                $newfilename = 'CONTR_' . date( 'y' );
+                // FileName to Store
+                $payment_proof = $newfilename . '_' . time() . '.' . $extension;
+                // Upload Image
+                $path = $request->file( 'transactionProof' )->storeAs( 'public/contributionPaymentProof', $payment_proof );
+            } else {
+                $payment_proof = 'NULL';
+            }
+            //End:: Get Payment Proof
+
+            //Start: insert into contribution
+            $newContribution =  Contribution::find($contributionID);
+            $newContribution->total_contributors  = $request->totalContributors;
+            $newContribution->total_members       = $request->totalMembers;
+            $newContribution->contribution_amount = str_replace( ',', '', $request->contributionAmount );
+            $newContribution->payment_mode_id     = $request->paymentMode;
+            $newContribution->payment_ref_no      = $request->transactionReference;
+            $newContribution->payment_proof       = $payment_proof;
+            $newContribution->payment_date        = date( 'Y-m-d', strtotime( $request->paymentDate ) );
+            $newContribution->updated_by          = Auth::user()->id;
+            $newContribution->processing_status    = 'PENDING';
+            $newContribution->save();
+            //End: insert into contribution
+
+            //Start:: Insert contribution details
+                #Start:: remove old Contribution Details
+                    ContributionDetail::where('contribution_id', $contributionID)->delete();
+                #End:: remove old Contribution Details
+
+            $contributor = $request->contributor;
+            $member = $request->member;
+            $memberMonthlyIncome = $request->memberMonthlyIncome;
+            $memberContribution = $request->memberContribution;
+            $contributorContribution = $request->contributorContribution;
+            $contributorMonthlyIncome = $request->contributorMonthlyIncome;
+            $topup = $request->topup;
+            //$totalContribution = $request->total;
+
+            for ( $aa = 0; $aa < count( $memberContribution );
+            $aa++ ) {
+
+                $getContributorData = Contributor::find($contributor[ $aa ]);
+                $getContriRate = ContributorCatContrStructure:: where('contributor_category_id', $getContributorData->contributor_type_id)->where('status','ACTIVE')->first();
+
+                
+                $member_monthly_income = str_replace( ',', '', (100 * str_replace( ',', '', $memberContribution[ $aa ] )) / $getContriRate->member_contribution_rate);
+                
+                $newContributionDetail = new ContributionDetail;
+                $newContributionDetail->contribution_id      = $contributionID;
+                $newContributionDetail->contributor_id       = $contributor[ $aa ];
+                $newContributionDetail->member_id            = $member[ $aa ];
+                $newContributionDetail->member_monthly_income = $member_monthly_income;
+                $newContributionDetail->member_contribution  = str_replace( ',', '', $memberContribution[ $aa ] );
+                $newContributionDetail->contributor_contribution  = str_replace( ',', '', $contributorContribution[ $aa ] );
+                $newContributionDetail->payment_ref_no       = $request->transactionReference;
+                $newContributionDetail->pay_mode_id          = $request->paymentMode;
+                $newContributionDetail->payment_proof        = $payment_proof;
+                $newContributionDetail->member_topup         = $topup[ $aa ];
+                $newContributionDetail->status               = 'ACTIVE';
+                $newContributionDetail->created_by           = Auth::user()->id;
+                $newContributionDetail->save();
+                //Start:: Save new member monthly income
+                
+                # Start: update Old monthly income
+                
+                $getThisMonthMemberIncome = MemberMonthlyIncome::where( 'member_id', $member[ $aa ] )->where( 'status', 'CONTRIBUTED' )->where('contribution_date',date( 'Y-m', strtotime( $request->contributionDate ) ))->first();
+                if($getThisMonthMemberIncome){
+                    $updateMemberIncome = MemberMonthlyIncome::find( $getThisMonthMemberIncome->id );
+                    $updateMemberIncome->member_monthly_income = str_replace( ',', '', $member_monthly_income );
+                        $updateMemberIncome->save();
+                }else{
+                        $getMemberIncome = MemberMonthlyIncome::where( 'member_id', $member[ $aa ] )->where( 'status', 'CONTRIBUTED' )->first();
+                        if ( $getMemberIncome ) {
+                            $updateMemberIncome = MemberMonthlyIncome::find( $getMemberIncome->id );
+                            $updateMemberIncome->status = 'DORMANT';
+                            $updateMemberIncome->save();
+                        }
+                        
+                        $newMemberIncome = new MemberMonthlyIncome;
+                        $newMemberIncome->member_id = $member[ $aa ];
+                        $newMemberIncome->member_monthly_income = str_replace( ',', '', $member_monthly_income );
+                        $newMemberIncome->contribution_date =  date( 'Y-m', strtotime( $request->contributionDate ) );
+                        $newMemberIncome->status = 'CONTRIBUTED';
+                        $newMemberIncome->created_by = Auth::user()->id;
+                        $newMemberIncome->save();
+                }
+                //END:: Save new member monthly income
+                
+                //Start:: Insert new Contributor an member income
+                #start::Check member salutation because only senior pastor contribution change affects contributor income
+                $getMemberData = Member::find( $member[ $aa ] ); // check for member
+                
+                if ( $getMemberData->member_salutation_id == 1 ) {
+
+                    # Start: update Old Contributor  monthly income
+                    $getThisMonthContributorIncome = ContributorIncomeTracker::where( 'contributor_id', $contributor[ $aa ] )->where( 'status', 'CONTRIBUTED' )->where('income_month',date( 'Y-m', strtotime( $request->contributionDate ) ))->first();
+                    if($getThisMonthContributorIncome){
+                        $updateContributorIncome = ContributorIncomeTracker::find( $getContributorIncome->id );
+                        $updateContributorIncome->status = 'DORMANT';
+                        $updateContributorIncome->updated_by = Auth::user()->id;
+                        $updateContributorIncome->save();
+                    }else{
+                            $getContributorIncome = ContributorIncomeTracker::where( 'contributor_id', $contributor[ $aa ] )->where( 'status', 'ACTIVE' )->first();
+                            if ( $getContributorIncome ) {
+                                $updateContributorIncome = ContributorIncomeTracker::find( $getContributorIncome->id );
+                                $updateContributorIncome->status = 'DORMANT';
+                                $updateContributorIncome->updated_by = Auth::user()->id;
+                                $updateContributorIncome->save();
+                            }
+                            # End: update Old Contributor  monthly income
+
+                            $contributorMonthlyIncome = (100 * str_replace( ',', '', $memberContribution[ $aa ] ))/$getContriRate->member_contribution_rate;
+                            $newContributorIncome = new ContributorIncomeTracker;
+                            $newContributorIncome->contributor_id = $contributor[ $aa ];
+                            $newContributorIncome->contributor_monthly_income = str_replace( ',', '', $contributorMonthlyIncome);
+                            $newContributorIncome->income_month = date( 'Y-m-d', strtotime( $request->contributionDate ) );
+                            $newContributorIncome->status = 'ACTIVE';
+                            $newContributorIncome->save();
+                    }
+                }
+                #End:: Check member salutation
+                //end:: insert new Contributor an member income
+            }
+
+            //End:: Insert contribution details
+            toastr();
+            return redirect( 'contributions/processing/'.Crypt::encryptString( 'PENDING' ) )->with( [ 'success'=>'You have Successfully updated a Contribution' ] );
+    } 
 
 }

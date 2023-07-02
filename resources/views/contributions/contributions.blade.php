@@ -61,7 +61,7 @@
                                             </li>
                                             <li class="nav-item">
                                                 <a href="{{url('contributions/processing/'.Crypt::encryptString('POSTING REJECTED'))}}" aria-expanded="true" class="nav-link @if($status=='POSTING REJECTED') {{'active'}} @endif">
-                                                    Approved
+                                                    Posting Rejected
                                                 </a>
                                             </li>
                                         </ul>
@@ -80,6 +80,7 @@
                                                                 <th>Contributors</th>
                                                                 <th>Members</th>
                                                                 <th>Pay Proof</th>
+                                                                <th>Type</th>
                                                                 <th>Process Status</th>
                                                                 <th>Action</th>
                                                             </tr>
@@ -94,10 +95,11 @@
                                                                 <td class="text-muted font-9">{{$data->section->name}}</td>
                                                                 <td>{{date('M, Y', strtotime($data->contribution_period))}}</td>
                                                                 <td>{{number_format($data->contribution_amount,2)}}</td>
-                                                                <td><small>{{$data->payMode->name}}</small></td>
+                                                                <td><span class="badge badge-outline-ligh">{{$data->payMode->name}}</span></td>
                                                                 <td class="text-center">{{$data->total_contributors}}</td>
                                                                 <td class="text-center">{{$data->total_members}}</td>
-                                                                <td class="text-center"> <a class="font-14" href="{{Storage::url('contributionPaymentProof/'.$data->payment_proof)}}" download="{{Storage::url('contributionPaymentProof/'.$data->payment_proof)}}" download title="Download Payment Proof" target="_blank"><i class="mdi mdi-cloud-download-outline"></i></a> </td>
+                                                                <td class="text-center"> <a class="font-14" href="{{Storage::url('contributionPaymentProof/'.$data->payment_proof)}}" target="_blank"><i class="mdi mdi-cloud-download-outline"></i></a> </td>
+                                                                <td><span class="badge badge-outline-{{$data->type=='CONTRIBUTION'?'info':'primary'}} badge-pill">{{$data->type}}</span></td>
                                                                 <td><span class="badge badge-outline-{{$badgeText}} badge-pill">{{$data->processing_status}}</span></td>
                                                                 <td>
                                                                     <div class="btn-group dropdown float-right">
@@ -106,7 +108,7 @@
                                                                             <i class="mdi mdi-dots-horizontal font-18"></i>
                                                                         </a>
                                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                                            <a href="{{url('contributions/details/'.Crypt::encryptString($data->id))}}" target="_blank" class="dropdown-item">
+                                                                            <a href="{{url('contributions/details/'.Crypt::encryptString($data->id))}}"  class="dropdown-item">
                                                                                 <i class='mdi mdi-eye-outline mr-1'></i>View
                                                                             </a>
                                                                             @if($data->processing_status =='PENDING')

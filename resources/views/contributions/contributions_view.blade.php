@@ -94,14 +94,18 @@
                                     <p class="text-muted">{{$contributionData->payment_ref_no}}</p>
                                 </div>
                                 <div class="col-md-2 font-11"> <strong>Pay Proof</strong>
-                                    <p><a class="font-14" href="{{Storage::url('contributionPaymentProof/'.$contributionData->payment_proof)}}" download="{{Storage::url('contributionPaymentProof/'.$contributionData->payment_proof)}}" download title="Download Payment Proof" target="_blank"><i class="mdi mdi-cloud-download-outline"></i></a></p>
+                                    <p><a class="font-14" href="{{Storage::url('contributionPaymentProof/'.$contributionData->payment_proof)}}" title="Download Payment Proof" target="_blank"><i class="mdi mdi-cloud-download-outline"></i></a></p>
                                 </div>
                                 <div class="col-md-2 font-11"> <strong>Process Status</strong>
                                     <p><span class="badge badge-outline-@if($contributionData->processing_status=="PENDING"){{"info"}} @elseif($contributionData->processing_status=="APPROVED"){{"primary"}} @elseif($contributionData->processing_status=="POSTED"){{"success"}}@elseif($contributionData->processing_status=="APPROVAL REJECTED"){{"danger"}} @elseif($contributionData->processing_status=="POSTING REJECTED"){{"pink"}} @else{{"secondary"}} @endif badge-pill">{{$contributionData->processing_status}}</span> 
                                     
-                                    @if($contributionData->processing_status =='APPROVAL REJECTED' || $contributionData->processing_status =='POSTING REJECTED') 
-                                     @php $rejectReason ='Trial Reason'; @endphp
-                                    <a href="javascript:void(0);" class="badge badge-outline-danger ml-2" data-container="body" title="" data-toggle="popover" data-placement="left" data-content="{{$rejectReason}}" data-original-title="Rejection Reason">  Reason </a> 
+                                    @if($contributionData->processing_status =='APPROVAL REJECTED' && $contributionData->posted_by == 0) 
+                                       @php if($contributionData->approval_rejected_reason_id == 0){ $rejectReason = $contributionData->approval_rejected_reason;}else{ $rejectReason = $contributionData->approvalRejectReason->reason;  } @endphp
+                                    <a href="javascript:void(0);" class="badge badge-soft-default ml-2" data-container="body" title="" data-toggle="popover" data-placement="left" data-content="{{$rejectReason}}" data-original-title="Rejection Reason">  REASON </a> 
+                                    @endif 
+                                    @if($contributionData->processing_status =='POSTING REJECTED' && $contributionData->approved_by > 0) 
+                                       @php if($contributionData->posting_rejected_reason_id == 0){ $rejectReason = $contributionData->posting_reject_reason;}else{ $rejectReason = $contributionData->postingRejectReason->reason;  } @endphp
+                                    <a href="javascript:void(0);" class="badge badge-soft-default ml-2" data-container="body" title="" data-toggle="popover" data-placement="left" data-content="{{$rejectReason}}" data-original-title="Rejection Reason">  REASON </a> 
                                     @endif 
                                     </p>
                                 </div>
@@ -173,7 +177,7 @@
                                                     <td>{{number_format($value->member_topup,2)}}</td>
                                                     <td>{{number_format($value->contributor_contribution+$value->member_contribution+$value->member_topup,2)}}</td>
                                                     <td class="text-center">
-                                                    <a class="font-14" href="{{Storage::url('contributionPaymentProof/'.$value->payment_proof)}}" download="{{Storage::url('contributionPaymentProof/'.$value->payment_proof)}}" download title="Download Payment Proof" target="_blank"><i class="mdi mdi-cloud-download-outline"></i></a>
+                                                        <a class="font-14" href="{{Storage::url('contributionPaymentProof/'.$value->payment_proof)}}" title="Download Payment Proof" target="_blank"><i class="mdi mdi-cloud-download-outline"></i></a>
                                                     </td>
                                                     <td><span class="badge badge-outline-{{$value->status=='ACTIVE'?'success':'primary'}}">{{$value->status}}</span></td>
                                                 </tr>

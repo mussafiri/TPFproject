@@ -121,7 +121,7 @@
                                 <div class="col-12 mb-3 p-2">
                                         <h4 class="header-title mb-3 text-muted">Contributions </h4>
                                         <div class="table-responsive">
-                                            <table class="existing_contrinbution_recon_table table table-sm font-11 table-bordered table-centered mb-0">
+                                            <table class="existing_contrinbution_recon_table table table-bordered font-11 table-striped w-100">
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>

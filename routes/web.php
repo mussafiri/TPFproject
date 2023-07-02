@@ -150,6 +150,11 @@ Route::middleware('auth')->group(function () {
         Route:: post('/compute/edit/membercontribution', [ContributionController::class, 'ajaxComputeEditMemberContribution']);
         Route:: post('/get/old/membercontribution', [ContributionController::class, 'ajaxGetOldContributionData']);
         #End:: Contibutions routes
+        
+        #start:: arrear routes
+        Route:: post('/get/arrear/data', [SettingsController::class, 'ajaxGetArrearData']);
+
+        #End:: arrear routes
     });
     
     //Start:: users management routes
@@ -181,6 +186,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/search', [ContributionController::class , 'searchContributions']);
         Route::get('/topup/{id}', [ContributionController::class, 'topupContribution']);
         Route::get('/edit/{id}', [ContributionController::class, 'editContribution']);
+        Route::post('/submit/topup', [ContributionController::class, 'submitContributionTopup']);
+        Route::post('/submit/edit/{id}', [ContributionController::class, 'submitContributionEdit']);
     });
     //End:: Contributions
 
@@ -190,6 +197,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/edit/constantvalue/submit', [SettingsController::class, 'submitConstantValues']);
         Route::get('/schemes', [SettingsController::class, 'schemes']);
         Route::get('/payment/modes', [SettingsController::class, 'paymentModes']);
+        Route::get('/arrears/recognition', [SettingsController::class, 'arrearsRecognition']);
+        Route::post('/edit/arrear/structure/submit', [SettingsController::class, 'submitArrearsRecognitionEdit']);
     });
     //Start:: Configurations routes
 });

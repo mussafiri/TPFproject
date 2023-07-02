@@ -41,7 +41,7 @@
                                 <div class="row px-3">
                                     <div class="col-md-9">
                                         <div class="form-group">
-                                            <label for="field-3" class="control-label">Section</label>
+                                            <label for="field-3" class="control-label">Section <span class="text-danger">*</span></label>
                                             <select class="form-control sectionSelect" name="section" data-toggle="select2">
                                                 <option value="0"> -- Select Section --</option>
                                                 @foreach($sections as $value)
@@ -54,7 +54,7 @@
 
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <label for="field-1" class="control-label">Contribution Date</label>
+                                            <label for="field-1" class="control-label">Contribution Date <span class="text-danger">*</span></label>
                                             <input type="text" name="contributionDate" class="form-control form-control-sm p-1 contributionDate" value="{{old('contributionDate')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="M yyyy" data-date-min-view-mode="1" data-date-end-date="0d" data-date-orientation="bottom" onkeydown="return false" placeholder="Pick Contribution Date">
                                             <span class="text-danger font-9" role="alert" id="contributionDateError"> {{ $errors->first('contributionDate') }}</span>
                                         </div>
@@ -151,7 +151,7 @@
                                 </div>
                             </div>
                             <!-- END:: blocked New Transaction -->
-                            
+
                             <!-- START:: noDataErrorBlock-->
                             <div class="row noDataErrorBlock"  style="display:none;">
                                  <div class="col-12 alert alert-danger" role="alert">
@@ -169,7 +169,7 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width:3%;">#</th>
-                                                    <th style="width:20%;">Contributor</th>
+                                                    <th style="width:15%;">Contributor</th>
                                                     <th style="width:18%;">Member Name</th>
                                                     <th style="width:10%;">Monthly Income <sup class="text-muted font-10">TZS</sup></th>
                                                     <th style="width:10%;">Amount <sup class="text-muted font-10">Contributor TZS</sup></th>
@@ -194,21 +194,21 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="field-4" class="control-label">Total Contribution Amount</label>
+                                                    <label for="field-4" class="control-label">Total Contribution Amount  <span class="text-danger">*</span></label>
                                                     <input type="text" name="contributionAmount" id="contributionAmount" class="form-control form-control-sm totalContributionInput contriInput autonumber" value="{{old('contributionAmount')}}" id="field-4" placeholder="Total Contribution">
                                                     <span class="text-danger" role="alert"> {{ $errors->first('contributionAmount') }}</span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="field-4" class="control-label">Payment Date</label>
+                                                    <label for="field-4" class="control-label">Payment Date  <span class="text-danger">*</span></label>
                                                     <input type="text" name="paymentDate" id="basic-datepicker" data-date-format="d M, Y" class="form-control form-control-sm contriInput" value="{{old('paymentDate')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Pick Payment Date">
                                                     <span class="text-danger" role="alert"> {{ $errors->first('paymentDate') }}</span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="field-1" class="control-label">Payment Mode</label>
+                                                    <label for="field-1" class="control-label">Payment Mode  <span class="text-danger">*</span></label>
                                                     <select class="form-control contriInput" name="paymentMode" data-toggle="select2">
                                                         @foreach($paymentMode as $value)
                                                         <option value="{{$value->id}}" {{old ('paymentMode') == $value->id ? 'selected' : ''}}>{{$value->name}}</option>
@@ -219,7 +219,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="field-4" class="control-label">Transaction Reference</label>
+                                                    <label for="field-4" class="control-label">Transaction Reference  <span class="text-danger">*</span></label>
                                                     <input type="text" name="transactionReference" id="transaction" class="form-control form-control-sm contriInput" value="{{old('transaction')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Transaction Reference">
                                                     <span class="text-danger" role="alert"> {{ $errors->first('transactionReference') }}</span>
                                                 </div>
@@ -229,7 +229,7 @@
                                     <div class="col-md-6">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label for="field-3" class="control-label">Transaction Proof</label>
+                                                <label for="field-3" class="control-label">Transaction Proof  <span class="text-danger">*</span></label>
                                                 <input type="file" class="form-control kartik-input-705 kv-fileinput-dropzone contriInput" name="transactionProof" id="field-4" placeholder="District" required>
                                                 <span class="text-danger" role="alert"> {{ $errors->first('transactionProof') }}</span>
                                             </div>
@@ -354,11 +354,11 @@ $('.addContribution').on('click', function(){ // adding new contribution
                     //Start:: check old contribution first
                     if(response.sectionContributionDataArr.oldContributions!==''){
                         $('.addNewContributoionErrorBlock').hide();
-                        
+
                         // START:: control new contributio entry
-                             $('.addContribution').show(); 
+                             $('.addContribution').show();
                             if(response.sectionContributionDataArr.onProcessContributions > 0){
-                                $('.addNewContributoionErrorSpan').html('You still have <b>Unattended Contribution(s)</b> on the same <b>Contribtuion Date</b> Kindly! Process it to be able to add a new contribution.');
+                                $('.addNewContributoionErrorSpan').html('You still have <b>Unattended Contribution(s)</b> on the same <b>Contribtuion Period</b> Kindly! Process it to be able to add a new contribution.');
                                 $('.addNewContributoionErrorBlock').show();
                                 $('.addContribution').hide(); // prevent Adding new contribution
                             }
@@ -407,7 +407,7 @@ $('.addContribution').on('click', function(){ // adding new contribution
                             let newMemberContribution = $(this).val();
                             let memberID      = $(this).attr('data-memberID');
                             let contributorID = $(this).attr('data-contributorID');
-
+                            
                             reverseContributioComputation(rowID,newMemberContribution,memberID, contributorID);
                         });
                         //End:: Contribution Inputs
@@ -447,7 +447,7 @@ $('.addContribution').on('click', function(){ // adding new contribution
                                         url: "{{url('/ajax/compute/edit/membercontribution')}}",
                                         type: 'POST',
                                         data: {
-                                            newContribution: newMemberContribution,
+                                            newContribution: parseInt(newMemberContribution.replace(/,/g, ''), 10),
                                             memberID: memberID,
                                             contributorID: contributorID,
                                             _token: '{{ csrf_token() }}'
@@ -456,14 +456,19 @@ $('.addContribution').on('click', function(){ // adding new contribution
                                         success: function(response) {
                                             var topupValue = parseInt($('.topupInput'+rowID).val().replace(/,/g, ''), 10);
                                             var memberContribution = parseInt(newMemberContribution.replace(/,/g, ''), 10);
-                                            var contributorContribution = parseInt((response.getContributionStructure.contributor_contribution).replace(/,/g, ''), 10);
+                                            // var contributorMonthlyIncome = response.getContributionStructure.contributor_monthly_income;
+                                            var contributorContribution = response.getContributionStructure.contributor_contribution;
 
                                             var total = memberContribution+contributorContribution+topupValue;
+                                            
                                             $('.monthlyIncomeSpan'+rowID).html((response.getContributionStructure.monthly_income).toLocaleString() + '.00');
-                                            $('.contributorContributionSpan'+rowID).html(parseInt(response.getContributionStructure.contributor_contribution.replace(/,/g, ''), 10).toLocaleString() + '.00');
+                                            $('.monthlyIncomeInput'+rowID).html(response.getContributionStructure.monthly_income);
+                                            $('.memberContributionInput'+rowID).html();
+                                            
+                                            $('.contributorContributionSpan'+rowID).html(contributorContribution.toLocaleString() + '.00');
                                             $('.contributorContributionInput'+rowID).val(contributorContribution);
                                             $('.totalSpan'+rowID).html(total.toLocaleString() + '.00');
-                                            $('.totalInput'+rowID).val(total);
+                                            $('.totalInput'+rowID).val(total); 
 
                                             calculateItems(); // Prior Items Caluculation
                                         }
@@ -484,7 +489,7 @@ $('.addContribution').on('click', function(){ // adding new contribution
 
         }else{
             $('.reconciliationBlock').hide();
-            $('.noDataErrorSpan').html(' Kindly, select <b>Section</b> and pick <b>Contribtuion Date</b> to get the data.');
+            $('.noDataErrorSpan').html(' Kindly, select <b>Section</b> and pick <b>Contribtuion Period</b> to get the data.');
             $('.noDataErrorBlock').show();
             $('.existingContrinbutionBlock').hide();
             $('.newContributionBlock').hide();

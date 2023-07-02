@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('payment_ref_no')->default('NULL');
             $table->string('payment_date')->default('NULL');
             $table->string('payment_proof')->default('NULL');
+            $table->enum('type',['CONTRIBUTION','TOPUP'])->default('CONTRIBUTION');
             $table->enum('status',['ACTIVE','SUSPENDED'])->default('ACTIVE');
             $table->enum('processing_status',['PENDING','APPROVED','POSTED','APPROVAL REJECTED','POSTING REJECTED'])->default('PENDING');
             $table->string('created_by')->default(0);
