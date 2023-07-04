@@ -22,10 +22,12 @@ return new class extends Migration
             $table->string('payment_ref_no')->default('NULL');
             $table->string('payment_date')->default('NULL');
             $table->string('payment_proof')->default('NULL');
+            $table->enum('type',['CONTRIBUTION','TOPUP'])->default('CONTRIBUTION');
             $table->enum('status',['ACTIVE','SUSPENDED'])->default('ACTIVE');
             $table->enum('processing_status',['PENDING','APPROVED','POSTED','APPROVAL REJECTED','POSTING REJECTED'])->default('PENDING');
             $table->string('approved_by')->default(0);
             $table->string('approved_at')->default('NULL');
+            $table->integer('approval_rejected_reason_id')->default(0);
             $table->string('approval_rejected_by')->default(0);
             $table->string('approval_rejected_at')->default('NULL');
             $table->string('approval_reject_reason')->default('NULL');
@@ -34,6 +36,7 @@ return new class extends Migration
             $table->string('posting_rejected_by')->default(0);
             $table->string('posting_rejected_at')->default('NULL');
             $table->string('posting_reject_reason')->default('NULL');
+            $table->integer('posting_rejected_reason_id')->default(0);
             $table->integer('created_by');
             $table->integer('updated_by')->default(0);
             $table->timestamps();

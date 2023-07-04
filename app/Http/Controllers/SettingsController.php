@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ArrearRecognition;
 use App\Models\ConstantValue;
 use App\Models\Scheme;
 use Illuminate\Http\Request;
@@ -47,16 +48,70 @@ class SettingsController extends Controller {
 
         $updateConstantValue = ConstantValue::find( $request->data_id );
         $updateConstantValue->consantValue = $request->consantValue;
+        
         if ( $updateConstantValue->save() ) {
-            toastr();
-            return redirect( 'configs/constantvalues' )->with( 'success', 'You have Successfully updates a Constant Value' );
+            $responseStatus='success';
+            $responseText= 'You have Successfully updates a Constant Value';
+        }else{
+            $responseStatus='error';
+            $responseText= 'Something went wrong, try again';
         }
+
         toastr();
-        return redirect( 'configs/constantvalues' )->with( 'error', 'Something went wrong, try again' );
+        return redirect( 'configs/constantvalues' )->with( [$responseStatus=>$responseText] );
     }
 
     public function schemes() {
         $schemeData = Scheme::all();
-        return view( 'settings.schemes', [ 'schemeData'=>$schemeData ] );
+        return view( 'settings.schemes', compact( 'schemeData') );
+    }
+
+    public function arrearsRecognition(){
+        $arrearData = ArrearRecognition::all();
+        return view( 'settings.arrear_structure', compact('arrearData'));
+    }
+
+    public function submitArrearsRecognitionEdit(Request $request){
+         # START:: VALIDATION
+         $valid = Validator::make( $request->all(), [
+            'gracePeriod' =>'required',
+            'penaltyRate' =>'required',
+            'data_id'     =>'required|integer',
+         ],['gracePeriod'=>'Enter value greater than Zero'] );
+
+        if ( $valid->fails() ) {
+            return back()->withErrors( $valid )->withInput();
+        }
+        # END:: VALIDATION
+
+        $arrearsData = ArrearRecognition::find($request->data_id);
+        $arrearsData->grace_period_days = $request->gracePeriod;
+        $arrearsData->penalty_rate = str_replace('%','',$request->penaltyRate);
+        
+        if($arrearsData->save()){
+            $responseStatus = 'success';
+            $responseText   = 'You have Successfully updated an Arrear Structure';
+        }else{
+            $responseStatus = 'error';
+            $responseText   = 'There is Something wrong';
+        }
+
+        toastr();
+
+        return redirect('configs/arrears/recognition')->with([$responseStatus => $responseText]);
+    }
+    public function ajaxGetArrearData(Request $request){
+        $getData = ArrearRecognition::find($request->data_id);
+
+        $arrearDataArr = array();
+        if($getData){
+            $arrearDataArr['status'] = 'success';
+            $arrearDataArr['data']   = $getData;
+        }else{
+            $arrearDataArr['status']  = 'failure';
+            $arrearDataArr['message'] = 'Data not found';
+        }
+        
+        return response()->json(['arrearDataArr'=>$arrearDataArr]);
     }
 }

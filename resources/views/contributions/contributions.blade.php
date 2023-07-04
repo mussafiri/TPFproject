@@ -33,16 +33,6 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card-box">
-                                        <div class="row">
-                                            <div class="col-sm-4">
-
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <div class="text-sm-right">
-                                                    <a href="{{url('contributions/add')}}" class="btn btn-info mb-2 mr-1"><i class="mdi mdi-plus-thick mr-2"></i> Add Contribution</a>
-                                                </div>
-                                            </div><!-- end col-->
-                                        </div>
 
                                         <!-- end row-->
                                         <div class="row">
@@ -50,28 +40,28 @@
                                         <div class="col-12">
                                          <ul class="nav nav-tabs nav-bordered">
                                             <li class="nav-item">
-                                                <a href="{{url('contributions/transactions/'.Crypt::encryptString('PENDING'))}}" aria-expanded="false" class="nav-link @if($status=='PENDING') {{'active'}} @endif">
+                                                <a href="{{url('contributions/processing/'.Crypt::encryptString('PENDING'))}}" aria-expanded="false" class="nav-link @if($status=='PENDING') {{'active'}} @endif">
                                                     Pending
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="{{url('contributions/transactions/'.Crypt::encryptString('APPROVED'))}}" aria-expanded="true" class="nav-link @if($status=='APPROVED') {{'active'}} @endif">
+                                                <a href="{{url('contributions/processing/'.Crypt::encryptString('APPROVED'))}}" aria-expanded="true" class="nav-link @if($status=='APPROVED') {{'active'}} @endif">
                                                     Approved
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="{{url('contributions/transactions/'.Crypt::encryptString('POSTED'))}}" aria-expanded="true" class="nav-link @if($status=='POSTED') {{'active'}} @endif">
+                                                <a href="{{url('contributions/processing/'.Crypt::encryptString('POSTED'))}}" aria-expanded="true" class="nav-link @if($status=='POSTED') {{'active'}} @endif">
                                                     Posted
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="{{url('contributions/transactions/'.Crypt::encryptString('APPROVAL REJECTED'))}}" aria-expanded="true" class="nav-link @if($status=='APPROVAL REJECTED') {{'active'}} @endif">
+                                                <a href="{{url('contributions/processing/'.Crypt::encryptString('APPROVAL REJECTED'))}}" aria-expanded="true" class="nav-link @if($status=='APPROVAL REJECTED') {{'active'}} @endif">
                                                     Approval Rejected
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="{{url('contributions/transactions/'.Crypt::encryptString('POSTING REJECTED'))}}" aria-expanded="true" class="nav-link @if($status=='POSTING REJECTED') {{'active'}} @endif">
-                                                    Approved
+                                                <a href="{{url('contributions/processing/'.Crypt::encryptString('POSTING REJECTED'))}}" aria-expanded="true" class="nav-link @if($status=='POSTING REJECTED') {{'active'}} @endif">
+                                                    Posting Rejected
                                                 </a>
                                             </li>
                                         </ul>
@@ -90,6 +80,7 @@
                                                                 <th>Contributors</th>
                                                                 <th>Members</th>
                                                                 <th>Pay Proof</th>
+                                                                <th>Type</th>
                                                                 <th>Process Status</th>
                                                                 <th>Action</th>
                                                             </tr>
@@ -98,29 +89,43 @@
                                                         <tbody>
                                                         @php $n=1; @endphp
                                                         @foreach($contributions as $data)
+                                                        @php if($data->processing_status=="PENDING"){$badgeText = "info";}else if ($data->processing_status=="APPROVED"){$badgeText = "primary";}elseif($data->processing_status=="POSTED"){$badgeText = "success";}else if($data->processing_status=="APPROVAL REJECTED"){$badgeText = "danger";}elseif($data->processing_status=="POSTING REJECTED"){$badgeText = "pink";}else{$badgeText = "secondary";}  @endphp
                                                             <tr>
                                                                 <td>{{$n}}.</td>
                                                                 <td class="text-muted font-9">{{$data->section->name}}</td>
-                                                                <td>{{date('d M, Y', strtotime($data->contribution_period))}}</td>
+                                                                <td>{{date('M, Y', strtotime($data->contribution_period))}}</td>
                                                                 <td>{{number_format($data->contribution_amount,2)}}</td>
-                                                                <td><small>{{$data->payMode->name}}</small></td>
+                                                                <td><span class="badge badge-outline-ligh">{{$data->payMode->name}}</span></td>
                                                                 <td class="text-center">{{$data->total_contributors}}</td>
                                                                 <td class="text-center">{{$data->total_members}}</td>
-                                                                <td class="text-center"> <a class="font-14" href="{{Storage::url('contributionPaymentProof/'.$data->payment_proof)}}" download="{{Storage::url('contributionPaymentProof/'.$data->payment_proof)}}" download title="Download Payment Proof" target="_blank"><i class="mdi mdi-cloud-download-outline"></i></a></td>
-                                                                <td><span class="badge badge-outline-{{$data->processing_status=='ACTIVE'?'success':'info'}} badge-pill">{{$data->processing_status}}</span></td>
+                                                                <td class="text-center"> <a class="font-14" href="{{Storage::url('contributionPaymentProof/'.$data->payment_proof)}}" target="_blank"><i class="mdi mdi-cloud-download-outline"></i></a> </td>
+                                                                <td><span class="badge badge-outline-{{$data->type=='CONTRIBUTION'?'info':'primary'}} badge-pill">{{$data->type}}</span></td>
+                                                                <td><span class="badge badge-outline-{{$badgeText}} badge-pill">{{$data->processing_status}}</span></td>
                                                                 <td>
                                                                     <div class="btn-group dropdown float-right">
                                                                         <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-light btn-sm"
                                                                             data-toggle="dropdown" aria-expanded="false">
-                                                                            <i class='mdi mdi-dots-horizontal font-18'></i>
+                                                                            <i class="mdi mdi-dots-horizontal font-18"></i>
                                                                         </a>
                                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                                            <a href="{{url('contributions/details/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
+                                                                            <a href="{{url('contributions/details/'.Crypt::encryptString($data->id))}}"  class="dropdown-item">
                                                                                 <i class='mdi mdi-eye-outline mr-1'></i>View
                                                                             </a>
+                                                                            @if($data->processing_status =='PENDING')
+                                                                            <a href="{{url('contributions/processing/'.Crypt::encryptString($data->id).'/'.Crypt::encryptString('APPROVE'))}}" class="dropdown-item">
+                                                                                <i class='mdi mdi-check-bold mr-1'></i>Approve
+                                                                            </a>
+                                                                            @endif
+                                                                            @if($data->processing_status =='PENDING'|| $data->processing_status =='APPROVAL REJECTED' || $data->processing_status =='POSTING REJECTED')
                                                                             <a href="{{url('contributions/edit/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
                                                                                 <i class='mdi mdi-pencil-outline mr-1'></i>Edit
                                                                             </a>
+                                                                            @endif
+                                                                            @if($data->processing_status =='APPROVED')
+                                                                            <a href="{{url('contributions/processing/'.Crypt::encryptString($data->id).'/'.Crypt::encryptString('APPROVE'))}}" class="dropdown-item">
+                                                                                <i class='mdi mdi-file-check-outline mr-1'></i>Post
+                                                                            </a>
+                                                                            @endif
                                                                             <div class="dropdown-divider"></div>
                                                                             <!-- item-->
                                                                             <a href="javascript:void(0);" class="dropdown-item change_contributor_status_swt_alert" data-id="{{$data->id}}" data-newstatus="@if($data->status=='ACTIVE'){{'Suspend'}} @else {{'Activate'}}@endif" data-name="{{$data->name}}">

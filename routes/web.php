@@ -149,9 +149,15 @@ Route::middleware('auth')->group(function () {
         Route:: post('/get/section/contribution/data', [ContributionController::class, 'ajaxGetSectionContributionData']);
         Route:: post('/member/contribution/validation', [ContributionController::class, 'ajaxValidateSubmitContribution']);
         Route:: post('/compute/edit/membercontribution', [ContributionController::class, 'ajaxComputeEditMemberContribution']);
+        Route:: post('/get/old/membercontribution', [ContributionController::class, 'ajaxGetOldContributionData']);
         #End:: Contibutions routes
-    });
+        
+        #start:: arrear routes
+        Route:: post('/get/arrear/data', [SettingsController::class, 'ajaxGetArrearData']);
 
+        #End:: arrear routes
+    });
+    
     //Start:: users management routes
     Route::prefix('users')->group(function(){
         Route::get('/list/{status}', [UserController::class, 'userList']);
@@ -168,12 +174,21 @@ Route::middleware('auth')->group(function () {
         Route::post('/designations/edit/submit', [UserController::class, 'submitEditDesignation']);
     });
     //end:: users management routes
-
+    
     //Start:: Contributions
     Route::prefix('contributions')->group(function(){
         Route::get('/add', [ContributionController::class, 'addContribution']);
         Route::post('/add/submit', [ContributionController::class, 'submitAddContribution']);
-        Route::get('/transactions/{status}', [ContributionController::class, 'contributions']);
+        Route::get('/details/{id}', [ContributionController::class, 'viewContributionDetails']);
+        Route::get('/processing/{status}', [ContributionController::class, 'contributions']);
+        Route::get('/processing/{id}/{status}', [ContributionController::class , 'contributionProcessing']);
+        Route::post('/submit/approval/{id}', [ContributionController::class , 'submitContributionApproval']);
+        Route::post('/submit/rejection/{id}', [ContributionController::class , 'submitContributionRejection']);
+        Route::get('/search', [ContributionController::class , 'searchContributions']);
+        Route::get('/topup/{id}', [ContributionController::class, 'topupContribution']);
+        Route::get('/edit/{id}', [ContributionController::class, 'editContribution']);
+        Route::post('/submit/topup', [ContributionController::class, 'submitContributionTopup']);
+        Route::post('/submit/edit/{id}', [ContributionController::class, 'submitContributionEdit']);
     });
     //End:: Contributions
 
@@ -183,6 +198,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/edit/constantvalue/submit', [SettingsController::class, 'submitConstantValues']);
         Route::get('/schemes', [SettingsController::class, 'schemes']);
         Route::get('/payment/modes', [SettingsController::class, 'paymentModes']);
+        Route::get('/arrears/recognition', [SettingsController::class, 'arrearsRecognition']);
+        Route::post('/edit/arrear/structure/submit', [SettingsController::class, 'submitArrearsRecognitionEdit']);
     });
     //Start:: Configurations routes
 });

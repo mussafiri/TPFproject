@@ -22,4 +22,42 @@ class Contribution extends Model {
     public function createdBy() {
         return $this->belongsTo( User::class, 'created_by');
     }
+
+    public function approvedBy() {
+        return $this->belongsTo( User::class, 'approved_by' );
+    }
+
+    public function approvalRejectedBy() {
+        return $this->belongsTo( User::class, 'approval_rejected_by' );
+    }
+
+    public function postedBy() {
+        return $this->belongsTo( User::class, 'posted_by' );
+    }
+
+    public function postingRejectedBy() {
+        return $this->belongsTo( User::class, 'posting_rejected_by' );
+    }
+
+    public function updatedBy() {
+        return $this->belongsTo( User::class, 'updated_by' );
+    }
+
+    public function approvalRejectReason() {
+        return $this->belongsTo( ContributionRejectReason::class, 'approval_rejected_reason_id' );
+    }
+
+    public function postingRejectReason() {
+        return $this->belongsTo( ContributionRejectReason::class, 'posting_rejected_reason_id' );
+    }
+
+    public function sumTransaction( $contritbutionID ) {
+        $totalTopup = ContributionDetail::where( 'contribution_id', $contritbutionID )->sum( 'member_contribution' );
+        return $totalTopup;
+    }
+
+    public function sumTopup( $contritbutionID ) {
+        $totalTopup = ContributionDetail::where( 'contribution_id', $contritbutionID )->sum( 'member_topup' );
+        return $totalTopup;
+    }
 }

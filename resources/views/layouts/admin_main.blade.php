@@ -109,9 +109,8 @@
 
         <!-- App js-->
 
-        <!-- Start:: custom data range picker -->
-
-        <!-- End:: custom data range picker -->
+        <!-- Tippy js-->
+        <script src="{{asset('assets/libs/tippy.js/tippy.all.min.js')}}"></script>
 
         <script src="{{asset('assets/js/app.min.js')}}"></script>
 

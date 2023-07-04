@@ -23,14 +23,12 @@
                         <li class="@if(request()->is('members/list')||request()->is('members/registration')){{'menuitem-active'}}@endif">
                             <a href="{{url('members/list')}}">List</a>
                         </li>
-                        <li>
-                            <a href="{{url('members/possible/duplicates')}}">Duplicates</a>
-                        </li>
+                        <li> <a href="{{url('members/possible/duplicates')}}">Duplicates</a> </li>
                     </ul>
                 </div>
             </li>
 
-             <li class="@if(request()->segment(1)=='contributions'){{'menuitem-active'}}@endif">
+            <li class="@if(request()->segment(1)=='contributions'){{'menuitem-active'}}@endif">
                 <a href="#sidebarContributions" data-toggle="collapse">
                     <i class=" mdi mdi-account-group-outline"></i>
                     <span> Contributions </span>
@@ -38,8 +36,9 @@
                 </a>
                 <div class="collapse @if(request()->segment(1)=='contributions'){{'show'}}@endif" id="sidebarContributions">
                     <ul class="nav-second-level">
-                        <li  class="@if(request()->is('contributions/add'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/add')}}">Add Contribution</a> </li>
-                        <li  class="@if(request()->is('contributions/transactions/*')){{'menuitem-active'}}@endif"> <a href="{{url('contributions/transactions/'.Crypt::encryptString('PENDING'))}}">Contributions</a> </li>
+                        <li  class="@if(request()->segment(2)=='add'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/add')}}">Add Contribution</a> </li>
+                        <li  class="@if(request()->segment(2)=='transactions' || request()->segment(2)=='processing' || request()->segment(2)=='details'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/processing/'.Crypt::encryptString('PENDING'))}}">Process Contribution</a> </li>
+                        <li  class="@if(request()->segment(2)=='search'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/search')}}">Search Contribution</a> </li>
                     </ul>
                 </div>
             </li>
@@ -102,6 +101,7 @@
                         <li> <a href="{{url('configs/constantvalues')}}">Default Value</a> </li>
                         <li> <a href="{{url('configs/schemes')}}">Schemes</a> </li>
                         <li> <a href="{{url('configs/payment/modes')}}">Payment Modes</a> </li>
+                        <li> <a href="{{url('configs/arrears/recognition')}}">Arrears Control</a> </li>
                     </ul>
                 </div>
             </li>
