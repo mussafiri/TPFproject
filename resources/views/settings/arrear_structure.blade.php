@@ -38,7 +38,6 @@
                         </div>
                         <div class="col-sm-8">
                             <div class="text-sm-right">
-                                <button type="button" class="btn btn-info mb-2 mr-1" data-toggle="modal" data-target="#add_modal"><i class="mdi mdi-plus-thick mr-2"></i> Add Department</button>
                             </div>
                         </div><!-- end col-->
                     </div>
@@ -58,6 +57,7 @@
                                                     <th>#</th>
                                                     <th>Name</th>
                                                     <th>Grace Period</th>
+                                                    <th>Penalty Rate/Month</th>
                                                     <th>Status</th>
                                                     <th>Created by</th>
                                                     <th>Created at</th>
@@ -72,6 +72,7 @@
                                                     <td>{{$n}}.</td>
                                                     <td>{{$data->name}}</td>
                                                     <td>{{$data->grace_period_days}}  <sup class="text-muted"> Days</sup></td>
+                                                    <td>{{$data->penalty_rate}}  <sup class="text-muted"> %</sup></td>
                                                     <td><span class="badge badge-outline-{{$data->status=='ACTIVE'?'success':'danger'}} badge-pill">{{$data->status}}</span></td>
                                                     <td><small>{{$data->createdBy->fname.' '.$data->createdBy->mname.' '.$data->createdBy->lname}}</small></td>
                                                     <td><small>{{date('d M Y', strtotime($data->created_at))}}</small></td>
@@ -106,14 +107,22 @@
                                                 <div class="row">
                                                     <div class="col-12"><span class="text-danger" id="edit_value_fetchError"></span></div>
 
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="field-1" class="control-label">Arrear Grace Period <sup class="text-muted">Days</sup></label>
                                                             <input type="hidden" class="form-control" id="data_id" name="data_id">
-                                                            <input type="text" class="form-control" id="gracePeriod" name="gracePeriod" value="{{ old('gracePeriod') }}"  oninput="this.value = this.value.toUpperCase()">
+                                                            <input type="text" class="form-control autonumber" id="gracePeriod" name="gracePeriod" value="{{ old('gracePeriod') }}"  oninput="this.value = this.value.toUpperCase()">
                                                             @if ($errors->editDepartment->has('gracePeriod')) <span class="text-danger" role="alert"> <strong>{{ $errors->editDepartment->first('gracePeriod') }}</strong></span>@endif
                                                         </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-1" class="control-label">Penalty Rate</label>
+                                                            <input type="text" class="form-control autonumber" id="penaltyRate" name="penaltyRate" value="" data-v-max="100.00" data-a-sign="%" data-p-sign="s" >
+                                                            @if ($errors->editDepartment->has('penaltyRate')) <span class="text-danger" role="alert"> <strong>{{ $errors->editDepartment->first('penaltyRate') }}</strong></span>@endif
                                                         </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer bg-light">
@@ -210,9 +219,11 @@
             success: function(response) {
                 if (response.arrearDataArr.status == 'success') {
                     $('#edit_value_fetchError').html('');
-                    $('#gracePeriod').val(response.arrearDataArr.grace_period_days);
+                    $('#gracePeriod').val(response.arrearDataArr.data.grace_period_days);
+                    $('#penaltyRate').val(response.arrearDataArr.data.penalty_rate);
                 } else {
                     $('#gracePeriod').val(0);
+                    $('#penaltyRate').val(0);
                     $('#edit_value_fetchError').html(response.arrearDataArr.message);
                 }
             }

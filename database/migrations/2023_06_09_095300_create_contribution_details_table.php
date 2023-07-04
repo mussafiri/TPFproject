@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('contribution_details', function (Blueprint $table) {
             $table->id();
             $table->integer('contribution_id');
-            $table->integer('contributor_id');
             $table->integer('member_id');
             $table->decimal('member_monthly_income', 32,2);
             $table->decimal('member_contribution', 32,2);

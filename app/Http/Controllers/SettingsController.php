@@ -74,7 +74,8 @@ class SettingsController extends Controller {
     public function submitArrearsRecognitionEdit(Request $request){
          # START:: VALIDATION
          $valid = Validator::make( $request->all(), [
-            'gracePeriod' =>'required|gt:0',
+            'gracePeriod' =>'required',
+            'penaltyRate' =>'required',
             'data_id'     =>'required|integer',
          ],['gracePeriod'=>'Enter value greater than Zero'] );
 
@@ -85,13 +86,14 @@ class SettingsController extends Controller {
 
         $arrearsData = ArrearRecognition::find($request->data_id);
         $arrearsData->grace_period_days = $request->gracePeriod;
+        $arrearsData->penalty_rate = str_replace('%','',$request->penaltyRate);
         
         if($arrearsData->save()){
-            $responseStatus='success';
-            $responseText= 'You have Successfully updated an Arrear Structure';
+            $responseStatus = 'success';
+            $responseText   = 'You have Successfully updated an Arrear Structure';
         }else{
-            $responseStatus='error';
-            $responseText= 'There is something wrong';
+            $responseStatus = 'error';
+            $responseText   = 'There is Something wrong';
         }
 
         toastr();
@@ -101,12 +103,12 @@ class SettingsController extends Controller {
     public function ajaxGetArrearData(Request $request){
         $getData = ArrearRecognition::find($request->data_id);
 
-        $arrearDataArr= array();
+        $arrearDataArr = array();
         if($getData){
             $arrearDataArr['status'] = 'success';
-            $arrearDataArr['grace_period_days'] = $getData->grace_period_days;
+            $arrearDataArr['data']   = $getData;
         }else{
-            $arrearDataArr['status'] = 'failure';
+            $arrearDataArr['status']  = 'failure';
             $arrearDataArr['message'] = 'Data not found';
         }
         

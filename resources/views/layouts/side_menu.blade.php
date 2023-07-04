@@ -101,7 +101,7 @@
                         <li> <a href="{{url('configs/constantvalues')}}">Default Value</a> </li>
                         <li> <a href="{{url('configs/schemes')}}">Schemes</a> </li>
                         <li> <a href="{{url('configs/payment/modes')}}">Payment Modes</a> </li>
-                        <li> <a href="{{url('configs/arrears/recognition')}}">Arrears Recognition</a> </li>
+                        <li> <a href="{{url('configs/arrears/recognition')}}">Arrears Control</a> </li>
                     </ul>
                 </div>
             </li>

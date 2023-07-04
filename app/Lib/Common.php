@@ -1,6 +1,8 @@
 <?php
 namespace App\Lib;
-
+use App\Models\Contribution;
+use App\Models\ArrearRecognition;
+use App\Models\ContributionDetail;
 use App\Models\ContributorCatContrStructure;
 use App\Models\Contributor;
 use App\Models\ContributorIncomeTracker;
@@ -188,4 +190,24 @@ class Common {
 
         return $returnDataArr;
     }
+
+    public function arrearRegistration($contributionID){
+        $updateContribution = Contribution::find( $contributionID );
+        $getArrearControls = ArrearRecognition::where('status','ACTIVE')->first();
+            
+        $paymentDate = Carbon::parse($updateContribution->payment_date);
+        $currentDate = Carbon::parse(date('Y-m-d'));
+        $delayedDays = $paymentDate->diffInDays($currentDate);
+        $months = ceil($delayedDays / 30);
+        
+        if($months > 0){
+            $getMembersContritbution = ContributionDetail::where('contribution_id', $contributionID)->where('status','ACTIVE')->get();
+
+            // if($getMembersContritbution){
+
+            // }
+        }
+    }
+
+    public 
 }

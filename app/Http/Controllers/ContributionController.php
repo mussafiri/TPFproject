@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Lib\Common;
+use App\Models\ArrearRecognition;
 use App\Models\Contribution;
 use App\Models\ContributionDetail;
 use App\Models\ContributionRejectReason;
@@ -16,6 +17,7 @@ use App\Models\PaymentMode;
 use App\Models\Scheme;
 use App\Models\Section;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
@@ -361,6 +363,7 @@ class ContributionController extends Controller {
         }
 
         public function submitContributionApproval(Request $request, $contributionID ) {
+            $cmn = new Common();
             $limit = $request->totalMembers;
             $valid = Validator::make( $request->all(), 
                         [ 'confirmMembers'      => ['required','array','size:'.$limit]]
@@ -372,27 +375,37 @@ class ContributionController extends Controller {
                 return back()->withErrors( $valid, 'approveContribution')->withInput();
             }
         
-            $updateContribution = Contribution::find( $contributionID );
+            $approveContribution = Contribution::find( $contributionID );
 
             if($request->approvalType == 'Approve Contribution'){
                 $status = 'APPROVED';
-                $updateContribution->approved_by = Auth::user()->id;
-                $updateContribution->approved_at = date('Y-m-d H:i:s');
+                $approveContribution->approved_by = Auth::user()->id;
+                $approveContribution->approved_at = date('Y-m-d H:i:s');
+                $approveContribution->processing_status = $status;
+                $approveContribution->save();
             
-            }else{
+                //START:: AUTO POSTING
                 $status = 'POSTED';
-                $updateContribution->posted_by = Auth::user()->id;
-                $updateContribution->posted_at = date('Y-m-d H:i:s');
-            }
-
-            $updateContribution->processing_status = $status;
-
-            if($updateContribution->save()){
-                $respStatus ="success";
-                $repsText='You have Successfully '.ucfirst(strtolower($status)).' a contribution';
+                $postiContribution = Contribution::find( $contributionID );
+                $postiContribution->posted_by = Auth::user()->id;
+                $postiContribution->posted_at = date('Y-m-d H:i:s');
+                $postiContribution->processing_status = $status;
+    
+                if($postiContribution->save()){
+                    //START:: Check if there is a need to onboarding Arrears
+                    $cmn->arrearRegister($contributionID);
+                    //END:: Check if there is a need to onboarding Arrears
+                    
+                    $respStatus ="success";
+                    $repsText   ='You have Successfully '.ucfirst(strtolower($status)).' a contribution';
+                }else{
+                    $respStatus ="errors";
+                    $repsText   ='So thing when wrong. Kindly, repeat the process';
+                }
             }else{
-                $respStatus="errors";
-                $repsText='So thing when wrong. Kindly, repeat the process';
+
+                $respStatus ="errors";
+                $repsText   ='So thing when wrong. Kindly, repeat the process';
             }
 
             toastr();
