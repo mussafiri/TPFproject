@@ -24,7 +24,6 @@ return new class extends Migration
             $table->string('payment_proof')->default('NULL');
             $table->enum('status',['ACTIVE','SUSPENDED'])->default('ACTIVE');
             $table->enum('processing_status',['PENDING','APPROVED','POSTED','APPROVAL REJECTED','POSTING REJECTED'])->default('PENDING');
-            $table->string('created_by')->default(0);
             $table->string('approved_by')->default(0);
             $table->string('approved_at')->default('NULL');
             $table->string('approval_rejected_by')->default(0);

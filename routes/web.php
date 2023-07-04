@@ -51,7 +51,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/update/section/status', [ZoneController::class, 'ajaxUpdateSectionStatus']);
         Route::post('/update/district/status', [ZoneController::class, 'ajaxUpdateDistrictStatus']);
         #Member
+
         Route::post('/dynamic/validation', [MemberController::class, 'ajaxRowDynamicValidation']);
+        Route::post('/dynamic/member/duplicate/validation', [MemberController::class, 'ajaxMemberDuplicateValidation']);
     });
 
     Route::prefix('zones')->group(function(){
@@ -80,12 +82,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/registration', [MemberController::class, 'regMemberView']);
         Route::get('/list', [MemberController::class, 'members']);
         Route::get('/possible/duplicates', [MemberController::class, 'duplicateMembers']);
-
-
     });
     Route::prefix('member')->group(function(){
-    Route::post('/registration/submit', [MemberController::class, 'submitMemberRegistration']);
-    Route::post('/dependants/submit', [MemberController::class, 'submitMemberDependants']);
+        Route::get('/view/details/{member_id}', [MemberController::class, 'memberViewDetails']);
+        Route::post('/registration/submit', [MemberController::class, 'submitMemberRegistration']);
+        Route::post('/dependants/submit', [MemberController::class, 'submitMemberDependants']);
     });
     //:::::::::::::::::::::::::::::::::::::::::::::::: END MEMBERS ROUTES ::::::::::::::::::::::::::::::::::::::::::::::::
 
