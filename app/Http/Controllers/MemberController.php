@@ -16,6 +16,8 @@ use App\Models\Contributor;
 use App\Models\MemberIdentityType;
 use App\Models\MemberSalutation;
 use App\Models\Section;
+use App\Models\Contribution;
+use App\Models\ContributionDetail;
 
 class MemberController extends Controller {
     public function __construct(){
@@ -23,7 +25,35 @@ class MemberController extends Controller {
         $this->carbonDateObj     = new Carbon('Africa/Dar_es_Salaam');
     }
     public function index() { }
-    
+
+    public function memberViewDetails($member_id) {
+        $member         = Crypt::decryptString($member_id);
+        $member_data    = Member::where('id', $member)
+                                  ->first();
+
+        $member_contributions    = ContributionDetail::join("members",'members.id', '=', 'contributions.member_id')
+                                        ->where("contribution_details.member_id",$member)
+                                        ->get(["contribution_details.*"]);
+
+        return view('members.members_details_view', ["member_data"=>$member_data,"member_contributions"=>$member_contributions]);
+    }
+
+    public function ajaxMemberDuplicateValidation(Request $ajaxreq){
+        #Taking all POST requests from the form
+        $newFormatteddate =  Carbon::createFromFormat('d M Y',$ajaxreq['dob']);
+        $formatted_date =  $newFormatteddate->format('Y-m-d',$ajaxreq['dob']);
+        // Check if the member already exists in the database
+        $member = Member::where('fname', $ajaxreq['firstname'])
+                ->where('mname', $ajaxreq['midname'])
+                ->where('lname', $ajaxreq['lastname'])
+                ->where('dob', $formatted_date)
+                ->count();
+        
+
+        // If the member exists, return false
+        $validator = $member > 0 ? "FAIL" : "SUCCESS";
+        return response()->json(['validationError' => $validator]);
+    }
     public function submitMemberDependants(Request $request){
          #START::Handle Files Upload Registration Form
         // Check for member Dependant Profile photo upload
@@ -133,13 +163,11 @@ class MemberController extends Controller {
     public function submitMemberRegistration(Request $request) {
         #Taking all POST requests from the form
         $valid = Validator::make($request->all(), [
-            'firstname' => 'required|unique:sections,name|min:3',
-            'middle_name' => 'required',
+            'firstname' => 'required|min:3',
+            'middle_name' => 'required|min:3',
+            'lastname' => 'required|min:3',
             'evengelical_title' => 'required|gt:0',
             'salutation' => 'required|not_in:0',
-            'firstname' => 'required|min:3',
-            'middle_name' => 'required',
-            'lastname' => 'required|min:3',
             'email' =>'email',
             'marital_status' => 'required|not_in:0',
             'gender' => 'required|not_in:0',
@@ -238,7 +266,12 @@ class MemberController extends Controller {
             $signature = 'NULL';
         }
         #END::Handle File Upload Registration Form
-        $dob = $this->carbonDateObj->format('Y-m-d',$request->dob);
+        $newFormatteddate =  Carbon::createFromFormat('d M Y',$request->dob);
+        $dob = $this->carbonDateObj->format('Y-m-d',$newFormatteddate);
+        
+        $servicedate_format = Carbon::createFromFormat('d M Y',$request->service_date);
+        $servicedate = $this->carbonDateObj->format('Y-m-d',$servicedate_format);
+
         $default_pwd = password_hash( $request->firstname.$dob, PASSWORD_BCRYPT, [ 'cost'=>10 ] );
 
 
@@ -255,7 +288,7 @@ class MemberController extends Controller {
         $memberRegObject->id_type_id            = $request->id_type;
         $memberRegObject->id_number             = $request->id_number;
         $memberRegObject->dob                   = $dob;
-        $memberRegObject->service_start_at      = $request->service_date;
+        $memberRegObject->service_start_at      = $servicedate;
         $memberRegObject->join_at               = $request->joining_date;
         $memberRegObject->marital_status        = $request->marital_status;
         $memberRegObject->phone                 = $request->phone;

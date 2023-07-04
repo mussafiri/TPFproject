@@ -25,7 +25,6 @@ return new class extends Migration
             $table->enum('type',['CONTRIBUTION','TOPUP'])->default('CONTRIBUTION');
             $table->enum('status',['ACTIVE','SUSPENDED'])->default('ACTIVE');
             $table->enum('processing_status',['PENDING','APPROVED','POSTED','APPROVAL REJECTED','POSTING REJECTED'])->default('PENDING');
-            $table->string('created_by')->default(0);
             $table->string('approved_by')->default(0);
             $table->string('approved_at')->default('NULL');
             $table->integer('approval_rejected_reason_id')->default(0);
