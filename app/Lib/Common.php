@@ -1,5 +1,6 @@
 <?php
 namespace App\Lib;
+use App\Models\Arrear;
 use App\Models\Contribution;
 use App\Models\ArrearRecognition;
 use App\Models\ContributionDetail;
@@ -203,11 +204,12 @@ class Common {
         if($months > 0){
             $getMembersContritbution = ContributionDetail::where('contribution_id', $contributionID)->where('status','ACTIVE')->get();
 
-            // if($getMembersContritbution){
-
-            // }
+            if($getMembersContritbution){
+                foreach($getMembersContritbution as $data){
+                    $registerArrear = new Arrear;
+                    $registerArrear->save();
+                }
+            }
         }
     }
-
-    public 
 }
