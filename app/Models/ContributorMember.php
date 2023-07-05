@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 class ContributorMember extends Model {
     use HasFactory;
 
+    public function transferedBy() {
+        return $this->belongsTo( User::class, 'created_by' );
+    }
     public function member() {
         return $this->belongsTo( Member::class, 'member_id' );
     }

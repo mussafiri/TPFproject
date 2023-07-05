@@ -14,7 +14,7 @@
 
             <li class="@if(request()->segment(1)=='members'){{'menuitem-active'}}@endif" >
                 <a href="#sidebarMembers" data-toggle="collapse">
-                    <i class=" mdi mdi-account-group-outline"></i>
+                    <i class="mdi flaticon-crowd-of-users"></i>
                     <span> Members </span>
                     <span class="menu-arrow"></span>
                 </a>
@@ -30,7 +30,7 @@
 
             <li class="@if(request()->segment(1)=='contributions'){{'menuitem-active'}}@endif">
                 <a href="#sidebarContributions" data-toggle="collapse">
-                    <i class=" mdi mdi-account-group-outline"></i>
+                    <i class="mdi flaticon-calculator-1"></i>
                     <span> Contributions </span>
                     <span class="menu-arrow"></span>
                 </a>
@@ -45,7 +45,7 @@
 
             <li class="@if(request()->segment(1)=='contributors'){{'menuitem-active'}}@endif">
                 <a href="#sidebarContributors" data-toggle="collapse">
-                    <i class="flaticon flaticon-donation"></i>
+                    <i class="mdi flaticon-infaq" style="transform: rotateY(180deg);"></i>
                     <span > Contributors</span>
                     <span class="menu-arrow"></span>
                 </a>

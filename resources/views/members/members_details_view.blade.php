@@ -38,11 +38,11 @@
                 <div class="card-box">
                     <div class="row mb-2">
                         <div class="col-sm-4">
-                            <h4 class="header-title mb-3">Member Details</h4>
+                            <h4 class="header-title mb-3">Member Particulars</h4>
                         </div>
                         <div class="col-sm-8">
                             <div class="text-sm-right">
-                                <a type="button" href="{{url()->previous()}}" class="btn btn-sm btn-blue waves-effect waves-light font-weight-bold"><i class="mdi mdi-arrow-left-thick mr-1  "></i>Back</a>
+                                <a type="button" href="{{url('members/list')}}" class="btn btn-sm btn-blue waves-effect waves-light font-weight-bold"><i class="mdi mdi-arrow-left-thick mr-1  "></i>Back</a>
                             </div>
                         </div><!-- end col-->
                     </div>
@@ -62,7 +62,7 @@
                             <p class="mb-1"><span class="font-weight-semibold mr-2">Physical Address:</span><span class="font-12 text-right">{{$member_data->physical_address}}</span></p>
                             <p class="mb-1"><span class="font-weight-semibold mr-2">Email:</span><span class="font-12 text-right">{{$member_data->email}}</span></p>
                             <p class="mb-1"><span class="font-weight-semibold mr-2">Vital Status:</span><small><span class="badge badge-soft-primary">{{$member_data->vital_status}}</span></small></p>
-                            <p class="mb-1"><span class="font-weight-semibold mr-2">Monthly Income:</span><span class="font-12 text-right">{{number_format($member_data->income,2)}}</span></p>
+                            <p class="mb-1"><span class="font-weight-semibold mr-2">Monthly Income:</span><span class="font-12 text-right">{{number_format($member_data->income,2)}}</span><sup><small>TZS</small></sup></p>
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-12">
                             <p class="mb-1"><span class="font-weight-semibold mr-2">Status:</span><small><span class="text-right {{$member_data->status=='ACTIVE' ? 'badge badge-soft-secondary':'badge badge-soft-danger';}}">{{$member_data->status}}</span></small></p>
@@ -86,36 +86,68 @@
                 <div class="card-box">
                     <div class="row mb-2">
                         <div class="col-sm-4">
-                            <h4 class="header-title mb-3">Member Details</h4>
+                            <h4 class="header-title mb-3">Other Details</h4>
                         </div>
                         <div class="col-sm-8">
                             <div class="text-sm-right">
-                                <a type="button" href="{{url()->previous()}}" class="btn btn-sm btn-blue waves-effect waves-light font-weight-bold"><i class="mdi mdi-arrow-left-thick mr-1  "></i>Back</a>
                             </div>
                         </div><!-- end col-->
                     </div>
                     <div class="row">
-                        <ul class="nav nav-tabs nav-bordered">
+                        <ul class="nav nav-tabs nav-bordered col-12">
                             <li class="nav-item">
-                                <a href="{{url('zones/sections/'.Crypt::encryptString('ACTIVE'))}}" class="nav-link ">
-                                    Active
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{url('zones/sections/'.Crypt::encryptString('SUSPENDED'))}}" class="nav-link active">
+                                <a href="#contributionsPane" data-toggle="tab" class="nav-link active">
+                                    <i class="flaticon-transaction-history"></i>
                                     Contributions
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="#transferHistoryPane" data-toggle="tab" class="nav-link ">
+                                    <i class="flaticon-data-transfer-1"></i>
+                                    Transfer History 
+                                </a>
+                            </li>
                         </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active">
+                        <div class="tab-content col-12">
+                            <div class="tab-pane" id="transferHistoryPane">
+                                <div class="table-responsive">
+                                    <table class="table table-sm font-12 table-striped w-100 datatable-buttons table-responsible" style="width:100%;">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:3%;">#</th>
+                                                <th style="width:35%;">Contributor</th>
+                                                <th style="width:16%;">From</th>
+                                                <th style="width:16%;">To</th>
+                                                <th style="width:10%;">status</th>
+                                                <th style="width:20%;">Transfered by</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php $t=1; @endphp
+                                            @foreach ($transfers as $trans_data)
+                                            @php $end_date = $trans_data->end_date == "NULL" ? '<small><span class="badge badge-outline-blue">CURRENT</span></small> ' : date('d M Y', strtotime($trans_data->end_date)); @endphp
+                                            <tr>
+                                                <td>{{$t}}</td>
+                                                <td>{{$trans_data->contributor->name}}</td>
+                                                <td>{{date('d M Y', strtotime($trans_data->start_date))}}</td>
+                                                <td>{!!$end_date!!}</td>
+                                                <td><span class="$data->status == ACTIVE ? 'badge badge-soft-success':'badge badge-soft-success';">{{$trans_data->status}}</span></td>
+                                                <td>{{$trans_data->transferedBy->fname." ".$trans_data->transferedBy->lname}}</td>
+                                            </tr>
+                                            @php $t++; @endphp
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div> <!-- end .table-responsive-->
+                            </div><!-- end .tab-pane active-->
+                            <div class="tab-pane active" id="contributionsPane" >
                                 <div class="table-responsive">
                                     <table class="table table-sm font-12 table-striped w-100 datatable-buttons table-responsible">
                                         <thead>
                                             <tr>
-                                                <th style="width:3%;">#</th>
+                                                <th style="width:4%;">#</th>
                                                 <th style="width:19%;">Contributor</th>
-                                                <th style="width:10%;">Monthly Income <sup class="text-muted font-10">TZS</sup></th>
+                                                <th style="width:14%;">Monthly Income <sup class="text-muted font-10">TZS</sup></th>
                                                 <th style="width:10%;">Amount <sup class="text-muted font-10">Contributor TZS</sup></th>
                                                 <th style="width:10%;">Amount <sup class="text-muted font-10">Member TZS</sup></th>
                                                 <th style="width:10%;">Topup <sup class="text-muted font-10">TZS</sup></th>
@@ -128,7 +160,10 @@
                                         <tbody>
                                             @php $x=1; @endphp
                                             @foreach ($member_contributions as $data)
-                                            @php $contri_status = $data->status == ACTIVE ? "POSTED" :"WITHDRAWN"; @endphp
+                                            @php 
+                                            $contri_status = $data->status == ACTIVE ? "POSTED" :"WITHDRAWN"; 
+                                            $total = $data->member_topup + $data->member_contribution + $data->member_monthly_income; 
+                                            @endphp
                                             <tr>
                                                 <td>{{$x}}</td>
                                                 <td>{{$data->contributor->name}}</td>

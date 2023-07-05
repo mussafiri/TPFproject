@@ -2,11 +2,11 @@ $flaticon_tpf_mcc-font: "flaticon_tpf_mcc";
 
 @font-face {
     font-family: $flaticon_tpf_mcc-font;
-    src: url("./flaticon_tpf_mcc.ttf?38c182282a7c667a82114fe598846547") format("truetype"),
-url("./flaticon_tpf_mcc.woff?38c182282a7c667a82114fe598846547") format("woff"),
-url("./flaticon_tpf_mcc.woff2?38c182282a7c667a82114fe598846547") format("woff2"),
-url("./flaticon_tpf_mcc.eot?38c182282a7c667a82114fe598846547#iefix") format("embedded-opentype"),
-url("./flaticon_tpf_mcc.svg?38c182282a7c667a82114fe598846547#flaticon_tpf_mcc") format("svg");
+    src: url("./flaticon_tpf_mcc.ttf?36ac01a5f6cfb94dccf07e24787e2915") format("truetype"),
+url("./flaticon_tpf_mcc.woff?36ac01a5f6cfb94dccf07e24787e2915") format("woff"),
+url("./flaticon_tpf_mcc.woff2?36ac01a5f6cfb94dccf07e24787e2915") format("woff2"),
+url("./flaticon_tpf_mcc.eot?36ac01a5f6cfb94dccf07e24787e2915#iefix") format("embedded-opentype"),
+url("./flaticon_tpf_mcc.svg?36ac01a5f6cfb94dccf07e24787e2915#flaticon_tpf_mcc") format("svg");
 }
 
 i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
@@ -66,105 +66,181 @@ $flaticon_tpf_mcc-map: (
     "id-card": "\f12b",
     "map": "\f12c",
     "community": "\f12d",
-    "money-sack": "\f12e",
-    "fast-delivery": "\f12f",
-    "increase": "\f130",
-    "dashboard": "\f131",
-    "dashboard-1": "\f132",
-    "wallet-1": "\f133",
-    "refund": "\f134",
-    "cashback": "\f135",
-    "wrench": "\f136",
-    "give-money": "\f137",
-    "complaint": "\f138",
-    "paper": "\f139",
-    "donation": "\f13a",
-    "left-and-right-arrows": "\f13b",
-    "wallet-2": "\f13c",
-    "folder-1": "\f13d",
-    "transfer": "\f13e",
-    "bank": "\f13f",
-    "bishop": "\f140",
-    "generous": "\f141",
-    "folder-2": "\f142",
-    "report-3": "\f143",
-    "monitor": "\f144",
-    "group": "\f145",
-    "report-4": "\f146",
-    "salary-1": "\f147",
-    "open": "\f148",
-    "open-1": "\f149",
-    "sales": "\f14a",
-    "attachment": "\f14b",
-    "clipboard": "\f14c",
-    "share": "\f14d",
-    "report-5": "\f14e",
-    "profile": "\f14f",
-    "forward": "\f150",
-    "reply": "\f151",
-    "transaction": "\f152",
-    "paper-1": "\f153",
-    "id-card-1": "\f154",
-    "chatting": "\f155",
-    "excel": "\f156",
-    "profit": "\f157",
-    "dashboard-2": "\f158",
-    "scroll": "\f159",
-    "teamwork": "\f15a",
-    "document": "\f15b",
-    "approve": "\f15c",
-    "report-6": "\f15d",
-    "cancel": "\f15e",
-    "price-list": "\f15f",
-    "rise": "\f160",
-    "rise-1": "\f161",
-    "rise-2": "\f162",
-    "gps": "\f163",
-    "data-transfer": "\f164",
-    "data-transfer-1": "\f165",
-    "edit": "\f166",
-    "trash": "\f167",
-    "delivery-man": "\f168",
-    "dashboard-3": "\f169",
-    "document-1": "\f16a",
-    "bank-transfer": "\f16b",
-    "bank-transfer-1": "\f16c",
-    "document-2": "\f16d",
-    "member-card": "\f16e",
-    "cancelation": "\f16f",
-    "cancelation-1": "\f170",
-    "user-2": "\f171",
-    "report-7": "\f172",
-    "file-explorer": "\f173",
-    "ban": "\f174",
-    "bookmark": "\f175",
-    "bin": "\f176",
-    "cashback-1": "\f177",
-    "remove": "\f178",
-    "growth": "\f179",
-    "family-tree": "\f17a",
-    "load": "\f17b",
-    "bill-1": "\f17c",
-    "gps-1": "\f17d",
-    "link-file": "\f17e",
-    "statistics-1": "\f17f",
-    "transfer-1": "\f180",
-    "product-research": "\f181",
-    "quality-assurance": "\f182",
-    "user-experience": "\f183",
-    "penalty": "\f184",
-    "business-report": "\f185",
-    "report-9": "\f186",
-    "audit": "\f187",
-    "data-collection": "\f188",
-    "truck": "\f189",
-    "approval-1": "\f18a",
-    "reporting": "\f18b",
-    "line-graph": "\f18c",
-    "analysis": "\f18d",
-    "notes": "\f18e",
-    "notes-1": "\f18f",
-    "statistics-2": "\f190",
+    "fast-delivery": "\f12e",
+    "increase": "\f12f",
+    "dashboard": "\f130",
+    "dashboard-1": "\f131",
+    "wallet-1": "\f132",
+    "refund": "\f133",
+    "cashback": "\f134",
+    "wrench": "\f135",
+    "give-money": "\f136",
+    "complaint": "\f137",
+    "paper": "\f138",
+    "donation": "\f139",
+    "left-and-right-arrows": "\f13a",
+    "wallet-2": "\f13b",
+    "folder-1": "\f13c",
+    "transfer": "\f13d",
+    "bank": "\f13e",
+    "bishop": "\f13f",
+    "generous": "\f140",
+    "folder-2": "\f141",
+    "report-3": "\f142",
+    "monitor": "\f143",
+    "group": "\f144",
+    "report-4": "\f145",
+    "salary-1": "\f146",
+    "open": "\f147",
+    "open-1": "\f148",
+    "sales": "\f149",
+    "attachment": "\f14a",
+    "clipboard": "\f14b",
+    "share": "\f14c",
+    "report-5": "\f14d",
+    "profile": "\f14e",
+    "forward": "\f14f",
+    "reply": "\f150",
+    "transaction": "\f151",
+    "paper-1": "\f152",
+    "id-card-1": "\f153",
+    "chatting": "\f154",
+    "excel": "\f155",
+    "profit": "\f156",
+    "dashboard-2": "\f157",
+    "scroll": "\f158",
+    "teamwork": "\f159",
+    "document": "\f15a",
+    "approve": "\f15b",
+    "report-6": "\f15c",
+    "cancel": "\f15d",
+    "price-list": "\f15e",
+    "rise": "\f15f",
+    "rise-1": "\f160",
+    "rise-2": "\f161",
+    "gps": "\f162",
+    "data-transfer": "\f163",
+    "data-transfer-1": "\f164",
+    "edit": "\f165",
+    "trash": "\f166",
+    "delivery-man": "\f167",
+    "dashboard-3": "\f168",
+    "document-1": "\f169",
+    "bank-transfer": "\f16a",
+    "bank-transfer-1": "\f16b",
+    "document-2": "\f16c",
+    "member-card": "\f16d",
+    "cancelation": "\f16e",
+    "cancelation-1": "\f16f",
+    "user-2": "\f170",
+    "report-7": "\f171",
+    "file-explorer": "\f172",
+    "ban": "\f173",
+    "bookmark": "\f174",
+    "bin": "\f175",
+    "remove": "\f176",
+    "growth": "\f177",
+    "family-tree": "\f178",
+    "load": "\f179",
+    "bill-1": "\f17a",
+    "gps-1": "\f17b",
+    "link-file": "\f17c",
+    "statistics-1": "\f17d",
+    "transfer-1": "\f17e",
+    "product-research": "\f17f",
+    "quality-assurance": "\f180",
+    "user-experience": "\f181",
+    "penalty": "\f182",
+    "business-report": "\f183",
+    "report-9": "\f184",
+    "audit": "\f185",
+    "data-collection": "\f186",
+    "truck": "\f187",
+    "approval-1": "\f188",
+    "reporting": "\f189",
+    "line-graph": "\f18a",
+    "analysis": "\f18b",
+    "notes": "\f18c",
+    "notes-1": "\f18d",
+    "statistics-2": "\f18e",
+    "bonus": "\f18f",
+    "bonus-1": "\f190",
+    "payment": "\f191",
+    "earnings": "\f192",
+    "earnings-1": "\f193",
+    "cathedral": "\f194",
+    "donation-1": "\f195",
+    "share-1": "\f196",
+    "arrows": "\f197",
+    "transaction-history": "\f198",
+    "bill-2": "\f199",
+    "cheque": "\f19a",
+    "transaction-history-1": "\f19b",
+    "donate": "\f19c",
+    "infaq": "\f19d",
+    "charity": "\f19e",
+    "give": "\f19f",
+    "subsidy": "\f1a0",
+    "funding": "\f1a1",
+    "give-money-1": "\f1a2",
+    "alms": "\f1a3",
+    "zakat": "\f1a4",
+    "money": "\f1a5",
+    "give-money-2": "\f1a6",
+    "donation-2": "\f1a7",
+    "donation-3": "\f1a8",
+    "donation-4": "\f1a9",
+    "donate-1": "\f1aa",
+    "donation-5": "\f1ab",
+    "donation-6": "\f1ac",
+    "donation-7": "\f1ad",
+    "donate-2": "\f1ae",
+    "donation-8": "\f1af",
+    "zakat-1": "\f1b0",
+    "donate-3": "\f1b1",
+    "money-exchange": "\f1b2",
+    "time-management": "\f1b3",
+    "clock": "\f1b4",
+    "money-1": "\f1b5",
+    "banknotes": "\f1b6",
+    "profit-1": "\f1b7",
+    "refund-1": "\f1b8",
+    "calculator": "\f1b9",
+    "money-bag": "\f1ba",
+    "profit-2": "\f1bb",
+    "get-money": "\f1bc",
+    "money-2": "\f1bd",
+    "cashback-1": "\f1be",
+    "money-3": "\f1bf",
+    "waiting-list": "\f1c0",
+    "infaq-2": "\f1c1",
+    "bank-1": "\f1c2",
+    "approved": "\f1c3",
+    "approved-1": "\f1c4",
+    "find": "\f1c5",
+    "user-account": "\f1c6",
+    "team": "\f1c7",
+    "team-1": "\f1c8",
+    "participation": "\f1c9",
+    "group-1": "\f1ca",
+    "leader": "\f1cb",
+    "collaboration": "\f1cc",
+    "group-2": "\f1cd",
+    "cross": "\f1ce",
+    "organization-chart": "\f1cf",
+    "login": "\f1d0",
+    "loan": "\f1d1",
+    "unlock": "\f1d2",
+    "group-3": "\f1d3",
+    "lock": "\f1d4",
+    "key": "\f1d5",
+    "view": "\f1d6",
+    "search": "\f1d7",
+    "woman": "\f1d8",
+    "avatar-1": "\f1d9",
+    "transfer-2": "\f1da",
+    "money-sack": "\f1db",
+    "calculator-1": "\f1dc",
 );
 
 .flaticon-spanner-wrench:before {
@@ -301,9 +377,6 @@ $flaticon_tpf_mcc-map: (
 }
 .flaticon-community:before {
     content: map-get($flaticon_tpf_mcc-map, "community");
-}
-.flaticon-money-sack:before {
-    content: map-get($flaticon_tpf_mcc-map, "money-sack");
 }
 .flaticon-fast-delivery:before {
     content: map-get($flaticon_tpf_mcc-map, "fast-delivery");
@@ -521,9 +594,6 @@ $flaticon_tpf_mcc-map: (
 .flaticon-bin:before {
     content: map-get($flaticon_tpf_mcc-map, "bin");
 }
-.flaticon-cashback-1:before {
-    content: map-get($flaticon_tpf_mcc-map, "cashback-1");
-}
 .flaticon-remove:before {
     content: map-get($flaticon_tpf_mcc-map, "remove");
 }
@@ -598,4 +668,238 @@ $flaticon_tpf_mcc-map: (
 }
 .flaticon-statistics-2:before {
     content: map-get($flaticon_tpf_mcc-map, "statistics-2");
+}
+.flaticon-bonus:before {
+    content: map-get($flaticon_tpf_mcc-map, "bonus");
+}
+.flaticon-bonus-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "bonus-1");
+}
+.flaticon-payment:before {
+    content: map-get($flaticon_tpf_mcc-map, "payment");
+}
+.flaticon-earnings:before {
+    content: map-get($flaticon_tpf_mcc-map, "earnings");
+}
+.flaticon-earnings-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "earnings-1");
+}
+.flaticon-cathedral:before {
+    content: map-get($flaticon_tpf_mcc-map, "cathedral");
+}
+.flaticon-donation-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "donation-1");
+}
+.flaticon-share-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "share-1");
+}
+.flaticon-arrows:before {
+    content: map-get($flaticon_tpf_mcc-map, "arrows");
+}
+.flaticon-transaction-history:before {
+    content: map-get($flaticon_tpf_mcc-map, "transaction-history");
+}
+.flaticon-bill-2:before {
+    content: map-get($flaticon_tpf_mcc-map, "bill-2");
+}
+.flaticon-cheque:before {
+    content: map-get($flaticon_tpf_mcc-map, "cheque");
+}
+.flaticon-transaction-history-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "transaction-history-1");
+}
+.flaticon-donate:before {
+    content: map-get($flaticon_tpf_mcc-map, "donate");
+}
+.flaticon-infaq:before {
+    content: map-get($flaticon_tpf_mcc-map, "infaq");
+}
+.flaticon-charity:before {
+    content: map-get($flaticon_tpf_mcc-map, "charity");
+}
+.flaticon-give:before {
+    content: map-get($flaticon_tpf_mcc-map, "give");
+}
+.flaticon-subsidy:before {
+    content: map-get($flaticon_tpf_mcc-map, "subsidy");
+}
+.flaticon-funding:before {
+    content: map-get($flaticon_tpf_mcc-map, "funding");
+}
+.flaticon-give-money-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "give-money-1");
+}
+.flaticon-alms:before {
+    content: map-get($flaticon_tpf_mcc-map, "alms");
+}
+.flaticon-zakat:before {
+    content: map-get($flaticon_tpf_mcc-map, "zakat");
+}
+.flaticon-money:before {
+    content: map-get($flaticon_tpf_mcc-map, "money");
+}
+.flaticon-give-money-2:before {
+    content: map-get($flaticon_tpf_mcc-map, "give-money-2");
+}
+.flaticon-donation-2:before {
+    content: map-get($flaticon_tpf_mcc-map, "donation-2");
+}
+.flaticon-donation-3:before {
+    content: map-get($flaticon_tpf_mcc-map, "donation-3");
+}
+.flaticon-donation-4:before {
+    content: map-get($flaticon_tpf_mcc-map, "donation-4");
+}
+.flaticon-donate-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "donate-1");
+}
+.flaticon-donation-5:before {
+    content: map-get($flaticon_tpf_mcc-map, "donation-5");
+}
+.flaticon-donation-6:before {
+    content: map-get($flaticon_tpf_mcc-map, "donation-6");
+}
+.flaticon-donation-7:before {
+    content: map-get($flaticon_tpf_mcc-map, "donation-7");
+}
+.flaticon-donate-2:before {
+    content: map-get($flaticon_tpf_mcc-map, "donate-2");
+}
+.flaticon-donation-8:before {
+    content: map-get($flaticon_tpf_mcc-map, "donation-8");
+}
+.flaticon-zakat-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "zakat-1");
+}
+.flaticon-donate-3:before {
+    content: map-get($flaticon_tpf_mcc-map, "donate-3");
+}
+.flaticon-money-exchange:before {
+    content: map-get($flaticon_tpf_mcc-map, "money-exchange");
+}
+.flaticon-time-management:before {
+    content: map-get($flaticon_tpf_mcc-map, "time-management");
+}
+.flaticon-clock:before {
+    content: map-get($flaticon_tpf_mcc-map, "clock");
+}
+.flaticon-money-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "money-1");
+}
+.flaticon-banknotes:before {
+    content: map-get($flaticon_tpf_mcc-map, "banknotes");
+}
+.flaticon-profit-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "profit-1");
+}
+.flaticon-refund-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "refund-1");
+}
+.flaticon-calculator:before {
+    content: map-get($flaticon_tpf_mcc-map, "calculator");
+}
+.flaticon-money-bag:before {
+    content: map-get($flaticon_tpf_mcc-map, "money-bag");
+}
+.flaticon-profit-2:before {
+    content: map-get($flaticon_tpf_mcc-map, "profit-2");
+}
+.flaticon-get-money:before {
+    content: map-get($flaticon_tpf_mcc-map, "get-money");
+}
+.flaticon-money-2:before {
+    content: map-get($flaticon_tpf_mcc-map, "money-2");
+}
+.flaticon-cashback-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "cashback-1");
+}
+.flaticon-money-3:before {
+    content: map-get($flaticon_tpf_mcc-map, "money-3");
+}
+.flaticon-waiting-list:before {
+    content: map-get($flaticon_tpf_mcc-map, "waiting-list");
+}
+.flaticon-infaq-2:before {
+    content: map-get($flaticon_tpf_mcc-map, "infaq-2");
+}
+.flaticon-bank-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "bank-1");
+}
+.flaticon-approved:before {
+    content: map-get($flaticon_tpf_mcc-map, "approved");
+}
+.flaticon-approved-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "approved-1");
+}
+.flaticon-find:before {
+    content: map-get($flaticon_tpf_mcc-map, "find");
+}
+.flaticon-user-account:before {
+    content: map-get($flaticon_tpf_mcc-map, "user-account");
+}
+.flaticon-team:before {
+    content: map-get($flaticon_tpf_mcc-map, "team");
+}
+.flaticon-team-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "team-1");
+}
+.flaticon-participation:before {
+    content: map-get($flaticon_tpf_mcc-map, "participation");
+}
+.flaticon-group-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "group-1");
+}
+.flaticon-leader:before {
+    content: map-get($flaticon_tpf_mcc-map, "leader");
+}
+.flaticon-collaboration:before {
+    content: map-get($flaticon_tpf_mcc-map, "collaboration");
+}
+.flaticon-group-2:before {
+    content: map-get($flaticon_tpf_mcc-map, "group-2");
+}
+.flaticon-cross:before {
+    content: map-get($flaticon_tpf_mcc-map, "cross");
+}
+.flaticon-organization-chart:before {
+    content: map-get($flaticon_tpf_mcc-map, "organization-chart");
+}
+.flaticon-login:before {
+    content: map-get($flaticon_tpf_mcc-map, "login");
+}
+.flaticon-loan:before {
+    content: map-get($flaticon_tpf_mcc-map, "loan");
+}
+.flaticon-unlock:before {
+    content: map-get($flaticon_tpf_mcc-map, "unlock");
+}
+.flaticon-group-3:before {
+    content: map-get($flaticon_tpf_mcc-map, "group-3");
+}
+.flaticon-lock:before {
+    content: map-get($flaticon_tpf_mcc-map, "lock");
+}
+.flaticon-key:before {
+    content: map-get($flaticon_tpf_mcc-map, "key");
+}
+.flaticon-view:before {
+    content: map-get($flaticon_tpf_mcc-map, "view");
+}
+.flaticon-search:before {
+    content: map-get($flaticon_tpf_mcc-map, "search");
+}
+.flaticon-woman:before {
+    content: map-get($flaticon_tpf_mcc-map, "woman");
+}
+.flaticon-avatar-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "avatar-1");
+}
+.flaticon-transfer-2:before {
+    content: map-get($flaticon_tpf_mcc-map, "transfer-2");
+}
+.flaticon-money-sack:before {
+    content: map-get($flaticon_tpf_mcc-map, "money-sack");
+}
+.flaticon-calculator-1:before {
+    content: map-get($flaticon_tpf_mcc-map, "calculator-1");
 }
