@@ -18,6 +18,7 @@ use App\Models\MemberSalutation;
 use App\Models\Section;
 use App\Models\Contribution;
 use App\Models\ContributionDetail;
+use App\Models\ContributorMember;
 
 class MemberController extends Controller {
     public function __construct(){
@@ -31,11 +32,16 @@ class MemberController extends Controller {
         $member_data    = Member::where('id', $member)
                                   ->first();
 
-        $member_contributions    = ContributionDetail::join("members",'members.id', '=', 'contributions.member_id')
+        $member_contributions    = ContributionDetail::join("members",'members.id', '=', 'contribution_details.member_id')
                                         ->where("contribution_details.member_id",$member)
                                         ->get(["contribution_details.*"]);
 
-        return view('members.members_details_view', ["member_data"=>$member_data,"member_contributions"=>$member_contributions]);
+        $transfer_history       = ContributorMember::join("members",'members.id', '=', 'contributor_members.member_id')
+                                                ->where("contributor_members.member_id",$member)
+                                                ->get(["contributor_members.*"]);
+
+
+        return view('members.members_details_view', ["member_data"=>$member_data,"member_contributions"=>$member_contributions,"transfers"=>$transfer_history]);
     }
 
     public function ajaxMemberDuplicateValidation(Request $ajaxreq){
