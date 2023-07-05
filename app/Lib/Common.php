@@ -192,7 +192,7 @@ class Common {
         return $returnDataArr;
     }
 
-    public function arrearRegistration($contributionID){
+    public function arrearRegister($contributionID){
         $updateContribution = Contribution::find( $contributionID );
         $getArrearControls = ArrearRecognition::where('status','ACTIVE')->first();
             
@@ -201,15 +201,22 @@ class Common {
         $delayedDays = $paymentDate->diffInDays($currentDate);
         $months = ceil($delayedDays / 30);
         
-        if($months > 0){
-            $getMembersContritbution = ContributionDetail::where('contribution_id', $contributionID)->where('status','ACTIVE')->get();
+        if($delayedDays > $getArrearControls->grace_period_days){
 
-            if($getMembersContritbution){
-                foreach($getMembersContritbution as $data){
-                    $registerArrear = new Arrear;
-                    $registerArrear->save();
+            if($months > 0){
+                $getMembersContritbution = ContributionDetail::where('contribution_id', $contributionID)->where('status','ACTIVE')->get();
+    
+                if($getMembersContritbution){
+                    foreach($getMembersContritbution as $data){
+                        $registerArrear = new Arrear;
+                        $registerArrear->contribution_details_id = $data->id;
+                        $registerArrear->arrear_period = $updateContribution->contribution_period;
+                        $registerArrear->status ='ACTIVE';
+                        $registerArrear->save();
+                    }
                 }
             }
+
         }
     }
 }
