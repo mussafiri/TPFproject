@@ -167,14 +167,13 @@ class Common {
         // get old contributor Monthly Income
 
         $contributor_contribution = 0;
-        $newDerivedMonhtlyIncome = 0;
+        $newDerivedMonhtlyIncome  = 0;
         $getcontributionRate = ContributorCatContrStructure::where( 'member_salutation_id', $memberData->member_salutation_id )->where( 'contributor_category_id', $contributorData->contributor_type_id )-> where( 'status', 'ACTIVE' )->first();
 
         if ( $getcontributionRate ) {
             $newDerivedMonhtlyIncome  = ( 100* $newContribution )/$getcontributionRate->member_contribution_rate;
             $contributor_contribution = ( $newDerivedMonhtlyIncome * $getcontributionRate->contributor_contribution_rate )/100 ;
         }
-        
 
         if ( $memberData->salutation_id == 1 ) {
             // Seniour Pastor
@@ -185,38 +184,61 @@ class Common {
         }
 
         $returnDataArr = array();
-        $returnDataArr[ 'monthly_income' ] = $newDerivedMonhtlyIncome;
+        $returnDataArr[ 'monthly_income' ]             = $newDerivedMonhtlyIncome;
         $returnDataArr[ 'contributor_monthly_income' ] = $contributorMonthlyIncome;
-        $returnDataArr[ 'contributor_contribution' ] = $contributor_contribution;
+        $returnDataArr[ 'contributor_contribution' ]   = $contributor_contribution;
 
         return $returnDataArr;
     }
 
-    public function arrearRegister($contributionID){
-        $updateContribution = Contribution::find( $contributionID );
-        $getArrearControls = ArrearRecognition::where('status','ACTIVE')->first();
-            
-        $paymentDate = Carbon::parse($updateContribution->payment_date);
-        $currentDate = Carbon::parse(date('Y-m-d'));
-        $delayedDays = $paymentDate->diffInDays($currentDate);
-        $months = ceil($delayedDays / 30);
-        
-        if($delayedDays > $getArrearControls->grace_period_days){
+    public function arrearRegister( $contributionID ) {
+        //START:: Check if there is a need to onboarding Arrears
+        $daysElapsed = $this->arrearElapsedDaysAlgorithm( $contributionID );
 
-            if($months > 0){
-                $getMembersContritbution = ContributionDetail::where('contribution_id', $contributionID)->where('status','ACTIVE')->get();
-    
-                if($getMembersContritbution){
-                    foreach($getMembersContritbution as $data){
-                        $registerArrear = new Arrear;
-                        $registerArrear->contribution_details_id = $data->id;
-                        $registerArrear->arrear_period = $updateContribution->contribution_period;
-                        $registerArrear->status ='ACTIVE';
-                        $registerArrear->save();
-                    }
+        $getContributionData = Contribution::find( $contributionID );
+        if ( $daysElapsed > 0 ) {
+            $getMembersContritbution = ContributionDetail::where( 'contribution_id', $contributionID )->where( 'status', 'ACTIVE' )->get();
+            if ( $getMembersContritbution ) {
+                foreach ( $getMembersContritbution as $data ) {
+                    $registerArrear = new Arrear;
+                    $registerArrear->contribution_details_id = $data->id;
+                    $registerArrear->arrear_period = $getContributionData->contribution_period;
+                    $registerArrear->status = 'ACTIVE';
+                    $registerArrear->save();
                 }
             }
-
         }
+        //END:: Check if there is a need to onboarding Arrears
     }
+
+    public function arrearsPenaltyComputation( $arrearID ) {
+
+        //$months = ceil( $delayedDays / 30 );
+        
+        $getArrearData = Arrear::find( $arrearID );
+
+        $daysElapsed = $this->arrearElapsedDaysAlgorithm( $getArrearData->contributionDetials->contribution_id );
+
+        $getArrearControls = ArrearRecognition::where( 'status', 'ACTIVE' )->first();
+    }
+
+    public function arrearElapsedDaysAlgorithm( $contributionID ) {
+        $getContributionData = Contribution::find( $contributionID );
+
+        $dateSegmentArr = explode( '-', $getContributionData->contribution_period );
+        $year  = $dateSegmentArr[ 0 ];
+        $month = $dateSegmentArr[ 1 ];
+        $daysInMonth = Carbon::createFromDate( $year, $month )->daysInMonth;
+        // get number of days in the month
+
+        $paymentDate        = Carbon::parse( $getContributionData->payment_date );
+        $contributionPeriod = Carbon::parse( $getContributionData->contribution_period.'-01' );
+
+        $daysDifferent = $paymentDate->diffInDays( $contributionPeriod );
+
+        $daysElapsed = $daysDifferent - $daysInMonth;
+
+        return $daysElapsed;
+    }
+
 }
