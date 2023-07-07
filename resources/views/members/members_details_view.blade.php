@@ -31,8 +31,6 @@
             </div>
         </div>
         <!-- end page title -->
-
-        <!-- end row-->
         <div class="row">
             <div class="col-12">
                 <div class="card-box">
@@ -67,20 +65,103 @@
                         <div class="col-lg-4 col-md-6 col-sm-12">
                             <p class="mb-1"><span class="font-weight-semibold mr-2">Status:</span><small><span class="text-right {{$member_data->status=='ACTIVE' ? 'badge badge-soft-secondary':'badge badge-soft-danger';}}">{{$member_data->status}}</span></small></p>
                             @php
-                            $last_login = $member_data->last_login == "NULL"? "NOT LOGGED IN" : $member_data->last_login;
-                            $last_changed = $member_data->password_changed_at == "NULL"? "NOT CHANGED" : $member_data->password_changed_at;
+                            $last_login = $member_data->last_login == "NULL"? "NOT LOGGED IN" : date('d M Y',strtotime($member_data->last_login));
+                            $last_changed = $member_data->password_changed_at == "NULL"? "NOT CHANGED" : date('d M Y',strtotime($member_data->password_changed_at));
                             @endphp
                             <p class="mb-1"><span class="font-weight-semibold mr-2">Last login:</span><span class="font-10 text-right {{$member_data->last_login == 'NULL'? 'badge badge-soft-dark':'';}}">{{$last_login}}</span></p>
                             <p class="mb-1"><span class="font-weight-semibold mr-2">Created on:</span><span class="font-12 text-right">{{date('d M Y', strtotime($member_data->created_at))}}</span></p>
                             <p class="mb-1"><span class="font-weight-semibold mr-2">Created by:</span><span class="font-12 text-right ">{{$member_data->createdBy->fname." ".$member_data->createdBy->lname}}</span></p>
-                            <p class="mb-1"><span class="font-weight-semibold mr-2">Password Status:</span><span class="text-right {{$member_data->password_status == 'ACTIVE'? 'badge badge-soft-secondary':($member_data->password_status == 'DEFAULT' ? 'badge badge-soft-dark':'badge badge-soft-danger');}}">{{$member_data->password_status}}</span></p>
-                            <p class="mb-1"><span class="font-weight-semibold mr-2">Last Changed:</span><span class="text-right {{$member_data->password_changed_at == 'NULL'? 'badge badge-soft-dark':'';}}">{{$last_changed}}</span></p>
+                            <p class="mb-1"><span class="font-weight-semibold mr-2">Password Status:</span><span class="font-12 text-right {{$member_data->password_status == 'ACTIVE'? 'badge badge-soft-secondary':($member_data->password_status == 'DEFAULT' ? 'badge badge-soft-dark':'badge badge-soft-danger');}}">{{$member_data->password_status}}</span></p>
+                            <p class="mb-1"><span class="font-weight-semibold mr-2">Last Changed:</span><span class="font-12 text-right {{$member_data->password_changed_at == 'NULL'? 'badge badge-soft-dark':'';}}">{{$last_changed}}</span></p>
+                        </div>
+
+                    </div>
+                    <div class="dropdown-divider col-12"></div>
+                        <div class="col-12 my-2"><h6 class="header-title font-16 text-muted">Attachments</h6></div>
+                        <div class="col-12"><!-- File Attachment -->
+                            <div class="row">
+                                <div class="col-xl-4 col-lg-4  pl-0">
+                                    <div class="card mb-1 ml-0 shadow-none border">
+                                        <div class="p-2">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="avatar-sm">
+                                                        <span class="avatar-title badge-soft-primary text-primary rounded">
+                                                            ZIP
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col pl-0">
+                                                    <a href="javascript:void(0);" class="text-muted font-weight-bold font-12">Ubold-sketch-design.zip</a>
+                                                    <p class="mb-0 font-12">2.3 MB</p>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <!-- Button -->
+                                                    <a href="javascript:void(0);" class="btn btn-link font-16 text-muted">
+                                                        <i class="dripicons-download"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-4  pl-0">
+                                    <div class="card mb-1 ml-0 shadow-none border">
+                                        <div class="p-2">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="avatar-sm">
+                                                        <span class="avatar-title badge-soft-primary text-primary rounded">
+                                                            ZIP
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col pl-0">
+                                                    <a href="javascript:void(0);" class="text-muted font-weight-bold font-12">Ubold-sketch-design.zip</a>
+                                                    <p class="mb-0 font-12">2.3 MB</p>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <!-- Button -->
+                                                    <a href="javascript:void(0);" class="btn btn-link font-16 text-muted">
+                                                        <i class="dripicons-download"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-4  pl-0">
+                                    <div class="card mb-1 ml-0 shadow-none border">
+                                        <div class="p-2">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="avatar-sm">
+                                                        <span class="avatar-title badge-soft-primary text-primary rounded">
+                                                            ZIP
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col pl-0">
+                                                    <a href="javascript:void(0);" class="text-muted font-weight-bold font-12">Ubold-sketch-design.zip</a>
+                                                    <p class="mb-0 font-12">2.3 MB</p>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <!-- Button -->
+                                                    <a href="javascript:void(0);" class="btn btn-link font-16 text-muted">
+                                                        <i class="dripicons-download"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div> <!-- end card-box-->
             </div> <!-- end col -->
-        </div>
-        <!-- end row -->
+        </div><!-- end Member Particulars row -->
+
         <div class="row"><!-- Summary Reports -->
             <div class="col-12">
                 <div class="card-box">
@@ -104,7 +185,7 @@
                             <li class="nav-item">
                                 <a href="#transferHistoryPane" data-toggle="tab" class="nav-link ">
                                     <i class="flaticon-data-transfer-1"></i>
-                                    Transfer History 
+                                    Transfer History
                                 </a>
                             </li>
                         </ul>
@@ -140,7 +221,7 @@
                                     </table>
                                 </div> <!-- end .table-responsive-->
                             </div><!-- end .tab-pane active-->
-                            <div class="tab-pane active" id="contributionsPane" >
+                            <div class="tab-pane active" id="contributionsPane">
                                 <div class="table-responsive">
                                     <table class="table table-sm font-12 table-striped w-100 datatable-buttons table-responsible">
                                         <thead>
@@ -160,9 +241,9 @@
                                         <tbody>
                                             @php $x=1; @endphp
                                             @foreach ($member_contributions as $data)
-                                            @php 
-                                            $contri_status = $data->status == ACTIVE ? "POSTED" :"WITHDRAWN"; 
-                                            $total = $data->member_topup + $data->member_contribution + $data->member_monthly_income; 
+                                            @php
+                                            $contri_status = $data->status == ACTIVE ? "POSTED" :"WITHDRAWN";
+                                            $total = $data->member_topup + $data->member_contribution + $data->member_monthly_income;
                                             @endphp
                                             <tr>
                                                 <td>{{$x}}</td>

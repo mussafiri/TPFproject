@@ -12,15 +12,15 @@
 
             <li class="menu-title mt-2">Apps</li>
 
-            <li class="@if(request()->segment(1)=='members'){{'menuitem-active'}}@endif" >
+            <li class="@if(request()->segment(1)=='members' || request()->segment(1)=='member'){{'menuitem-active'}}@endif" >
                 <a href="#sidebarMembers" data-toggle="collapse">
                     <i class="mdi flaticon-crowd-of-users"></i>
                     <span> Members </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse  @if(request()->segment(1)=='members'){{'show'}}@endif" id="sidebarMembers">
+                <div class="collapse  @if(request()->segment(1)=='members'|| request()->segment(1)=='member'){{'show'}}@endif" id="sidebarMembers">
                     <ul class="nav-second-level">
-                        <li class="@if(request()->is('members/list')||request()->is('members/registration')){{'menuitem-active'}}@endif">
+                        <li class="@if(request()->is('members/list') || request()->is('members/registration') || request()->is('member/view/details/*')){{'menuitem-active'}}@endif">
                             <a href="{{url('members/list')}}">List</a>
                         </li>
                         <li> <a href="{{url('members/possible/duplicates')}}">Duplicates</a> </li>

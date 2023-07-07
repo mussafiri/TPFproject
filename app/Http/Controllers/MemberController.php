@@ -27,6 +27,38 @@ class MemberController extends Controller {
     }
     public function index() { }
 
+    public function memberFetchFromSelectize(Request $request) {
+        $select_request = $request->input('member_search');  
+        if(!empty($select_request)) { 
+            $members = Member::where(function ($query) use ($select_request) {
+                $query->where(DB::raw("CONCAT(fname, ' ', mname, ' ', lname)","member_code"), 'LIKE', "%{$select_request}%");
+            })->select(DB::raw("members.*"))->latest()->take(600)->get();
+                                
+            return view('members.members_list', ['members_filtered'=>$members,"selectize"=>"AVAILABLE"]);
+        }else{
+            return $this->members();
+        }
+
+    }
+
+    public function ajaxMemberSelectionFilterOptions(Request $ajaxreq) {
+        $select_request = $ajaxreq['q'];
+        $members = Member::where(function ($query) use ($select_request) {
+            $query->where(DB::raw("CONCAT(fname, ' ', mname, ' ', lname)","member_code"), 'LIKE', "%{$select_request}%");
+        })->select(DB::raw("CONCAT(fname, ' ', mname, ' ', lname) AS full_name,id,member_code"))->get();
+
+       $member_data= array();
+        if ($members) {
+            $member_data[ 'status' ] = 'success';
+            $member_data[ 'message' ] = 'Member data has been Succefully fetched';
+            $member_data[ 'data' ] = $members;
+        } else {
+            $member_data[ 'status' ] = 'Errors';
+            $member_data[ 'message' ] = 'We could not find such Member in our database';
+        }
+        return response()->json( [ 'members'=>$member_data ] );
+
+    }
     public function memberViewDetails($member_id) {
         $member         = Crypt::decryptString($member_id);
         $member_data    = Member::where('id', $member)
@@ -313,6 +345,14 @@ class MemberController extends Controller {
         if ( $memberRegObject->save() ) {
             #Return the Dependants View
             $this->cmn -> memberCodeGenerator($memberRegObject->id);
+            // Insert a member to Contributor Member Table
+            $contributorMemObj = new ContributorMember;
+            $contributorMemObj->contributor_id        = $memberRegObject->contributor_id;
+            $contributorMemObj->member_id            = $memberRegObject->id;
+            $contributorMemObj->start_date            = $memberRegObject->joining_date;
+            $contributorMemObj->status                = "ACTIVE";
+            $contributorMemObj->created_by            = auth()->user()->id;
+            $contributorMemObj->save();
 
             toastr();
             return redirect('members/registration/')->with(['success'=>'Member has been successfully created!','member_data'=>$memberRegObject,"response_message"=>"SUCCESS"]);
@@ -323,7 +363,7 @@ class MemberController extends Controller {
     }
     public function members() {
         $members = Member::latest()->take(500)->get();
-        return view('members.members_list', ['members'=>$members]);
+        return view('members.members_list', ['members'=>$members,"selectize"=>"UNAVAILABLE"]);
     }
     public function regMemberView() {
         $salutation_title=MemberSalutation::where("status","ACTIVE")->get();

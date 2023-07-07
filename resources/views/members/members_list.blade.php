@@ -4,10 +4,15 @@
 <link href="{{asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{asset('assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{asset('assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
-<link href="{{asset('assets/libs/datatables.net-select-bs4/css//select.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{asset('assets/libs/datatables.net-select-bs4/css/select.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{asset('assets/libs/sweetalert2/sweetalert2.min.css')}}" rel="stylesheet" type="text/css" />
-
 <!-- third party css end -->
+<style>
+    .selectize-control.multi .selectize-dropdown,
+    .selectize-control.single .selectize-dropdown {
+    display: none;
+    }
+</style>
 @endsection
 @section('content')
 <div class="content">
@@ -22,7 +27,8 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Members</li>
+                            @if($selectize !="AVAILABLE")<li class="breadcrumb-item active">Members</li>@else <li class="breadcrumb-item"><a href="{{url('members/list')}}">Members</a></li> @endif
+                            @if($selectize=='AVAILABLE')<li class="breadcrumb-item active">Filtered</li>@endif
                         </ol>
                     </div>
                     <h4 class="page-title">Members</h4>
@@ -30,7 +36,33 @@
             </div>
         </div>
         <!-- end page title -->
+        <!-- Filter card -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card-box">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <label for="inputPassword2" class="sr-only">Search</label>
+                                    <select id="selectize-membersSearch" placeholder="Enter Member name or Member code..."  autocomplete="off">
 
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <form action="{{url('/members/find')}}" method="POST">
+                                    @csrf
+                                    <input type="text" name="member_search" hidden>
+                                    <div class="text-lg-right mt-3 mt-lg-0">
+                                        <button type="submit" class="btn btn-info waves-effect waves-light mr-1"><i class="mdi flaticon-search mr-1"></i>Find Member</button>
+                                    </div>
+                                </form>
+                            </div><!-- end col-->
+                        </div> <!-- end row -->
+                    </div> <!-- end card-box -->
+                </div> <!-- end col-->
+            </div><!-- End Filter Card -->
         <!-- end row-->
         <div class="row">
             <div class="col-12">
@@ -45,29 +77,30 @@
                             </div>
                         </div><!-- end col-->
                     </div>
-                            <div class="table-responsive">
-                                <table class="table table-sm font-12 table-striped w-100 datatable-buttons table-responsible">
-                                    <thead>
-                                        <tr>
-                                            <th style="width:4%;">#</th>
-                                            <th style="width:13%;">TPF-Number</th>
-                                            <th style="width:28%;">Member</th>
-                                            <th style="width:12%;">Title</th>
-                                            <th style="width:13%;">Contributor</th>
-                                            <th style="width:12%;">Vital Status</th>
-                                            <th style="width:14%;">Created</th>
-                                            <th style="width:4%;">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php $x=1; @endphp
-                                        @foreach ($members as $data)
+                    <div class="table-responsive">
+                        <table class="table table-sm font-12 table-striped w-100 datatable-buttons table-responsible">
+                            <thead>
+                                <tr>
+                                    <th style="width:4%;">#</th>
+                                    <th style="width:13%;">TPF-Number</th>
+                                    <th style="width:28%;">Member</th>
+                                    <th style="width:12%;">Title</th>
+                                    <th style="width:13%;">Contributor</th>
+                                    <th style="width:12%;">Vital Status</th>
+                                    <th style="width:14%;">Created</th>
+                                    <th style="width:4%;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php $x=1; @endphp
+                                @if ($selectize=="AVAILABLE")
+                                    @foreach ($members_filtered as $data)
                                         <tr>
                                             <td>{{$x}}</td>
                                             <td>{{$data->member_code}}</td>
                                             <td>{{$data->title." ".$data->fname." ".$data->mname." ".$data->lname}}</td>
                                             <td><span class="badge badge-outline-{{$data->salutationTitle->name=='SENIOR PASTOR'?'info':'secondary';}}">{{$data->salutationTitle->name}}</span></td>
-                                            <td ><small><span>{{$data->contributor->name}}</span></small></td>
+                                            <td><small><span>{{$data->contributor->name}}</span></small></td>
                                             <td><span class="badge badge-outline-{{$data->vital_status=='ALIVE'?'success':'danger';}}">{{$data->vital_status}}</span></td>
                                             <td>{{date('d M Y', strtotime($data->created_at))}}&nbsp;<span class="text-muted font-10"><small>{{date('H:i', strtotime($data->created_at))}}</small></span></td>
                                             <td>
@@ -81,18 +114,41 @@
                                             </td>
                                         </tr>
                                         @php $x++; @endphp
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div> <!-- end .table-responsive-->
-                        </div> <!-- end card-box-->
-                    </div> <!-- end col -->
-                </div>
-                <!-- end row -->
+                                    @endforeach
+                                @else
+                                    @foreach ($members as $data)
+                                        <tr>
+                                            <td>{{$x}}</td>
+                                            <td>{{$data->member_code}}</td>
+                                            <td>{{$data->title." ".$data->fname." ".$data->mname." ".$data->lname}}</td>
+                                            <td><span class="badge badge-outline-{{$data->salutationTitle->name=='SENIOR PASTOR'?'info':'secondary';}}">{{$data->salutationTitle->name}}</span></td>
+                                            <td><small><span>{{$data->contributor->name}}</span></small></td>
+                                            <td><span class="badge badge-outline-{{$data->vital_status=='ALIVE'?'success':'danger';}}">{{$data->vital_status}}</span></td>
+                                            <td>{{date('d M Y', strtotime($data->created_at))}}&nbsp;<span class="text-muted font-10"><small>{{date('H:i', strtotime($data->created_at))}}</small></span></td>
+                                            <td>
+                                                <div class="btn-group dropdown">
+                                                    <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <a class="dropdown-item" href="{{url('/member/view/details/'.Crypt::encryptString($data->id))}}"><i class="mdi mdi-eye-outline mr-2 text-muted font-18 vertical-middle"></i>View</a>
+                                                        <a class="dropdown-item" href="{{url('/member/edit/details/'.Crypt::encryptString($data->id))}}"><i class="mdi mdi-pencil-outline mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @php $x++; @endphp
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div> <!-- end .table-responsive-->
+                </div> <!-- end card-box-->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
 
-            </div> <!-- container -->
+    </div> <!-- container -->
 
-        </div> <!-- content -->
+</div> <!-- content -->
 @endsection
 @section('custom_script')
 <!-- third party js -->
@@ -109,6 +165,7 @@
 <script src="{{asset('assets/libs/datatables.net-select/js/dataTables.select.min.js')}}"></script>
 <script src="{{asset('assets/libs/pdfmake/build/pdfmake.min.js')}}"></script>
 <script src="{{asset('assets/libs/pdfmake/build/vfs_fonts.js')}}"></script>
+
 <!-- third party js ends -->
 
 <!-- Datatables init -->
@@ -116,6 +173,53 @@
 
 <!-- Datatables init -->
 <script src="{{asset('assets/js/pages/datatables.init.js')}}"></script>
+<!-- Init js-->
+<script>
+    $(document).ready(function() {
+        $('#selectize-membersSearch').selectize({
+            maxItems: 1,
+            valueField: 'id',
+            labelField: 'full_name',
+            searchField: 'full_name',
+            create: true,
+            persist:false,// Restrict attaching the typed value to options field
+            onType: function(str) {
+                var upper = str.toUpperCase();
+                this.setTextboxValue(upper);
+                return true;
+            },
+            onChange: function(value) {
+                // Update the value of the hidden input field whenever the Selectize input value changes
+                $('input[name="member_search"]').val(value);
+            },
+            load: function(query, callback) {
+                var self = this;
+                if (query.length < 3) return callback();
+                clearTimeout(self.timer);
+                self.timer = setTimeout(function() {
+                    $.ajax({
+                        url: "{{url('/ajax/dynamic/member/selectize/options/filter')}}",
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            q: query,
+                        },
+                        success: function(results) {
+                            var optionsArr = results.members.data;
+                            callback(optionsArr);
+                        },
+                        error: function() {
+                            callback();
+                        },    
+                    });
+                },500); // Wait for 500ms before making the AJAX request to reduce many ajax requests on keydown
+            },
+        });
+        
+    });
+
+</script>
 <script type="text/javascript">
     $(".district_statusChangeLink").click(function() {
         var district_id = $(this).attr("data-district");
