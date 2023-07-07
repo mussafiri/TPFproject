@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Lib\Common;
+use App\Models\Arrear;
 use App\Models\ArrearRecognition;
 use App\Models\Contribution;
 use App\Models\ContributionDetail;
@@ -391,11 +392,12 @@ class ContributionController extends Controller {
                 $postiContribution->posted_at = date('Y-m-d H:i:s');
                 $postiContribution->processing_status = $status;
     
+
                 if($postiContribution->save()){
-                    //START:: Check if there is a need to onboarding Arrears
+                  //START:: Check if there is a need to onboarding Arrears
                     $cmn->arrearRegister($contributionID);
-                    //END:: Check if there is a need to onboarding Arrears
-                    
+                  //END:: Check if there is a need to onboarding Arrears
+
                     $respStatus ="success";
                     $repsText   ='You have Successfully '.ucfirst(strtolower($status)).' a contribution';
                 }else{

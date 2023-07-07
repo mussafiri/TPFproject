@@ -144,25 +144,25 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @php $n=1;@endphp
+                                            @php $n=1;@endphp
                                             @foreach($contributionDetails as $value)
-                                                <tr>
-                                                    <td>{{$n}}.</td>
-                                                    <td>{{$value->contributor->name}}</td>
-                                                    <td>{{$value->member->fname.' '.$value->member->mname.' '.$value->member->lname}}</td>
-                                                    <td>{{number_format($value->member_monthly_income,2)}}</td>
-                                                    <td>{{number_format($value->contributor_contribution,2)}}</td>
-                                                    <td>{{number_format($value->member_contribution,2)}}</td>
-                                                    <td>{{number_format($value->member_topup,2)}}</td>
-                                                    <td>{{number_format($value->contributor_contribution+$value->member_contribution+$value->member_topup,2)}}</td>
-                                                    <td><span class="badge badge-outline-{{$value->status=='ACTIVE'?'success':'primary'}}">{{$value->status}}</span></td>
-                                                    <td class="text-center">
-                                                        <div class="custom-control custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="customCheck{{$n}}" name="confirmMembers[]">
-                                                            <label class="custom-control-label" for="customCheck{{$n}}"></label>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                            <tr>
+                                                <td>{{$n}}.</td>
+                                                <td>{{$value->contributor->name}}</td>
+                                                <td>{{$value->member->fname.' '.$value->member->mname.' '.$value->member->lname}}</td>
+                                                <td>{{number_format($value->member_monthly_income,2)}}</td>
+                                                <td>{{number_format($value->contributor_contribution,2)}}</td>
+                                                <td>{{number_format($value->member_contribution,2)}}</td>
+                                                <td>{{number_format($value->member_topup,2)}}</td>
+                                                <td>{{number_format($value->contributor_contribution+$value->member_contribution+$value->member_topup,2)}}</td>
+                                                <td><span class="badge badge-outline-{{$value->status=='ACTIVE'?'success':'primary'}}">{{$value->status}}</span></td>
+                                                <td class="text-center">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="customCheck{{$n}}" name="confirmMembers[]">
+                                                        <label class="custom-control-label" for="customCheck{{$n}}"></label>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                             @php $n++;@endphp
                                             @endforeach
                                         </tbody>

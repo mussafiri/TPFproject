@@ -89,7 +89,7 @@
                                                         <tbody>
                                                         @php $n=1; @endphp
                                                         @foreach($contributions as $data)
-                                                        @php if($data->processing_status=="PENDING"){$badgeText = "info";}else if ($data->processing_status=="APPROVED"){$badgeText = "primary";}elseif($data->processing_status=="POSTED"){$badgeText = "success";}else if($data->processing_status=="APPROVAL REJECTED"){$badgeText = "danger";}elseif($data->processing_status=="POSTING REJECTED"){$badgeText = "pink";}else{$badgeText = "secondary";}  @endphp
+                                                        @php if($data->processing_status=="PENDING"){$badgeText = "info";}else if ($data->processing_status=="APPROVED"){$badgeText = "primary";}elseif($data->processing_status=="POSTED"){$badgeText = "success";}else if($data->processing_status=="APPROVAL REJECTED"){$badgeText = "danger";}elseif($data->processing_status=="POSTING REJECTED"){$badgeText = "pink";}else{$badgeText = "secondary";} @endphp
                                                             <tr>
                                                                 <td>{{$n}}.</td>
                                                                 <td class="text-muted font-9">{{$data->section->name}}</td>
@@ -103,8 +103,7 @@
                                                                 <td><span class="badge badge-outline-{{$badgeText}} badge-pill">{{$data->processing_status}}</span></td>
                                                                 <td>
                                                                     <div class="btn-group dropdown float-right">
-                                                                        <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-light btn-sm"
-                                                                            data-toggle="dropdown" aria-expanded="false">
+                                                                        <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false">
                                                                             <i class="mdi mdi-dots-horizontal font-18"></i>
                                                                         </a>
                                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -126,8 +125,8 @@
                                                                                 <i class='mdi mdi-file-check-outline mr-1'></i>Post
                                                                             </a>
                                                                             @endif
-                                                                            <div class="dropdown-divider"></div>
-                                                                            <!-- item-->
+                                                                            <!-- <div class="dropdown-divider"></div> -->
+                                                                            <!-- item -->
                                                                             <a href="javascript:void(0);" class="dropdown-item change_contributor_status_swt_alert" data-id="{{$data->id}}" data-newstatus="@if($data->status=='ACTIVE'){{'Suspend'}} @else {{'Activate'}}@endif" data-name="{{$data->name}}">
                                                                                 @if($data->status=='ACTIVE')
                                                                                 <i class='mdi mdi-close-thick mr-1'></i>Suspend
