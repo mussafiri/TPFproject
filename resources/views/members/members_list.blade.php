@@ -93,8 +93,8 @@
                             </thead>
                             <tbody>
                                 @php $x=1; @endphp
-                                @if ($selectize=="AVAILABLE")
-                                    @foreach ($members_filtered as $data)
+                                @php $members_array = ($selectize=="AVAILABLE")? $members_filtered:$members;@endphp
+                                    @foreach ($members_array as $data)
                                         <tr>
                                             <td>{{$x}}</td>
                                             <td>{{$data->member_code}}</td>
@@ -107,7 +107,7 @@
                                                 <div class="btn-group dropdown">
                                                     <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="{{url('/member/view/details/'.Crypt::encryptString($data->id))}}"><i class="mdi mdi-eye-outline mr-2 text-muted font-18 vertical-middle"></i>View</a>
+                                                        <a class="dropdown-item" href="{{url('/member/view/details/'.Crypt::encryptString($data->id))}}"><i class="mdi flaticon-view mr-2 text-muted font-18 vertical-middle"></i>View</a>
                                                         <a class="dropdown-item" href="{{url('/member/edit/details/'.Crypt::encryptString($data->id))}}"><i class="mdi mdi-pencil-outline mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
                                                     </div>
                                                 </div>
@@ -115,29 +115,6 @@
                                         </tr>
                                         @php $x++; @endphp
                                     @endforeach
-                                @else
-                                    @foreach ($members as $data)
-                                        <tr>
-                                            <td>{{$x}}</td>
-                                            <td>{{$data->member_code}}</td>
-                                            <td>{{$data->title." ".$data->fname." ".$data->mname." ".$data->lname}}</td>
-                                            <td><span class="badge badge-outline-{{$data->salutationTitle->name=='SENIOR PASTOR'?'info':'secondary';}}">{{$data->salutationTitle->name}}</span></td>
-                                            <td><small><span>{{$data->contributor->name}}</span></small></td>
-                                            <td><span class="badge badge-outline-{{$data->vital_status=='ALIVE'?'success':'danger';}}">{{$data->vital_status}}</span></td>
-                                            <td>{{date('d M Y', strtotime($data->created_at))}}&nbsp;<span class="text-muted font-10"><small>{{date('H:i', strtotime($data->created_at))}}</small></span></td>
-                                            <td>
-                                                <div class="btn-group dropdown">
-                                                    <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="{{url('/member/view/details/'.Crypt::encryptString($data->id))}}"><i class="mdi mdi-eye-outline mr-2 text-muted font-18 vertical-middle"></i>View</a>
-                                                        <a class="dropdown-item" href="{{url('/member/edit/details/'.Crypt::encryptString($data->id))}}"><i class="mdi mdi-pencil-outline mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        @php $x++; @endphp
-                                    @endforeach
-                                @endif
                             </tbody>
                         </table>
                     </div> <!-- end .table-responsive-->
