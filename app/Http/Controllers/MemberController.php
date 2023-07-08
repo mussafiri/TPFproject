@@ -106,7 +106,7 @@ class MemberController extends Controller {
                     // Get just filename
                     $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
                     //Get just ext
-                    $extension = $dep_photo[$index]->getClientOriginalExtension();
+                    $extension = strtolower($dep_photo[$index]->getClientOriginalExtension());
                     // Create new Filename
                     $newfilename = 'MEMDEPPHOTO_' . date( 'y' );
                     // FileName to Store
@@ -124,7 +124,7 @@ class MemberController extends Controller {
                 // Get just filename
                 $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
                 //Get just ext
-                $extension = $dep_birthcert[$index]->getClientOriginalExtension();
+                $extension = strtolower($dep_birthcert[$index]->getClientOriginalExtension());
                 // Create new Filename
                 $newfilename = 'MEMDEPCERT_' . date( 'y' );
                 // FileName to Store
@@ -140,7 +140,7 @@ class MemberController extends Controller {
                 // Get just filename
                 $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
                 //Get just ext
-                $extension = $dep_marriagecert[$index]->getClientOriginalExtension();
+                $extension = strtolower($dep_marriagecert[$index]->getClientOriginalExtension());
                 // Create new Filename
                 $newfilename = 'MEMDEPMCERT_' . date( 'y' );
                 // FileName to Store
@@ -244,7 +244,7 @@ class MemberController extends Controller {
             // Get just filename
             $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
             //Get just ext
-            $extension = $request->file( 'member_avatar' )->getClientOriginalExtension();
+            $extension = strtolower($request->file( 'member_avatar' )->getClientOriginalExtension());
             // Create new Filename
             $newfilename = 'MEMPHOTO_' . date( 'y' );
             // FileName to Store
@@ -260,7 +260,7 @@ class MemberController extends Controller {
             // Get just filename
             $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
             //Get just ext
-            $extension = $request->file( 'member_id' )->getClientOriginalExtension();
+            $extension = strtolower($request->file( 'member_id' )->getClientOriginalExtension());
             // Create new Filename
             $newfilename = 'MEMIDS_' . date( 'y' );
             // FileName to Store
@@ -275,7 +275,7 @@ class MemberController extends Controller {
             // Get just filename
             $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
             //Get just ext
-            $extension = $request->file( 'regform_attachment' )->getClientOriginalExtension();
+            $extension = strtolower($request->file( 'regform_attachment' )->getClientOriginalExtension());
             // Create new Filename
             $newfilename = 'MEMREGFRM_' . date( 'y' );
             // FileName to Store
@@ -293,7 +293,7 @@ class MemberController extends Controller {
             // Get just filename
             $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
             //Get just ext
-            $extension = $request->file( 'member_signature' )->getClientOriginalExtension();
+            $extension = strtolower($request->file( 'member_signature' )->getClientOriginalExtension());
             // Create new Filename
             $newfilename = 'MEMPHOTO_' . date( 'y' );
             // FileName to Store
