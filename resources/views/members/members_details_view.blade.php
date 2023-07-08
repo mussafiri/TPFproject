@@ -53,8 +53,8 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-sm-12">
-                            <p class="mb-1"><span class="font-weight-semibold mr-2">Primary Contributor:</span><br><span class="font-12 text-right">{{$member_data->contributor->name}}</span><br>
-                            <span class="font-10 text-right {{$member_data->contributor->contributorType->name=='CHURCH'? 'badge badge-soft-success':($member_data->contributor->contributorType->name=='EDUCATION DEPARTMENT'?'badge badge-soft-info':($member_data->contributor->contributorType->name=='MISSIONARY DEPARTMENT'?'badge badge-soft-success':'badge badge-soft-primary'));}}">{{$member_data->contributor->contributorType->name}}</span></p>
+                            <p class="mb-1"><span class="font-weight-semibold mr-2">Primary Contributor:</span><br><span class="font-12 text-right">{{$member_data->contributor->name}}</span></p>
+                            <p class="mb-1"><span class="font-weight-semibold mr-2">Type:</span><span class="font-10 text-right {{$member_data->contributor->contributorType->name=='CHURCH'? 'badge badge-soft-success':($member_data->contributor->contributorType->name=='EDUCATION DEPARTMENT'?'badge badge-soft-info':($member_data->contributor->contributorType->name=='MISSIONARY DEPARTMENT'?'badge badge-soft-success':'badge badge-soft-primary'));}}">{{$member_data->contributor->contributorType->name}}</span></p>
                             <p class="mb-1"><span class="font-weight-semibold mr-2">Zone:</span><span class="font-12">{{$member_data->contributor->contributorSection->district->zone->name}}</span>
                             </p>
                             <p class="mb-1"><span class="font-weight-semibold mr-2">District:</span><span class="font-12 text-right">{{$member_data->contributor->contributorSection->district->name}}</span></p>
@@ -114,10 +114,9 @@
                             <p class="mb-1"> <span class="font-weight-semibold mr-2">Created by:</span><span class="font-12 text-right ">{{$member_data->createdBy->fname." ".$member_data->createdBy->lname}}</span></p>
                             <p class="mb-1"><span><span class="font-weight-semibold mr-2">Vital Status:</span><small><span class="badge badge-soft-primary">{{$member_data->vital_status}}</span></small></span>
                             <span class="float-right">
-                                <span class="font-weight-semibold mr-2">Monthly <sup>Income</sup></span><span class="font-12 text-right">{{number_format($member_data->income,2)}}</span><sup><small>TZS</small></sup>
+                                <span class="font-weight-semibold mr-2">Monthly Income</span><br><span class="font-12 text-right">{{number_format($member_data->income,2)}}</span><sup><small>TZS</small></sup>
                             </span>
                             </p>
-                
                         </div>
 
                     </div>
@@ -135,45 +134,53 @@
                                             <div class="col-auto">
                                                 <div class="avatar-sm">
                                                     <span class="avatar-title badge-soft-primary text-primary rounded">
-                                                        ZIP
+                                                        {!! $member_data->regform_attachment != "NULL"? pathinfo(Storage::url('members/reg_forms/'.$member_data->regform_attachment), PATHINFO_EXTENSION):'<i class="flaticon-cross"></i>';!!}
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div class="col pl-0">
-                                                <a href="javascript:void(0);" class="text-muted font-weight-bold font-12">Ubold-sketch-design.zip</a>
-                                                <p class="mb-0 font-12">2.3 MB</p>
-                                            </div>
-                                            <div class="col-auto">
-                                                <!-- Button -->
-                                                <a href="javascript:void(0);" class="btn btn-link font-16 text-muted">
-                                                    <i class="dripicons-download"></i>
+                                            <div class="col pl-0 pr-0">
+                                                <a href="javascript:void(0);" class="text-muted font-weight-medium font-11">
+                                                    {!!$member_data->regform_attachment=="NULL"?'<span class="text-danger"> No Attachment</span>':$member_data->regform_attachment;!!}
                                                 </a>
+                                                <p class="mb-0 font-12">
+                                                    {!! $member_data->regform_attachment=="NULL"? "": convertToReadableFileSize(filesize('storage/members/reg_forms/'.$member_data->regform_attachment));!!}
+                                                </p>
+                                            </div>
+                                            <div class="col-auto px-1">
+                                                <!-- Button -->
+                                                @if($member_data->regform_attachment!="NULL")
+                                                    <a href="{{Storage::url('members/reg_forms/'.$member_data->regform_attachment)}}" class="btn btn-link font-16 text-muted" target="_blank">
+                                                        <i class="dripicons-download"></i>
+                                                    </a>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-4 col-lg-4  pl-0">
-                                <label for="name" class="font-12">{{$member_data->idAttachment->name}} [ <small>{{$member_data->id_number}}</small> ]</label>
+                                <label for="name" class="font-12">{{$member_data->id_type_id == 0 ? "ID Attachment": $member_data->idAttachment->name;}} {!! $member_data->id_type_id > 0 ?'[ <small>'.$member_data->id_number.'</small> ]':'';!!}</label>
                                 <div class="card mb-1 ml-0 shadow-none border">
                                     <div class="p-1">
                                         <div class="row align-items-center">
                                             <div class="col-auto">
                                                 <div class="avatar-sm">
                                                     <span class="avatar-title badge-soft-primary text-primary rounded">
-                                                        {{pathinfo(Storage::url('members/ids/'.$member_data->id_attachment), PATHINFO_EXTENSION)}}
+                                                        {!! $member_data->id_attachment != "NULL"? pathinfo(Storage::url('members/ids/'.$member_data->id_attachment), PATHINFO_EXTENSION):'<i class="flaticon-cross"></i>';!!}
                                                     </span>
                                                 </div>
                                             </div>
                                             <div class="col pl-0">
-                                                <a href="javascript:void(0);" class="text-muted font-weight-bold font-11">{!!$member_data->id_attachment=="NULL"?'<span class="text-danger"> No Attachement</span>'  :$member_data->id_attachment;!!}</a>
-                                                <p class="mb-0 font-12">{!! $member_data->id_attachment=="NULL"? "": "";!!} </p>
+                                                <a href="javascript:void(0);" class="text-muted font-weight-bold font-11">{!!$member_data->id_attachment=="NULL"?'<span class="text-danger"> No Attachment</span>'  :$member_data->id_attachment;!!}</a>
+                                                <p class="mb-0 font-12">{!! $member_data->id_attachment=="NULL"? "": convertToReadableFileSize(filesize('storage/members/ids/'.$member_data->id_attachment));!!} </p>
                                             </div>
                                             <div class="col-auto">
                                                 <!-- Button -->
+                                                @if($member_data->id_attachment!="NULL")
                                                 <a href="{{Storage::url('members/ids/'.$member_data->id_attachment)}}" target="_blank" class="btn btn-link font-16 text-muted">
                                                     <i class="dripicons-download"></i>
                                                 </a>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -187,19 +194,23 @@
                                             <div class="col-auto">
                                                 <div class="avatar-sm">
                                                     <span class="avatar-title badge-soft-primary text-primary rounded">
-                                                        ZIP
+                                                        {!! $member_data->member_signature != "NULL"? pathinfo(Storage::url('members/signatures/'.$member_data->member_signature), PATHINFO_EXTENSION):'<i class="flaticon-cross"></i>';!!}
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div class="col pl-0">
-                                                <a href="javascript:void(0);" class="text-muted font-weight-bold font-12">Ubold-sketch-design.zip</a>
-                                                <p class="mb-0 font-12">2.3 MB</p>
+                                            <div class="col pl-0 pr-0">
+                                                <a href="javascript:void(0);" class="text-muted font-weight-bold font-11">
+                                                    {!!$member_data->member_signature=="NULL"?'<span class="text-danger"> No Attachment</span>':$member_data->member_signature;!!}
+                                                </a>
+                                                <p class="mb-0 font-12"> {!! $member_data->member_signature=="NULL"? "": convertToReadableFileSize(filesize('storage/members/signatures/'.$member_data->member_signature));!!} </p>
                                             </div>
                                             <div class="col-auto">
                                                 <!-- Button -->
-                                                <a href="javascript:void(0);" class="btn btn-link font-16 text-muted">
-                                                    <i class="dripicons-download"></i>
-                                                </a>
+                                                @if($member_data->member_signature!="NULL")
+                                                    <a href="{{Storage::url('members/signatures/'.$member_data->member_signature)}}" target="_blank" class="btn btn-link font-16 text-muted">
+                                                        <i class="dripicons-download"></i>
+                                                    </a>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>

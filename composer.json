@@ -30,8 +30,11 @@
             "Database\\Seeders\\": "database/seeders/",
             "App\\Models\\": "app/Models/"
         },
+        "files": [
+            "app/Http/Helpers/AppHelper.php"
+        ],
         "classmap": [
-            "database/seeds",
+            "database/seeders",
             "database/factories",
             "app/Http/Middleware"
         ]

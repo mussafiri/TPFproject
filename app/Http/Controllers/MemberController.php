@@ -27,16 +27,21 @@ class MemberController extends Controller {
     }
     public function index() { }
 
+    public function membersEditView() {
+
+    }
+
     public function memberFetchFromSelectize(Request $request) {
-        $select_request = $request->input('member_search');  
+        $select_request = $request->input('member_search'); 
+        // dd($select_request); 
         if(!empty($select_request)) { 
             $members = Member::where(function ($query) use ($select_request) {
-                $query->where(DB::raw("CONCAT(fname, ' ', mname, ' ', lname)","member_code"), 'LIKE', "%{$select_request}%");
+                $query->where(DB::raw("CONCAT(fname,' ',mname,' ',lname)","member_code"), 'LIKE', "%{$select_request}%");
             })->select(DB::raw("members.*"))->latest()->take(600)->get();
                                 
             return view('members.members_list', ['members_filtered'=>$members,"selectize"=>"AVAILABLE"]);
         }else{
-            return $this->members();
+            return redirect('members/list');
         }
 
     }
@@ -295,7 +300,7 @@ class MemberController extends Controller {
             //Get just ext
             $extension = strtolower($request->file( 'member_signature' )->getClientOriginalExtension());
             // Create new Filename
-            $newfilename = 'MEMPHOTO_' . date( 'y' );
+            $newfilename = 'MEMSIGN_' . date( 'y' );
             // FileName to Store
             $signature = $newfilename . '_' . time() . '.' . $extension;
             // Upload Image

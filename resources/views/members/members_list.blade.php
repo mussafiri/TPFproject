@@ -155,7 +155,7 @@
     $(document).ready(function() {
         $('#selectize-membersSearch').selectize({
             maxItems: 1,
-            valueField: 'id',
+            valueField: 'full_name',
             labelField: 'full_name',
             searchField: 'full_name',
             create: true,
