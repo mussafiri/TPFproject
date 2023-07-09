@@ -27,7 +27,6 @@
             </div>
         </div>
         <!-- end page title -->
-
             <div class="row">
                 <div class="col-12">
                     <div class="card-box">
@@ -49,7 +48,6 @@
                                                             <th class="text-center">Contributors</th>
                                                             <th class="text-center">Members</th>
                                                             <th class="text-center">Monthly Contribution <sup class="text-muted font-10">TZS</sup></th>
-                                                            <th class="text-center">Arrers Age </th>
                                                             <th class="text-center">Total Arrear Penalty <sup class="text-muted font-10">TZS</sup></th>
                                                         </tr>
                                                     </thead>
@@ -60,8 +58,7 @@
                                                             <td class="text-center">{{$arrearDetails->totalContributors($arrearDetails->section_id)}}</td>
                                                             <td class="text-center">{{$arrearDetails->totalMembers($arrearDetails->section_id)}}</td>
                                                             <td class="text-center">{{number_format($arrearDetails->arrearTotalContributionExpected($arrearDetails->section_id, $arrearDetails->arrear_period),2)}}</td>
-                                                            <td class="text-center">{{$arrearDetails->arrearAge($arrearDetails->id, $arrearPeriod)}} <sup class="text-muted"><small>Days</small></sup></td>
-                                                            <td class="text-center text-danger">{{number_format($arrearDetails->arrearTotalPenaltyExpected($arrearDetails->arrearTotalContributionExpected($arrearDetails->section_id, $arrearDetails->arrear_period),$arrearDetails->id, $arrearPeriod),2)}}</td>
+                                                            <td class="text-center">{{number_format($arrearDetails->arrearTotalPenaltyExpected($arrearDetails->id, $arrearDetails->arrear_period),2)}}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -85,7 +82,7 @@
                                                     <th style="width:10%;">Monthly Income <sup class="text-muted font-10">TZS</sup></th>
                                                     <th style="width:10%;">Amount <sup class="text-muted font-10">Contributor TZS</sup></th>
                                                     <th style="width:10%;">Amount <sup class="text-muted font-10">Member TZS</sup></th>
-                                                    <th style="width:10%;">Total <sup class="text-muted font-10">TZS</sup></th>
+                                                    <th class="text-center" style="width:10%;">Total <sup class="text-muted font-10">TZS</sup></th>
                                                     <th style="width:10%;">Arrear Penalty <sup class="text-muted font-10">TZS</sup></th>
                                                     <th style="width:5%;">Status</th>
                                                     <th style="width:4%;">Action</th>
@@ -94,7 +91,6 @@
                                             <tbody>
                                             @php $counter = 1; @endphp
                                             @foreach( $arearDetails AS $arrearData )
-                                            @php $totalMemberContribution = $arrearData->getMemberContributionAmount( $arrearData->contributor_id, $arrearData->member_id ) + $arrearData->getContributorContributionAmount( $arrearData->contributor_id, $arrearData->member_id ); @endphp
                                                 <tr>
                                                     <td>{{$counter}}</td>
                                                     <td class="font-9 px-0">{{$arrearData->contributor->name}}</td>
@@ -102,14 +98,24 @@
                                                     <td> {{number_format( $arrearData->getMemberMonthlyIncome( $arrearData->member_id ), 2 )}}</td>
                                                     <td> {{number_format( $arrearData->getContributorContributionAmount( $arrearData->contributor_id, $arrearData->member_id ), 2 )}}</td>
                                                     <td> {{number_format( $arrearData->getMemberContributionAmount( $arrearData->contributor_id, $arrearData->member_id ), 2 )}}</td>
-                                                    <td> {{number_format( ($totalMemberContribution), 2 )}}</td>
-                                                    <td class="text-danger text-center"> {{number_format( $arrearData->totalMemberArrearPenaltyExpected($totalMemberContribution, $arrearData->arrear_id, $arrearPeriod),2)}}</td>
+                                                    <td> {{number_format( ($arrearData->getMemberContributionAmount( $arrearData->contributor_id, $arrearData->member_id )+$arrearData->getContributorContributionAmount( $arrearData->contributor_id, $arrearData->member_id )), 2 )}}</td>
+                                                    <td> {{number_format( $arrearData->totalMemberArrearPenaltyExpected($arrearDetails->id, $arrearData->member_id, $$arrearDetails->arrear_period),2)}}</td>
                                                     <td> <span id="status{{$counter}}" class="badge badge-outline-{{$arrearData->status == 'ACTIVE'?'success':'danger';}} badge-pill">{{$arrearData->status}}</span></td>
-                                                    <td>
-                                                        <div class="float-right">
-                                                            <a href="javascript:void(0);" class="text-blue btn btn-light btn-sm waveArrear editButton{{$counter}}" data-memberID="{{$arrearData->member_id}}" data-contributorID="{{$arrearData->contributor_id}}" aria-expanded="false" data-rowID="{{$counter}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Suspend User Contribution">
-                                                                <i class="mdi mdi-close-thick mr-1"></i>
+                                                    <td> 
+                                                        <div class="btn-group dropdown float-right">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" class="custom-control-input" id="customCheck{{$n}}" name="confirmMembers[]">
+                                                                <label class="custom-control-label" for="customCheck{{$n}}"></label>
+                                                            </div>
+
+                                                            <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="mdi mdi-dots-horizontal font-18"></i>
                                                             </a>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <a href="javascript:void(0);" class="text-blue btn btn-light btn-sm waveArrear editButton{{$counter}}" data-memberID="{{$arrearData->member_id}}" aria-expanded="false" data-rowID="{{$counter}}" data-toggle="tooltip" data-placement="top" data-original-title="Waive ">
+                                                                    <i class="mdi mdi-close-thick mr-1"></i>  Waive Penalty
+                                                                </a> 
+                                                            </div> <!-- end dropdown menu-->
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -120,6 +126,57 @@
                                     </div>
                                 </div>
 
+                            </div>
+
+                            <div class="col-12 arrearPenaltyPayementBlock" style="display:none;">
+                            <h4 class="header-title mb-3 text-muted">Transaction Proofs</h4>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="field-4" class="control-label">Total Arrear Paid  <span class="text-danger">*</span></label>
+                                                    <input type="text" name="contributionAmount" id="contributionAmount" class="form-control form-control-sm totalContributionInput contriInput autonumber" value="{{old('contributionAmount',$contributionData->contribution_amount )}}" id="field-4" placeholder="Total Contribution">
+                                                    <span class="text-danger" role="alert"> {{ $errors->first('contributionAmount') }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="field-4" class="control-label">Payment Date  <span class="text-danger">*</span></label>
+                                                    <input type="text" name="paymentDate" id="basic-datepicker" data-date-format="d M, Y" class="form-control form-control-sm contriInput" value="{{old('paymentDate', date('M Y', strtotime($contributionData->contribution_period)))}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Pick Payment Date">
+                                                    <span class="text-danger" role="alert"> {{ $errors->first('paymentDate') }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="field-1" class="control-label">Payment Mode  <span class="text-danger">*</span></label>
+                                                    <select class="form-control contriInput" name="paymentMode" data-toggle="select2">
+                                                        @foreach($paymentMode as $value)
+                                                        <option value="{{$value->id}}" {{$contributionData->payment_mode_id==$value->id?'selected':''}} {{old ('paymentMode') == $value->id ? 'selected' : ''}}>{{$value->name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    <span class="text-danger" role="alert"> {{ $errors->first('paymentMode') }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="field-4" class="control-label">Transaction Reference  <span class="text-danger">*</span></label>
+                                                    <input type="text" name="transactionReference" id="transaction" class="form-control form-control-sm contriInput" value="{{old('transaction', $contributionData->payment_ref_no)}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Transaction Reference">
+                                                    <span class="text-danger" role="alert"> {{ $errors->first('transactionReference') }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="field-3" class="control-label">Transaction Proof  <span class="text-danger">*</span></label>
+                                                <input type="file" class="form-control kartik-input-705 kv-fileinput-dropzone contriInput" name="transactionProof" id="field-4" required>
+                                                <span class="text-danger" role="alert"> {{ $errors->first('transactionProof') }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="col-md-12 px-3 pt-2">
@@ -145,11 +202,11 @@
 
                             </div> <!-- end col -->
                         </div> <!-- end row -->
-
                     </div> <!-- container -->
                 </div> <!-- content -->
                 <!-- end .table-responsive-->
             </div> <!-- end card-box-->
+
     </div> <!-- end col -->
 </div>
 <!-- end row -->
@@ -165,7 +222,6 @@
     //START:: Suspend  Member Contribution
     $('.waveArrear').click(function() {
         let rowID = $(this).attr('data-id');
-
         $('.memberContributionInput'+rowID).val('0.00');
         let newMemberContribution = $('.memberContributionInput'+rowID).val();
         let memberID      = $(this).attr('data-memberID');
@@ -173,87 +229,4 @@
     });
     //END:: Suspend  Member Contribution
 </script>
-
-@if($errors->hasBag('approveContribution'))
-    <script>
-        $(document).ready(function(){
-            $('#approvalModal').modal({show: true});
-        });
-    </script>
-@endif
-
-@if($errors->hasBag('rejectionValidation'))
-    <script>
-        $(document).ready(function(){
-            $('#rejectModal').modal({show: true});
-        });
-    </script>
-@endif
-
-<script>
-    $(".kartik-input-705").fileinput({
-        theme: "explorer"
-        , uploadUrl: '#'
-        , allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif']
-        , overwriteInitial: false
-        , initialPreviewAsData: true
-        , maxFileSize: 2000
-        , maxTotalFileCount: 1
-        , showUpload: false
-        , showCancel: false
-        , dropZoneTitle: '<span>Drag & Drop Proof File here to upload</span>'
-        , fileActionSettings: {
-            showUpload: false
-            , showRemove: true
-        , }
-    , });
-
-</script>
-
-<script>
-$('.approvalButton').on('click',function(){
-   var approvalType = $(this).attr('data-approvalType');
-   $('#approvalType').val(approvalType);
-
-    if(approvalType =='Approve Contribution'){
-        $('.approvalSpanTextTitle').html('Approval');
-        $('.approvalSpanTextBody').html('Approve');
-        $('.approvalSpanButton').html('Submit Approval');
-
-    }else{
-        $('.approvalSpanTextTitle').html('Posting');
-        $('.approvalSpanTextBody').html('Post');
-        $('.approvalSpanButton').html('Post Contribution');
-    }
-});
-
-$('.rejectionButton').on('click',function(){
-   var rejectionType = $(this).attr('data-rejectionType');
-   $('#rejectionType').val(rejectionType);
-    if(rejectionType =='Reject Approval'){
-        $('rejectionSpanTextTitle').html('Approval');
-        $('rejectionSpanTextBody').html('Reject Approval of');
-        $('rejectionSpanButton').html('Approval  Rejection');
-
-    }else{
-        $('rejectionSpanTextTitle').html('Posting');
-        $('rejectionSpanTextBody').html('Reject Posting of');
-        $('rejectionSpanButton').html('Positing  Rejection');
-    }
-});
-
-$('.reasonSelect').change(function(){
-    var reason = $(this).find(":selected").val();
-    
-    if(reason == 0){
-        $('.otherRectionReasonInput').prop('required', true);
-        $('.otherRectionReason').show();
-    }else{
-        $('.otherRectionReasonInput').removeAttr('required');
-        $('.otherRectionReason').hide();
-    }
-});
-
-</script>
-
 @endsection

@@ -1,12 +1,14 @@
 <?php
 namespace App\Lib;
 use App\Models\Arrear;
+use App\Models\ArrearDetail;
 use App\Models\Contribution;
 use App\Models\ArrearRecognition;
 use App\Models\ContributionDetail;
 use App\Models\ContributorCatContrStructure;
 use App\Models\Contributor;
 use App\Models\ContributorIncomeTracker;
+use App\Models\ContributorMember;
 use App\Models\Member;
 use App\Models\District;
 use App\Models\MemberMonthlyIncome;
@@ -92,7 +94,6 @@ class Common {
 
         return $income;
     }
-
     public function memberContributionAmount( $contributorID, $memberID ) {
         $memberIncome = 0;
         #start:: get member income
@@ -190,54 +191,140 @@ class Common {
 
         return $returnDataArr;
     }
+    public function arrearTotalContribution($sectionID, $arear_date){
+        $totalContribution = 0;
+        $contributionDate = date('Y-m', strtotime($arear_date));
+        //START:: Current Active Member
+        $getCurrentContributorMember = ContributorMember::join( 'contributors', 'contributors.id', '=', 'contributor_members.contributor_id' )
+        ->where( 'contributors.section_id', $sectionID )
+        ->where( 'contributor_members.start_date', '<=', $contributionDate )
+        ->where( 'contributor_members.end_date', 'NULL' )
+        ->where( 'contributor_members.status', 'ACTIVE' )
+        ->get();
 
-    public function arrearRegister( $contributionID ) {
-        //START:: Check if there is a need to onboarding Arrears
-        $daysElapsed = $this->arrearElapsedDaysAlgorithm( $contributionID );
-
-        $getContributionData = Contribution::find( $contributionID );
-        if ( $daysElapsed > 0 ) {
-            $getMembersContritbution = ContributionDetail::where( 'contribution_id', $contributionID )->where( 'status', 'ACTIVE' )->get();
-            if ( $getMembersContritbution ) {
-                foreach ( $getMembersContritbution as $data ) {
-                    $registerArrear = new Arrear;
-                    $registerArrear->contribution_details_id = $data->id;
-                    $registerArrear->arrear_period = $getContributionData->contribution_period;
-                    $registerArrear->status = 'ACTIVE';
-                    $registerArrear->save();
-                }
-            }
+        foreach ( $getCurrentContributorMember AS $memberData ) { 
+            $totalContribution+= $memberData->getMemberContributionAmount( $memberData->contributor_id, $memberData->member_id )+$memberData->getContributorContributionAmount( $memberData->contributor_id, $memberData->member_id );
         }
-        //END:: Check if there is a need to onboarding Arrears
+        //END:: Current Active Member
+
+        //START:: Qualifying member
+        $getQualifyingContributorMember = ContributorMember::join( 'contributors', 'contributors.id', '=', 'contributor_members.contributor_id' )
+        ->where( 'contributors.section_id', $sectionID )
+        ->where( 'contributor_members.start_date', '<=', $contributionDate )
+        ->where( 'contributor_members.end_date', '>=', $contributionDate )
+        ->where( 'contributor_members.end_date', '!=', 'NULL' )
+        ->where( 'contributor_members.status', 'ACTIVE' )
+        ->get();
+
+        foreach ( $getQualifyingContributorMember AS $qualifiedMembers ) {
+            $totalContribution+= $qualifiedMembers->getMemberContributionAmount( $qualifiedMembers->contributor_id, $qualifiedMembers->member_id )+$qualifiedMembers->getContributorContributionAmount( $qualifiedMembers->contributor_id, $qualifiedMembers->member_id );
+        }
+
+        return $totalContribution;
+        //END:: Qualifying member
+    }
+    public function arrearRegister( $section_id, $contribution_period ) {
+                    
+                    $registerArrear = new Arrear;
+                    $registerArrear->section_id     = $section_id;
+                    $registerArrear->arrear_period  = $contribution_period;
+                    $registerArrear->penalty_amount = 0;
+                    $registerArrear->status         = 'ACTIVE';
+                    $registerArrear->save();
+
+                    $getCurrentContributorMember = ContributorMember::join( 'contributors', 'contributors.id', '=', 'contributor_members.contributor_id' )
+                    ->where( 'contributors.section_id', $section_id )
+                    ->where( 'contributor_members.start_date', '<=', $contribution_period )
+                    ->where( 'contributor_members.end_date', 'NULL' )
+                    ->where( 'contributor_members.status', 'ACTIVE' )
+                    ->get();
+
+                    if($getCurrentContributorMember->count() > 0){
+                        foreach($getCurrentContributorMember as $data){
+                            $pushArrearDetails = new ArrearDetail;
+                            $pushArrearDetails->arrear_id = $registerArrear->id;
+                            $pushArrearDetails->contributor_id = $data->contributor_id;
+                            $pushArrearDetails->member_id = $data->member_id;
+                            $pushArrearDetails->member_monthly_income = $data->getMemberMonthlyIncome( $data->member_id );
+                            $pushArrearDetails->member_contribution = $data->getMemberContributionAmount( $data->contributor_id, $data->member_id );
+                            $pushArrearDetails->contributor_contribution = $data->getContributorContributionAmount( $data->contributor_id, $data->member_id );
+                            $pushArrearDetails->arrear_amount =$data->getMemberContributionAmount( $data->contributor_id, $data->member_id ) + $data->getContributorContributionAmount( $data->contributor_id, $data->member_id );
+                            $pushArrearDetails->arrear_penalty_amount =0;
+                            $pushArrearDetails->status='ACTIVE';
+                            $pushArrearDetails->processing_status='ACTIVE';
+                            $pushArrearDetails->save();
+                        }
+                    }
+                    //END:: get Active Existing members
+            
+                    //START:: Qualifying member
+                    $getQualifyingContributorMember = ContributorMember::join( 'contributors', 'contributors.id', '=', 'contributor_members.contributor_id' )
+                    ->where( 'contributors.section_id', $section_id )
+                    ->where( 'contributor_members.start_date', '<=', $contribution_period )
+                    ->where( 'contributor_members.end_date', '>=', $contribution_period )
+                    ->where( 'contributor_members.end_date', '!=', 'NULL' )
+                    ->where( 'contributor_members.status', 'ACTIVE' )
+                    ->get();
+
+                    if($getQualifyingContributorMember->count() > 0){
+                        foreach($getQualifyingContributorMember as $value){
+                            $pushArrearDetails = new ArrearDetail;
+                            $pushArrearDetails->arrear_id = $registerArrear->id;
+                            $pushArrearDetails->contributor_id = $value->contributor_id;
+                            $pushArrearDetails->member_id = $value->member_id;
+                            $pushArrearDetails->member_monthly_income = $value->getMemberMonthlyIncome( $value->member_id );
+                            $pushArrearDetails->member_contribution = $value->getMemberContributionAmount( $value->contributor_id, $value->member_id );
+                            $pushArrearDetails->contributor_contribution = $value->getContributorContributionAmount( $value->contributor_id, $value->member_id );
+                            $pushArrearDetails->arrear_amount =$value->getMemberContributionAmount( $value->contributor_id, $value->member_id ) + $value->getContributorContributionAmount( $value->contributor_id, $value->member_id );
+                            $pushArrearDetails->arrear_penalty_amount =0;
+                            $pushArrearDetails->status='ACTIVE';
+                            $pushArrearDetails->processing_status='ACTIVE';
+                            $pushArrearDetails->save();
+                            
+                        }
+                    }
+                    //END:: Qualifying member
+
     }
 
-    public function arrearsPenaltyComputation( $arrearID ) {
-
-        //$months = ceil( $delayedDays / 30 );
-        
+    public function arrearsPenaltyComputation( $arrearID, $current_date) {
         $getArrearData = Arrear::find( $arrearID );
-
-        $daysElapsed = $this->arrearElapsedDaysAlgorithm( $getArrearData->contributionDetials->contribution_id );
+        $arrear_period = $getArrearData->arrear_period.'-01';
+        $arrearDaysElapsed = $this->arrearElapsedDaysAlgorithm( $arrear_period, $current_date );
 
         $getArrearControls = ArrearRecognition::where( 'status', 'ACTIVE' )->first();
+        $gracePeriodDays = $getArrearControls->grace_period_days;
+
+        if($arrearDaysElapsed >$gracePeriodDays  ){
+            $arrearPenaltyDays = $arrearDaysElapsed- $gracePeriodDays;
+            $months = $arrearPenaltyDays / 30;
+        }else{
+            $months = 0;
+        }
+
+        $totalRate = ($getArrearControls->penalty_rate/100) * $months;
+        return $totalRate;
     }
 
-    public function arrearElapsedDaysAlgorithm( $contributionID ) {
-        $getContributionData = Contribution::find( $contributionID );
+    public function arrearElapsedDaysAlgorithm( $contribution_period, $current_date ) {
+        // get number of days in the month
+        $paymentDate        = Carbon::parse( $current_date );
+        $contributionPeriod = Carbon::parse( $contribution_period );
+        $daysDifferent      = $paymentDate->diffInDays( $contributionPeriod );
 
-        $dateSegmentArr = explode( '-', $getContributionData->contribution_period );
+
+        $dateSegmentArr = explode( '-', $contribution_period);
         $year  = $dateSegmentArr[ 0 ];
         $month = $dateSegmentArr[ 1 ];
+        $day   = $dateSegmentArr[ 2 ];// 
+
         $daysInMonth = Carbon::createFromDate( $year, $month )->daysInMonth;
-        // get number of days in the month
 
-        $paymentDate        = Carbon::parse( $getContributionData->payment_date );
-        $contributionPeriod = Carbon::parse( $getContributionData->contribution_period.'-01' );
-
-        $daysDifferent = $paymentDate->diffInDays( $contributionPeriod );
-
-        $daysElapsed = $daysDifferent - $daysInMonth;
-
+        if($daysDifferent > 0 && $daysDifferent > $daysInMonth){
+            $daysElapsed = $daysDifferent - $daysInMonth;
+        }else{
+            $daysElapsed = 0;
+        }
         return $daysElapsed;
     }
 

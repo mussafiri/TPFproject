@@ -6,18 +6,27 @@ use App\Lib\Common;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ContributorMember extends Model {
+class ArrearDetail extends Model
+{
     use HasFactory;
 
-    public function transferedBy() {
-        return $this->belongsTo( User::class, 'created_by' );
-    }
-    public function member() {
-        return $this->belongsTo( Member::class, 'member_id' );
+    public function arrear() {
+        return $this->belongsTo( Arrear::class, 'arrear_id' );
     }
 
+    public function createdBy() {
+        return $this->belongsTo( User::class, 'created_by' );
+    }
+
+    public function updatedBy() {
+        return $this->belongsTo( User::class, 'updated_by' );
+    }
     public function contributor() {
         return $this->belongsTo( Contributor::class, 'contributor_id' );
+    }
+    
+    public function member() {
+        return $this->belongsTo( Member::class, 'member_id' );
     }
 
     public function getMemberMonthlyIncome( $memberID ) {
@@ -44,13 +53,11 @@ class ContributorMember extends Model {
         return $contributorContribution;
     }
 
-    public function totalMemberArrearPenaltyExpected($totalMemberContribution, $arrearID, $current_date){
+    public function totalMemberArrearPenaltyExpected($memberContribution, $arrearID, $current_date){
         $cmn = new Common();
-        $arrearPenaltyRate = $cmn->arrearsPenaltyComputation( $arrearID, $current_date);
-
-        $totalMemberArrearPenalty = $totalMemberContribution*$arrearPenaltyRate;
-
-        return $totalMemberArrearPenalty;
+        $arrearTotalPenaltyRate = $cmn->arrearsPenaltyComputation( $arrearID, $current_date);
+    
+        $arrearTotalPenalty     = $arrearTotalPenaltyRate * $memberContribution;
+        return $arrearTotalPenalty;
     }
-
 }

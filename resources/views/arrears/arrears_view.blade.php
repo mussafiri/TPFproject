@@ -61,7 +61,7 @@
                                                             <td class="text-center">{{$arrearDetails->totalMembers($arrearDetails->section_id)}}</td>
                                                             <td class="text-center">{{number_format($arrearDetails->arrearTotalContributionExpected($arrearDetails->section_id, $arrearDetails->arrear_period),2)}}</td>
                                                             <td class="text-center">{{$arrearDetails->arrearAge($arrearDetails->id, $arrearPeriod)}} <sup class="text-muted"><small>Days</small></sup></td>
-                                                            <td class="text-center text-danger">{{number_format($arrearDetails->arrearTotalPenaltyExpected($arrearDetails->arrearTotalContributionExpected($arrearDetails->section_id, $arrearDetails->arrear_period),$arrearDetails->id, $arrearPeriod),2)}}</td>
+                                                            <td class="text-center text-danger ">{{number_format($arrearDetails->arrearTotalPenaltyExpected($arrearDetails->arrearTotalContributionExpected($arrearDetails->section_id, $arrearDetails->arrear_period),$arrearDetails->id, $arrearPeriod),2)}}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -173,87 +173,4 @@
     });
     //END:: Suspend  Member Contribution
 </script>
-
-@if($errors->hasBag('approveContribution'))
-    <script>
-        $(document).ready(function(){
-            $('#approvalModal').modal({show: true});
-        });
-    </script>
-@endif
-
-@if($errors->hasBag('rejectionValidation'))
-    <script>
-        $(document).ready(function(){
-            $('#rejectModal').modal({show: true});
-        });
-    </script>
-@endif
-
-<script>
-    $(".kartik-input-705").fileinput({
-        theme: "explorer"
-        , uploadUrl: '#'
-        , allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif']
-        , overwriteInitial: false
-        , initialPreviewAsData: true
-        , maxFileSize: 2000
-        , maxTotalFileCount: 1
-        , showUpload: false
-        , showCancel: false
-        , dropZoneTitle: '<span>Drag & Drop Proof File here to upload</span>'
-        , fileActionSettings: {
-            showUpload: false
-            , showRemove: true
-        , }
-    , });
-
-</script>
-
-<script>
-$('.approvalButton').on('click',function(){
-   var approvalType = $(this).attr('data-approvalType');
-   $('#approvalType').val(approvalType);
-
-    if(approvalType =='Approve Contribution'){
-        $('.approvalSpanTextTitle').html('Approval');
-        $('.approvalSpanTextBody').html('Approve');
-        $('.approvalSpanButton').html('Submit Approval');
-
-    }else{
-        $('.approvalSpanTextTitle').html('Posting');
-        $('.approvalSpanTextBody').html('Post');
-        $('.approvalSpanButton').html('Post Contribution');
-    }
-});
-
-$('.rejectionButton').on('click',function(){
-   var rejectionType = $(this).attr('data-rejectionType');
-   $('#rejectionType').val(rejectionType);
-    if(rejectionType =='Reject Approval'){
-        $('rejectionSpanTextTitle').html('Approval');
-        $('rejectionSpanTextBody').html('Reject Approval of');
-        $('rejectionSpanButton').html('Approval  Rejection');
-
-    }else{
-        $('rejectionSpanTextTitle').html('Posting');
-        $('rejectionSpanTextBody').html('Reject Posting of');
-        $('rejectionSpanButton').html('Positing  Rejection');
-    }
-});
-
-$('.reasonSelect').change(function(){
-    var reason = $(this).find(":selected").val();
-    
-    if(reason == 0){
-        $('.otherRectionReasonInput').prop('required', true);
-        $('.otherRectionReason').show();
-    }else{
-        $('.otherRectionReasonInput').removeAttr('required');
-        $('.otherRectionReason').hide();
-    }
-});
-
-</script>
-
 @endsection
