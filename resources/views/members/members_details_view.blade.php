@@ -1,4 +1,7 @@
 @extends('layouts.admin_main')
+@php
+    use Carbon\Carbon;
+@endphp
 @section('custom_css')
 <!-- third party css -->
 <link href="{{asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
@@ -78,7 +81,16 @@
                                 <div class="row align-items-center">
                                     <div class="col-auto pl-1">
                                         <div class="avatar-lg" >
-                                            <img src="{{asset('storage/members/photo/'.$member_data->picture)}}" class="img-fluid rounded-circle my-image" alt="user-img"  />                                      
+                                            @if($member_data->picture =="NULL")
+                                                @if($member_data->gender=="FEMALE")
+                                                    <img src="{{asset('assets/images/profile/profile-woman.png')}}" class="img-fluid rounded-circle my-image" alt="user-img"  />                                      
+                                                @else
+                                                    <img src="{{asset('assets/images/profile/profile-man.png')}}" class="img-fluid rounded-circle my-image" alt="user-img"  />                                      
+                                                @endif  
+
+                                            @else
+                                                <img src="{{asset('storage/members/photo/'.$member_data->picture)}}" class="img-fluid rounded-circle my-image" alt="user-img"  />                                      
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="col">
@@ -249,8 +261,54 @@
                                 Transfer History
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="#memberDependantsPane" data-toggle="tab" class="nav-link ">
+                                <i class="flaticon-leader"></i>
+                                    Dependants
+                            </a>
+                        </li>
                     </ul>
                     <div class="tab-content col-12">
+                        <div class="tab-pane" id="memberDependantsPane">
+                            <div class="table-responsive">
+                                <table class="table table-sm font-12 table-striped w-100 datatable-buttons table-responsible" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:2%;">#</th>
+                                            <th style="width:21%;">Name</th>
+                                            <th style="width:8%;">Relationship</th>
+                                            <th style="width:5%;">Gender</th>
+                                            <th style="width:8%;">Occupation</th>
+                                            <th style="width:5%;">Phone</th>
+                                            <th style="width:5%;">Age</th>
+                                            <th style="width:12%;">Attachments</th>
+                                            <th style="width:10%;">Vital </th>
+                                            <th style="width:6%;">status</th>
+                                            <th style="width:18%;">Created</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php $dep=1; @endphp
+                                        @foreach ($dependants as $dep_data)
+                                        <tr>
+                                            <td>{{$dep}}</td>
+                                            <td>{{$dep_data->fname." ".$dep_data->mname." ".$dep_data->lname}}</td>
+                                            <td>{{$dep_data->relationship}}</td>
+                                            <td>{{$dep_data->gender}}</td>
+                                            <td>{{$dep_data->occupation}}</td>
+                                            <td>{{$dep_data->phone}}</td>
+                                            <td>{{$dep_data->dob != "NULL"?Carbon::parse($dep_data->dob)->age:"NOT DETERMINED";}}</td>
+                                            <td></td>
+                                            <td><span class="$data->vital_status == ALIVE ? 'badge badge-soft-success':'badge badge-soft-danger';">{{$dep_data->vital_status}}</span></td>
+                                            <td><span class="$data->status == ACTIVE ? 'badge badge-soft-success':'badge badge-soft-danger';">{{$dep_data->status}}</span></td>
+                                            <td>{{$dep_data->createdBy->fname." ".$dep_data->createdBy->lname}}</td>
+                                        </tr>
+                                        @php $dep++; @endphp
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div> <!-- end .table-responsive-->
+                        </div><!-- end .tab-pane active-->
                         <div class="tab-pane" id="transferHistoryPane">
                             <div class="table-responsive">
                                 <table class="table table-sm font-12 table-striped w-100 datatable-buttons table-responsible" style="width:100%;">

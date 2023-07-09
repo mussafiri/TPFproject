@@ -77,8 +77,12 @@ class MemberController extends Controller {
                                                 ->where("contributor_members.member_id",$member)
                                                 ->get(["contributor_members.*"]);
 
+        $member_dependants       = MemberDependant::join("members",'members.id', '=', 'member_dependants.member_id')
+                                                ->where("member_dependants.member_id",$member)
+                                                ->get(["member_dependants.*"]);
 
-        return view('members.members_details_view', ["member_data"=>$member_data,"member_contributions"=>$member_contributions,"transfers"=>$transfer_history]);
+
+        return view('members.members_details_view', ["member_data"=>$member_data,"member_contributions"=>$member_contributions,"transfers"=>$transfer_history,"dependants"=>$member_dependants]);
     }
 
     public function ajaxMemberDuplicateValidation(Request $ajaxreq){

@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class MemberDependant extends Model
 {
     use HasFactory;
+    protected $guarded = [];
+
+    public function createdBy() {
+        return $this->belongsTo( User::class, 'created_by' );
+    }
+
 }
