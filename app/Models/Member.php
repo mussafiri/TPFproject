@@ -48,4 +48,8 @@ class Member extends Authenticatable implements AuthenticatableContract
     public function contributor() {
         return $this->belongsTo(Contributor::class, 'contributor_id' );
     }
+    public function idAttachment() {
+        return $this->belongsTo(MemberIdentityType::class, 'id_type_id' );
+    }
+
 }

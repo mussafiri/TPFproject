@@ -27,6 +27,43 @@ class MemberController extends Controller {
     }
     public function index() { }
 
+    public function membersEditView() {
+
+    }
+
+    public function memberFetchFromSelectize(Request $request) {
+        $select_request = $request->input('member_search'); 
+        // dd($select_request); 
+        if(!empty($select_request)) { 
+            $members = Member::where(function ($query) use ($select_request) {
+                $query->where(DB::raw("CONCAT(fname,' ',mname,' ',lname)","member_code"), 'LIKE', "%{$select_request}%");
+            })->select(DB::raw("members.*"))->latest()->take(600)->get();
+                                
+            return view('members.members_list', ['members_filtered'=>$members,"selectize"=>"AVAILABLE"]);
+        }else{
+            return redirect('members/list');
+        }
+
+    }
+
+    public function ajaxMemberSelectionFilterOptions(Request $ajaxreq) {
+        $select_request = $ajaxreq['q'];
+        $members = Member::where(function ($query) use ($select_request) {
+            $query->where(DB::raw("CONCAT(fname, ' ', mname, ' ', lname)","member_code"), 'LIKE', "%{$select_request}%");
+        })->select(DB::raw("CONCAT(fname, ' ', mname, ' ', lname) AS full_name,id,member_code"))->get();
+
+       $member_data= array();
+        if ($members) {
+            $member_data[ 'status' ] = 'success';
+            $member_data[ 'message' ] = 'Member data has been Succefully fetched';
+            $member_data[ 'data' ] = $members;
+        } else {
+            $member_data[ 'status' ] = 'Errors';
+            $member_data[ 'message' ] = 'We could not find such Member in our database';
+        }
+        return response()->json( [ 'members'=>$member_data ] );
+
+    }
     public function memberViewDetails($member_id) {
         $member         = Crypt::decryptString($member_id);
         $member_data    = Member::where('id', $member)
@@ -40,8 +77,12 @@ class MemberController extends Controller {
                                                 ->where("contributor_members.member_id",$member)
                                                 ->get(["contributor_members.*"]);
 
+        $member_dependants       = MemberDependant::join("members",'members.id', '=', 'member_dependants.member_id')
+                                                ->where("member_dependants.member_id",$member)
+                                                ->get(["member_dependants.*"]);
 
-        return view('members.members_details_view', ["member_data"=>$member_data,"member_contributions"=>$member_contributions,"transfers"=>$transfer_history]);
+
+        return view('members.members_details_view', ["member_data"=>$member_data,"member_contributions"=>$member_contributions,"transfers"=>$transfer_history,"dependants"=>$member_dependants]);
     }
 
     public function ajaxMemberDuplicateValidation(Request $ajaxreq){
@@ -74,7 +115,7 @@ class MemberController extends Controller {
                     // Get just filename
                     $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
                     //Get just ext
-                    $extension = $dep_photo[$index]->getClientOriginalExtension();
+                    $extension = strtolower($dep_photo[$index]->getClientOriginalExtension());
                     // Create new Filename
                     $newfilename = 'MEMDEPPHOTO_' . date( 'y' );
                     // FileName to Store
@@ -92,7 +133,7 @@ class MemberController extends Controller {
                 // Get just filename
                 $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
                 //Get just ext
-                $extension = $dep_birthcert[$index]->getClientOriginalExtension();
+                $extension = strtolower($dep_birthcert[$index]->getClientOriginalExtension());
                 // Create new Filename
                 $newfilename = 'MEMDEPCERT_' . date( 'y' );
                 // FileName to Store
@@ -108,7 +149,7 @@ class MemberController extends Controller {
                 // Get just filename
                 $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
                 //Get just ext
-                $extension = $dep_marriagecert[$index]->getClientOriginalExtension();
+                $extension = strtolower($dep_marriagecert[$index]->getClientOriginalExtension());
                 // Create new Filename
                 $newfilename = 'MEMDEPMCERT_' . date( 'y' );
                 // FileName to Store
@@ -212,7 +253,7 @@ class MemberController extends Controller {
             // Get just filename
             $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
             //Get just ext
-            $extension = $request->file( 'member_avatar' )->getClientOriginalExtension();
+            $extension = strtolower($request->file( 'member_avatar' )->getClientOriginalExtension());
             // Create new Filename
             $newfilename = 'MEMPHOTO_' . date( 'y' );
             // FileName to Store
@@ -228,7 +269,7 @@ class MemberController extends Controller {
             // Get just filename
             $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
             //Get just ext
-            $extension = $request->file( 'member_id' )->getClientOriginalExtension();
+            $extension = strtolower($request->file( 'member_id' )->getClientOriginalExtension());
             // Create new Filename
             $newfilename = 'MEMIDS_' . date( 'y' );
             // FileName to Store
@@ -243,7 +284,7 @@ class MemberController extends Controller {
             // Get just filename
             $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
             //Get just ext
-            $extension = $request->file( 'regform_attachment' )->getClientOriginalExtension();
+            $extension = strtolower($request->file( 'regform_attachment' )->getClientOriginalExtension());
             // Create new Filename
             $newfilename = 'MEMREGFRM_' . date( 'y' );
             // FileName to Store
@@ -261,9 +302,9 @@ class MemberController extends Controller {
             // Get just filename
             $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
             //Get just ext
-            $extension = $request->file( 'member_signature' )->getClientOriginalExtension();
+            $extension = strtolower($request->file( 'member_signature' )->getClientOriginalExtension());
             // Create new Filename
-            $newfilename = 'MEMPHOTO_' . date( 'y' );
+            $newfilename = 'MEMSIGN_' . date( 'y' );
             // FileName to Store
             $signature = $newfilename . '_' . time() . '.' . $extension;
             // Upload Image
@@ -313,6 +354,14 @@ class MemberController extends Controller {
         if ( $memberRegObject->save() ) {
             #Return the Dependants View
             $this->cmn -> memberCodeGenerator($memberRegObject->id);
+            // Insert a member to Contributor Member Table
+            $contributorMemObj = new ContributorMember;
+            $contributorMemObj->contributor_id        = $memberRegObject->contributor_id;
+            $contributorMemObj->member_id            = $memberRegObject->id;
+            $contributorMemObj->start_date            = $memberRegObject->joining_date;
+            $contributorMemObj->status                = "ACTIVE";
+            $contributorMemObj->created_by            = auth()->user()->id;
+            $contributorMemObj->save();
 
             toastr();
             return redirect('members/registration/')->with(['success'=>'Member has been successfully created!','member_data'=>$memberRegObject,"response_message"=>"SUCCESS"]);
@@ -323,7 +372,7 @@ class MemberController extends Controller {
     }
     public function members() {
         $members = Member::latest()->take(500)->get();
-        return view('members.members_list', ['members'=>$members]);
+        return view('members.members_list', ['members'=>$members,"selectize"=>"UNAVAILABLE"]);
     }
     public function regMemberView() {
         $salutation_title=MemberSalutation::where("status","ACTIVE")->get();

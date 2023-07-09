@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class MemberIdentityType extends Model
 {
     use HasFactory;
+    
 }

@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
     //:::::::::::::::::::::::::::::::::::::::::::::::: ZONES ROUTES ::::::::::::::::::::::::::::::::::::::::::::::::
 
     Route::prefix('ajax')->group(function(){
+        #zones management routes
         Route::get('/get/district/old/data', [ZoneController::class, 'ajaxGetDistrictOldData']);
         Route::get('/get/zone/old/data', [ZoneController::class, 'ajaxGetZoneOldData'])->name('ajaxGetZoneOldData');
         Route::get('/get/zone/data', [ZoneController::class, 'zoneUpdateAjax']);
@@ -52,7 +53,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/update/section/status', [ZoneController::class, 'ajaxUpdateSectionStatus']);
         Route::post('/update/district/status', [ZoneController::class, 'ajaxUpdateDistrictStatus']);
         #Member
-
+        Route::post('/dynamic/member/selectize/options/filter', [MemberController::class, 'ajaxMemberSelectionFilterOptions']);
         Route::post('/dynamic/validation', [MemberController::class, 'ajaxRowDynamicValidation']);
         Route::post('/dynamic/member/duplicate/validation', [MemberController::class, 'ajaxMemberDuplicateValidation']);
     });
@@ -83,6 +84,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/registration', [MemberController::class, 'regMemberView']);
         Route::get('/list', [MemberController::class, 'members']);
         Route::get('/possible/duplicates', [MemberController::class, 'duplicateMembers']);
+        Route::post('/find', [MemberController::class, 'memberFetchFromSelectize']);
     });
     Route::prefix('member')->group(function(){
         Route::get('/view/details/{member_id}', [MemberController::class, 'memberViewDetails']);
