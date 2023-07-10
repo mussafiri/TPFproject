@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
         commands\UsersUpload::class,
         commands\SectionsUpload::class,
         commands\ContributorMemberUpload::class,
+        commands\ArrearCheck::class,
     ];
 
     /**
@@ -22,6 +23,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->command('ArrearCheck')->monthlyOn(1)->timezone('Africa/Dar_es_Salaam')->at('00:01');
     }
 
     /**

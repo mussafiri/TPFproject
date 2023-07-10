@@ -56,9 +56,9 @@ class ContributionController extends Controller {
                         $countPendingContrinbution++;
                     }
                 //END:: check unattended contribution
-                
+
                 if($contriData->processing_status=="PENDING"){$badgeText = "info";}else if ($contriData->processing_status=="APPROVED"){$badgeText = "primary";}elseif($contriData->processing_status=="POSTED"){$badgeText = "success";}else if($contriData->processing_status=="APPROVAL REJECTED"){$badgeText = "danger";}elseif($contriData->processing_status=="POSTING REJECTED"){$badgeText = "pink";}else{$badgeText = "secondary";}
-                
+
                 $action = 'contributions/details/'.Crypt::encryptString($contriData->id);
                 $oldContributions .= '<tr>
                                         <td>'.$count.'</td>
@@ -70,7 +70,7 @@ class ContributionController extends Controller {
                                         <td class="text-center"><span class="badge badge-outline-'.$badgeText.' badge-pill">'.$contriData->processing_status.'</span></td>
                                         <td class="text-center"> <a href="'.url($action).'"> <i class="mdi mdi-eye-outline"></i></a></td>
                                     </tr>';
-                
+
                 $count++;
             }
         }
@@ -248,9 +248,9 @@ class ContributionController extends Controller {
                 $getContributorData = Contributor::find($contributor[ $aa ]);
                 $getContriRate = ContributorCatContrStructure:: where('contributor_category_id', $getContributorData->contributor_type_id)->where('status','ACTIVE')->first();
 
-                
+
                 $member_monthly_income = str_replace( ',', '', (100 * str_replace( ',', '', $memberContribution[ $aa ] )) / $getContriRate->member_contribution_rate);
-                
+
                 $newContributionDetail = new ContributionDetail;
                 $newContributionDetail->contribution_id      = $newContribution->id;
                 $newContributionDetail->contributor_id       = $contributor[ $aa ];
@@ -266,9 +266,9 @@ class ContributionController extends Controller {
                 $newContributionDetail->created_by           = Auth::user()->id;
                 $newContributionDetail->save();
                 //Start:: Save new member monthly income
-                
+
                 # Start: update Old monthly income
-                
+
                 $getThisMonthMemberIncome = MemberMonthlyIncome::where( 'member_id', $member[ $aa ] )->where( 'status', 'CONTRIBUTED' )->where('contribution_date',date( 'Y-m', strtotime( $request->contributionDate ) ))->first();
                 if($getThisMonthMemberIncome){
                     $updateMemberIncome = MemberMonthlyIncome::find( $getThisMonthMemberIncome->id );
@@ -281,7 +281,7 @@ class ContributionController extends Controller {
                             $updateMemberIncome->status = 'DORMANT';
                             $updateMemberIncome->save();
                         }
-                        
+
                         $newMemberIncome = new MemberMonthlyIncome;
                         $newMemberIncome->member_id = $member[ $aa ];
                         $newMemberIncome->member_monthly_income = str_replace( ',', '', $member_monthly_income );
@@ -291,11 +291,11 @@ class ContributionController extends Controller {
                         $newMemberIncome->save();
                 }
                 //END:: Save new member monthly income
-                
+
                 //Start:: Insert new Contributor an member income
                 #start::Check member salutation because only senior pastor contribution change affects contributor income
                 $getMemberData = Member::find( $member[ $aa ] ); // check for member
-                
+
                 if ( $getMemberData->member_salutation_id == 1 ) {
 
                     # Start: update Old Contributor  monthly income
@@ -331,7 +331,6 @@ class ContributionController extends Controller {
             //End:: Insert contribution details
             toastr();
             return redirect( 'contributions/processing/'.Crypt::encryptString( 'PENDING' ) )->with( [ 'success'=>'You have Successfully added new Contribution for '.$request->contributionDate ] );
-
         }
 
         public function contributions( $status ) {
@@ -366,16 +365,16 @@ class ContributionController extends Controller {
         public function submitContributionApproval(Request $request, $contributionID ) {
             $cmn = new Common();
             $limit = $request->totalMembers;
-            $valid = Validator::make( $request->all(), 
+            $valid = Validator::make( $request->all(),
                         [ 'confirmMembers'      => ['required','array','size:'.$limit]]
-                        , 
+                        ,
                         [ 'confirmMembers.required' => 'You must confirm ALL Members Contributions',
                           'confirmMembers.size' => 'You must confirm ALL Members Contributions' ] );
 
             if ( $valid->fails() ) {
                 return back()->withErrors( $valid, 'approveContribution')->withInput();
             }
-        
+
             $approveContribution = Contribution::find( $contributionID );
 
             if($request->approvalType == 'Approve Contribution'){
@@ -383,19 +382,24 @@ class ContributionController extends Controller {
                 $approveContribution->approved_by = Auth::user()->id;
                 $approveContribution->approved_at = date('Y-m-d H:i:s');
                 $approveContribution->processing_status = $status;
+
                 $approveContribution->save();
-            
                 //START:: AUTO POSTING
                 $status = 'POSTED';
-                $postiContribution = Contribution::find( $contributionID );
-                $postiContribution->posted_by = Auth::user()->id;
-                $postiContribution->posted_at = date('Y-m-d H:i:s');
-                $postiContribution->processing_status = $status;
-    
+                $postContribution = Contribution::find( $contributionID );
+                $postContribution->posted_by = Auth::user()->id;
+                $postContribution->posted_at = date('Y-m-d H:i:s');
+                $postContribution->processing_status = $status;
 
-                if($postiContribution->save()){
+
+                if($postContribution->save()){
                   //START:: Check if there is a need to onboarding Arrears
-                    $cmn->arrearRegister($contributionID);
+                    $getContrData = Contribution::find( $contributionID );
+                    $daysElapsed  = $this->arrearElapsedDaysAlgorithm( $getContrData->contribution_period, $getContrData->payment_date );
+
+                    if ( $daysElapsed > 0 ) {
+                        $cmn->arrearRegister($getContrData->section_id, $getContrData->contribution_period);
+                    }
                   //END:: Check if there is a need to onboarding Arrears
 
                     $respStatus ="success";
@@ -404,6 +408,7 @@ class ContributionController extends Controller {
                     $respStatus ="errors";
                     $repsText   ='So thing when wrong. Kindly, repeat the process';
                 }
+
             }else{
 
                 $respStatus ="errors";
@@ -451,11 +456,11 @@ class ContributionController extends Controller {
                 if($contriData->processing_status == "PENDING"|| $contriData->processing_status =="APPROVAL REJECTED" || $contriData->processing_status =="POSTING REJECTED"){
                     $ditLink = '<a href="'.url("contributions/edit/".Crypt::encryptString($contriData->id)).'" class="dropdown-item"> <i class="mdi mdi-pencil-outline mr-1"></i> Edit </a>';
                 }
-               
+
                 $topUpLink ='<a href="'.url("contributions/topup/".Crypt::encryptString($contriData->id)).'" class="dropdown-item"> <i class="mdi mdi-account-cash-outline mr-1"></i> Topup </a>';
-                
+
                 if($contriData->processing_status=="PENDING"){ $badgeState="info";} elseif($contriData->processing_status=="APPROVED"){ $badgeState="primary";} elseif($contriData->processing_status=="POSTED"){ $badgeState="success";} elseif($contriData->processing_status=="APPROVAL REJECTED"){ $badgeState="danger";} elseif($contriData->processing_status=="POSTING REJECTED"){ $badgeState="pink";} else{ $badgeState="secondary";}
-                
+
                 $oldContributions .= '<tr>
                                         <td>'.$count.'</td>
                                         <td class="text-center">'.$contriData->section->name.'</td>
@@ -464,7 +469,7 @@ class ContributionController extends Controller {
                                         <td class="text-center">'.$contriData->total_members.'</td>
                                         <td class="text-center">'.number_format($contriData->contribution_amount,2).'</td>
                                         <td class="text-center"><span class="badge badge-outline-'.$badgeState.' badge-pill">'.$contriData->processing_status.'</span></td>
-                                        <td class="text-center"> 
+                                        <td class="text-center">
                                             <div class="btn-group dropdown float-right">
                                                 <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-light btn-sm"
                                                     data-toggle="dropdown" aria-expanded="false">
@@ -473,8 +478,8 @@ class ContributionController extends Controller {
                                                 <div class="dropdown-menu dropdown-menu-right">
                                                     <a href="'.url("contributions/details/".Crypt::encryptString($contriData->id)).'" class="dropdown-item">
                                                         <i class="mdi mdi-eye-outline mr-1"></i> View
-                                                    </a>'.$ditLink.$topUpLink.' 
-                                                    
+                                                    </a>'.$ditLink.$topUpLink.'
+
                                                 </div> <!-- end dropdown menu-->
                                             </div>
                                         </td>
@@ -509,7 +514,7 @@ class ContributionController extends Controller {
 
         return view( 'contributions/contributions_topup', compact( 'contributionData', 'contributionDetails','paymentMode' ) );
     }
-    
+
     public function submitContributionRejection(Request $request, $contributionID){
         $valid = Validator::make( $request->all(), [
             'rejectionType'   => 'required',
@@ -519,9 +524,9 @@ class ContributionController extends Controller {
         if ( $valid->fails() ) {
             return back()->withErrors( $valid, 'rejectionValidation' )->withInput();
         }
-        
+
         $getContributionData = Contribution::find( $contributionID );
-        
+
         if($request->rejectionReason==''){
             $rejectionReason = 'NULL';
         }else{
@@ -534,7 +539,7 @@ class ContributionController extends Controller {
             $getContributionData->approval_rejected_by   = Auth::user()->id;
             $getContributionData->approval_rejected_at   = date('Y-m-d H:i:s');
             $getContributionData->approval_reject_reason = $rejectionReason;
-       
+
         }else{
 
             $processing_status = 'POSTING REJECTED';
@@ -543,7 +548,7 @@ class ContributionController extends Controller {
             $getContributionData->posting_rejected_at   = date('Y-m-d H:i:s');
             $getContributionData->posting_reject_reason = $rejectionReason;
         }
-        
+
         $getContributionData->processing_status = $processing_status;
         $getContributionData->save();
 
@@ -552,7 +557,7 @@ class ContributionController extends Controller {
         return redirect('contributions/processing/'.Crypt::encryptString('PENDING'))->with(['success'=>'You have Successfully Rejected a Section Contribution']);
     }
 
-    
+
     public function submitContributionTopup(Request $request){
         $valid = Validator::make( $request->all(), [
             'contriDetailID'      => 'required',
@@ -585,7 +590,7 @@ class ContributionController extends Controller {
                         $payment_proof = 'NULL';
                     }
                     //End:: Get Payment Proof
-        
+
                     //Start: insert into contribution
                     $newContribution =  new Contribution;
                     $newContribution->section_id          = $contriDetails->contribution->section_id;
@@ -619,11 +624,11 @@ class ContributionController extends Controller {
                     $newContributionDetail->created_by           = Auth::user()->id;
                     $newContributionDetail->save();
                 //Start:: Save new member monthly income
-                
+
             toastr();
             return redirect( 'contributions/processing/'.Crypt::encryptString( 'PENDING' ) )->with( [ 'success'=>'You have Successfully added new Contribution Topup' ] );
     }
-    
+
     public function editContribution($contributionID){
         $contributionID = Crypt::decryptString($contributionID);
 
@@ -633,12 +638,12 @@ class ContributionController extends Controller {
 
         $contributionData   = Contribution::find($contributionID);
         $contributionDetail = ContributionDetail::where('contribution_id', $contributionID)->get();
-        
+
         $paymentProofArr = array();
         $paymentProofArr['filePath'] = asset( 'storage/contributionPaymentProof' ). '/' . $contributionData->payment_proof;
         $paymentProofArr['fileName'] = $contributionData->payment_proof;
         $paymentProofArr['fileSize'] = Storage::disk( 'public' )->size( 'contributionPaymentProof/' . $contributionData->payment_proof );
-        
+
         return view( 'contributions.contributions_edit', compact('sections', 'schemes', 'paymentMode', 'contributionData', 'contributionDetail','paymentProofArr'));
     }
 
@@ -722,9 +727,9 @@ class ContributionController extends Controller {
                 $getContributorData = Contributor::find($contributor[ $aa ]);
                 $getContriRate = ContributorCatContrStructure:: where('contributor_category_id', $getContributorData->contributor_type_id)->where('status','ACTIVE')->first();
 
-                
+
                 $member_monthly_income = str_replace( ',', '', (100 * str_replace( ',', '', $memberContribution[ $aa ] )) / $getContriRate->member_contribution_rate);
-                
+
                 $newContributionDetail = new ContributionDetail;
                 $newContributionDetail->contribution_id      = $contributionID;
                 $newContributionDetail->contributor_id       = $contributor[ $aa ];
@@ -740,9 +745,9 @@ class ContributionController extends Controller {
                 $newContributionDetail->created_by           = Auth::user()->id;
                 $newContributionDetail->save();
                 //Start:: Save new member monthly income
-                
+
                 # Start: update Old monthly income
-                
+
                 $getThisMonthMemberIncome = MemberMonthlyIncome::where( 'member_id', $member[ $aa ] )->where( 'status', 'CONTRIBUTED' )->where('contribution_date',date( 'Y-m', strtotime( $request->contributionDate ) ))->first();
                 if($getThisMonthMemberIncome){
                     $updateMemberIncome = MemberMonthlyIncome::find( $getThisMonthMemberIncome->id );
@@ -755,7 +760,7 @@ class ContributionController extends Controller {
                             $updateMemberIncome->status = 'DORMANT';
                             $updateMemberIncome->save();
                         }
-                        
+
                         $newMemberIncome = new MemberMonthlyIncome;
                         $newMemberIncome->member_id = $member[ $aa ];
                         $newMemberIncome->member_monthly_income = str_replace( ',', '', $member_monthly_income );
@@ -765,11 +770,11 @@ class ContributionController extends Controller {
                         $newMemberIncome->save();
                 }
                 //END:: Save new member monthly income
-                
+
                 //Start:: Insert new Contributor an member income
                 #start::Check member salutation because only senior pastor contribution change affects contributor income
                 $getMemberData = Member::find( $member[ $aa ] ); // check for member
-                
+
                 if ( $getMemberData->member_salutation_id == 1 ) {
 
                     # Start: update Old Contributor  monthly income
@@ -805,6 +810,6 @@ class ContributionController extends Controller {
             //End:: Insert contribution details
             toastr();
             return redirect( 'contributions/processing/'.Crypt::encryptString( 'PENDING' ) )->with( [ 'success'=>'You have Successfully updated a Contribution' ] );
-    } 
+    }
 
 }

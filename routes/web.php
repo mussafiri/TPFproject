@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\ContributionController;
 
+use App\Http\Controllers\ArrearsController;
 use App\Http\Controllers\ContributorratesController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\SettingsController;
@@ -192,6 +193,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit/{id}', [ContributionController::class, 'editContribution']);
         Route::post('/submit/topup', [ContributionController::class, 'submitContributionTopup']);
         Route::post('/submit/edit/{id}', [ContributionController::class, 'submitContributionEdit']);
+        //start:: Arrears Routes
+        Route::get('/arrears/{status}', [ArrearsController::class, 'contributionArrears']);
+        Route::get('/arrearsview/{id}', [ArrearsController::class, 'arrearsView']);
+        Route::get('/arrearsprocessing/{action}/{id}', [ArrearsController::class, 'arrearsProcessing']);
+        Route::post('/waive/bulk/arrears/submit', [ArrearsController::class, 'submitBulkArrearsWaive']);
+        //end:: Arrears Routes
     });
     //End:: Contributions
 

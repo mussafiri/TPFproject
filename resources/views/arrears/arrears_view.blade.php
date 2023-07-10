@@ -19,10 +19,10 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Edit Contribution</li>
+                            <li class="breadcrumb-item active">View Arrear</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Edit Contribution</h4>
+                    <h4 class="page-title">View Arrear</h4>
                 </div>
             </div>
         </div>
@@ -61,7 +61,7 @@
                                                             <td class="text-center">{{$arrearDetails->totalMembers($arrearDetails->section_id)}}</td>
                                                             <td class="text-center">{{number_format($arrearDetails->arrearTotalContributionExpected($arrearDetails->section_id, $arrearDetails->arrear_period),2)}}</td>
                                                             <td class="text-center">{{$arrearDetails->arrearAge($arrearDetails->id, $arrearPeriod)}} <sup class="text-muted"><small>Days</small></sup></td>
-                                                            <td class="text-center text-danger">{{number_format($arrearDetails->arrearTotalPenaltyExpected($arrearDetails->arrearTotalContributionExpected($arrearDetails->section_id, $arrearDetails->arrear_period),$arrearDetails->id, $arrearPeriod),2)}}</td>
+                                                            <td class="text-center text-danger ">{{number_format($arrearDetails->arrearTotalPenaltyExpected($arrearDetails->arrearTotalContributionExpected($arrearDetails->section_id, $arrearDetails->arrear_period),$arrearDetails->id, $arrearPeriod),2)}}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -88,7 +88,6 @@
                                                     <th style="width:10%;">Total <sup class="text-muted font-10">TZS</sup></th>
                                                     <th style="width:10%;">Arrear Penalty <sup class="text-muted font-10">TZS</sup></th>
                                                     <th style="width:5%;">Status</th>
-                                                    <th style="width:4%;">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -104,14 +103,7 @@
                                                     <td> {{number_format( $arrearData->getMemberContributionAmount( $arrearData->contributor_id, $arrearData->member_id ), 2 )}}</td>
                                                     <td> {{number_format( ($totalMemberContribution), 2 )}}</td>
                                                     <td class="text-danger text-center"> {{number_format( $arrearData->totalMemberArrearPenaltyExpected($totalMemberContribution, $arrearData->arrear_id, $arrearPeriod),2)}}</td>
-                                                    <td> <span id="status{{$counter}}" class="badge badge-outline-{{$arrearData->status == 'ACTIVE'?'success':'danger';}} badge-pill">{{$arrearData->status}}</span></td>
-                                                    <td>
-                                                        <div class="float-right">
-                                                            <a href="javascript:void(0);" class="text-blue btn btn-light btn-sm waveArrear editButton{{$counter}}" data-memberID="{{$arrearData->member_id}}" data-contributorID="{{$arrearData->contributor_id}}" aria-expanded="false" data-rowID="{{$counter}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Suspend User Contribution">
-                                                                <i class="mdi mdi-close-thick mr-1"></i>
-                                                            </a>
-                                                        </div>
-                                                    </td>
+                                                    <td> <span id="status{{$counter}}" class="badge badge-outline-{{$arrearData->status == 'ACTIVE'?'success':'danger'}} badge-pill">{{$arrearData->status}}</span></td>
                                                 </tr>
                                             @php $counter++; @endphp
                                             @endforeach
@@ -121,29 +113,6 @@
                                 </div>
 
                             </div>
-
-                            <div class="col-md-12 px-3 pt-2">
-                                <a href="javascript:void(0);" class="btn btn-info waves-effect waves-light float-right" data-toggle="modal" data-target="#contributionSubmisionAlert">Submit Contribution</a>
-
-                                <!-- Start:: Warning Alert Modal -->
-                                <div id="contributionSubmisionAlert" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-                                    <div class="modal-dialog modal-md">
-                                        <div class="modal-content">
-                                            <div class="modal-body p-4">
-                                                <div class="text-center">
-                                                    <i class="dripicons-warning h1 text-warning"></i>
-                                                    <h4 class="mt-2">Confirm Contribution Edit Submission</h4>
-                                                    <p class="mt-3">Are you sure! <br> You are about to submit Section Contribution. You can cancel to review contribtions before submission</p>
-                                                </div>
-                                                <button type="submit" class="btn btn-success my-2 float-left">Yes! Update</button>
-                                                <button type="button" class="btn btn-danger my-2 float-right" data-dismiss="modal">Cancel</button>
-                                            </div>
-                                        </div><!-- /.modal-content -->
-                                    </div><!-- /.modal-dialog -->
-                                </div>
-                                <!-- End:: Warning Alert Modal -->
-
-                            </div> <!-- end col -->
                         </div> <!-- end row -->
 
                     </div> <!-- container -->
@@ -173,87 +142,4 @@
     });
     //END:: Suspend  Member Contribution
 </script>
-
-@if($errors->hasBag('approveContribution'))
-    <script>
-        $(document).ready(function(){
-            $('#approvalModal').modal({show: true});
-        });
-    </script>
-@endif
-
-@if($errors->hasBag('rejectionValidation'))
-    <script>
-        $(document).ready(function(){
-            $('#rejectModal').modal({show: true});
-        });
-    </script>
-@endif
-
-<script>
-    $(".kartik-input-705").fileinput({
-        theme: "explorer"
-        , uploadUrl: '#'
-        , allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif']
-        , overwriteInitial: false
-        , initialPreviewAsData: true
-        , maxFileSize: 2000
-        , maxTotalFileCount: 1
-        , showUpload: false
-        , showCancel: false
-        , dropZoneTitle: '<span>Drag & Drop Proof File here to upload</span>'
-        , fileActionSettings: {
-            showUpload: false
-            , showRemove: true
-        , }
-    , });
-
-</script>
-
-<script>
-$('.approvalButton').on('click',function(){
-   var approvalType = $(this).attr('data-approvalType');
-   $('#approvalType').val(approvalType);
-
-    if(approvalType =='Approve Contribution'){
-        $('.approvalSpanTextTitle').html('Approval');
-        $('.approvalSpanTextBody').html('Approve');
-        $('.approvalSpanButton').html('Submit Approval');
-
-    }else{
-        $('.approvalSpanTextTitle').html('Posting');
-        $('.approvalSpanTextBody').html('Post');
-        $('.approvalSpanButton').html('Post Contribution');
-    }
-});
-
-$('.rejectionButton').on('click',function(){
-   var rejectionType = $(this).attr('data-rejectionType');
-   $('#rejectionType').val(rejectionType);
-    if(rejectionType =='Reject Approval'){
-        $('rejectionSpanTextTitle').html('Approval');
-        $('rejectionSpanTextBody').html('Reject Approval of');
-        $('rejectionSpanButton').html('Approval  Rejection');
-
-    }else{
-        $('rejectionSpanTextTitle').html('Posting');
-        $('rejectionSpanTextBody').html('Reject Posting of');
-        $('rejectionSpanButton').html('Positing  Rejection');
-    }
-});
-
-$('.reasonSelect').change(function(){
-    var reason = $(this).find(":selected").val();
-    
-    if(reason == 0){
-        $('.otherRectionReasonInput').prop('required', true);
-        $('.otherRectionReason').show();
-    }else{
-        $('.otherRectionReasonInput').removeAttr('required');
-        $('.otherRectionReason').hide();
-    }
-});
-
-</script>
-
 @endsection

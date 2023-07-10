@@ -11,11 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('arrears', function (Blueprint $table) {
+        Schema::create('arrear_details', function (Blueprint $table) {
             $table->id();
-            $table->integer('section_id');
-            $table->string('arrear_period');
-            $table->decimal('penalty_amount', 32,2)->default(0);
+            $table->integer('arrear_id');
+            $table->integer('contributor_id');
+            $table->integer('member_id');
+            $table->decimal('member_monthly_income', 32,2);
+            $table->decimal('member_contribution', 32,2);
+            $table->decimal('contributor_contribution', 32,2);
+            $table->decimal('arrear_amount', 32,2);
+            $table->decimal('arrear_penalty_amount', 32,2);
+            $table->string('payment_ref_no')->default('NULL');
+            $table->string('payment_proof')->default('NULL');
             $table->enum('status',['ACTIVE','SUSPENDED','CLOSED','ON PAYMENT']  )->default('ACTIVE');
             $table->enum('processing_status',['ACTIVE','PENDING','SUSPENDED','CLOSED','ON PAYMENT','SUSPEND REJECTED','CLOSURE REJECTED'])->default('ACTIVE');
             $table->integer('closed_by')->default(0);
@@ -37,6 +44,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('arrears');
+        Schema::dropIfExists('arrear_details');
     }
 };
