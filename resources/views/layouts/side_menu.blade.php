@@ -5,7 +5,7 @@
 
             <li>
                 <a href="{{url('/dashboard')}}">
-                    <i data-feather="airplay"></i>
+                    <i class="mdi flaticon-dashboard-1"></i>
                     <span> Dashboards </span>
                 </a>
             </li>
