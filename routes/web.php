@@ -87,6 +87,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/find', [MemberController::class, 'memberFetchFromSelectize']);
     });
     Route::prefix('member')->group(function(){
+        Route::get('/edit/details/{member_id}', [MemberController::class, 'membersEditView']);
         Route::get('/view/details/{member_id}', [MemberController::class, 'memberViewDetails']);
         Route::post('/registration/submit', [MemberController::class, 'submitMemberRegistration']);
         Route::post('/dependants/submit', [MemberController::class, 'submitMemberDependants']);

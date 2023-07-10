@@ -27,8 +27,13 @@ class MemberController extends Controller {
     }
     public function index() { }
 
-    public function membersEditView() {
-
+    public function membersEditView($member) {
+        $id= Crypt::decryptString($member);
+        $member_data = Member::find($id);
+        $salutation_title=MemberSalutation::all();
+        $identity_types=MemberIdentityType::all();
+        $contributors=Contributor::all();
+        return view('members.member_details_edit_view',  compact('member_data','salutation_title','contributors','identity_types'));
     }
 
     public function memberFetchFromSelectize(Request $request) {

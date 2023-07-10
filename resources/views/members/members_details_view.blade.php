@@ -32,7 +32,7 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
-                            <li class="breadcrumb-item">Members</li>
+                            <li class="breadcrumb-item"><a href="{{url('members/list')}}">Members</a></li>
                             <li class="breadcrumb-item active">Member Details</li>
                         </ol>
                     </div>
@@ -87,7 +87,6 @@
                                                 @else
                                                     <img src="{{asset('assets/images/profile/profile-man.png')}}" class="img-fluid rounded-circle my-image" alt="user-img"  />                                      
                                                 @endif  
-
                                             @else
                                                 <img src="{{asset('storage/members/photo/'.$member_data->picture)}}" class="img-fluid rounded-circle my-image" alt="user-img"  />                                      
                                             @endif
@@ -95,13 +94,13 @@
                                     </div>
                                     <div class="col">
                                         <h5 class="mb-1 mt-2 font-12">{{$member_data? $member_data->title.". ".$member_data->fname." ".$member_data->mname." ".$member_data->lname:" ";}} </h5>
-                                        <p class="mb-2 font-12 text-muted"><span class="{{$member_data->salutationTitle->name=='ASSOCIATE PASTOR'? 'badge badge-soft-secondary':'badge badge-soft-dark';}}">{{$member_data->salutationTitle->name}}</span></p>
+                                        <p class="mb-2 font-12 text-muted"><span class="{{$member_data->salutationTitle->name=='ASSOCIATE PASTOR' ? 'badge badge-soft-secondary':'badge badge-soft-dark';}}">{{$member_data->salutationTitle->name}}</span></p>
                                     </div>
                                 </div> <!-- end row-->
                             </div> <!-- end widget-rounded-circle-->
                             @php
-                            $last_login = $member_data->last_login == "NULL"? "NOT LOGGED IN" : date('d M Y',strtotime($member_data->last_login));
-                            $last_changed = $member_data->password_changed_at == "NULL"? "NOT CHANGED" : date('d M Y',strtotime($member_data->password_changed_at));
+                                $last_login = $member_data->last_login == "NULL"? "NOT LOGGED IN" : date('d M Y',strtotime($member_data->last_login));
+                                $last_changed = $member_data->password_changed_at == "NULL"? "NOT CHANGED" :"<small>".date('d M Y',strtotime($member_data->password_changed_at))."</small>";
                             @endphp
                             <p class="mb-1"><span></span><span class="font-weight-semibold mr-2">Status:</span><small><span class="text-right mr-3 {{$member_data->status=='ACTIVE' ? 'badge badge-soft-secondary':'badge badge-soft-danger';}}">{{$member_data->status}}</span></small></span>
                             <span class="float-right">
@@ -120,7 +119,7 @@
                                     <span class="font-weight-semibold mr-2">Password <sup>Status</sup></span><span class="font-10 text-right {{$member_data->password_status == 'ACTIVE'? 'badge badge-soft-secondary':($member_data->password_status == 'DEFAULT' ? 'badge badge-soft-dark':'badge badge-soft-danger');}}">{{$member_data->password_status}}</span>
                                 </span>
                                 <span class="float-right">
-                                    <sup class="mr-2">Last Changed</sup><span class="font-10 text-right {{$member_data->password_changed_at == 'NULL'? 'badge badge-soft-dark':'';}}">{{$last_changed}}</span>
+                                    <sup class="mr-2">Last Changed</sup><span class="font-10 text-right {{$member_data->password_changed_at == 'NULL'? 'badge badge-soft-dark':'';}}">{!!$last_changed!!}</span>
                                 </span>
                             </p>
                             <p class="mb-1"> <span class="font-weight-semibold mr-2">Created by:</span><span class="font-12 text-right ">{{$member_data->createdBy->fname." ".$member_data->createdBy->lname}}</span></p>
@@ -146,16 +145,16 @@
                                             <div class="col-auto">
                                                 <div class="avatar-sm">
                                                     <span class="avatar-title badge-soft-primary text-primary rounded">
-                                                        {!! $member_data->regform_attachment != "NULL"? pathinfo(Storage::url('members/reg_forms/'.$member_data->regform_attachment), PATHINFO_EXTENSION):'<i class="flaticon-cross"></i>';!!}
+                                                        {!! $member_data->regform_attachment != "NULL"? pathinfo(Storage::url('members/reg_forms/'.$member_data->regform_attachment), PATHINFO_EXTENSION):'<i class="flaticon-paperclip font-18"></i>';!!}
                                                     </span>
                                                 </div>
                                             </div>
                                             <div class="col pl-0 pr-0">
                                                 <a href="javascript:void(0);" class="text-muted font-weight-medium font-11">
-                                                    {!!$member_data->regform_attachment=="NULL"?'<span class="text-danger"> No Attachment</span>':$member_data->regform_attachment;!!}
+                                                    {!!$member_data->regform_attachment == "NULL" ? '<span class="text-danger"> No Attachment</span>':$member_data->regform_attachment;!!}
                                                 </a>
                                                 <p class="mb-0 font-12">
-                                                    {!! $member_data->regform_attachment=="NULL"? "": convertToReadableFileSize(filesize('storage/members/reg_forms/'.$member_data->regform_attachment));!!}
+                                                    {!! $member_data->regform_attachment=="NULL" ? "": convertToReadableFileSize(filesize('storage/members/reg_forms/'.$member_data->regform_attachment));!!}
                                                 </p>
                                             </div>
                                             <div class="col-auto px-1">
@@ -178,7 +177,7 @@
                                             <div class="col-auto">
                                                 <div class="avatar-sm">
                                                     <span class="avatar-title badge-soft-primary text-primary rounded">
-                                                        {!! $member_data->id_attachment != "NULL"? pathinfo(Storage::url('members/ids/'.$member_data->id_attachment), PATHINFO_EXTENSION):'<i class="flaticon-cross"></i>';!!}
+                                                        {!! $member_data->id_attachment != "NULL"? pathinfo(Storage::url('members/ids/'.$member_data->id_attachment), PATHINFO_EXTENSION):'<i class="flaticon-paperclip font-18"></i>';!!}
                                                     </span>
                                                 </div>
                                             </div>
@@ -206,7 +205,7 @@
                                             <div class="col-auto">
                                                 <div class="avatar-sm">
                                                     <span class="avatar-title badge-soft-primary text-primary rounded">
-                                                        {!! $member_data->member_signature != "NULL"? pathinfo(Storage::url('members/signatures/'.$member_data->member_signature), PATHINFO_EXTENSION):'<i class="flaticon-cross"></i>';!!}
+                                                        {!! $member_data->member_signature != "NULL"? pathinfo(Storage::url('members/signatures/'.$member_data->member_signature), PATHINFO_EXTENSION):'<i class="flaticon-paperclip font-18"></i>';!!}
                                                     </span>
                                                 </div>
                                             </div>
@@ -271,17 +270,17 @@
                     <div class="tab-content col-12">
                         <div class="tab-pane" id="memberDependantsPane">
                             <div class="table-responsive">
-                                <table class="table table-sm font-12 table-striped w-100 datatable-buttons table-responsible" style="width:100%;">
+                                <table class="table table-sm font-12 table-striped w-100 datatable-buttons table-responsible">
                                     <thead>
                                         <tr>
                                             <th style="width:2%;">#</th>
-                                            <th style="width:21%;">Name</th>
-                                            <th style="width:8%;">Relationship</th>
+                                            <th style="width:26%;">Name</th>
+                                            <th style="width:5%;">Relationship</th>
                                             <th style="width:5%;">Gender</th>
                                             <th style="width:8%;">Occupation</th>
                                             <th style="width:5%;">Phone</th>
                                             <th style="width:5%;">Age</th>
-                                            <th style="width:12%;">Attachments</th>
+                                            <th style="width:10%;">Attachments</th>
                                             <th style="width:10%;">Vital </th>
                                             <th style="width:6%;">status</th>
                                             <th style="width:18%;">Created</th>
@@ -290,17 +289,24 @@
                                     <tbody>
                                         @php $dep=1; @endphp
                                         @foreach ($dependants as $dep_data)
+                                            @php
+                                                $picture              = $dep_data->picture == "NULL" ? '': '<span data-toggle="tooltip" data-placement="top" title="Picture" data-original-title="Tooltip on top"><a href="'.Storage::url('members/dependants/photo/'.$dep_data->picture).'" target="_blank"><i class="font-14 mdi flaticon-image mr-1"></i></a></span>';                                        
+                                                $marriagecertificate  = $dep_data->marriagecert == "NULL" ? '': '<span data-toggle="tooltip" data-placement="top" title="Marriage Certificate" data-original-title="Tooltip on top"><a href="'.Storage::url('members/dependants/certificates/'.$dep_data->marriagecert).'" target="_blank"><i class="mdi flaticon-wedding-contract mr-1"></i></a></span>';                                        
+                                                $birthcertificate     = $dep_data->birthcert == "NULL" ? '': '<span data-toggle="tooltip" data-placement="top" title="Birth Certificate" data-original-title="Tooltip on top"><a href="'.Storage::url('members/dependants/certificates/'.$dep_data->birthcert).'" target="_blank"><i class="mdi flaticon-bill-2 mr-1"></i></a></span>'; 
+                                                $attached_attachment  = $picture.$marriagecertificate.$birthcertificate;
+                                                $attachment           = ($dep_data->picture == "NULL" && $dep_data->marriagecert == "NULL" && $dep_data->birthcert == "NULL") ? '<a data-toggle="tooltip" data-placement="top" title="No Attachment" data-original-title="Tooltip on top"><i class="font-14 text-secondary mdi mdi-alert-circle-outline"></i></a>':$attached_attachment;
+                                            @endphp                                     
                                         <tr>
                                             <td>{{$dep}}</td>
                                             <td>{{$dep_data->fname." ".$dep_data->mname." ".$dep_data->lname}}</td>
-                                            <td>{{$dep_data->relationship}}</td>
-                                            <td>{{$dep_data->gender}}</td>
+                                            <td><span class="badge badge-soft-{{$dep_data->relationship =='PARENT'? 'default':'success';}}">{{$dep_data->relationship}}</span></td>
+                                            <td><span class="badge badge-soft-{{$dep_data->gender =='MALE'? 'info':'blue';}}">{{$dep_data->gender}}</span></td>
                                             <td>{{$dep_data->occupation}}</td>
                                             <td>{{$dep_data->phone}}</td>
-                                            <td>{{$dep_data->dob != "NULL"?Carbon::parse($dep_data->dob)->age:"NOT DETERMINED";}}</td>
-                                            <td></td>
-                                            <td><span class="$data->vital_status == ALIVE ? 'badge badge-soft-success':'badge badge-soft-danger';">{{$dep_data->vital_status}}</span></td>
-                                            <td><span class="$data->status == ACTIVE ? 'badge badge-soft-success':'badge badge-soft-danger';">{{$dep_data->status}}</span></td>
+                                            <td>{!!$dep_data->dob != "NULL"? Carbon::parse($dep_data->dob)->age:'<span class="badge badge-soft-dark"> NOT DETERMINED</span>';!!}</td>
+                                            <td class="text-center">{!!$attachment!!}</td>
+                                            <td><span class="{{$dep_data->vital_status == 'ALIVE' ? 'badge badge-soft-success':'badge badge-soft-danger';}}">{{$dep_data->vital_status}}</span></td>
+                                            <td><span class="{{$dep_data->status == 'ACTIVE' ? 'badge badge-soft-success':'badge badge-soft-danger';}}">{{$dep_data->status}}</span></td>
                                             <td>{{$dep_data->createdBy->fname." ".$dep_data->createdBy->lname}}</td>
                                         </tr>
                                         @php $dep++; @endphp
