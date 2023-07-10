@@ -197,6 +197,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/arrearsview/{id}', [ArrearsController::class, 'arrearsView']);
         Route::get('/arrearsprocessing/{action}/{id}', [ArrearsController::class, 'arrearsProcessing']);
         Route::post('/waive/bulk/arrears/submit', [ArrearsController::class, 'submitBulkArrearsWaive']);
+        Route::post('/submit/member/arrearpenalty/waive', [ArrearsController::class, 'submitMemberArrearsPenaltyWaive']);
+        Route::get('/memberarrears', [ArrearsController::class, 'memberArrears']);
         //end:: Arrears Routes
     });
     //End:: Contributions

@@ -88,11 +88,13 @@
                                                                     <th>Process Status</th>
                                                                     <th> 
                                                                         <div class="row pl-2"> 
-                                                                            <div class="custom-control custom-checkbox">
-                                                                                <input type="checkbox" class="custom-control-input sectioArrearParent" id="customCheck1" name="confirmMembers[]">
-                                                                                <label class="custom-control-label" for="customCheck1"></label>
+                                                                            <div class="col-4 pl-2"> 
+                                                                                <div class="custom-control custom-checkbox">
+                                                                                    <input type="checkbox" class="custom-control-input sectioArrearParent" id="customCheck1">
+                                                                                    <label class="custom-control-label" for="customCheck1"></label>
+                                                                                </div>
                                                                             </div>
-                                                                            <div class="my-auto">All</div>
+                                                                            <div class="col-8">Action</div>
                                                                         </div>
                                                                     </th>
                                                                 </tr>
@@ -123,14 +125,16 @@
                                                                     <td class="text-danger">{{number_format($totalPenalty,2)}}</td>
                                                                     <td>{{$data->arrearAge($data->id, $arrearPeriod)}} <sup class="text-muted"><small>Days</small></sup></td>
                                                                     <td><span class="badge badge-xs badge-outline-{{$badgeText}} badge-pill">{{$data->processing_status}}</span></td>
-                                                                    <td  class="float-left">
+                                                                    <td class="float-left py-1">
                                                                         <div class="btn-group dropdown float-right">
-                                                                            <div class="custom-control custom-checkbox my-auto">
-                                                                                <input type="checkbox" class="custom-control-input memberArrearCheckBox" value="{{$data->id}}" id="customCheck{{$n}}" name="sectionArrear[]">
-                                                                                <label class="custom-control-label" for="customCheck{{$n}}"></label>
-                                                                            </div>
+                                                                            <a class="btn btn-sm btn-light btn-xs">
+                                                                                <div class="custom-control custom-checkbox my-auto">
+                                                                                    <input type="checkbox" class="custom-control-input memberArrearCheckBox" value="{{$data->id}}" id="customCheck{{$n}}" name="sectionArrear[]">
+                                                                                    <label class="custom-control-label" for="customCheck{{$n}}"></label>
+                                                                                </div>
+                                                                            </a>
 
-                                                                            <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-sm btn-light btn-sm" data-toggle="dropdown" aria-expanded="false">
+                                                                            <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-sm btn-light btn-xs" data-toggle="dropdown" aria-expanded="false">
                                                                                 <i class="mdi mdi-dots-horizontal font-18"></i>
                                                                             </a>
 
@@ -140,10 +144,13 @@
                                                                                 </a>
                                                                                 @if($data->processing_status=='ACTIVE')
                                                                                 <a href="{{url('contributions/arrearsprocessing/'.Crypt::encryptString('CLOSE').'/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
-                                                                                    <i class='mdi mdi-check-bold mr-1'></i>Pay Arrear
+                                                                                    <i class='mdi mdi-check-bold mr-1'></i>Pay Section Arrears
                                                                                 </a>
                                                                                 
-                                                                                <a href="{{url('contributions/arrearsprocessing/'.Crypt::encryptString('WAIVE').'/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
+                                                                                <a href="{{url('contributions/arrearsprocessing/'.Crypt::encryptString('PAY MEMBER ARREAR').'/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
+                                                                                    <i class='mdi mdi-close-thick mr-1'></i>Pay Member Arrears
+                                                                                </a>
+                                                                                <a href="{{url('contributions/arrearsprocessing/'.Crypt::encryptString('WAIVE MEMBER ARREAR').'/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
                                                                                     <i class='mdi mdi-close-thick mr-1'></i>Waive Member Arrears
                                                                                 </a>
                                                                                 @endif
@@ -240,30 +247,6 @@
             $('.waiveBulkArrears').hide();
             $('.sectioArrearParent').prop('checked', false);
         }
-    });
-</script>
-<script>
-    $('.contrCatEdit').on('click', function() {
-        var data_id = $(this).attr('data-id');
-        $('#data_id').val(data_id);
-         $.ajax({
-            type: 'POST',
-            url: "{{url('/ajax/get/contri/category/data')}}",
-            data: {
-                data_id: data_id,
-                _token: '{{ csrf_token() }}'
-            },
-            dataType: 'json',
-            success: function(response) {
-                if (response.categoryDataArr.status == 'success') {
-                    $('#edit_contr_Category_fetchError').html('');
-                    $('#edit_name').val(response.categoryDataArr.data.name);
-                } else {
-                    $('#edit_name').val('');
-                    $('#edit_contr_Category_fetchError').html(response.categoryDataArr.message);
-                }
-            }
-        });
     });
 </script>
 

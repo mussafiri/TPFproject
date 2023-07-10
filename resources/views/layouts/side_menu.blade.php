@@ -39,7 +39,8 @@
                         <li  class="@if(request()->segment(2)=='add'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/add')}}">Add Contribution</a> </li>
                         <li  class="@if(request()->segment(2)=='transactions' || request()->segment(2)=='processing' || request()->segment(2)=='details'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/processing/'.Crypt::encryptString('PENDING'))}}">Process Contribution</a> </li>
                         <li  class="@if(request()->segment(2)=='search'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/search')}}">Search Contribution</a> </li>
-                        <li  class="@if(request()->segment(2)=='arrears' || request()->segment(2)=='arrearsprocessing'|| request()->segment(2)=='arrearsview'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/arrears/'.Crypt::encryptString('ACTIVE'))}}">Arrears</a> </li>
+                        <li  class="@if(request()->segment(2)=='arrears' || request()->segment(2)=='arrearsprocessing'|| request()->segment(2)=='arrearsview'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/arrears/'.Crypt::encryptString('ACTIVE'))}}">Section Arrears</a> </li>
+                        <li  class="@if(request()->segment(2)=='membersarrears' || request()->segment(2)=='memberarrearsprocessing'|| request()->segment(2)=='memberarrearsview'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/memberarrears/'.Crypt::encryptString('ACTIVE'))}}">Member Arrears</a> </li>
                     </ul>
                 </div>
             </li>
