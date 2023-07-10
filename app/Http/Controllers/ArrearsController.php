@@ -17,11 +17,13 @@ class ArrearsController extends Controller
         $status = Crypt::decryptString($status);
         $arrears= Arrear::where('processing_status',$status)->get();
 
-        return view('arrears.arrears', compact('arrears', 'status'));
+        $paymentMode= PaymentMode::where('status','ACTIVE')->get();
+
+        return view('arrears.arrears', compact('arrears', 'paymentMode', 'status'));
     }
 
     public function arrearsView($arearID){
-        $arearID   = Crypt::decryptString($arearID);
+        $arearID       = Crypt::decryptString($arearID);
         $arrearDetails = Arrear::find($arearID);
         
         
@@ -36,8 +38,8 @@ class ArrearsController extends Controller
     }
 
     public function arrearsProcessing($action, $arearID){
-        $action   = Crypt::decryptString($action);
-        $arearID   = Crypt::decryptString($arearID);
+        $action        = Crypt::decryptString($action);
+        $arearID       = Crypt::decryptString($arearID);
         $arrearDetails = Arrear::find($arearID);
         
         $paymentMode= PaymentMode::where('status','ACTIVE')->get();

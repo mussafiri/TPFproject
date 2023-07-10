@@ -194,10 +194,9 @@
         }
     });
 
-
-$('.memberWaiveAcciton').on('click', function(){
-    $('.modalTitleSpan').html($(this).attr('data-actionTitle'));
-    $('.modalIntroSpan').html($(this).attr('data-actionIntro'));
-});
+    $('.memberWaiveAcciton').on('click', function(){
+        $('.modalTitleSpan').html($(this).attr('data-actionTitle'));
+        $('.modalIntroSpan').html($(this).attr('data-actionIntro'));
+    });
 </script>
 @endsection

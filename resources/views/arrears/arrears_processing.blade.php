@@ -180,7 +180,7 @@
                                 <!-- End:: Warning Alert Modal -->
                             </div> <!-- end col -->
 
-                            <div class="col-12 arrearPenaltyPayementBlock" style="display:none;">
+                            <div class="col-12 arrearPenaltyPayementBlock border rounded" style="display:none;">
                                 <h4 class="header-title mb-3 text-muted">Transaction Proofs</h4>
                                 <div class="row">
                                     <div class="col-md-6">
