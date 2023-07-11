@@ -198,7 +198,7 @@
                                                                             <i class="dripicons-warning h1 text-warning"></i>
                                                                             <h4 class="mt-2">Confirm Waiving all checked Arrear Penalties</h4>
                                                                             <p class="mt-3">Are you sure! <br> You are about to waive all the Arrear Penalties. You can <span class="text-info">cancel</span> to review Arrears before Waiving all</p>
-                                                                            <input type="hidden" value="{{$counter}}">
+                                                                            <input type="hidden" name="memberCounter" value="{{$counter}}">
                                                                              @if ($errors->suspendBulkArrears->has('sectionArrear')) <span class="text-danger" role="alert"> <strong>{{ $errors->suspendBulkArrears->first('sectionArrear') }}</strong></span>@endif
                                                                         </div>
                                                                         <button type="submit" class="btn btn-success my-2 float-left">Yes! Waive All Penalties</button>

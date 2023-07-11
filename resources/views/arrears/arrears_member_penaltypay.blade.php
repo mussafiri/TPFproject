@@ -49,17 +49,18 @@
                                                 <div class="col-12 p-1">
                                                     <h4 class="header-title mb-3 text-muted"> Section Details</h4>
                                                     <div class="row">
-                                                        <div class="col-sm-8"><strong>Section Name:</strong> {{$arrearDetailsData->arrear->section->name}}</div>
-                                                        <div class="col-sm-4"> <strong>Section Code:</strong> {{$arrearDetailsData->arrear->section->section_code}}</div>
+                                                        <div class="col-sm-5"><strong>Section Name:</strong> {{$arrearDetailsData->arrear->section->name}}</div>
+                                                        <div class="col-sm-2"> <strong>Section Code:</strong> {{$arrearDetailsData->arrear->section->section_code}}</div>
+                                                        <div class="col-sm-5"> <strong>Contribution:</strong> {{$arrearDetailsData->contributor->name}}</div>
                                                     </div>
 
                                                     <div class="col-sm-12 mt-2">
                                                         <div class="table-responsive">
                                                             @php 
-                                                                if($arrearDetailsData->status =='ACTIVE' || $arrearDetailsData->status=='ON PAYMENT'){
-                                                                    $arrearPeriod = ($arrearDetailsData->status =='ACTIVE')? date('Y-m-d'): date('Y-m-d', strtotime($arrearDetailsData->closed_at));
+                                                                if($arrearDetailsData->arrear->status =='ACTIVE' || $arrearDetailsData->arrear->status=='ON PAYMENT'){
+                                                                    $arrearPeriod = ($arrearDetailsData->arrear->status =='ACTIVE')? date('Y-m-d'): date('Y-m-d', strtotime($arrearDetailsData->closed_at));
                                                                 }else{
-                                                                    $arrearPeriod = ($arrearDetailsData->status =='SUSPENDED')? date('Y-m-d', strtotime($arrearDetailsData->suspended_at)): date('Y-m-d', strtotime($arrearDetailsData->closed_at));
+                                                                    $arrearPeriod = ($arrearDetailsData->arrear->status =='SUSPENDED')? date('Y-m-d', strtotime($arrearDetailsData->suspended_at)): date('Y-m-d', strtotime($arrearDetailsData->closed_at));
                                                                 }
 
                                                                 $totalMemberContribution = $arrearDetailsData->getMemberContributionAmount( $arrearDetailsData->contributor_id, $arrearDetailsData->member_id ) + $arrearDetailsData->getContributorContributionAmount( $arrearDetailsData->contributor_id, $arrearDetailsData->member_id ); 
@@ -67,7 +68,7 @@
                                                                 $totalPenalty = $arrearDetailsData->totalMemberArrearPenaltyExpected($totalMemberContribution, $arrearDetailsData->arrear_id, $arrearPeriod);
                                                                  
                                                                 $penaltyPaid = $arrearDetailsData->memberPenatyPaid($arrearDetailsData->id, $arrearDetailsData->section_id);
-                                                                    
+                                                                
                                                                 //Start::payment cumputations
                                                                 $refund = 0;
                                                                 $penaltyBalance = 0;
@@ -83,7 +84,7 @@
                                                                 <thead class="thead-light">
                                                                     <tr>
                                                                         <th class="text-center">Arrear Period</th>
-                                                                        <th class="text-center">Contributor</th>
+                                                                        <th class="text-center">Arrear Age</th>
                                                                         <th class="text-center">Member</th>
                                                                         <th class="text-center">Monthly Income</th>
                                                                         <th class="text-center">Contributor Amount</th>
@@ -97,11 +98,12 @@
                                                                 <tbody>
                                                                     <tr>
                                                                         <td class="text-center">{{date('M, Y', strtotime($arrearDetailsData->arrear->arrear_period))}}</td>
-                                                                        <td class="text-center">{{$arrearDetailsData->contributor->name}}</td>
+                                                                        <td class="text-center">{{$arrearDetailsData->arrearAge($arrearDetailsData->arrear_id, $arrearPeriod)}} <sup class="text-muted"><small>Days</small></sup></td>
                                                                         <td class="text-center">{{$arrearDetailsData->member->fname.' '.$arrearDetailsData->member->mname.' '.$arrearDetailsData->member->lname}}</td>
                                                                         <td class="text-center">{{number_format( $arrearDetailsData->getMemberMonthlyIncome( $arrearDetailsData->member_id ), 2 )}}</td>
                                                                         <td class="text-center">{{number_format( $arrearDetailsData->getContributorContributionAmount( $arrearDetailsData->contributor_id, $arrearDetailsData->member_id ), 2 )}}</td>
-                                                                        <td class="text-center text-danger">{{number_format($totalMemberContribution,2)}}</td>
+                                                                        <td class="text-center">{{number_format($arrearDetailsData->getMemberContributionAmount( $arrearDetailsData->contributor_id, $arrearDetailsData->member_id ), 2 )}}</td>
+                                                                        <td class="text-center text-info">{{number_format($totalMemberContribution,2)}}</td>
                                                                         <td class="text-center text-danger">{{number_format($penaltyBalance,2)}}</td>
                                                                         <td class="text-center">{{number_format($penaltyPaid,2)}}</td>
                                                                         <td class="text-center text-primary">{{number_format($refund,2)}}</td>
@@ -113,7 +115,7 @@
                                                 </div>
 
                                                 <div class="col-12 mt-2">
-                                                    <form method="POST" action="{{url('arrears/submit/member/arrearpenalty/'.$arrearDetailsData->id)}}">
+                                                    <form method="POST" action="{{url('arrears/submit/member/arrearpenalty/'.$arrearDetailsData->id)}}" enctype="multipart/form-data">
                                                     @csrf
                                                         <h4 class="header-title mb-3 text-muted">Transaction Proofs</h4>
                                                         <div class="row">

@@ -106,7 +106,7 @@
                                                 </div>
 
                                                 <div class="col-12 mt-2">
-                                                    <form method="POST" action="{{url('arrears/submit/section/arrearpenalty/'.$arrearData->id)}}">
+                                                    <form method="POST" action="{{url('arrears/submit/section/arrearpenalty/'.$arrearData->id)}}" enctype="multipart/form-data">
                                                     @csrf
                                                         <h4 class="header-title mb-3 text-muted">Transaction Proofs</h4>
                                                         <div class="row">

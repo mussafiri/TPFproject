@@ -58,9 +58,11 @@ class ArrearsController extends Controller {
     public function submitBulkArrearsWaive( Request $request ) {
         # START:: VALIDATION
         $valid = Validator::make( $request->all(), [
+            'memberCounter'     =>'required',
             'sectionArrear'     =>'required|array|min:1',
-        ], [ 'sectionArrear.required' =>'You must select at least on Arrear to Waive',
-        'sectionArrear.min' =>'You must select at least on Arrear to Waive' ] );
+        ], 
+        [ 'sectionArrear.required' =>'You must select at least on Arrear to Waive',
+         'sectionArrear.min' =>'You must select at least on Arrear to Waive' ] );
 
         if ( $valid->fails() ) {
             return back()->withErrors( $valid, 'suspendBulkArrears' )->withInput();
@@ -68,17 +70,10 @@ class ArrearsController extends Controller {
         # END:: VALIDATION
         $sectionArrear = $request->sectionArrear;
 
+        if($request->memberCounter > count( $sectionArrear )){ $processing_type = 'INDIVIDUAL'; }else{ $processing_type= 'GROUP'; }
+
         for ( $aa = 0; $aa< count( $sectionArrear );
         $aa++ ) {
-            //Start:: Arrear Update
-            $getArrrear = Arrear::find( $sectionArrear[ $aa ] );
-            $getArrrear->status             = 'SUSPENDED';
-            $getArrrear->processing_status  = 'PENDING';
-            $getArrrear->suspended_by       = Auth::user()->id;
-            $getArrrear->suspended_at       = date( 'Y-m-d H:i:s' );
-            $getArrrear->save();
-            //End:: Arrear Update
-
             //Start:: Arrear Detail Update
             $getMemberArrear = ArrearDetail::where( 'arrear_id', $sectionArrear[ $aa ] )->get();
             if ( $getMemberArrear->count() > 0 ) {
@@ -86,12 +81,24 @@ class ArrearsController extends Controller {
                     $updateArrearDetail = ArrearDetail::find( $data->id );
                     $updateArrearDetail->status = 'SUSPENDED';
                     $updateArrearDetail->processing_status = 'PENDING';
+                    $updateArrearDetail->processing_type = $processing_type;
                     $updateArrearDetail->suspended_by = Auth::user()->id;
                     $updateArrearDetail->suspended_at = date( 'Y-m-d H:i:s' );
                     $updateArrearDetail->save();
                 }
             }
             //End:: Arrear Detail Update
+
+            //Start:: Arrear Update
+            if($processing_type == 'GROUP' ){
+                $getArrrear = Arrear::find( $sectionArrear[ $aa ] );
+                $getArrrear->status             = 'SUSPENDED';
+                $getArrrear->processing_status  = 'PENDING';
+                $getArrrear->suspended_by       = Auth::user()->id;
+                $getArrrear->suspended_at       = date( 'Y-m-d H:i:s' );
+                $getArrrear->save();
+            }
+            //End:: Arrear Update
         }
 
         toastr();
@@ -211,4 +218,65 @@ class ArrearsController extends Controller {
         return view( 'arrears.arrears_member_penaltypay', compact( 'arrearDetailsData', 'paymentMode' ) );
     }
 
+    public function submitMemberArrearPenaltyPay(Request $request, $arrearDetailID){
+        $valid = Validator::make( $request->all(), [
+            'arrearPenalty'        => 'required',
+            'paymentDate'          => 'required',
+            'paymentMode'          => 'required',
+            'transactionReference' => 'required',
+        ]);
+
+        if ( $valid->fails() ) {
+            return back()->withErrors( $valid )->withInput();
+        }
+
+        //Start:: Get Payment Proof
+        if ( $request->hasFile( 'transactionProof' ) ) {
+            $filenameWithExt = $request->file( 'transactionProof' )->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo( $filenameWithExt, PATHINFO_FILENAME );
+            //Get just ext
+            $extension = $request->file( 'transactionProof' )->getClientOriginalExtension();
+            // Create new Filename
+            $newfilename = 'PENALTY_' . date( 'y' );
+            // FileName to Store
+            $payment_proof = $newfilename . '_' . time() . '.' . $extension;
+            // Upload Image
+            $path = $request->file( 'transactionProof' )->storeAs( 'public/penaltyPaymentProof', $payment_proof );
+        } else {
+            $payment_proof = 'NULL';
+        }
+        //End:: Get Payment Proof
+        $arrearData = ArrearDetail::find($arrearDetailID);
+
+        $penaltyPayment = new ArrearPenaltyPayment;
+        $penaltyPayment->arrear_id          = $arrearData->arrear_id;
+        $penaltyPayment->arrear_detail_id   = $arrearDetailID;
+        $penaltyPayment->section_id         = $arrearData->arrear->section_id;
+        $penaltyPayment->pay_amount         = str_replace( ',', '', $request->arrearPenalty);
+        $penaltyPayment->payment_mode_id    = $request->paymentMode;
+        $penaltyPayment->payment_ref_no     = $request->transactionReference;
+        $penaltyPayment->payment_date       = date('Y-m-d', strtotime($request->paymentDate));
+        $penaltyPayment->payment_proof      = $payment_proof;
+        $penaltyPayment->type               = 'MEMBER PAY';
+        $penaltyPayment->status             = 'PENDING';
+        $penaltyPayment->processing_status  = 'PENDING';
+        $penaltyPayment->created_by         = Auth::user()->id;
+        
+        if($penaltyPayment->save()){
+            $respStatus ="success";
+            $repsText   ='You have Successfully submitted Member Penalty Payment';
+        }else{
+            $respStatus ="errors";
+            $repsText   ='So thing when wrong. Kindly, repeat the process';
+        }
+
+        toastr();
+
+        return redirect('arrears/sectionarrears/'.Crypt::encryptString('ACTIVE'))->with([$respStatus=>$repsText]);
+    }
+
+    public function sectionPenaltyWaived($status){
+
+    }
 }

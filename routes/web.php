@@ -206,7 +206,9 @@ Route::middleware('auth')->group(function () {
          Route::post('/submit/member/arrearpenalty/waive', [ArrearsController::class, 'submitMemberArrearsPenaltyWaive']);
          Route::get('/sectionarrears/pay/{id}', [ArrearsController::class, 'paySectionArrearPenalty']);
          Route::post('/submit/section/arrearpenalty/{id}', [ArrearsController::class, 'submitSectionArrearPenaltyPay']);
- 
+         Route::post('/submit/member/arrearpenalty/{id}', [ArrearsController::class, 'submitMemberArrearPenaltyPay']);
+         Route::get('/sectionpenalty/waived/{id}', [ArrearsController::class, 'sectionPenaltyWaived']);
+         
          Route::get('/memberpenalty/pay/{id}', [ArrearsController::class, 'payMemberArrearPenalty']);
          Route::get('/memberarrears', [ArrearsController::class, 'memberArrears']);
     });
