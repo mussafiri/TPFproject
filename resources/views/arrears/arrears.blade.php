@@ -1,7 +1,12 @@
 
-@extends('layouts.admin_main')
-@section('custom_css')
-   <!-- third party css -->
+@extends('layouts.admin_main')@section('custom_css')
+        <!-- kartik Fileinput-->
+        <link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/css/fontawesome-kartik.css')}}" />
+        <link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/css/bootstrap-icons.css')}}" />
+        <link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/css/fileinput.min.css')}}" />
+        <link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/themes/explorer/theme.css')}}" />
+        
+        <!-- third party css -->
         <link href="{{asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
         <link href="{{asset('assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
         <link href="{{asset('assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
@@ -88,11 +93,13 @@
                                                                     <th>Process Status</th>
                                                                     <th> 
                                                                         <div class="row pl-2"> 
-                                                                            <div class="custom-control custom-checkbox">
-                                                                                <input type="checkbox" class="custom-control-input sectioArrearParent" id="customCheck1" name="confirmMembers[]">
-                                                                                <label class="custom-control-label" for="customCheck1"></label>
+                                                                            <div class="col-4 pl-2"> 
+                                                                                <div class="custom-control custom-checkbox">
+                                                                                    <input type="checkbox" class="custom-control-input sectioArrearParent" id="customCheck1">
+                                                                                    <label class="custom-control-label" for="customCheck1"></label>
+                                                                                </div>
                                                                             </div>
-                                                                            <div class="my-auto">All</div>
+                                                                            <div class="col-8">Action</div>
                                                                         </div>
                                                                     </th>
                                                                 </tr>
@@ -115,7 +122,7 @@
                                                                     
                                                                     if($data->processing_status=="PENDING"){ $badgeText = "info";}else if ( $data->processing_status=="ON PAYMENT"){ $badgeText = "primary"; }elseif($data->processing_status == "CLOSED"){ $badgeText = "success"; }else if($data->processing_status=="CLOSURE REJECTED"){$badgeText = "danger";}elseif($data->processing_status=="SUSPEND REJECTED"){$badgeText = "pink";}else{$badgeText = "secondary";}
                                                                 @endphp
-                                                                <tr>
+                                                                <tr id="trID{{$n}}">
                                                                     <td>{{$counter}}.</td>
                                                                     <td class="text-muted font-9">{{$data->section->name}}</td>
                                                                     <td>{{date('M, Y', strtotime($data->arrear_period))}}</td>
@@ -123,14 +130,16 @@
                                                                     <td class="text-danger">{{number_format($totalPenalty,2)}}</td>
                                                                     <td>{{$data->arrearAge($data->id, $arrearPeriod)}} <sup class="text-muted"><small>Days</small></sup></td>
                                                                     <td><span class="badge badge-xs badge-outline-{{$badgeText}} badge-pill">{{$data->processing_status}}</span></td>
-                                                                    <td  class="float-left">
+                                                                    <td class="float-left py-1">
                                                                         <div class="btn-group dropdown float-right">
-                                                                            <div class="custom-control custom-checkbox my-auto">
-                                                                                <input type="checkbox" class="custom-control-input memberArrearCheckBox" value="{{$data->id}}" id="customCheck{{$n}}" name="sectionArrear[]">
-                                                                                <label class="custom-control-label" for="customCheck{{$n}}"></label>
-                                                                            </div>
+                                                                            <a class="btn btn-sm btn-xs">
+                                                                                <div class="custom-control custom-checkbox my-auto">
+                                                                                    <input type="checkbox" class="custom-control-input memberArrearCheckBox" value="{{$data->id}}" id="customCheck{{$n}}" name="sectionArrear[]">
+                                                                                    <label class="custom-control-label" for="customCheck{{$n}}"></label>
+                                                                                </div>
+                                                                            </a>
 
-                                                                            <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-sm btn-light btn-sm" data-toggle="dropdown" aria-expanded="false">
+                                                                            <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-sm  btn-xs" data-toggle="dropdown" aria-expanded="false">
                                                                                 <i class="mdi mdi-dots-horizontal font-18"></i>
                                                                             </a>
 
@@ -139,12 +148,15 @@
                                                                                     <i class='mdi mdi-eye-outline mr-1'></i>View
                                                                                 </a>
                                                                                 @if($data->processing_status=='ACTIVE')
-                                                                                <a href="{{url('contributions/arrearsprocessing/'.Crypt::encryptString('CLOSE').'/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
-                                                                                    <i class='mdi mdi-check-bold mr-1'></i>Pay Arrear
+                                                                                <a href="javascript:void(0);" class="dropdown-item paySectionArrear" data-rowID="{{$n}}">
+                                                                                    <i class='flaticon-give-money-1 mr-1 font-18'></i>Pay Section Arrears
                                                                                 </a>
                                                                                 
-                                                                                <a href="{{url('contributions/arrearsprocessing/'.Crypt::encryptString('WAIVE').'/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
-                                                                                    <i class='mdi mdi-close-thick mr-1'></i>Waive Member Arrears
+                                                                                <a href="{{url('contributions/arrearsprocessing/'.Crypt::encryptString('PAY MEMBER ARREAR').'/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
+                                                                                    <i class='mdi mdi-account-cash mr-1'></i>Pay Member Arrears
+                                                                                </a>
+                                                                                <a href="{{url('contributions/arrearsprocessing/'.Crypt::encryptString('WAIVE MEMBER ARREAR').'/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
+                                                                                    <i class='flaticon-refund mr-1 font-18'></i>Waive Member Arrears
                                                                                 </a>
                                                                                 @endif
                                                                             </div> <!-- end drop down menu-->
@@ -182,6 +194,66 @@
                                                     <!--- END:: Waive All Arrear Penalties -->
                                                     </div>
                                                 </form>
+
+                                                <div class="col-12 arrearPenaltyPayementBlock border rounded p-3" style="display:none;">
+                                                    <h4 class="header-title mb-3 text-muted"> Section Details</h4>
+                                                    <div class="mb-2">
+                                                        
+                                                    </div>
+
+                                                    <h4 class="header-title mb-3 text-muted">Transaction Proofs</h4>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-4" class="control-label">Total Arrear Paid  <span class="text-danger">*</span></label>
+                                                                        <input type="text" name="contributionAmount" id="contributionAmount" class="form-control form-control-sm totalContributionInput contriInput autonumber" value="{{old('contributionAmount' )}}" id="field-4" placeholder="Total Contribution">
+                                                                        <span class="text-danger" role="alert"> {{ $errors->first('contributionAmount') }}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-4" class="control-label">Payment Date  <span class="text-danger">*</span></label>
+                                                                        <input type="text" name="paymentDate" id="basic-datepicker" data-date-format="d M, Y" class="form-control form-control-sm contriInput" value="{{old('paymentDate')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Pick Payment Date">
+                                                                        <span class="text-danger" role="alert"> {{ $errors->first('paymentDate') }}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-1" class="control-label">Payment Mode  <span class="text-danger">*</span></label>
+                                                                        <select class="form-control contriInput" name="paymentMode" data-toggle="select2">
+                                                                            @foreach($paymentMode as $value)
+                                                                            <option value="{{$value->id}}" {{old ('paymentMode') == $value->id ? 'selected' : ''}}>{{$value->name}}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                        <span class="text-danger" role="alert"> {{ $errors->first('paymentMode') }}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label for="field-4" class="control-label">Transaction Reference  <span class="text-danger">*</span></label>
+                                                                        <input type="text" name="transactionReference" id="transaction" class="form-control form-control-sm contriInput" value="{{old('transaction')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Transaction Reference">
+                                                                        <span class="text-danger" role="alert"> {{ $errors->first('transactionReference') }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="field-3" class="control-label">Transaction Proof  <span class="text-danger">*</span></label>
+                                                                    <input type="file" class="form-control kartik-input-705 kv-fileinput-dropzone contriInput" name="transactionProof" id="field-4" required>
+                                                                    <span class="text-danger" role="alert"> {{ $errors->first('transactionProof') }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <button type="submit" class="btn btn-info waves-effect waves-light float-right">Submit Arrear Penalty Pay</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
                                                  <!-- end card-box-->
@@ -201,7 +273,11 @@
         </div> <!-- content -->
 @endsection
 @section('custom_script')
-<script>
+
+<script src="{{asset('assets/libs/kartik-v-bootstrap-fileinput/js/fileinput.min.js')}}"></script>
+<script src="{{asset('assets/libs/kartik-v-bootstrap-fileinput/themes/explorer/theme.js')}}"></script>
+
+<script type="text/javascript">
     window.setTimeout(function() {
         $(".alert").fadeTo(1000, 0).slideUp(500, function() {
             $(this).remove();
@@ -209,15 +285,34 @@
     }, 6000);
 </script>
 
+<script>
+    $(".kartik-input-705").fileinput({
+        theme: "explorer"
+        , uploadUrl: '#'
+        , allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif']
+        , overwriteInitial: false
+        , initialPreviewAsData: true
+        , maxFileSize: 2000
+        , maxTotalFileCount: 1
+        , showUpload: false
+        , showCancel: false
+        , dropZoneTitle: '<span>Drag & Drop Proof File here to upload</span>'
+        , fileActionSettings: {
+            showUpload: false
+            , showRemove: true
+        , }
+    , });
+</script>
+
 @if($errors->hasBag('suspendBulkArrears'))
-    <script>
+    <script type="text/javascript">
         $(document).ready(function(){
             $('#waiveBulkArrearPenalties').modal({show: true});
         });
     </script>
 @endif
 
-<script>
+<script type="text/javascript">
     $('.sectioArrearParent').on('click', function(){
         if($(this).is(':checked')){
             $('.memberArrearCheckBox').prop('checked', true);
@@ -241,29 +336,16 @@
             $('.sectioArrearParent').prop('checked', false);
         }
     });
-</script>
-<script>
-    $('.contrCatEdit').on('click', function() {
-        var data_id = $(this).attr('data-id');
-        $('#data_id').val(data_id);
-         $.ajax({
-            type: 'POST',
-            url: "{{url('/ajax/get/contri/category/data')}}",
-            data: {
-                data_id: data_id,
-                _token: '{{ csrf_token() }}'
-            },
-            dataType: 'json',
-            success: function(response) {
-                if (response.categoryDataArr.status == 'success') {
-                    $('#edit_contr_Category_fetchError').html('');
-                    $('#edit_name').val(response.categoryDataArr.data.name);
-                } else {
-                    $('#edit_name').val('');
-                    $('#edit_contr_Category_fetchError').html(response.categoryDataArr.message);
-                }
-            }
-        });
+
+    $('.paySectionArrear').on('click', function(){
+        var rowID = $(this).attr('data-rowID');
+
+        $('#memberArrearCheckBox').prop('checked', false);
+        $('#customCheck'+rowID).prop('checked', true);
+
+        $('.sectioArrearParent').hide();
+        $('.waiveBulkArrears').hide();
+        $('.arrearPenaltyPayementBlock').show();
     });
 </script>
 
@@ -272,6 +354,7 @@
         var data_id = $(this).attr("data-id");
         var new_status = $(this).attr("data-newstatus");
         var data_name = $(this).attr("data-name");
+        
         Swal.fire({
             title: "Are you sure?",
             html: 'You want to <span class="text-danger">' + new_status + '</span> <span class="text-info">' + data_name + ' </span>!',

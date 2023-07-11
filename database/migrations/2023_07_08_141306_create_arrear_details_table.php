@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('payment_proof')->default('NULL');
             $table->enum('status',['ACTIVE','SUSPENDED','CLOSED','ON PAYMENT']  )->default('ACTIVE');
             $table->enum('processing_status',['ACTIVE','PENDING','SUSPENDED','CLOSED','ON PAYMENT','SUSPEND REJECTED','CLOSURE REJECTED'])->default('ACTIVE');
+            $table->enum('processing_type',['GROUP','INDIVIDUAl'])->default('GROUP');
             $table->integer('closed_by')->default(0);
             $table->string('closed_at')->default('NULL');
             $table->integer('suspended_by')->default(0);
