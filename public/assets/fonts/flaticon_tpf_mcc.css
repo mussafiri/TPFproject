@@ -1,10 +1,10 @@
 @font-face {
     font-family: "flaticon_tpf_mcc";
-    src: url("./flaticon_tpf_mcc.ttf?7fe65fe03a10c91ff9206e797e9355d8") format("truetype"),
-url("./flaticon_tpf_mcc.woff?7fe65fe03a10c91ff9206e797e9355d8") format("woff"),
-url("./flaticon_tpf_mcc.woff2?7fe65fe03a10c91ff9206e797e9355d8") format("woff2"),
-url("./flaticon_tpf_mcc.eot?7fe65fe03a10c91ff9206e797e9355d8#iefix") format("embedded-opentype"),
-url("./flaticon_tpf_mcc.svg?7fe65fe03a10c91ff9206e797e9355d8#flaticon_tpf_mcc") format("svg");
+    src: url("./flaticon_tpf_mcc.ttf?4ecbe0a70fa94e591c54ecc07b5397d3") format("truetype"),
+url("./flaticon_tpf_mcc.woff?4ecbe0a70fa94e591c54ecc07b5397d3") format("woff"),
+url("./flaticon_tpf_mcc.woff2?4ecbe0a70fa94e591c54ecc07b5397d3") format("woff2"),
+url("./flaticon_tpf_mcc.eot?4ecbe0a70fa94e591c54ecc07b5397d3#iefix") format("embedded-opentype"),
+url("./flaticon_tpf_mcc.svg?4ecbe0a70fa94e591c54ecc07b5397d3#flaticon_tpf_mcc") format("svg");
 }
 
 i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
@@ -363,402 +363,405 @@ i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
 .flaticon-user-experience:before {
     content: "\f173";
 }
-.flaticon-penalty:before {
+.flaticon-business-report:before {
     content: "\f174";
 }
-.flaticon-business-report:before {
+.flaticon-report-7:before {
     content: "\f175";
 }
-.flaticon-report-7:before {
+.flaticon-audit:before {
     content: "\f176";
 }
-.flaticon-audit:before {
+.flaticon-data-collection:before {
     content: "\f177";
 }
-.flaticon-data-collection:before {
+.flaticon-truck:before {
     content: "\f178";
 }
-.flaticon-truck:before {
+.flaticon-approval-1:before {
     content: "\f179";
 }
-.flaticon-approval-1:before {
+.flaticon-reporting:before {
     content: "\f17a";
 }
-.flaticon-reporting:before {
+.flaticon-line-graph:before {
     content: "\f17b";
 }
-.flaticon-line-graph:before {
+.flaticon-analysis:before {
     content: "\f17c";
 }
-.flaticon-analysis:before {
+.flaticon-notes:before {
     content: "\f17d";
 }
-.flaticon-notes:before {
+.flaticon-notes-1:before {
     content: "\f17e";
 }
-.flaticon-notes-1:before {
+.flaticon-statistics-2:before {
     content: "\f17f";
 }
-.flaticon-statistics-2:before {
+.flaticon-bonus:before {
     content: "\f180";
 }
-.flaticon-bonus:before {
+.flaticon-bonus-1:before {
     content: "\f181";
 }
-.flaticon-bonus-1:before {
+.flaticon-earnings:before {
     content: "\f182";
 }
-.flaticon-earnings:before {
+.flaticon-earnings-1:before {
     content: "\f183";
 }
-.flaticon-earnings-1:before {
+.flaticon-cathedral:before {
     content: "\f184";
 }
-.flaticon-cathedral:before {
+.flaticon-donation-1:before {
     content: "\f185";
 }
-.flaticon-donation-1:before {
+.flaticon-share-1:before {
     content: "\f186";
 }
-.flaticon-share-1:before {
+.flaticon-arrows:before {
     content: "\f187";
 }
-.flaticon-arrows:before {
+.flaticon-transaction-history:before {
     content: "\f188";
 }
-.flaticon-transaction-history:before {
+.flaticon-bill-2:before {
     content: "\f189";
 }
-.flaticon-bill-2:before {
+.flaticon-cheque:before {
     content: "\f18a";
 }
-.flaticon-cheque:before {
+.flaticon-transaction-history-1:before {
     content: "\f18b";
 }
-.flaticon-transaction-history-1:before {
+.flaticon-donate:before {
     content: "\f18c";
 }
-.flaticon-donate:before {
+.flaticon-infaq:before {
     content: "\f18d";
 }
-.flaticon-infaq:before {
+.flaticon-subsidy:before {
     content: "\f18e";
 }
-.flaticon-subsidy:before {
+.flaticon-give-money-1:before {
     content: "\f18f";
 }
-.flaticon-give-money-1:before {
+.flaticon-alms:before {
     content: "\f190";
 }
-.flaticon-alms:before {
+.flaticon-zakat:before {
     content: "\f191";
 }
-.flaticon-zakat:before {
+.flaticon-money:before {
     content: "\f192";
 }
-.flaticon-money:before {
+.flaticon-donation-2:before {
     content: "\f193";
 }
-.flaticon-donation-2:before {
+.flaticon-donate-1:before {
     content: "\f194";
 }
-.flaticon-donate-1:before {
+.flaticon-donation-3:before {
     content: "\f195";
 }
-.flaticon-donation-3:before {
+.flaticon-donation-4:before {
     content: "\f196";
 }
-.flaticon-donation-4:before {
+.flaticon-donation-5:before {
     content: "\f197";
 }
-.flaticon-donation-5:before {
+.flaticon-donation-6:before {
     content: "\f198";
 }
-.flaticon-donation-6:before {
+.flaticon-zakat-1:before {
     content: "\f199";
 }
-.flaticon-zakat-1:before {
+.flaticon-money-exchange:before {
     content: "\f19a";
 }
-.flaticon-money-exchange:before {
+.flaticon-time-management:before {
     content: "\f19b";
 }
-.flaticon-time-management:before {
+.flaticon-clock:before {
     content: "\f19c";
 }
-.flaticon-clock:before {
+.flaticon-money-1:before {
     content: "\f19d";
 }
-.flaticon-money-1:before {
+.flaticon-banknotes:before {
     content: "\f19e";
 }
-.flaticon-banknotes:before {
+.flaticon-refund-1:before {
     content: "\f19f";
 }
-.flaticon-refund-1:before {
+.flaticon-calculator:before {
     content: "\f1a0";
 }
-.flaticon-calculator:before {
+.flaticon-profit-1:before {
     content: "\f1a1";
 }
-.flaticon-profit-1:before {
+.flaticon-get-money:before {
     content: "\f1a2";
 }
-.flaticon-get-money:before {
+.flaticon-money-2:before {
     content: "\f1a3";
 }
-.flaticon-money-2:before {
+.flaticon-cashback-1:before {
     content: "\f1a4";
 }
-.flaticon-cashback-1:before {
+.flaticon-money-3:before {
     content: "\f1a5";
 }
-.flaticon-money-3:before {
+.flaticon-waiting-list:before {
     content: "\f1a6";
 }
-.flaticon-waiting-list:before {
+.flaticon-infaq-2:before {
     content: "\f1a7";
 }
-.flaticon-infaq-2:before {
+.flaticon-bank-1:before {
     content: "\f1a8";
 }
-.flaticon-bank-1:before {
+.flaticon-approved:before {
     content: "\f1a9";
 }
-.flaticon-approved:before {
+.flaticon-approved-1:before {
     content: "\f1aa";
 }
-.flaticon-approved-1:before {
+.flaticon-find:before {
     content: "\f1ab";
 }
-.flaticon-find:before {
+.flaticon-user-account:before {
     content: "\f1ac";
 }
-.flaticon-user-account:before {
+.flaticon-participation:before {
     content: "\f1ad";
 }
-.flaticon-participation:before {
+.flaticon-leader:before {
     content: "\f1ae";
 }
-.flaticon-leader:before {
+.flaticon-collaboration:before {
     content: "\f1af";
 }
-.flaticon-collaboration:before {
+.flaticon-group-1:before {
     content: "\f1b0";
 }
-.flaticon-group-1:before {
+.flaticon-cross:before {
     content: "\f1b1";
 }
-.flaticon-cross:before {
+.flaticon-organization-chart:before {
     content: "\f1b2";
 }
-.flaticon-organization-chart:before {
+.flaticon-login:before {
     content: "\f1b3";
 }
-.flaticon-login:before {
+.flaticon-unlock:before {
     content: "\f1b4";
 }
-.flaticon-unlock:before {
+.flaticon-group-2:before {
     content: "\f1b5";
 }
-.flaticon-group-2:before {
+.flaticon-lock:before {
     content: "\f1b6";
 }
-.flaticon-lock:before {
+.flaticon-key:before {
     content: "\f1b7";
 }
-.flaticon-key:before {
+.flaticon-view:before {
     content: "\f1b8";
 }
-.flaticon-view:before {
+.flaticon-search:before {
     content: "\f1b9";
 }
-.flaticon-search:before {
+.flaticon-woman:before {
     content: "\f1ba";
 }
-.flaticon-woman:before {
+.flaticon-avatar-1:before {
     content: "\f1bb";
 }
-.flaticon-avatar-1:before {
+.flaticon-calculator-1:before {
     content: "\f1bc";
 }
-.flaticon-calculator-1:before {
+.flaticon-cross-1:before {
     content: "\f1bd";
 }
-.flaticon-cross-1:before {
+.flaticon-file:before {
     content: "\f1be";
 }
-.flaticon-file:before {
+.flaticon-unknown:before {
     content: "\f1bf";
 }
-.flaticon-unknown:before {
+.flaticon-file-1:before {
     content: "\f1c0";
 }
-.flaticon-file-1:before {
+.flaticon-duplicate:before {
     content: "\f1c1";
 }
-.flaticon-duplicate:before {
+.flaticon-copy-1:before {
     content: "\f1c2";
 }
-.flaticon-copy-1:before {
+.flaticon-sync:before {
     content: "\f1c3";
 }
-.flaticon-sync:before {
+.flaticon-paperclip:before {
     content: "\f1c4";
 }
-.flaticon-paperclip:before {
+.flaticon-clip:before {
     content: "\f1c5";
 }
-.flaticon-clip:before {
+.flaticon-pen:before {
     content: "\f1c6";
 }
-.flaticon-pen:before {
+.flaticon-money-bag:before {
     content: "\f1c7";
 }
-.flaticon-money-bag:before {
+.flaticon-salary-1:before {
     content: "\f1c8";
 }
-.flaticon-salary-1:before {
+.flaticon-money-bag-1:before {
     content: "\f1c9";
 }
-.flaticon-money-bag-1:before {
+.flaticon-focus:before {
     content: "\f1ca";
 }
-.flaticon-focus:before {
+.flaticon-strategy:before {
     content: "\f1cb";
 }
-.flaticon-strategy:before {
+.flaticon-money-bag-2:before {
     content: "\f1cc";
 }
-.flaticon-money-bag-2:before {
+.flaticon-money-bag-3:before {
     content: "\f1cd";
 }
-.flaticon-money-bag-3:before {
+.flaticon-cash-bag:before {
     content: "\f1ce";
 }
-.flaticon-cash-bag:before {
+.flaticon-money-bag-4:before {
     content: "\f1cf";
 }
-.flaticon-money-bag-4:before {
+.flaticon-refund-2:before {
     content: "\f1d0";
 }
-.flaticon-refund-2:before {
+.flaticon-cash:before {
     content: "\f1d1";
 }
-.flaticon-cash:before {
+.flaticon-will:before {
     content: "\f1d2";
 }
-.flaticon-will:before {
+.flaticon-last-will:before {
     content: "\f1d3";
 }
-.flaticon-last-will:before {
+.flaticon-refund-3:before {
     content: "\f1d4";
 }
-.flaticon-refund-3:before {
+.flaticon-profile-1:before {
     content: "\f1d5";
 }
-.flaticon-profile-1:before {
+.flaticon-block:before {
     content: "\f1d6";
 }
-.flaticon-block:before {
+.flaticon-image:before {
     content: "\f1d7";
 }
-.flaticon-image:before {
+.flaticon-business-report-1:before {
     content: "\f1d8";
 }
-.flaticon-business-report-1:before {
+.flaticon-penalty:before {
     content: "\f1d9";
 }
-.flaticon-penalty-1:before {
+.flaticon-budget:before {
     content: "\f1da";
 }
-.flaticon-budget:before {
+.flaticon-punishment:before {
     content: "\f1db";
 }
-.flaticon-punishment:before {
+.flaticon-law-book:before {
     content: "\f1dc";
 }
-.flaticon-law-book:before {
+.flaticon-invoice:before {
     content: "\f1dd";
 }
-.flaticon-invoice:before {
+.flaticon-certificate:before {
     content: "\f1de";
 }
-.flaticon-certificate:before {
+.flaticon-stamp:before {
     content: "\f1df";
 }
-.flaticon-stamp:before {
+.flaticon-coin:before {
     content: "\f1e0";
 }
-.flaticon-coin:before {
+.flaticon-regulation:before {
     content: "\f1e1";
 }
-.flaticon-regulation:before {
+.flaticon-insurance-2:before {
     content: "\f1e2";
 }
-.flaticon-insurance-2:before {
+.flaticon-pay-day:before {
     content: "\f1e3";
 }
-.flaticon-pay-day:before {
+.flaticon-justice:before {
     content: "\f1e4";
 }
-.flaticon-justice:before {
+.flaticon-gavel:before {
     content: "\f1e5";
 }
-.flaticon-gavel:before {
+.flaticon-law:before {
     content: "\f1e6";
 }
-.flaticon-law:before {
+.flaticon-documents:before {
     content: "\f1e7";
 }
-.flaticon-documents:before {
+.flaticon-approval-2:before {
     content: "\f1e8";
 }
-.flaticon-approval-2:before {
+.flaticon-approve-1:before {
     content: "\f1e9";
 }
-.flaticon-approve-1:before {
+.flaticon-invoice-1:before {
     content: "\f1ea";
 }
-.flaticon-invoice-1:before {
+.flaticon-group-3:before {
     content: "\f1eb";
 }
-.flaticon-group-3:before {
+.flaticon-waiting-list-1:before {
     content: "\f1ec";
 }
-.flaticon-waiting-list-1:before {
+.flaticon-time:before {
     content: "\f1ed";
 }
-.flaticon-time:before {
+.flaticon-tick:before {
     content: "\f1ee";
 }
-.flaticon-tick:before {
+.flaticon-tick-1:before {
     content: "\f1ef";
 }
-.flaticon-tick-1:before {
+.flaticon-time-1:before {
     content: "\f1f0";
 }
-.flaticon-time-1:before {
+.flaticon-payment:before {
     content: "\f1f1";
 }
-.flaticon-payment:before {
+.flaticon-payment-1:before {
     content: "\f1f2";
 }
-.flaticon-payment-1:before {
+.flaticon-face-scan:before {
     content: "\f1f3";
 }
-.flaticon-face-scan:before {
+.flaticon-wedding-contract:before {
     content: "\f1f4";
 }
-.flaticon-wedding-contract:before {
+.flaticon-payment-2:before {
     content: "\f1f5";
 }
-.flaticon-payment-2:before {
+.flaticon-no-money:before {
     content: "\f1f6";
 }
-.flaticon-no-corruption:before {
+.flaticon-card:before {
     content: "\f1f7";
 }
-.flaticon-no-money:before {
+.flaticon-rejected:before {
     content: "\f1f8";
+}
+.flaticon-rejected-1:before {
+    content: "\f1f9";
 }
