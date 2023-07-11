@@ -20,7 +20,7 @@
                 </a>
                 <div class="collapse  @if(request()->segment(1)=='members'|| request()->segment(1)=='member'){{'show'}}@endif" id="sidebarMembers">
                     <ul class="nav-second-level">
-                        <li class="@if(request()->is('members/list') || request()->is('members/registration') || request()->is('member/view/details/*')){{'menuitem-active'}}@endif">
+                        <li class="@if(request()->is('members/list') || request()->is('members/registration') || request()->is('member/view/details/*') || Str::contains(request()->url(), 'member/edit/details/')){{'menuitem-active'}}@endif">
                             <a href="{{url('members/list')}}">List</a>
                         </li>
                         <li> <a href="{{url('members/possible/duplicates')}}">Duplicates</a> </li>

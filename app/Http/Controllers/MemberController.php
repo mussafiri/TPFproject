@@ -27,6 +27,93 @@ class MemberController extends Controller {
     }
     public function index() { }
 
+    public function submitMemberEditDetails(Request $request, $member) {
+        #Taking all POST requests from the form
+        $submit_type    =   $request->submission_type;
+        $member_id      =   Crypt::decryptString($member);
+
+        if ($submit_type=="MEMBER-PARTICULARS") {
+
+            $valid = Validator::make($request->all(), [
+                    'firstname' => 'required|min:3',
+                    'middle_name' => 'required|min:3',
+                    'lastname' => 'required|min:3',
+                    'evengelical_title' => 'required|gt:0',
+                    'salutation' => 'required|not_in:0',
+                    'email' =>'email',
+                    'marital_status' => 'required|not_in:0',
+                    'gender' => 'required|not_in:0',
+                    'dob' => 'required',
+                    'postalAddress' => 'required',
+                    'physicalAddress' => 'required',
+                    'phone' => 'required',
+                    'occupation' => 'required|not_in:0',
+                    'joining_date' => 'required',
+                    'service_date' => 'required',
+                    'monthly_income' => 'required',
+                ],
+
+                [   'evengelical_title.gt' => 'You must select Evengelical Title',
+                    'salutation.not_in' => 'You must select Salutation',
+                    'marital_status.not_in' => 'You must select Marital Status',
+                    'gender.not_in' => 'You must select Gender',
+                    'occupation.gt' => 'You must select Occupation',
+                ]
+            );
+
+            if ( $valid->fails() ) {
+               
+                #Returns errors with Error Bag 'registerMember'
+                return back()->withErrors( $valid, 'editMemberDetails' )->withInput();
+            }
+
+            $newFormatteddate =  Carbon::createFromFormat('d M Y',$request->dob);
+            $dob = $this->carbonDateObj->format('Y-m-d',$newFormatteddate);
+            
+            $servicedate_format = Carbon::createFromFormat('d M Y',$request->service_date);
+            $servicedate = $this->carbonDateObj->format('Y-m-d',$servicedate_format);
+                
+                $memberDetsUpdateObject = Member::find($member_id);
+                $memberDetsUpdateObject->title                 = $request->salutation;
+                $memberDetsUpdateObject->member_salutation_id  = $request->evengelical_title;
+                $memberDetsUpdateObject->fname                 = strtoupper($request->firstname);
+                $memberDetsUpdateObject->mname                 = strtoupper($request->middle_name);
+                $memberDetsUpdateObject->lname                 = strtoupper($request->lastname);
+                $memberDetsUpdateObject->gender                = $request->gender;
+                $memberDetsUpdateObject->occupation            = $request->occupation;
+                $memberDetsUpdateObject->dob                   = $dob;
+                $memberDetsUpdateObject->service_start_at      = $servicedate;
+                $memberDetsUpdateObject->join_at               = $request->joining_date;
+                $memberDetsUpdateObject->marital_status        = $request->marital_status;
+                $memberDetsUpdateObject->phone                 = $request->phone;
+                $memberDetsUpdateObject->email                 = $request->email;
+                $memberDetsUpdateObject->income                = str_replace(['TZS.',',',' '],'',$request->monthly_income);
+                $memberDetsUpdateObject->postal_address        = $request->postalAddress;
+                $memberDetsUpdateObject->physical_address      = $request->physicalAddress;
+                $memberDetsUpdateObject->updated_by            = auth()->user()->id;
+                $memberDetsUpdateObject->save();
+               
+                toastr();
+                return redirect('members/list')->with(['success'=>'Member details have been successfully Updated!']);
+
+        }
+        elseif($submit_type == "CONTRIBUTOR"){
+
+
+
+        }
+        elseif($submit_type == "DEPENDANTS"){
+
+        }
+        elseif($submit_type == "ATTACHMENT"){
+
+        }else{
+            toastr();
+            return redirect('members/registration/'.Crypt::encryptString("ACTIVE"))->with(['error'=>'Oops, Member has not been successfully updated!']);
+        }
+
+    }
+
     public function membersEditView($member) {
         $id= Crypt::decryptString($member);
         $member_data = Member::find($id);
@@ -362,7 +449,7 @@ class MemberController extends Controller {
             // Insert a member to Contributor Member Table
             $contributorMemObj = new ContributorMember;
             $contributorMemObj->contributor_id        = $memberRegObject->contributor_id;
-            $contributorMemObj->member_id            = $memberRegObject->id;
+            $contributorMemObj->member_id             = $memberRegObject->id;
             $contributorMemObj->start_date            = $memberRegObject->joining_date;
             $contributorMemObj->status                = "ACTIVE";
             $contributorMemObj->created_by            = auth()->user()->id;

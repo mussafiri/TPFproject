@@ -91,6 +91,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/view/details/{member_id}', [MemberController::class, 'memberViewDetails']);
         Route::post('/registration/submit', [MemberController::class, 'submitMemberRegistration']);
         Route::post('/dependants/submit', [MemberController::class, 'submitMemberDependants']);
+        Route::post('/edit/details/submit/{member_id}', [MemberController::class, 'submitMemberEditDetails']);
     });
     //:::::::::::::::::::::::::::::::::::::::::::::::: END MEMBERS ROUTES ::::::::::::::::::::::::::::::::::::::::::::::::
 

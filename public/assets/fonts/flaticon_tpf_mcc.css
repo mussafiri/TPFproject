@@ -1,10 +1,10 @@
 @font-face {
     font-family: "flaticon_tpf_mcc";
-    src: url("./flaticon_tpf_mcc.ttf?249efe2e2e7f3a6da37470895c037887") format("truetype"),
-url("./flaticon_tpf_mcc.woff?249efe2e2e7f3a6da37470895c037887") format("woff"),
-url("./flaticon_tpf_mcc.woff2?249efe2e2e7f3a6da37470895c037887") format("woff2"),
-url("./flaticon_tpf_mcc.eot?249efe2e2e7f3a6da37470895c037887#iefix") format("embedded-opentype"),
-url("./flaticon_tpf_mcc.svg?249efe2e2e7f3a6da37470895c037887#flaticon_tpf_mcc") format("svg");
+    src: url("./flaticon_tpf_mcc.ttf?7fe65fe03a10c91ff9206e797e9355d8") format("truetype"),
+url("./flaticon_tpf_mcc.woff?7fe65fe03a10c91ff9206e797e9355d8") format("woff"),
+url("./flaticon_tpf_mcc.woff2?7fe65fe03a10c91ff9206e797e9355d8") format("woff2"),
+url("./flaticon_tpf_mcc.eot?7fe65fe03a10c91ff9206e797e9355d8#iefix") format("embedded-opentype"),
+url("./flaticon_tpf_mcc.svg?7fe65fe03a10c91ff9206e797e9355d8#flaticon_tpf_mcc") format("svg");
 }
 
 i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
@@ -447,321 +447,318 @@ i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
 .flaticon-subsidy:before {
     content: "\f18f";
 }
-.flaticon-funding:before {
+.flaticon-give-money-1:before {
     content: "\f190";
 }
-.flaticon-give-money-1:before {
+.flaticon-alms:before {
     content: "\f191";
 }
-.flaticon-alms:before {
+.flaticon-zakat:before {
     content: "\f192";
 }
-.flaticon-zakat:before {
+.flaticon-money:before {
     content: "\f193";
 }
-.flaticon-money:before {
+.flaticon-donation-2:before {
     content: "\f194";
 }
-.flaticon-donation-2:before {
+.flaticon-donate-1:before {
     content: "\f195";
 }
-.flaticon-donate-1:before {
+.flaticon-donation-3:before {
     content: "\f196";
 }
-.flaticon-donation-3:before {
+.flaticon-donation-4:before {
     content: "\f197";
 }
-.flaticon-donation-4:before {
+.flaticon-donation-5:before {
     content: "\f198";
 }
-.flaticon-donation-5:before {
+.flaticon-donation-6:before {
     content: "\f199";
 }
-.flaticon-donate-2:before {
+.flaticon-zakat-1:before {
     content: "\f19a";
 }
-.flaticon-donation-6:before {
+.flaticon-money-exchange:before {
     content: "\f19b";
 }
-.flaticon-zakat-1:before {
+.flaticon-time-management:before {
     content: "\f19c";
 }
-.flaticon-donate-3:before {
+.flaticon-clock:before {
     content: "\f19d";
 }
-.flaticon-money-exchange:before {
+.flaticon-money-1:before {
     content: "\f19e";
 }
-.flaticon-time-management:before {
+.flaticon-banknotes:before {
     content: "\f19f";
 }
-.flaticon-clock:before {
+.flaticon-refund-1:before {
     content: "\f1a0";
 }
-.flaticon-money-1:before {
+.flaticon-calculator:before {
     content: "\f1a1";
 }
-.flaticon-banknotes:before {
+.flaticon-profit-1:before {
     content: "\f1a2";
 }
-.flaticon-refund-1:before {
+.flaticon-get-money:before {
     content: "\f1a3";
 }
-.flaticon-calculator:before {
+.flaticon-money-2:before {
     content: "\f1a4";
 }
-.flaticon-profit-1:before {
+.flaticon-cashback-1:before {
     content: "\f1a5";
 }
-.flaticon-get-money:before {
+.flaticon-money-3:before {
     content: "\f1a6";
 }
-.flaticon-money-2:before {
+.flaticon-waiting-list:before {
     content: "\f1a7";
 }
-.flaticon-cashback-1:before {
+.flaticon-infaq-2:before {
     content: "\f1a8";
 }
-.flaticon-money-3:before {
+.flaticon-bank-1:before {
     content: "\f1a9";
 }
-.flaticon-waiting-list:before {
+.flaticon-approved:before {
     content: "\f1aa";
 }
-.flaticon-infaq-2:before {
+.flaticon-approved-1:before {
     content: "\f1ab";
 }
-.flaticon-bank-1:before {
+.flaticon-find:before {
     content: "\f1ac";
 }
-.flaticon-approved:before {
+.flaticon-user-account:before {
     content: "\f1ad";
 }
-.flaticon-approved-1:before {
+.flaticon-participation:before {
     content: "\f1ae";
 }
-.flaticon-find:before {
+.flaticon-leader:before {
     content: "\f1af";
 }
-.flaticon-user-account:before {
+.flaticon-collaboration:before {
     content: "\f1b0";
 }
-.flaticon-participation:before {
+.flaticon-group-1:before {
     content: "\f1b1";
 }
-.flaticon-leader:before {
+.flaticon-cross:before {
     content: "\f1b2";
 }
-.flaticon-collaboration:before {
+.flaticon-organization-chart:before {
     content: "\f1b3";
 }
-.flaticon-group-1:before {
+.flaticon-login:before {
     content: "\f1b4";
 }
-.flaticon-cross:before {
+.flaticon-unlock:before {
     content: "\f1b5";
 }
-.flaticon-organization-chart:before {
+.flaticon-group-2:before {
     content: "\f1b6";
 }
-.flaticon-login:before {
+.flaticon-lock:before {
     content: "\f1b7";
 }
-.flaticon-unlock:before {
+.flaticon-key:before {
     content: "\f1b8";
 }
-.flaticon-group-2:before {
+.flaticon-view:before {
     content: "\f1b9";
 }
-.flaticon-lock:before {
+.flaticon-search:before {
     content: "\f1ba";
 }
-.flaticon-key:before {
+.flaticon-woman:before {
     content: "\f1bb";
 }
-.flaticon-view:before {
+.flaticon-avatar-1:before {
     content: "\f1bc";
 }
-.flaticon-search:before {
+.flaticon-calculator-1:before {
     content: "\f1bd";
 }
-.flaticon-woman:before {
+.flaticon-cross-1:before {
     content: "\f1be";
 }
-.flaticon-avatar-1:before {
+.flaticon-file:before {
     content: "\f1bf";
 }
-.flaticon-calculator-1:before {
+.flaticon-unknown:before {
     content: "\f1c0";
 }
-.flaticon-cross-1:before {
+.flaticon-file-1:before {
     content: "\f1c1";
 }
-.flaticon-file:before {
+.flaticon-duplicate:before {
     content: "\f1c2";
 }
-.flaticon-unknown:before {
+.flaticon-copy-1:before {
     content: "\f1c3";
 }
-.flaticon-file-1:before {
+.flaticon-sync:before {
     content: "\f1c4";
 }
-.flaticon-duplicate:before {
+.flaticon-paperclip:before {
     content: "\f1c5";
 }
-.flaticon-copy-1:before {
+.flaticon-clip:before {
     content: "\f1c6";
 }
-.flaticon-sync:before {
+.flaticon-pen:before {
     content: "\f1c7";
 }
-.flaticon-paperclip:before {
+.flaticon-money-bag:before {
     content: "\f1c8";
 }
-.flaticon-clip:before {
+.flaticon-salary-1:before {
     content: "\f1c9";
 }
-.flaticon-clip-1:before {
+.flaticon-money-bag-1:before {
     content: "\f1ca";
 }
-.flaticon-pen:before {
+.flaticon-focus:before {
     content: "\f1cb";
 }
-.flaticon-money-bag:before {
+.flaticon-strategy:before {
     content: "\f1cc";
 }
-.flaticon-salary-1:before {
+.flaticon-money-bag-2:before {
     content: "\f1cd";
 }
-.flaticon-money-bag-1:before {
+.flaticon-money-bag-3:before {
     content: "\f1ce";
 }
-.flaticon-focus:before {
+.flaticon-cash-bag:before {
     content: "\f1cf";
 }
-.flaticon-strategy:before {
+.flaticon-money-bag-4:before {
     content: "\f1d0";
 }
-.flaticon-money-bag-2:before {
+.flaticon-refund-2:before {
     content: "\f1d1";
 }
-.flaticon-money-bag-3:before {
+.flaticon-cash:before {
     content: "\f1d2";
 }
-.flaticon-cash-bag:before {
+.flaticon-will:before {
     content: "\f1d3";
 }
-.flaticon-money-bag-4:before {
+.flaticon-last-will:before {
     content: "\f1d4";
 }
-.flaticon-refund-2:before {
+.flaticon-refund-3:before {
     content: "\f1d5";
 }
-.flaticon-cash:before {
+.flaticon-profile-1:before {
     content: "\f1d6";
 }
-.flaticon-will:before {
+.flaticon-block:before {
     content: "\f1d7";
 }
-.flaticon-last-will:before {
+.flaticon-image:before {
     content: "\f1d8";
 }
-.flaticon-refund-3:before {
+.flaticon-business-report-1:before {
     content: "\f1d9";
 }
-.flaticon-profile-1:before {
+.flaticon-penalty-1:before {
     content: "\f1da";
 }
-.flaticon-block:before {
+.flaticon-budget:before {
     content: "\f1db";
 }
-.flaticon-image:before {
+.flaticon-punishment:before {
     content: "\f1dc";
 }
-.flaticon-business-report-1:before {
+.flaticon-law-book:before {
     content: "\f1dd";
 }
-.flaticon-penalty-1:before {
+.flaticon-invoice:before {
     content: "\f1de";
 }
-.flaticon-budget:before {
+.flaticon-certificate:before {
     content: "\f1df";
 }
-.flaticon-punishment:before {
+.flaticon-stamp:before {
     content: "\f1e0";
 }
-.flaticon-law-book:before {
+.flaticon-coin:before {
     content: "\f1e1";
 }
-.flaticon-invoice:before {
+.flaticon-regulation:before {
     content: "\f1e2";
 }
-.flaticon-certificate:before {
+.flaticon-insurance-2:before {
     content: "\f1e3";
 }
-.flaticon-stamp:before {
+.flaticon-pay-day:before {
     content: "\f1e4";
 }
-.flaticon-coin:before {
+.flaticon-justice:before {
     content: "\f1e5";
 }
-.flaticon-regulation:before {
+.flaticon-gavel:before {
     content: "\f1e6";
 }
-.flaticon-insurance-2:before {
+.flaticon-law:before {
     content: "\f1e7";
 }
-.flaticon-pay-day:before {
+.flaticon-documents:before {
     content: "\f1e8";
 }
-.flaticon-justice:before {
+.flaticon-approval-2:before {
     content: "\f1e9";
 }
-.flaticon-gavel:before {
+.flaticon-approve-1:before {
     content: "\f1ea";
 }
-.flaticon-law:before {
+.flaticon-invoice-1:before {
     content: "\f1eb";
 }
-.flaticon-documents:before {
+.flaticon-group-3:before {
     content: "\f1ec";
 }
-.flaticon-approval-2:before {
+.flaticon-waiting-list-1:before {
     content: "\f1ed";
 }
-.flaticon-approve-1:before {
+.flaticon-time:before {
     content: "\f1ee";
 }
-.flaticon-invoice-1:before {
+.flaticon-tick:before {
     content: "\f1ef";
 }
-.flaticon-group-3:before {
+.flaticon-tick-1:before {
     content: "\f1f0";
 }
-.flaticon-waiting-list-1:before {
+.flaticon-time-1:before {
     content: "\f1f1";
 }
-.flaticon-time:before {
+.flaticon-payment:before {
     content: "\f1f2";
 }
-.flaticon-tick:before {
+.flaticon-payment-1:before {
     content: "\f1f3";
 }
-.flaticon-tick-1:before {
+.flaticon-face-scan:before {
     content: "\f1f4";
 }
-.flaticon-time-1:before {
+.flaticon-wedding-contract:before {
     content: "\f1f5";
 }
-.flaticon-payment:before {
+.flaticon-payment-2:before {
     content: "\f1f6";
 }
-.flaticon-payment-1:before {
+.flaticon-no-corruption:before {
     content: "\f1f7";
 }
-.flaticon-face-scan:before {
+.flaticon-no-money:before {
     content: "\f1f8";
-}
-.flaticon-wedding-contract:before {
-    content: "\f1f9";
 }
