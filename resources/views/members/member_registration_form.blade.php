@@ -392,8 +392,8 @@
                                                 </div>
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="field-5" class="control-label">Monthly income</label>
-                                                        <input type="text" name="monthly_income" id="monthly_income" class="form-control form-control-sm autonumber" value="{{old('monthly_income')}}" placeholder="Monthly Income" data-a-sign="TZS. " placeholder="Enter Income" autocomplete="off">
+                                                        <label for="field-5" class="control-label">Member Monthly income</label>
+                                                        <input type="text" name="monthly_income" id="monthly_income" class="form-control form-control-sm autonumber" value="{{old('monthly_income')}}" placeholder="Member Monthly Income" data-a-sign="TZS. " placeholder="Enter Income" autocomplete="off">
                                                         @if ($errors->registerMemberDetails->has('monthly_income')) <span class="text-danger" id="contributor" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('monthly_income') }}</small></strong></span>@endif
                                                     </div>
                                                 </div>

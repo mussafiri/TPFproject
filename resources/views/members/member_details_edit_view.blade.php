@@ -77,7 +77,7 @@ use Carbon\Carbon;
                             <li class="nav-item">
                                 <a href="#memberAttachmentsPane" data-toggle="tab" class="nav-link ">
                                     <i class="flaticon-paper"></i>
-                                    Attachements
+                                    Attachments
                                 </a>
                             </li>
                         </ul>
@@ -85,183 +85,225 @@ use Carbon\Carbon;
                             <div class="tab-pane active" id="MemberParticularsPane">
                                 <div class="col-12">
                                     <h5 class="text-uppercase mt-0 mb-3 bg-light p-2">Personal Data</h5>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="field-1" class="control-label">Designation</label>
-                                                        <select class="form-control" name="evengelical_title" data-toggle="select2" required>
-                                                            <option value="0">--Select Designation--</option>
-                                                            @foreach($salutation_title as $title)
-                                                            <option value="{{$title->id}}">{{$title->name}}</option>
-                                                            @endforeach
-                                                        </select>
+                                    <form action="{{url('/member/edit/details/submit/'.Crypt::encryptString($member_data->id))}}" method="post">
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-1" class="control-label">Designation</label>
+                                                            <select class="form-control" name="evengelical_title" data-toggle="select2" required>
+                                                                <option value="0">--Select Designation--</option>
+                                                                @foreach($salutation_title as $title)
+                                                                @if (!($title->id != $member_data->member_salutation_id && $title->status != "ACTIVE"))
+                                                                <option value="{{$title->id}}" {{($title->id == $member_data->member_salutation_id)? "selected":"";}}>{{$title->name}}</option>
+                                                                @endif
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="field-1" class="control-label">Salutation</label>
-                                                        <select class="form-control" name="salutation" data-toggle="select2" required>
-                                                            <option value="0">--Select Salutation--</option>
-                                                            <option value="MR">MR</option>
-                                                            <option value="MS">MS</option>
-                                                            <option value="MRS">MRS</option>
-                                                            <option value="DR">DR</option>
-                                                            <option value="REV">REV</option>
-                                                            <option value="PST">PST</option>
-                                                            <option value="PROF">PROF</option>
-                                                            <option value="BISHOP">BISHOP</option>
-                                                        </select>
-                                                        @if ($errors->registerMemberDetails->has('salutation')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('salutation') }}</small></strong></span>@endif
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-1" class="control-label">Salutation</label>
+                                                            <select class="form-control" name="salutation" data-toggle="select2" required>
+                                                                <option value="0">--Select Salutation--</option>
+                                                                <option value="MR" {{$member_data->title =="MR" ? "selected":"";}}>MR</option>
+                                                                <option value="MS" {{$member_data->title =="MS" ? "selected":"";}}>MS</option>
+                                                                <option value="MRS" {{$member_data->title =="MRS" ? "selected":"";}}>MRS</option>
+                                                                <option value="DR" {{$member_data->title =="DR" ? "selected":"";}}>DR</option>
+                                                                <option value="REV" {{$member_data->title =="REV" ? "selected":"";}}>REV</option>
+                                                                <option value="PST" {{$member_data->title =="PST" ? "selected":"";}}>PST</option>
+                                                                <option value="PROF" {{$member_data->title =="PROF" ? "selected":"";}}>PROF</option>
+                                                                <option value="BISHOP" {{$member_data->title =="BISHOP" ? "selected":"";}}>BISHOP</option>
+                                                            </select>
+                                                            @if ($errors->editMemberDetails->has('salutation')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->editMemberDetails->first('salutation') }}</small></strong></span>@endif
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="field-1" class="control-label">First-name</label>
-                                                        <input type="text" name="firstname" class="form-control form-control-sm" value="{{old('firstname')}}" oninput="this.value = this.value.toUpperCase()" id="firstname-1" placeholder="Firstname" autocomplete="off" required>
-                                                        @if ($errors->registerMemberDetails->has('firstname')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('firstname') }}</small></strong></span>@endif
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-1" class="control-label">First-name</label>
+                                                            <input type="text" name="firstname" class="form-control form-control-sm" value="{{old('firstname',$member_data->fname)}}" oninput="this.value = this.value.toUpperCase()" id="firstname-1" placeholder="Firstname" autocomplete="off" required>
+                                                            @if ($errors->editMemberDetails->has('firstname')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->editMemberDetails->first('firstname') }}</small></strong></span>@endif
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="field-1" class="control-label">Middlename</label>
-                                                        <input type="text" name="middle_name" class="form-control form-control-sm" value="{{old('middle_name')}}" oninput="this.value = this.value.toUpperCase()" id="midname-1" placeholder="Middle Name" autocomplete="off" required>
-                                                        @if ($errors->registerMemberDetails->has('middle_name')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('middle_name') }}</small></strong></span>@endif
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-1" class="control-label">Middlename</label>
+                                                            <input type="text" name="middle_name" class="form-control form-control-sm" value="{{old('middle_name',$member_data->mname)}}" oninput="this.value = this.value.toUpperCase()" id="midname-1" placeholder="Middle Name" autocomplete="off" required>
+                                                            @if ($errors->editMemberDetails->has('middle_name')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->editMemberDetails->first('middle_name') }}</small></strong></span>@endif
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="field-1" class="control-label">Last-name</label>
-                                                        <input type="text" name="lastname" class="form-control form-control-sm" value="{{old('lastname')}}" oninput="this.value = this.value.toUpperCase()" id="lastname-1" placeholder="Last Name" autocomplete="off" required>
-                                                        @if ($errors->registerMemberDetails->has('lastname')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('lastname') }}</small></strong></span>@endif
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-1" class="control-label">Last-name</label>
+                                                            <input type="text" name="lastname" class="form-control form-control-sm" value="{{old('lastname',$member_data->lname)}}" oninput="this.value = this.value.toUpperCase()" id="lastname-1" placeholder="Last Name" autocomplete="off" required>
+                                                            @if ($errors->editMemberDetails->has('lastname')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->editMemberDetails->first('lastname') }}</small></strong></span>@endif
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="field-1" class="control-label">Marital Status</label>
-                                                        <select class="form-control" name="marital_status" data-toggle="select2">
-                                                            <option value="0">--Select Marital status--</option>
-                                                            <option value="MARRIED">MARRIED</option>
-                                                            <option value="SINGLE">SINGLE</option>
-                                                            <option value="DIVORCED">DIVORCED</option>
-                                                        </select>
-                                                        @if ($errors->registerMemberDetails->has('marital_status')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('marital_status') }}</small></strong></span>@endif
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-1" class="control-label">Marital Status</label>
+                                                            <select class="form-control" name="marital_status" data-toggle="select2">
+                                                                <option value="0">--Select Marital status--</option>
+                                                                <option value="MARRIED" {{$member_data->marital_status =="MARRIED" ? "selected":"";}}>MARRIED</option>
+                                                                <option value="SINGLE" {{$member_data->marital_status =="SINGLE" ? "selected":"";}}>SINGLE</option>
+                                                                <option value="DIVORCED" {{$member_data->marital_status =="DIVORCED" ? "selected":"";}}>DIVORCED</option>
+                                                            </select>
+                                                            @if ($errors->editMemberDetails->has('marital_status')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->editMemberDetails->first('marital_status') }}</small></strong></span>@endif
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="field-1" class="control-label">Gender</label>
-                                                        <select class="form-control" name="gender" data-toggle="select2">
-                                                            <option value="0">--Select Gender--</option>
-                                                            <option value="MALE">MALE</option>
-                                                            <option value="FEMALE">FEMALE</option>
-                                                        </select>
-                                                        @if ($errors->registerMemberDetails->has('gender')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('gender') }}</small></strong></span>@endif
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-1" class="control-label">Gender</label>
+                                                            <select class="form-control" name="gender" data-toggle="select2">
+                                                                <option value="0">--Select Gender--</option>
+                                                                <option value="MALE" {{$member_data->gender=="MALE" ? "selected":""}}>MALE</option>
+                                                                <option value="FEMALE" {{$member_data->gender=="FEMALE" ? "selected":""}}>FEMALE</option>
+                                                            </select>
+                                                            @if ($errors->editMemberDetails->has('gender')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->editMemberDetails->first('gender') }}</small></strong></span>@endif
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="field-1" class="control-label">Date of Birth</label>
-                                                        <input type="text" name="dob" class="form-control form-control-sm" id="member_dobdatepicker" value="{{old('dob')}}" data-provide="datepicker" data-date-autoclose="true" data-date-format="dd M yyyy" placeholder="Date of Birth">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-1" class="control-label">Date of Birth</label>
+                                                            @php $dob = $member_data->dob != "NULL" ? date('d M Y',strtotime($member_data->dob)) :''; @endphp
+                                                            <input type="text" name="dob" value="{{old('dob',$dob)}}" class="form-control form-control-sm" id="member_dobdatepicker">
+                                                            @if ($errors->editMemberDetails->has('dob')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->editMemberDetails->first('dob') }}</small></strong></span>@endif
+                                                        </div>
+                                                    </div>
 
-                                                        @if ($errors->registerMemberDetails->has('dob')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('dob') }}</small></strong></span>@endif
-                                                    </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="field-3" class="control-label">Postal Address</label>
-                                                        <input type="text" name="postalAddress" class="form-control form-control-sm" value="{{old('postalAddress')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Postal Address" autocomplete="off">
+                                            </div><!-- .end of Personal Data -->
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-3" class="control-label">Postal Address</label>
+                                                            <input type="text" name="postalAddress" class="form-control form-control-sm" value="{{old('postalAddress',$member_data->postal_address)}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Postal Address" autocomplete="off">
 
-                                                        @if ($errors->registerMemberDetails->has('postalAddress')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('postalAddress') }}</small></strong></span>@endif
+                                                            @if ($errors->editMemberDetails->has('postalAddress')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->editMemberDetails->first('postalAddress') }}</small></strong></span>@endif
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="field-4" class="control-label">Physical Address</label>
-                                                        <input type="text" name="physicalAddress" class="form-control form-control-sm" value="{{old('physicalAddress')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Physical Address" autocomplete="off">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-4" class="control-label">Physical Address</label>
+                                                            <input type="text" name="physicalAddress" class="form-control form-control-sm" value="{{old('physicalAddress',$member_data->physical_address)}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Physical Address" autocomplete="off">
 
-                                                        @if ($errors->registerMemberDetails->has('physicalAddress')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('physicalAddress') }}</small></strong></span>@endif
+                                                            @if ($errors->editMemberDetails->has('physicalAddress')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->editMemberDetails->first('physicalAddress') }}</small></strong></span>@endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-5" class="control-label">Phone</label>
+                                                            <input type="text" name="phone" class="form-control form-control-sm" id="input-phone" value="{{old('phone',$member_data->phone)}}" placeholder="e.g 255 717 000 052" data-toggle="input-mask" data-mask-format="(255) 000-000-000" autocomplete="off">
+
+                                                            @if ($errors->editMemberDetails->has('phone')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->editMemberDetails->first('phone') }}</small></strong></span>@endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-5" class="control-label">Email</label>
+                                                            <input type="email" name="email" class="form-control form-control-sm" value="{{old('email',$member_data->email)}}" oninput="this.value = this.value.toLowerCase()" id="input-email" placeholder="e.g xxxxx@gmail.com" autocomplete="off">
+
+                                                            @if ($errors->editMemberDetails->has('email')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->editMemberDetails->first('email') }}</small></strong></span>@endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-1" class="control-label">Scheme joining date</label>
+                                                            <input type="text" id="scheme_date" name="joining_date" class="form-control form-control-sm humanfd-datepicker" value="{{old('joining_date',$member_data->join_at)}}" placeholder="Scheme joining of date">
+                                                            @if ($errors->editMemberDetails->has('joining_date')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->editMemberDetails->first('joining_date') }}</small></strong></span>@endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-1" class="control-label">Service start Date</label>
+                                                            @php $service = $member_data->service_start_at != "NULL" ? date('d M Y',strtotime($member_data->service_start_at)) :''; @endphp
+                                                            <input type="text" name="service_date" class="form-control form-control-sm" data-provide="datepicker" data-date-autoclose="true" onkeydown="return false;" data-date-format="dd M yyyy" value="{{old('service_date',$service)}}" placeholder="Date of Service start date">
+                                                            @if ($errors->editMemberDetails->has('service_date')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->editMemberDetails->first('service_date') }}</small></strong></span>@endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-1" class="control-label">Occupation</label>
+                                                            <select class="form-control" name="occupation" data-toggle="select2">
+                                                                <option value="0">--Select Occupation--</option>
+                                                                <option value="PASTOR" {{$member_data->occupation =="PASTOR" ? "selected":"";}}>PASTOR</option>
+                                                                <option value="FARMER" {{$member_data->occupation =="FARMER" ? "selected":"";}}>FARMER</option>
+                                                                <option value="UNEMPLOYED" {{$member_data->occupation =="UNEMPLOYED" ? "selected":"";}}>UNEMPLOYED</option>
+                                                                <option value="EMPLOYED" {{$member_data->occupation =="EMPLOYED" ? "selected":"";}}>EMPLOYED</option>
+                                                                <option value="RETIRED" {{$member_data->occupation =="RETIRED" ? "selected":"";}}>RETIRED</option>
+                                                                <option value="BUSINESS" {{$member_data->occupation =="BUSINESS" ? "selected":"";}}>BUSINESS</option>
+                                                                <option value="NONE" {{$member_data->occupation =="NONE" ? "selected":"";}}>NONE</option>
+                                                            </select>
+                                                            @if ($errors->editMemberDetails->has('occupation')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->editMemberDetails->first('occupation') }}</small></strong></span>@endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="field-4" class="control-label">Member monthly income</label>
+                                                            <input type="text" name="submission_type" class="form-control form-control-sm" value="MEMBER-PARTICULARS" hidden>
+                                                            <input type="text" name="monthly_income" id="monthly_income" class="form-control form-control-sm autonumber" value="{{old('monthly_income',$member_data->income)}}" data-a-sign="TZS. " placeholder="Enter member monthly income" autocomplete="off">
+                                                            @if ($errors->editMemberDetails->has('id_number')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->editMemberDetails->first('id_number') }}</small></strong></span>@endif
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div><!-- .end of Personal Data -->
-                                        <div class="col-md-6">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="field-5" class="control-label">Phone</label>
-                                                        <input type="text" name="phone" class="form-control form-control-sm" id="input-phone" value="{{old('phone')}}" placeholder="e.g 255 717 000 052" data-toggle="input-mask" data-mask-format="(255) 000-000-000" autocomplete="off">
-    
-                                                        @if ($errors->registerMemberDetails->has('phone')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('phone') }}</small></strong></span>@endif
+                                            <div class=" dropdown-divider col-12"></div>
+                                            <div class="col-sm-12">
+                                                <button type="submit" class="btn btn-info waves-effect waves-light float-right">Update Particulars</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div><!-- end Member Particulars .tab-pane active-->
+                            <div class="tab-pane" id="contributorPane">
+                                <div class="col-12">
+                                    <h5 class="text-uppercase mt-0 mb-1 bg-light p-2">Contributor Data</h5>
+                                    <p class="font-13"><i class="mdi mdi-star-half-full text-success font-18 mr-1 mt-0"></i>Change the Primary Contributor of the Member</p>
+                                    <form action="{{url('/member/edit/details/submit/'.Crypt::encryptString($member_data->id))}}" method="post">
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="field-1" class="control-label">Contributor</label>
+                                                            <select class="form-control contirbutorSelect" name="contributor_name" data-toggle="select2">
+                                                                <option value="0">-- Select Contributor --</option>
+                                                                @foreach($contributors as $contributor)
+                                                                <option value="{{$contributor->id}}">{{$contributor->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            <span class="text-danger" id="contirbutorError" role="alert"> <strong><small>@if ($errors->registerMemberDetails->has('contributor_name')){{ $errors->registerMemberDetails->first('contributor_name') }}@endif</small></strong></span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="field-5" class="control-label">Email</label>
-                                                        <input type="email" name="email" class="form-control form-control-sm" value="{{old('email')}}" oninput="this.value = this.value.toLowerCase()" id="input-email" placeholder="e.g xxxxx@gmail.com" autocomplete="off">
-    
-                                                        @if ($errors->registerMemberDetails->has('email')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('email') }}</small></strong></span>@endif
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="field-5" class="control-label">Zone</label>
+                                                            <input type="text" name="zone" id="zone" class="form-control form-control-sm" value="{{old('zone')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Zone" readonly>
+                                                            <span class="zoneErrorTxt text-danger" role="alert"></span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="field-1" class="control-label">Occupation</label>
-                                                        <select class="form-control" name="occupation" data-toggle="select2">
-                                                            <option value="0">--Select Occupation--</option>
-                                                            <option value="PASTOR">PASTOR</option>
-                                                            <option value="FARMER">FARMER</option>
-                                                            <option value="UNEMPLOYED">UNEMPLOYED</option>
-                                                            <option value="EMPLOYED">EMPLOYED</option>
-                                                            <option value="RETIRED">RETIRED</option>
-                                                            <option value="BUSINESS">BUSINESS</option>
-                                                            <option value="NONE">NONE</option>
-                                                        </select>
-                                                        @if ($errors->registerMemberDetails->has('occupation')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('occupation') }}</small></strong></span>@endif
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="field-4" class="control-label">District</label>
+                                                            <input type="text" name="district" id="district" class="form-control form-control-sm" value="{{old('district')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="District" readonly>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="field-1" class="control-label">Scheme joining date</label>
-                                                        <input type="text" id="scheme_date" name="joining_date" class="form-control form-control-sm humanfd-datepicker" value="{{old('joining_date')}}" placeholder="Scheme joining of date">
-                                                        @if ($errors->registerMemberDetails->has('joining_date')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('joining_date') }}</small></strong></span>@endif
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="field-1" class="control-label">Service start Date</label>
-                                                        <input type="text" name="service_date" class="form-control form-control-sm" data-provide="datepicker" data-date-autoclose="true" onkeydown="return false;" onpaste="return false;" data-date-format="dd MM yyyy" value="{{old('service_date')}}" placeholder="Date of Service start date">
-                                                        @if ($errors->registerMemberDetails->has('service_date')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('service_date') }}</small></strong></span>@endif
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="field-1" class="control-label">Identification Type</label>
-                                                        <select class="form-control" name="id_type" data-toggle="select2">
-                                                            <option value="0">--Select ID status--</option>
-                                                            @foreach($identity_types as $identity)
-                                                            <option value="{{$identity->id}}">{{$identity->name}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        @if ($errors->registerMemberDetails->has('id_type')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('id_type') }}</small></strong></span>@endif
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label for="field-4" class="control-label">ID number</label>
-                                                        <input type="text" name="id_number" id="id-number" class="form-control form-control-sm" value="{{old('id_number')}}" oninput="this.value = this.value.toUpperCase()" placeholder="ID number" autocomplete="off" required>
-                                                        @if ($errors->registerMemberDetails->has('id_number')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('id_number') }}</small></strong></span>@endif
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="field-4" class="control-label">Section</label>
+                                                            <input type="text" name="submission_type" class="form-control form-control-sm" value="CONTRIBUTOR" hidden>
+                                                            <input type="text" name="section" id="section" class="form-control form-control-sm" value="{{old('section')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="District" readonly>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
-                            </div><!-- end Member Particulars .tab-pane active-->
-                            <div class="tab-pane" id="transferHistoryPane">
-                                <div class="table-responsive">
-
-                                </div> <!-- end .table-responsive-->
                             </div><!-- end .tab-pane active-->
                             <div class="tab-pane" id="contributionsPane">
                                 <div class="table-responsive">
@@ -299,6 +341,17 @@ use Carbon\Carbon;
 
 <!-- Datatables init -->
 <script src="{{asset('assets/js/pages/datatables.init.js')}}"></script>
+<script>
+    $(document).ready(function() {
+        var defaultDt = new Date('2023-07-13');
+        $('#member_dobdatepicker').datepicker({
+            format: 'dd M yyyy',
+            // defaultDate: defaultDt,
+        });
+        // Set input value to defaultDate
+        // $('#member_dobdatepicker').val("2023-07-13");
+    });
+</script>
 <script type="text/javascript">
     $(".district_statusChangeLink").click(function() {
         var district_id = $(this).attr("data-district");
