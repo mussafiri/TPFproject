@@ -195,21 +195,21 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="field-4" class="control-label">Total Contribution Amount  <span class="text-danger">*</span></label>
-                                                    <input type="text" name="contributionAmount" id="contributionAmount" class="form-control form-control-sm totalContributionInput contriInput autonumber" value="{{old('contributionAmount')}}" id="field-4" placeholder="Total Contribution">
+                                                    <input type="text" name="contributionAmount" id="contributionAmount" class="form-control form-control-sm totalContributionInput  autonumber" value="{{old('contributionAmount')}}" id="field-4" placeholder="Total Contribution">
                                                     <span class="text-danger" role="alert"> {{ $errors->first('contributionAmount') }}</span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="field-4" class="control-label">Payment Date  <span class="text-danger">*</span></label>
-                                                    <input type="text" name="paymentDate" id="basic-datepicker" data-date-format="d M, Y" class="form-control form-control-sm contriInput" value="{{old('paymentDate')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Pick Payment Date">
+                                                    <input type="text" name="paymentDate" id="basic-datepicker" data-date-format="d M, Y" class="form-control form-control-sm " value="{{old('paymentDate')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Pick Payment Date">
                                                     <span class="text-danger" role="alert"> {{ $errors->first('paymentDate') }}</span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="field-1" class="control-label">Payment Mode  <span class="text-danger">*</span></label>
-                                                    <select class="form-control contriInput" name="paymentMode" data-toggle="select2">
+                                                    <select class="form-control " name="paymentMode" data-toggle="select2">
                                                         @foreach($paymentMode as $value)
                                                         <option value="{{$value->id}}" {{old ('paymentMode') == $value->id ? 'selected' : ''}}>{{$value->name}}</option>
                                                         @endforeach
@@ -220,7 +220,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="field-4" class="control-label">Transaction Reference  <span class="text-danger">*</span></label>
-                                                    <input type="text" name="transactionReference" id="transaction" class="form-control form-control-sm contriInput" value="{{old('transaction')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Transaction Reference">
+                                                    <input type="text" name="transactionReference" id="transaction" class="form-control form-control-sm " value="{{old('transactionReference')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Transaction Reference">
                                                     <span class="text-danger" role="alert"> {{ $errors->first('transactionReference') }}</span>
                                                 </div>
                                             </div>
@@ -230,7 +230,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="field-3" class="control-label">Transaction Proof  <span class="text-danger">*</span></label>
-                                                <input type="file" class="form-control kartik-input-705 kv-fileinput-dropzone contriInput" name="transactionProof" id="field-4" placeholder="District" required>
+                                                <input type="file" class="form-control kartik-input-705 kv-fileinput-dropzone " name="transactionProof" id="field-4" placeholder="District" required>
                                                 <span class="text-danger" role="alert"> {{ $errors->first('transactionProof') }}</span>
                                             </div>
                                         </div>

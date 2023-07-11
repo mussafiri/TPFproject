@@ -48,4 +48,13 @@ class Arrear extends Model
         $arrearTotalPenalty = $cmn->arrearElapsedDaysAlgorithm( $arrear_period, $current_date );
         return $arrearTotalPenalty;
     }
+
+    public function sectionPenatyPaid($arrearID, $sectionID){
+        $totalPaid = ArrearPenaltyPayment::where('arrear_id',$arrearID)
+        ->where('section_id',$sectionID)
+        ->where('status', 'COMPLETED')
+        ->where('type','SECTION PAY')
+        ->sum('pay_amount');
+        return $totalPaid;
+    }
 }

@@ -95,18 +95,19 @@
                                             @foreach( $arrearDetailsData AS $arrearData )
                                             @php 
                                             $totalMemberContribution = $arrearData->getMemberContributionAmount( $arrearData->contributor_id, $arrearData->member_id ) + $arrearData->getContributorContributionAmount( $arrearData->contributor_id, $arrearData->member_id ); 
+                                            
                                             if($arrearData->status=="ACTIVE"){ $badgeText = "info";}else if ( $arrearData->status=="ON PAYMENT"){ $badgeText = "primary"; }elseif($arrearData->status == "CLOSED"){ $badgeText = "success"; }else{$badgeText = "danger";}
                                             @endphp
                                                 <tr>
-                                                    <td>{{$counter}}</td>
+                                                    <td> {{$counter}} </td>
                                                     <td class="font-9 px-0">{{$arrearData->contributor->name}}</td>
                                                     <td> {{$arrearData->member->fname.' '.$arrearData->member->mname.' '.$arrearData->member->lname}}</td>
                                                     <td> {{number_format( $arrearData->getMemberMonthlyIncome( $arrearData->member_id ), 2 )}}</td>
                                                     <td> {{number_format( $arrearData->getContributorContributionAmount( $arrearData->contributor_id, $arrearData->member_id ), 2 )}}</td>
                                                     <td> {{number_format( $arrearData->getMemberContributionAmount( $arrearData->contributor_id, $arrearData->member_id ), 2 )}}</td>
-                                                    <td> {{number_format( ($totalMemberContribution), 2 )}}</td>
+                                                    <td> {{number_format( $totalMemberContribution, 2 )}}</td>
                                                     <td class="text-danger text-center"> {{number_format( $arrearData->totalMemberArrearPenaltyExpected($totalMemberContribution, $arrearData->arrear_id, $arrearPeriod),2)}}</td>
-                                                    <td> <span class="badge badge-outline-{{$badgeText}}">{{$arrearData->status=='SUSPENDED'?'WAIVED':$arrearData->status}}</span></td>
+                                                    <td> <span class="badge badge-outline-{{$badgeText}}">{{$arrearData->status == 'SUSPENDED'?'WAIVED':$arrearData->status}}</span></td>
                                                 </tr>
                                             @php $counter++; @endphp
                                             @endforeach

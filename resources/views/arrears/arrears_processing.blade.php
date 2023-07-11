@@ -19,10 +19,10 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Processs Arrear</li>
+                            <li class="breadcrumb-item active">Processs Member Arrears</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Processs Arrear</h4>
+                    <h4 class="page-title">Processs Member Arrears</h4>
                 </div>
             </div>
         </div>
@@ -34,12 +34,12 @@
                     <form method="POST" action="{{url('contributions/submit/member/arrearpenalty/waive')}}">
                     @csrf
                     <div class="row">
-                        <h4 class="header-title mb-3 text-muted">Details Panel </h4>
+                        <h4 class="header-title mb-3 text-muted">Section Details Panel </h4>
 
                         <div class="col-12 mb-3 border rounded p-2" style="background-color: #f6fcff;">
                             <div class="row">
-                                <div class="col-sm-8"><strong>Section Name:</strong> <span id="sectionName">{{$arrearDetails->section->name}}</span></div>
-                                <div class="col-sm-4"> <strong>Section Code:</strong> <span id="sectionCode">{{$arrearDetails->section->section_code}}</span></div>
+                                <div class="col-sm-8"><strong>Section Name:</strong> {{$arrearDetails->section->name}}</div>
+                                <div class="col-sm-4"> <strong>Section Code:</strong> {{$arrearDetails->section->section_code}}</div>
 
                                 <div class="col-sm-12 mt-2">
                                     <div class="table-responsive">
@@ -74,8 +74,8 @@
                     </div>
 
                     <div class="row">
+                            <h4 class="header-title mb-3 text-muted">Members Arrears</h4>
                             <div class="col-12">
-                                <h4 class="header-title mb-3 text-muted">Members Arrears</h4>
                                 <div class="table-responsive">
                                     <table class="datatable-buttons table font-11 table-striped w-100">
                                         <thead>
@@ -92,12 +92,18 @@
                                                 <th style="width:5%;">
                                                     <div class="row pl-2"> 
                                                         <div class="col-4 pl-2"> 
+                                                        @if($action=='WAIVE MEMBER ARREAR')
                                                             <div class="custom-control custom-checkbox">
                                                                 <input type="checkbox" class="custom-control-input sectionArrearCheckBoxParent" id="customCheck1" name="confirmMembers[]">
                                                                 <label class="custom-control-label" for="customCheck1"></label>
                                                             </div>
+                                                            @endif
                                                         </div>
-                                                        <div class="col-8">Action</div>
+                                                        <div class="col-8">
+                                                        @if($action=='PAY MEMBER ARREAR')
+                                                        Action
+                                                        @endif
+                                                        </div>
                                                     </div>
                                                 </th>
 
@@ -105,40 +111,41 @@
                                         </thead>
                                         <tbody>
                                             @php $n=2; $counter = 1; @endphp
-                                            @foreach( $arrearDetailsData AS $arrearData )
-                                            @php 
-                                            $totalMemberContribution = $arrearData->getMemberContributionAmount( $arrearData->contributor_id, $arrearData->member_id ) + $arrearData->getContributorContributionAmount( $arrearData->contributor_id, $arrearData->member_id ); 
-                                            $totalMemberArrearPenalty = $arrearData->totalMemberArrearPenaltyExpected($totalMemberContribution, $arrearData->arrear_id, $arrearPeriod);
-                                            if($arrearData->status=="ACTIVE"){ $badgeText = "info";}else if ( $arrearData->status=="ON PAYMENT"){ $badgeText = "primary"; }elseif($arrearData->status == "CLOSED"){ $badgeText = "success"; }else{$badgeText = "danger";}
+                                            @foreach( $arrearDetailsData AS $data )
+                                            @php
+                                            $totalMemberContribution = $data->getMemberContributionAmount( $data->contributor_id, $data->member_id ) + $data->getContributorContributionAmount( $data->contributor_id, $data->member_id ); 
+                                            $totalMemberArrearPenalty = $data->totalMemberArrearPenaltyExpected($totalMemberContribution, $data->arrear_id, $arrearPeriod);
+                                            if($data->status=="ACTIVE"){ $badgeText = "info";}else if ( $data->status=="ON PAYMENT"){ $badgeText = "primary"; }elseif($data->status == "CLOSED"){ $badgeText = "success"; }else{$badgeText = "danger";}
                                             @endphp
                                             <tr>
                                                 <td>{{$counter}}.</td>
-                                                <td class="font-9 px-0">{{$arrearData->contributor->name}}</td>
-                                                <td> {{$arrearData->member->fname.' '.$arrearData->member->mname.' '.$arrearData->member->lname}}</td>
-                                                <td> {{number_format( $arrearData->getMemberMonthlyIncome( $arrearData->member_id ), 2 )}}</td>
-                                                <td> {{number_format( $arrearData->getContributorContributionAmount( $arrearData->contributor_id, $arrearData->member_id ), 2 )}}</td>
-                                                <td> {{number_format( $arrearData->getMemberContributionAmount( $arrearData->contributor_id, $arrearData->member_id ), 2 )}}</td>
+                                                <td class="font-9 px-0">{{$data->contributor->name}}</td>
+                                                <td> {{$data->member->fname.' '.$data->member->mname.' '.$data->member->lname}}</td>
+                                                <td> {{number_format( $data->getMemberMonthlyIncome( $data->member_id ), 2 )}}</td>
+                                                <td> {{number_format( $data->getContributorContributionAmount( $data->contributor_id, $data->member_id ), 2 )}}</td>
+                                                <td> {{number_format( $data->getMemberContributionAmount( $data->contributor_id, $data->member_id ), 2 )}}</td>
                                                 <td> {{number_format( ($totalMemberContribution), 2 )}}</td>
                                                 <td class="text-danger text-center"> {{number_format( $totalMemberArrearPenalty,2)}}</td>
-                                                <td> <span class="badge badge-outline-{{$badgeText}}">{{$arrearData->status=='SUSPENDED'?'WAIVED':$arrearData->status}}</span></td>
+                                                <td> <span class="badge badge-outline-{{$badgeText}}">{{$data->status=='SUSPENDED'?'WAIVED':$data->status}}</span></td>
                                                 <td class="py-1">
                                                     <div class="btn-group dropdown float-right">
-                                                        @if($arrearData->status !='SUSPENDED' && $arrearData->status !='CLOSED')
+                                                        @if($data->status !='SUSPENDED' && $data->status !='CLOSED' && $action=='WAIVE MEMBER ARREAR')
                                                             <a class="btn btn-light btn-xs">
                                                                 <div class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" class="custom-control-input memberArrearCheckBox" id="customCheck{{$n}}" value="{{$arrearData->id}}" name="selectedMembers[]">
+                                                                    <input type="checkbox" class="custom-control-input memberArrearCheckBox" id="customCheck{{$n}}" value="{{$data->id}}" name="selectedMembers[]">
                                                                     <label class="custom-control-label" for="customCheck{{$n}}"></label>
                                                                 </div>
                                                             </a>
                                                         @endif
 
+                                                       
+
+                                                        @if($data->processing_status=='ACTIVE' && $action=='PAY MEMBER ARREAR') 
                                                         <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-light btn-xs" data-toggle="dropdown" aria-expanded="false">
                                                             <i class="mdi mdi-dots-horizontal font-18"></i>
                                                         </a>
-
-                                                        @if($arrearData->processing_status=='ACTIVE')
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a href="javascript:void(0)"; class="dropdown-item payMemberArrearPenalty" data-arrearDetailID="{{$arrearData->id}}" data-arrearPenaltyAmount="{{$totalMemberArrearPenalty}}" data-contributorName="{{$arrearData->contributor->name}}" data-memberName="{{$arrearData->member->fname.' '.$arrearData->member->mname.' '.$arrearData->member->lname}}">
+                                                                <a href="{{url('arrears/memberpenalty/pay/'.Crypt::encryptString($data->id))}}"; class="dropdown-item payMemberArrearPenalty" data-arrearDetailID="{{$data->id}}" data-arrearPenaltyAmount="{{$totalMemberArrearPenalty}}" data-contributorName="{{$data->contributor->name}}" data-memberName="{{$data->member->fname.' '.$data->member->mname.' '.$data->member->lname}}">
                                                                     <i class='flaticon-give-money-1 mr-1 font-18'></i><span>Pay Member Arrear Penalty</span>
                                                                 </a>
                                                             </div> <!-- end drop down menu-->

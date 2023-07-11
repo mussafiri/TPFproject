@@ -60,4 +60,13 @@ class ArrearDetail extends Model
         $arrearTotalPenalty     = $arrearTotalPenaltyRate * $memberContribution;
         return $arrearTotalPenalty;
     }
+    public function memberPenatyPaid($arrearID, $sectionID){
+        $totalPaid = ArrearPenaltyPayment::where('arrear_id',$arrearID)
+        ->where('section_id',$sectionID)
+        ->where('arrear_detail_id','>',0)
+        ->where('status', 'COMPLETED')
+        ->where('type','MEMBER PAY')
+        ->sum('pay_amount');
+        return $totalPaid;
+    }
 }
