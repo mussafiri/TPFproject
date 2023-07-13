@@ -30,8 +30,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="card-box">
-
-                    <form method="POST" action="{{url('contributions/submit/member/arrearpenalty/waive')}}">
+                    <form method="POST" action="{{url('arrears/submit/member/arrearpenalty/waive')}}">
                     @csrf
                     <div class="row">
                         <h4 class="header-title mb-3 text-muted">Section Details Panel </h4>
@@ -138,8 +137,6 @@
                                                             </a>
                                                         @endif
 
-                                                       
-
                                                         @if($data->processing_status=='ACTIVE' && $action=='PAY MEMBER ARREAR') 
                                                         <a href="#" class="dropdown-toggle arrow-none text-muted btn btn-light btn-xs" data-toggle="dropdown" aria-expanded="false">
                                                             <i class="mdi mdi-dots-horizontal font-18"></i>
@@ -174,11 +171,12 @@
                                                     <i class="dripicons-warning h1 text-warning"></i>
                                                     <h4 class="mt-2">Confirm <span class="modalTitleSpan text-info"></span></h4>
                                                     <p class="mt-3">Are you sure! <br> You are about to <span class="modalIntroSpan text-info"></span>. You can cancel to review arrear to review </p>
-                                                    <input type="hidden" name="totalMembers" value="{{$counter-1}}" required>
+                                                    <input type="hidden" name="arrearID" value="{{$arrearDetails->id}}" required>
+                                                    <input type="hidden" name="totalMembers" value="{{$totalMember}}" required>
 
                                                     @if ($errors->memberArrearPenaltyWaive->has('selectedMembers')) <span class="text-danger" role="alert"> <strong>{{ $errors->memberArrearPenaltyWaive->first('selectedMembers') }}</strong></span>@endif
                                                 </div>
-                                                <button type="submit" class="btn btn-success my-2 float-left">Yes! Submit</button>
+                                                <button type="submit" class="btn btn-success my-2 float-left">Yes! Submit Waive Request</button>
                                                 <button type="button" class="btn btn-danger my-2 float-right" data-dismiss="modal">Cancel</button>
                                             </div>
                                         </div><!-- /.modal-content -->
@@ -186,7 +184,10 @@
                                 </div>
                                 <!-- End:: Warning Alert Modal -->
                             </div> <!-- end col -->
-
+                    </div> <!-- end row -->
+                    </form>
+                    <div class="row">
+                    
                             <div class="col-12 arrearPenaltyPayementBlock border rounded" style="display:none;">
                                 <h4 class="header-title mb-3 text-muted">Transaction Proofs</h4>
                                 <div class="row">
@@ -240,9 +241,7 @@
                                     </div>
                                 </div>
                             </div>
-                    </div> <!-- end row -->
-
-                        </form>
+                    </div>
                 </div> <!-- container -->
             </div> <!-- content -->
             <!-- end .table-responsive-->

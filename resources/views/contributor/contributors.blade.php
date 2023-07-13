@@ -90,8 +90,8 @@
                                                                         <th>Contributor Name</th>
                                                                         <th>Income</th>
                                                                         <th>Contributor Type</th>
-                                                                        <!-- <th>Zone</th>
-                                                                        <th>Distict</th> --> 
+                                                                        <th>Zone</th>
+                                                                        <th>Distict</th>
                                                                         <th>Section</th>
                                                                         <th>Status</th>
                                                                         <th></th>
@@ -107,8 +107,8 @@
                                                                         <td>{{$data->name}}</td>
                                                                         <td>{{number_format($data->getContributorIncome($data->id),2)}}</td>
                                                                         <td>{{$data->contributorType->name}}</td>
-                                                                       <!-- <td class="font-9">{{$data->contributorSection->district->zone->name}}</td>
-                                                                        <td class="font-9">{{$data->contributorSection->district->name}}</td> -->
+                                                                        <td class="font-9">{{$data->contributorSection->district->zone->name}}</td>
+                                                                        <td class="font-9">{{$data->contributorSection->district->name}}</td>
                                                                         <td class="font-9">{{$data->contributorSection->name}}</td> 
                                                                         <td><span class="badge badge-outline-{{$data->status=='ACTIVE'?'success':'danger'}} badge-pill">{{$data->status}}</span></td>
                                                                         <td>

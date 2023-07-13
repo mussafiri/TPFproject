@@ -194,13 +194,9 @@ class Common {
     public function arrearTotalContribution($sectionID, $arear_date){
         $totalContribution = 0;
         $contributionDate = date('Y-m', strtotime($arear_date));
+        
         //START:: Current Active Member
-        $getCurrentContributorMember = ContributorMember::join( 'contributors', 'contributors.id', '=', 'contributor_members.contributor_id' )
-        ->where( 'contributors.section_id', $sectionID )
-        ->where( 'contributor_members.start_date', '<=', $contributionDate )
-        ->where( 'contributor_members.end_date', 'NULL' )
-        ->where( 'contributor_members.status', 'ACTIVE' )
-        ->get();
+        $getCurrentContributorMember = $this->getCurrentContributorMember($sectionID, $contributionDate);
 
         foreach ( $getCurrentContributorMember AS $memberData ) { 
             $totalContribution+= $memberData->getMemberContributionAmount( $memberData->contributor_id, $memberData->member_id )+$memberData->getContributorContributionAmount( $memberData->contributor_id, $memberData->member_id );
@@ -208,13 +204,7 @@ class Common {
         //END:: Current Active Member
 
         //START:: Qualifying member
-        $getQualifyingContributorMember = ContributorMember::join( 'contributors', 'contributors.id', '=', 'contributor_members.contributor_id' )
-        ->where( 'contributors.section_id', $sectionID )
-        ->where( 'contributor_members.start_date', '<=', $contributionDate )
-        ->where( 'contributor_members.end_date', '>=', $contributionDate )
-        ->where( 'contributor_members.end_date', '!=', 'NULL' )
-        ->where( 'contributor_members.status', 'ACTIVE' )
-        ->get();
+        $getQualifyingContributorMember = $this->getQualifyingContributorMember($sectionID, $contributionDate);
 
         foreach ( $getQualifyingContributorMember AS $qualifiedMembers ) {
             $totalContribution+= $qualifiedMembers->getMemberContributionAmount( $qualifiedMembers->contributor_id, $qualifiedMembers->member_id )+$qualifiedMembers->getContributorContributionAmount( $qualifiedMembers->contributor_id, $qualifiedMembers->member_id );
@@ -223,8 +213,8 @@ class Common {
         return $totalContribution;
         //END:: Qualifying member
     }
+
     public function arrearRegister( $section_id, $contribution_period ) {
-                    
                     $registerArrear = new Arrear;
                     $registerArrear->section_id     = $section_id;
                     $registerArrear->arrear_period  = $contribution_period;
@@ -232,59 +222,71 @@ class Common {
                     $registerArrear->status         = 'ACTIVE';
                     $registerArrear->save();
 
-                    $getCurrentContributorMember = ContributorMember::join( 'contributors', 'contributors.id', '=', 'contributor_members.contributor_id' )
-                    ->where( 'contributors.section_id', $section_id )
-                    ->where( 'contributor_members.start_date', '<=', $contribution_period )
-                    ->where( 'contributor_members.end_date', 'NULL' )
-                    ->where( 'contributor_members.status', 'ACTIVE' )
-                    ->get();
+                    $getCurrentContributorMember = $this->getCurrentContributorMember($section_id, $contribution_period);
 
                     if($getCurrentContributorMember->count() > 0){
                         foreach($getCurrentContributorMember as $data){
-                            $pushArrearDetails = new ArrearDetail;
-                            $pushArrearDetails->arrear_id = $registerArrear->id;
-                            $pushArrearDetails->contributor_id = $data->contributor_id;
-                            $pushArrearDetails->member_id = $data->member_id;
-                            $pushArrearDetails->member_monthly_income = $data->getMemberMonthlyIncome( $data->member_id );
-                            $pushArrearDetails->member_contribution = $data->getMemberContributionAmount( $data->contributor_id, $data->member_id );
+                            $pushArrearDetails                           = new ArrearDetail;
+                            $pushArrearDetails->arrear_id                = $registerArrear->id;
+                            $pushArrearDetails->contributor_id           = $data->contributor_id;
+                            $pushArrearDetails->member_id                = $data->member_id;
+                            $pushArrearDetails->member_monthly_income    = $data->getMemberMonthlyIncome( $data->member_id );
+                            $pushArrearDetails->member_contribution      = $data->getMemberContributionAmount( $data->contributor_id, $data->member_id );
                             $pushArrearDetails->contributor_contribution = $data->getContributorContributionAmount( $data->contributor_id, $data->member_id );
-                            $pushArrearDetails->arrear_amount =$data->getMemberContributionAmount( $data->contributor_id, $data->member_id ) + $data->getContributorContributionAmount( $data->contributor_id, $data->member_id );
-                            $pushArrearDetails->arrear_penalty_amount =0;
-                            $pushArrearDetails->status='ACTIVE';
-                            $pushArrearDetails->processing_status='ACTIVE';
-                            $pushArrearDetails->save();
+                            $pushArrearDetails->arrear_amount            = $data->getMemberContributionAmount( $data->contributor_id, $data->member_id ) + $data->getContributorContributionAmount( $data->contributor_id, $data->member_id );
+                            $pushArrearDetails->arrear_penalty_amount    = 0;
+                            $pushArrearDetails->status                   = 'ACTIVE';
+                            $pushArrearDetails->processing_status        = 'ACTIVE';
+                            $pushArrearDetails->save(); 
                         }
                     }
                     //END:: get Active Existing members
             
                     //START:: Qualifying member
-                    $getQualifyingContributorMember = ContributorMember::join( 'contributors', 'contributors.id', '=', 'contributor_members.contributor_id' )
-                    ->where( 'contributors.section_id', $section_id )
-                    ->where( 'contributor_members.start_date', '<=', $contribution_period )
-                    ->where( 'contributor_members.end_date', '>=', $contribution_period )
-                    ->where( 'contributor_members.end_date', '!=', 'NULL' )
-                    ->where( 'contributor_members.status', 'ACTIVE' )
-                    ->get();
+                    $getQualifyingContributorMember = $this->getQualifyingContributorMember($section_id, $contribution_period);
 
                     if($getQualifyingContributorMember->count() > 0){
                         foreach($getQualifyingContributorMember as $value){
-                            $pushArrearDetails = new ArrearDetail;
-                            $pushArrearDetails->arrear_id = $registerArrear->id;
-                            $pushArrearDetails->contributor_id = $value->contributor_id;
-                            $pushArrearDetails->member_id = $value->member_id;
+                            $pushArrearDetails                        = new ArrearDetail;
+                            $pushArrearDetails->arrear_id             = $registerArrear->id;
+                            $pushArrearDetails->contributor_id        = $value->contributor_id;
+                            $pushArrearDetails->member_id             = $value->member_id;
                             $pushArrearDetails->member_monthly_income = $value->getMemberMonthlyIncome( $value->member_id );
-                            $pushArrearDetails->member_contribution = $value->getMemberContributionAmount( $value->contributor_id, $value->member_id );
+                            $pushArrearDetails->member_contribution   = $value->getMemberContributionAmount( $value->contributor_id, $value->member_id );
                             $pushArrearDetails->contributor_contribution = $value->getContributorContributionAmount( $value->contributor_id, $value->member_id );
-                            $pushArrearDetails->arrear_amount =$value->getMemberContributionAmount( $value->contributor_id, $value->member_id ) + $value->getContributorContributionAmount( $value->contributor_id, $value->member_id );
-                            $pushArrearDetails->arrear_penalty_amount =0;
-                            $pushArrearDetails->status='ACTIVE';
-                            $pushArrearDetails->processing_status='ACTIVE';
+                            $pushArrearDetails->arrear_amount         = $value->getMemberContributionAmount( $value->contributor_id, $value->member_id ) + $value->getContributorContributionAmount( $value->contributor_id, $value->member_id );
+                            $pushArrearDetails->arrear_penalty_amount = 0;
+                            $pushArrearDetails->status                = 'ACTIVE';
+                            $pushArrearDetails->processing_status     = 'ACTIVE';
                             $pushArrearDetails->save();
                             
                         }
                     }
                     //END:: Qualifying member
 
+    }
+
+    public function getCurrentContributorMember($section_id, $contribution_period){
+        $getCurrentMember = ContributorMember::join( 'contributors', 'contributors.id', '=', 'contributor_members.contributor_id' )
+                            ->where( 'contributors.section_id', $section_id )
+                            ->where( 'contributor_members.start_date', '<=', $contribution_period )
+                            ->where( 'contributor_members.end_date', 'NULL' )
+                            ->where( 'contributor_members.status', 'ACTIVE' )
+                            ->get();
+
+        return $getCurrentMember;
+    }
+
+    public function getQualifyingContributorMember($section_id, $contribution_period){
+        $getQualifyingMember =  ContributorMember::join( 'contributors', 'contributors.id', '=', 'contributor_members.contributor_id' )
+                                ->where( 'contributors.section_id', $section_id )
+                                ->where( 'contributor_members.start_date', '<=', $contribution_period )
+                                ->where( 'contributor_members.end_date', '>=', $contribution_period )
+                                ->where( 'contributor_members.end_date', '!=', 'NULL' )
+                                ->where( 'contributor_members.status', 'DORMANT' )
+                                ->get();
+
+        return $getQualifyingMember;
     }
 
     public function arrearsPenaltyComputation( $arrearID, $current_date) {

@@ -128,18 +128,21 @@ class ContributorController extends Controller {
         $addContributorType->updated_by = Auth::user()->id;
 
         if ( $addContributorType->save() ) {
-            toastr();
-            return redirect( 'contributors/categories/'.Crypt::encryptString( 'ACTIVE' ) )->with( 'success', 'You have Successfully Updated a Contributor Category' );
-        } else {
-            toastr();
-            return redirect( 'contributors/categories/'.Crypt::encryptString( 'ACTIVE' ) )->with( 'error', 'Something went wrong, redo the process' );
-        }
 
+            $respStatus  = 'success';
+            $responseText= 'You have Successfully Updated a Contributor Category';
+        } else {
+            $respStatus  = 'error';
+            $responseText= 'Something went wrong, redo the process';
+        }
+        
+        toastr();
+        return redirect( 'contributors/categories/'.Crypt::encryptString( 'ACTIVE' ) )->with( [ $respStatus =>$responseText ] );
     }
 
     public function contributors( $status ) {
         $status = Crypt::decryptString( $status );
-        $contributors = Contributor::where( 'status', $status )->limit( 50 )->get();
+        $contributors = Contributor::where( 'status', $status )->latest()->take(500)->get();
         return view( 'contributor.contributors', [ 'contributors'=>$contributors, 'status'=>$status ] );
     }
 
@@ -200,7 +203,6 @@ class ContributorController extends Controller {
 
         return response()->json( [ 'contributorCategArr' => $contributorCategArr ] );
     }
-
     public function SubmitAddContributor( Request $request ) {
         # START:: VALIDATION
         $request->validate( [
@@ -269,7 +271,7 @@ class ContributorController extends Controller {
 
             toastr();
 
-            return redirect( 'contributors' )->with( 'success', 'Contributor Successfully Added!' );
+            return redirect( 'contributors/list/'.Crypt::encryptString('ACTIVE') )->with( 'success', 'Contributor Successfully Added!' );
         }
 
         toastr();

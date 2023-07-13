@@ -41,139 +41,137 @@
 
                                         <!-- end row-->
                                         <div class="row">
-
                                         <div class="col-12">
-
-                                        <div class="tab-content">
-                                            <div class="tab-pane active" id="active">
-                                                <div class="col-12 p-1">
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="active">
                                                     <h4 class="header-title mb-3 text-muted"> Section Details</h4>
-                                                    <div class="row">
-                                                        <div class="col-sm-5"><strong>Section Name:</strong> {{$arrearDetailsData->arrear->section->name}}</div>
-                                                        <div class="col-sm-2"> <strong>Section Code:</strong> {{$arrearDetailsData->arrear->section->section_code}}</div>
-                                                        <div class="col-sm-5"> <strong>Contribution:</strong> {{$arrearDetailsData->contributor->name}}</div>
-                                                    </div>
+                                                    <div class="col-12 border rounded p-2" style="background-color: #f6fcff;">
+                                                        <div class="row px-2">
+                                                            <div class="col-sm-5"><strong>Section Name:</strong> {{$arrearDetailsData->arrear->section->name}}</div>
+                                                            <div class="col-sm-2"><strong>Section Code:</strong> {{$arrearDetailsData->arrear->section->section_code}}</div>
+                                                            <div class="col-sm-5"><strong>Contributor:</strong> {{$arrearDetailsData->contributor->name}}</div>
+                                                        </div>
 
-                                                    <div class="col-sm-12 mt-2">
-                                                        <div class="table-responsive">
-                                                            @php 
-                                                                if($arrearDetailsData->arrear->status =='ACTIVE' || $arrearDetailsData->arrear->status=='ON PAYMENT'){
-                                                                    $arrearPeriod = ($arrearDetailsData->arrear->status =='ACTIVE')? date('Y-m-d'): date('Y-m-d', strtotime($arrearDetailsData->closed_at));
-                                                                }else{
-                                                                    $arrearPeriod = ($arrearDetailsData->arrear->status =='SUSPENDED')? date('Y-m-d', strtotime($arrearDetailsData->suspended_at)): date('Y-m-d', strtotime($arrearDetailsData->closed_at));
-                                                                }
+                                                        <div class="col-sm-12 mt-2">
+                                                            <div class="table-responsive">
+                                                                @php 
+                                                                    if($arrearDetailsData->arrear->status =='ACTIVE' || $arrearDetailsData->arrear->status=='ON PAYMENT'){
+                                                                        $arrearPeriod = ($arrearDetailsData->arrear->status =='ACTIVE')? date('Y-m-d'): date('Y-m-d', strtotime($arrearDetailsData->closed_at));
+                                                                    }else{
+                                                                        $arrearPeriod = ($arrearDetailsData->arrear->status =='SUSPENDED')? date('Y-m-d', strtotime($arrearDetailsData->suspended_at)): date('Y-m-d', strtotime($arrearDetailsData->closed_at));
+                                                                    }
 
-                                                                $totalMemberContribution = $arrearDetailsData->getMemberContributionAmount( $arrearDetailsData->contributor_id, $arrearDetailsData->member_id ) + $arrearDetailsData->getContributorContributionAmount( $arrearDetailsData->contributor_id, $arrearDetailsData->member_id ); 
+                                                                    $totalMemberContribution = $arrearDetailsData->getMemberContributionAmount( $arrearDetailsData->contributor_id, $arrearDetailsData->member_id ) + $arrearDetailsData->getContributorContributionAmount( $arrearDetailsData->contributor_id, $arrearDetailsData->member_id ); 
 
-                                                                $totalPenalty = $arrearDetailsData->totalMemberArrearPenaltyExpected($totalMemberContribution, $arrearDetailsData->arrear_id, $arrearPeriod);
-                                                                 
-                                                                $penaltyPaid = $arrearDetailsData->memberPenatyPaid($arrearDetailsData->id, $arrearDetailsData->section_id);
-                                                                
-                                                                //Start::payment cumputations
-                                                                $refund = 0;
-                                                                $penaltyBalance = 0;
+                                                                    $totalPenalty = $arrearDetailsData->totalMemberArrearPenaltyExpected($totalMemberContribution, $arrearDetailsData->arrear_id, $arrearPeriod);
+                                                                    
+                                                                    $penaltyPaid = $arrearDetailsData->memberPenatyPaid($arrearDetailsData->id, $arrearDetailsData->section_id);
+                                                                    
+                                                                    //Start::payment cumputations
+                                                                    $refund = 0;
+                                                                    $penaltyBalance = 0;
 
-                                                                if($penaltyPaid >= $totalPenalty ){
-                                                                    $refund = $penaltyPaid - $totalPenalty;
-                                                                }else{
-                                                                    $penaltyBalance = $totalPenalty - $penaltyPaid;
-                                                                }
-                                                                //End::payment cumputations
-                                                            @endphp
-                                                            <table class="table table-sm font-11 table-bordered table-centered mb-0">
-                                                                <thead class="thead-light">
-                                                                    <tr>
-                                                                        <th class="text-center">Arrear Period</th>
-                                                                        <th class="text-center">Arrear Age</th>
-                                                                        <th class="text-center">Member</th>
-                                                                        <th class="text-center">Monthly Income</th>
-                                                                        <th class="text-center">Contributor Amount</th>
-                                                                        <th class="text-center">Member Amount</th>
-                                                                        <th class="text-center">Total Arrear <sup class="text-muted font-10">TZS</sup></th>
-                                                                        <th class="text-center">Penalty<sup class="text-muted font-10">TZS</sup></th>
-                                                                        <th class="text-center">Paid <sup class="text-muted font-10">TZS</sup></th>
-                                                                        <th class="text-center">Refund<sup class="text-muted font-10">TZS</sup></th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="text-center">{{date('M, Y', strtotime($arrearDetailsData->arrear->arrear_period))}}</td>
-                                                                        <td class="text-center">{{$arrearDetailsData->arrearAge($arrearDetailsData->arrear_id, $arrearPeriod)}} <sup class="text-muted"><small>Days</small></sup></td>
-                                                                        <td class="text-center">{{$arrearDetailsData->member->fname.' '.$arrearDetailsData->member->mname.' '.$arrearDetailsData->member->lname}}</td>
-                                                                        <td class="text-center">{{number_format( $arrearDetailsData->getMemberMonthlyIncome( $arrearDetailsData->member_id ), 2 )}}</td>
-                                                                        <td class="text-center">{{number_format( $arrearDetailsData->getContributorContributionAmount( $arrearDetailsData->contributor_id, $arrearDetailsData->member_id ), 2 )}}</td>
-                                                                        <td class="text-center">{{number_format($arrearDetailsData->getMemberContributionAmount( $arrearDetailsData->contributor_id, $arrearDetailsData->member_id ), 2 )}}</td>
-                                                                        <td class="text-center text-info">{{number_format($totalMemberContribution,2)}}</td>
-                                                                        <td class="text-center text-danger">{{number_format($penaltyBalance,2)}}</td>
-                                                                        <td class="text-center">{{number_format($penaltyPaid,2)}}</td>
-                                                                        <td class="text-center text-primary">{{number_format($refund,2)}}</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
+                                                                    if($penaltyPaid >= $totalPenalty ){
+                                                                        $refund = $penaltyPaid - $totalPenalty;
+                                                                    }else{
+                                                                        $penaltyBalance = $totalPenalty - $penaltyPaid;
+                                                                    }
+                                                                    //End::payment cumputations
+                                                                @endphp
+                                                                <table class="table table-sm font-11 table-bordered table-centered mb-0">
+                                                                    <thead class="thead-light">
+                                                                        <tr>
+                                                                            <th class="text-center">Arrear Period</th>
+                                                                            <th class="text-center">Arrear Age</th>
+                                                                            <th class="text-center">Member</th>
+                                                                            <th class="text-center">Monthly Income</th>
+                                                                            <th class="text-center">Contributor Amount</th>
+                                                                            <th class="text-center">Member Amount</th>
+                                                                            <th class="text-center">Total Arrear <sup class="text-muted font-10">TZS</sup></th>
+                                                                            <th class="text-center">Penalty<sup class="text-muted font-10">TZS</sup></th>
+                                                                            <th class="text-center">Paid <sup class="text-muted font-10">TZS</sup></th>
+                                                                            <th class="text-center">Refund<sup class="text-muted font-10">TZS</sup></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td class="text-center">{{date('M, Y', strtotime($arrearDetailsData->arrear->arrear_period))}}</td>
+                                                                            <td class="text-center">{{$arrearDetailsData->arrearAge($arrearDetailsData->arrear_id, $arrearPeriod)}} <sup class="text-muted"><small>Days</small></sup></td>
+                                                                            <td class="text-center">{{$arrearDetailsData->member->fname.' '.$arrearDetailsData->member->mname.' '.$arrearDetailsData->member->lname}}</td>
+                                                                            <td class="text-center">{{number_format( $arrearDetailsData->getMemberMonthlyIncome( $arrearDetailsData->member_id ), 2 )}}</td>
+                                                                            <td class="text-center">{{number_format( $arrearDetailsData->getContributorContributionAmount( $arrearDetailsData->contributor_id, $arrearDetailsData->member_id ), 2 )}}</td>
+                                                                            <td class="text-center">{{number_format($arrearDetailsData->getMemberContributionAmount( $arrearDetailsData->contributor_id, $arrearDetailsData->member_id ), 2 )}}</td>
+                                                                            <td class="text-center text-info">{{number_format($totalMemberContribution,2)}}</td>
+                                                                            <td class="text-center text-danger">{{number_format($penaltyBalance,2)}}</td>
+                                                                            <td class="text-center">{{number_format($penaltyPaid,2)}}</td>
+                                                                            <td class="text-center text-primary">{{number_format($refund,2)}}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="col-12 mt-2">
-                                                    <form method="POST" action="{{url('arrears/submit/member/arrearpenalty/'.$arrearDetailsData->id)}}" enctype="multipart/form-data">
-                                                    @csrf
-                                                        <h4 class="header-title mb-3 text-muted">Transaction Proofs</h4>
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="row">
-                                                                    <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label for="field-4" class="control-label">Arrear Penalty Paid  <span class="text-danger">*</span></label>
-                                                                            <input type="text" name="arrearPenalty" id="arrearPenalty" class="form-control form-control-sm totalContributionInput  autonumber" value="{{old('arrearPenalty' )}}" id="field-4" placeholder="Total Contribution">
-                                                                            <span class="text-danger" role="alert"> {{ $errors->first('arrearPenalty') }}</span>
-                                                                            <span class="text-danger font-11" role="alert" id="arrearPenaltyErrorSpan"></span>
+                                                    <h4 class="header-title mt-2 mb-3 text-muted">Transaction Proofs</h4>
+                                                    <div class="col-12 mt-2">
+                                                        <form method="POST" action="{{url('arrears/submit/member/arrearpenalty/'.$arrearDetailsData->id)}}" enctype="multipart/form-data">
+                                                        @csrf
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <div class="form-group">
+                                                                                <label for="field-4" class="control-label">Arrear Penalty Paid  <span class="text-danger">*</span></label>
+                                                                                <input type="text" name="arrearPenalty" id="arrearPenalty" class="form-control form-control-sm totalContributionInput  autonumber" value="{{old('arrearPenalty' )}}" id="field-4" placeholder="Total Contribution">
+                                                                                <span class="text-danger" role="alert"> {{ $errors->first('arrearPenalty') }}</span>
+                                                                                <span class="text-danger font-11" role="alert" id="arrearPenaltyErrorSpan"></span>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label for="field-4" class="control-label">Payment Date  <span class="text-danger">*</span></label>
-                                                                            <input type="text" name="paymentDate" id="basic-datepicker" data-date-format="d M, Y" class="form-control form-control-sm " value="{{old('paymentDate')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Pick Payment Date">
-                                                                            <span class="text-danger" role="alert"> {{ $errors->first('paymentDate') }}</span>
+                                                                        <div class="col-md-6">
+                                                                            <div class="form-group">
+                                                                                <label for="field-4" class="control-label">Payment Date  <span class="text-danger">*</span></label>
+                                                                                <input type="text" name="paymentDate" id="basic-datepicker" data-date-format="d M, Y" class="form-control form-control-sm " value="{{old('paymentDate')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Pick Payment Date">
+                                                                                <span class="text-danger" role="alert"> {{ $errors->first('paymentDate') }}</span>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label for="field-1" class="control-label">Payment Mode  <span class="text-danger">*</span></label>
-                                                                            <select class="form-control " name="paymentMode" data-toggle="select2">
-                                                                                @foreach($paymentMode as $value)
-                                                                                <option value="{{$value->id}}" {{old ('paymentMode') == $value->id ? 'selected' : ''}}>{{$value->name}}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                            <span class="text-danger" role="alert"> {{ $errors->first('paymentMode') }}</span>
+                                                                        <div class="col-md-6">
+                                                                            <div class="form-group">
+                                                                                <label for="field-1" class="control-label">Payment Mode  <span class="text-danger">*</span></label>
+                                                                                <select class="form-control " name="paymentMode" data-toggle="select2">
+                                                                                    @foreach($paymentMode as $value)
+                                                                                    <option value="{{$value->id}}" {{old ('paymentMode') == $value->id ? 'selected' : ''}}>{{$value->name}}</option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                                <span class="text-danger" role="alert"> {{ $errors->first('paymentMode') }}</span>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                        <div class="form-group">
-                                                                            <label for="field-4" class="control-label">Transaction Reference  <span class="text-danger">*</span></label>
-                                                                            <input type="text" name="transactionReference" id="transactionReference" class="form-control form-control-sm " value="{{old('transactionReference')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Transaction Reference">
-                                                                            <span class="text-danger" role="alert"> {{ $errors->first('transactionReference') }}</span>
+                                                                        <div class="col-md-6">
+                                                                            <div class="form-group">
+                                                                                <label for="field-4" class="control-label">Transaction Reference  <span class="text-danger">*</span></label>
+                                                                                <input type="text" name="transactionReference" id="transactionReference" class="form-control form-control-sm " value="{{old('transactionReference')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Transaction Reference">
+                                                                                <span class="text-danger" role="alert"> {{ $errors->first('transactionReference') }}</span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-md-6">
+                                                                <div class="col-md-6">
+                                                                    <div class="col-md-12">
+                                                                        <div class="form-group">
+                                                                            <label for="field-3" class="control-label">Transaction Proof  <span class="text-danger">*</span></label>
+                                                                            <input type="file" class="form-control kartik-input-705 kv-fileinput-dropzone " name="transactionProof" id="field-4" required>
+                                                                            <span class="text-danger" role="alert"> {{ $errors->first('transactionProof') }}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                                 <div class="col-md-12">
-                                                                    <div class="form-group">
-                                                                        <label for="field-3" class="control-label">Transaction Proof  <span class="text-danger">*</span></label>
-                                                                        <input type="file" class="form-control kartik-input-705 kv-fileinput-dropzone " name="transactionProof" id="field-4" required>
-                                                                        <span class="text-danger" role="alert"> {{ $errors->first('transactionProof') }}</span>
-                                                                    </div>
+                                                                    <button type="submit" class="btn btn-info waves-effect waves-light float-right">Submit Penalty Payment</button>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-12">
-                                                                <button type="submit" class="btn btn-info waves-effect waves-light float-right">Submit Penalty Payment</button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
+                                                        </form>
+                                                    </div>
 
+                                                </div>
                                             </div>
-                                        </div>
                                                  <!-- end card-box-->
                                         </div> <!-- end col -->
                                     </div>

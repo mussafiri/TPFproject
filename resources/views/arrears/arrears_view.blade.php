@@ -37,7 +37,7 @@
                                 <div class="col-12 mb-3 border rounded p-2" style="background-color: #f6fcff;">
                                     <div class="row">
                                         <div class="col-sm-8"><strong>Section Name:</strong> <span id="sectionName">{{$arrearDetails->section->name}}</span></div>
-                                        <div class="col-sm-4"> <strong>Section Code:</strong> <span id="sectionCode">{{$arrearDetails->section->section_code}}</span></div>
+                                        <div class="col-sm-4"><strong>Section Code:</strong> <span id="sectionCode">{{$arrearDetails->section->section_code}}</span></div>
 
                                         <div class="col-sm-12 mt-2">
                                             <div class="table-responsive">
@@ -56,7 +56,7 @@
                                                     <tbody>
                                                         <tr>
                                                             <td class="text-center">TUMAINI PENSION FUND</td>
-                                                            <td class="text-center">{{date('M Y', strtotime($arrearDetails->arrear_period))}}</td>
+                                                            <td class="text-center">{{date('M, Y', strtotime($arrearDetails->arrear_period))}}</td>
                                                             <td class="text-center">{{$arrearDetails->totalContributors($arrearDetails->section_id)}}</td>
                                                             <td class="text-center">{{$arrearDetails->totalMembers($arrearDetails->section_id)}}</td>
                                                             <td class="text-center">{{number_format($arrearDetails->arrearTotalContributionExpected($arrearDetails->section_id, $arrearDetails->arrear_period),2)}}</td>
@@ -83,8 +83,8 @@
                                                     <th style="width:15%;">Contributor</th>
                                                     <th style="width:18%;">Member Name</th>
                                                     <th style="width:10%;">Monthly Income <sup class="text-muted font-10">TZS</sup></th>
-                                                    <th style="width:10%;">Amount <sup class="text-muted font-10">Contributor TZS</sup></th>
-                                                    <th style="width:10%;">Amount <sup class="text-muted font-10">Member TZS</sup></th>
+                                                    <th style="width:10%;">Contributor <sup class="text-muted font-10">TZS</sup></th>
+                                                    <th style="width:10%;">Member <sup class="text-muted font-10">TZS</sup></th>
                                                     <th style="width:10%;">Total <sup class="text-muted font-10">TZS</sup></th>
                                                     <th style="width:10%;">Arrear Penalty <sup class="text-muted font-10">TZS</sup></th>
                                                     <th style="width:5%;">Status</th>
