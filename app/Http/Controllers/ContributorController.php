@@ -268,7 +268,6 @@ class ContributorController extends Controller {
             $cmn -> contributorCodeGenerator( $addNewContributor->id );
 
             toastr();
-
             return redirect( 'contributors' )->with( 'success', 'Contributor Successfully Added!' );
         }
 

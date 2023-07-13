@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('contributor_id');
             $table->integer('member_id');
+            $table->enum('contributormem_type', ['PRIMARY', 'SECONDARY'])->default('SECONDARY');
             $table->string('start_date')->default('NULL');
             $table->string('end_date')->default('NULL');
             $table->enum('status', ['ACTIVE', 'DORMANT'])->default('ACTIVE');
