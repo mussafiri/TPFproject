@@ -11,7 +11,6 @@
 
 <!-- third party css end -->
 <style>
-
     .kv-avatar .krajee-default.file-preview-frame,
     .kv-signature .krajee-default.file-preview-frame,
     .kv-avatar .krajee-default.file-preview-frame:hover,
@@ -81,7 +80,6 @@
         margin-left: auto;
         float: right;
     }
-
 </style>
 @endsection
 @section('content')
@@ -276,7 +274,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="field-1" class="control-label">Scheme joining date</label>
-                                                        <input type="text"id="scheme_date" name="joining_date" class="form-control form-control-sm humanfd-datepicker" value="{{old('joining_date')}}"  placeholder="Scheme joining of date">
+                                                        <input type="text" id="scheme_date" name="joining_date" class="form-control form-control-sm humanfd-datepicker" value="{{old('joining_date')}}" onkeydown="return false;" onpaste="return false;" placeholder="Scheme joining of date">
                                                         @if ($errors->registerMemberDetails->has('joining_date')) <span class="text-danger" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('joining_date') }}</small></strong></span>@endif
                                                     </div>
                                                 </div>
@@ -377,20 +375,28 @@
                                                         <input type="text" name="section" id="section" class="form-control form-control-sm" value="{{old('section')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="District" readonly>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label for="field-4" class="control-label">District</label>
                                                         <input type="text" name="district" id="district" class="form-control form-control-sm" value="{{old('district')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="District" readonly>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label for="field-5" class="control-label">Zone</label>
                                                         <input type="text" name="zone" id="zone" class="form-control form-control-sm" value="{{old('zone')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Zone" readonly>
                                                         <span class="zoneErrorTxt text-danger" role="alert"></span>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="field-5" class="control-label">Contribution Startdate</label>
+                                                        <input type="text" name="contribution_startdate" id="contribution_start" class="form-control form-control-sm" value="{{old('contribution_startdate')}}" onkeydown="return false;" onpaste="return false;" placeholder=" Enter Contribution Start Date" autocomplete="off" >
+                                                        @if ($errors->registerMemberDetails->has('contribution_startdate')) <span class="text-danger" id="contribution_startError" role="alert"> <strong><small>{{ $errors->registerMemberDetails->first('contribution_startdate') }}</small></strong></span>@endif
+                                                        <span class="text-danger font-12" id="contribution_startError" role="alert"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label for="field-5" class="control-label">Member Monthly income</label>
                                                         <input type="text" name="monthly_income" id="monthly_income" class="form-control form-control-sm autonumber" value="{{old('monthly_income')}}" placeholder="Member Monthly Income" data-a-sign="TZS. " placeholder="Enter Income" autocomplete="off">
@@ -714,6 +720,32 @@
 
 <!-- Datatables init -->
 <script src="{{asset('assets/libs/sweetalert2/sweetalert2.min.js')}}"></script>
+<script>
+    $(document).ready(function() {
+         $('#contribution_start').prop('disabled',true);
+         $('#contribution_startError').html('First select the Scheme joining date');
+
+        // Set the start date for the contribution datepicker when a scheme date is selected
+        $('#scheme_date').on('change', function() {
+            
+            var pickedDate = $(this).val();
+            var selectedDate =  moment(pickedDate).format('D MMM YYYY');
+            $('#contribution_start').datepicker({
+                format: 'dd M yyyy',
+                startDate: selectedDate,
+                endDate: 'today',
+                autoclose: true,
+                todayHighlight: true
+                
+            });
+            $('#contribution_start').prop('disabled', false);
+            $('#contribution_startError').html('');
+
+
+        });
+    });
+
+</script>
 <script type="text/javascript">
     flatpickr("#scheme_date", {
         minDate: "2019-01-01", // Sets the earliest selectable date to July 1, 2023
@@ -723,6 +755,8 @@
         dateFormat: "Y-m-d",
         // Other options...
     });
+
+
     // Function for Validation of Member duplicates
     $(document).ready(function() {
         $('#formMemberDetails').on('submit', function(e) {
@@ -749,7 +783,7 @@
                         // sweetAlert implementation for Confrimation Dialog
                         Swal.fire({
                             title: "Are you sure?",
-                            html:errorMessage ,
+                            html: errorMessage,
                             type: "warning",
                             showCancelButton: !0,
                             confirmButtonText: "Yes, Proceed",
@@ -833,7 +867,7 @@
                 '<option value="0">--Select Gender--</option>' +
                 '<option value="UNEMPLOYED">UNEMPLOYED</option><option value="STUDENT">STUDENT</option><option value="FARMER">FARMER</option><option value="RETIRED">RETIRED</option><option value="EMPLOYED">EMPLOYED</option><option value="BUSINESS">BUSINESS</option><option value="PASTOR">PASTOR</option><option value="NONE">NONE</option>' +
                 '</select>' +
-                '<select class="form-control px-0" name="inputs['+b+'][dep_vital_status]" data-toggle="select2"><option value="ALIVE" selected>ALIVE</option></select>'+
+                '<select class="form-control px-0" name="inputs[' + b + '][dep_vital_status]" data-toggle="select2"><option value="ALIVE" selected>ALIVE</option></select>' +
                 '</div></div>' +
                 '<div class="col-lg-6">' +
                 '<div class="form-group">' +

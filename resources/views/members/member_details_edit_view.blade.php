@@ -261,11 +261,11 @@ use Carbon\Carbon;
                             <div class="tab-pane" id="contributorPane">
                                 <div class="col-12">
                                     <h5 class="text-uppercase mt-0 mb-1 bg-light p-2">Contributor Data</h5>
-                                    <p class="font-13"><i class="mdi mdi-star-half-full text-success font-18 mr-1 mt-0"></i>Change the Primary Contributor of the Member</p>
+                                    <p class="font-13"><i class="mdi mdi-star-half-full text-success font-18 mr-1 mt-0"></i>Change the Member's Primary Contributor</p>
                                     <form action="{{url('/member/edit/details/submit/'.Crypt::encryptString($member_data->id))}}" method="post">
                                         @csrf
                                         <div class="row">
-                                            <div class="col-md-8">
+                                            <div class="col-md-8 pr-4">
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
@@ -273,7 +273,7 @@ use Carbon\Carbon;
                                                             <select class="form-control contirbutorSelect" name="contributor_name" data-toggle="select2">
                                                                 <option value="0">-- Select Contributor --</option>
                                                                 @foreach($contributors as $contributor)
-                                                                <option value="{{$contributor->id}}">{{$contributor->name}}</option>
+                                                                <option value="{{$contributor->id}}" {{$contributor->id == $member_data->contributor_id ? " selected":"";}}>{{$contributor->name}}</option>
                                                                 @endforeach
                                                             </select>
                                                             <span class="text-danger" id="contirbutorError" role="alert"> <strong><small>@if ($errors->registerMemberDetails->has('contributor_name')){{ $errors->registerMemberDetails->first('contributor_name') }}@endif</small></strong></span>
@@ -282,24 +282,54 @@ use Carbon\Carbon;
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="field-5" class="control-label">Zone</label>
-                                                            <input type="text" name="zone" id="zone" class="form-control form-control-sm" value="{{old('zone')}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Zone" readonly>
+                                                            <input type="text" name="zone" id="zone" class="form-control form-control-sm" value="{{old('zone',$member_data->contributor->contributorSection->district->zone->name)}}" oninput="this.value = this.value.toUpperCase()" id="field-5" placeholder="Zone" readonly>
                                                             <span class="zoneErrorTxt text-danger" role="alert"></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="field-4" class="control-label">District</label>
-                                                            <input type="text" name="district" id="district" class="form-control form-control-sm" value="{{old('district')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="District" readonly>
+                                                            <input type="text" name="district" id="district" class="form-control form-control-sm" value="{{old('district',$member_data->contributor->contributorSection->district->name)}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="District" readonly>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="field-4" class="control-label">Section</label>
                                                             <input type="text" name="submission_type" class="form-control form-control-sm" value="CONTRIBUTOR" hidden>
-                                                            <input type="text" name="section" id="section" class="form-control form-control-sm" value="{{old('section')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="District" readonly>
+                                                            <input type="text" name="section" id="section" class="form-control form-control-sm" value="{{old('section',$member_data->contributor->contributorSection->name)}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="District" readonly>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class=" dropdown-divider col-12"></div>
+                                                <div class="col-sm-12">
+                                                    <button type="submit" class="btn btn-info waves-effect waves-light float-right">Update Primary Contributor</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h5 class="mt-0 mb-0 p-2 text-muted">Contributors History Summary</h5>
+                                                <div class="track-order-list">
+                                                    <ul class="list-unstyled">
+                                                        @foreach ($contributor_history as $key => $contributor)
+                                                            @if ($key === count($contributor_history) - 1)
+                                                                    <li>
+                                                                        <span class="active-dot dot"></span>
+                                                                        <h5 class="mt-0 mb-1 font-14">{{$contributor->contributor->name}}</h5>
+                                                                        <p class="text-muted">{{date('M d Y',strtotime($contributor->start_date))}} <i class="mdi mdi-drag mr-1 font-16"></i><span class="badge badge-soft-{{$contributor->contributormem_type=='PRIMARY'?'dark':'success';}}">{{$contributor->contributormem_type}}</span></p>
+                                                                    </li>
+                                                                @else
+                                                                    <li class="completed">
+                                                                        <h5 class="mt-0 mb-1 font-14">{{$contributor->contributor->name}}</h5>
+                                                                        <p class="text-muted">{{date('M d Y',strtotime($contributor->start_date))}} <small class="badge badge-soft-{{$contributor->contributormem_type=='PRIMARY'?'dark':'success';}}">{{$contributor->contributormem_type}}</small> </p>
+                                                                    </li>
+                                                            @endif
+                                                          
+
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+
                                             </div>
                                         </div>
                                     </form>

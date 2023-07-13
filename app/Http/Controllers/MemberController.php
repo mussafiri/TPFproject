@@ -35,31 +35,29 @@ class MemberController extends Controller {
         if ($submit_type=="MEMBER-PARTICULARS") {
 
             $valid = Validator::make($request->all(), [
-                    'firstname' => 'required|min:3',
-                    'middle_name' => 'required|min:3',
-                    'lastname' => 'required|min:3',
-                    'evengelical_title' => 'required|gt:0',
-                    'salutation' => 'required|not_in:0',
-                    'email' =>'email',
-                    'marital_status' => 'required|not_in:0',
-                    'gender' => 'required|not_in:0',
-                    'dob' => 'required',
-                    'postalAddress' => 'required',
-                    'physicalAddress' => 'required',
-                    'phone' => 'required',
-                    'occupation' => 'required|not_in:0',
-                    'joining_date' => 'required',
-                    'service_date' => 'required',
-                    'monthly_income' => 'required',
-                ],
-
-                [   'evengelical_title.gt' => 'You must select Evengelical Title',
-                    'salutation.not_in' => 'You must select Salutation',
-                    'marital_status.not_in' => 'You must select Marital Status',
-                    'gender.not_in' => 'You must select Gender',
-                    'occupation.gt' => 'You must select Occupation',
-                ]
-            );
+                'firstname' => 'required|min:3',
+                'middle_name' => 'required|min:3',
+                'lastname' => 'required|min:3',
+                'evengelical_title' => 'required|gt:0',
+                'salutation' => 'required|not_in:0',
+                'email' =>'email',
+                'marital_status' => 'required|not_in:0',
+                'gender' => 'required|not_in:0',
+                'dob' => 'required',
+                'postalAddress' => 'required',
+                'physicalAddress' => 'required',
+                'phone' => 'required',
+                'occupation' => 'required|not_in:0',
+                'joining_date' => 'required',
+                'service_date' => 'required',
+                'monthly_income' => 'required',
+            ],
+            [   'evengelical_title.gt' => 'You must select Evengelical Title',
+                'salutation.not_in' => 'You must select Salutation',
+                'marital_status.not_in' => 'You must select Marital Status',
+                'gender.not_in' => 'You must select Gender',
+                'occupation.gt' => 'You must select Occupation',
+            ]);
 
             if ( $valid->fails() ) {
                
@@ -98,6 +96,30 @@ class MemberController extends Controller {
 
         }
         elseif($submit_type == "CONTRIBUTOR"){
+            
+            $valid = Validator::make($request->all(), [
+                'contributor_name' => 'required|gt:0',
+                'middle_name' => 'required|min:3',
+            ],
+            [   'evengelical_title.gt' => 'You must select Evengelical Title',
+                'salutation.not_in' => 'You must select Salutation',
+                'marital_status.not_in' => 'You must select Marital Status',
+                'gender.not_in' => 'You must select Gender',
+                'occupation.gt' => 'You must select Occupation',
+            ]);
+
+            if ( $valid->fails() ) {
+               
+                #Returns errors with Error Bag 'registerMember'
+                return back()->withErrors( $valid, 'editMemberContributorDetails' )->withInput();
+            }
+            $validityforActiveContributor = ContributorMember::join( 'members', 'members.id', '=', 'contributor_members.member_id' )
+                    ->where( 'contributors.section_id', $request->section_id )
+                    ->where( 'contributor_members.start_date', '<=', $contributionDate )
+                    ->where( 'contributor_members.end_date', 'NULL' )
+                    ->where( 'contributor_members.status', 'ACTIVE' )
+                    ->count();
+
 
 
 
@@ -117,10 +139,11 @@ class MemberController extends Controller {
     public function membersEditView($member) {
         $id= Crypt::decryptString($member);
         $member_data = Member::find($id);
-        $salutation_title=MemberSalutation::all();
-        $identity_types=MemberIdentityType::all();
-        $contributors=Contributor::all();
-        return view('members.member_details_edit_view',  compact('member_data','salutation_title','contributors','identity_types'));
+        $contributor_history = ContributorMember::latest()->take(3)->orderBy("id")->get();
+        $salutation_title = MemberSalutation::all();
+        $identity_types = MemberIdentityType::all();
+        $contributors = Contributor::all();
+        return view('members.member_details_edit_view',  compact('member_data','salutation_title','contributors','identity_types','contributor_history'));
     }
 
     public function memberFetchFromSelectize(Request $request) {
@@ -306,6 +329,7 @@ class MemberController extends Controller {
             'middle_name' => 'required|min:3',
             'lastname' => 'required|min:3',
             'evengelical_title' => 'required|gt:0',
+            'contribution_startdate' => 'required',
             'salutation' => 'required|not_in:0',
             'email' =>'email',
             'marital_status' => 'required|not_in:0',
@@ -329,6 +353,7 @@ class MemberController extends Controller {
             'gender.not_in' => 'You must select Gender',
             'occupation.gt' => 'You must select Occupation',
             'id_type.not_in' => 'You must select ID type',
+            'contribution_startdate.required' => 'Select contribution start date',
             'contributor_name.not_in' => 'You must select a Contributor',
             ]
         );
@@ -450,7 +475,8 @@ class MemberController extends Controller {
             $contributorMemObj = new ContributorMember;
             $contributorMemObj->contributor_id        = $memberRegObject->contributor_id;
             $contributorMemObj->member_id             = $memberRegObject->id;
-            $contributorMemObj->start_date            = $memberRegObject->joining_date;
+            $contributorMemObj->start_date            = $request->contribution_startdate;
+            $contributorMemObj->contributormem_type   = "PRIMARY";
             $contributorMemObj->status                = "ACTIVE";
             $contributorMemObj->created_by            = auth()->user()->id;
             $contributorMemObj->save();
