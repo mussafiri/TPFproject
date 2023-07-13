@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/css/bootstrap-icons.css')}}" />
         <link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/css/fileinput.min.css')}}" />
         <link rel="stylesheet" href="{{asset('assets/libs/kartik-v-bootstrap-fileinput/themes/explorer/theme.css')}}" />
-        
+
         <!-- third party css -->
         <link href="{{asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
         <link href="{{asset('assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
@@ -45,32 +45,32 @@
                                         <div class="col-12">
                                          <ul class="nav nav-tabs nav-bordered">
                                             <li class="nav-item">
-                                                <a href="{{url('contributions/arrears/'.Crypt::encryptString('ACTIVE'))}}" aria-expanded="false" class="nav-link @if($status=='ACTIVE') {{'active'}} @endif">
+                                                <a href="{{url('arrears/sectionarrears/'.Crypt::encryptString('ACTIVE'))}}" aria-expanded="false" class="nav-link @if($status=='ACTIVE') {{'active'}} @endif">
                                                     Active
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="{{url('contributions/arrears/'.Crypt::encryptString('PENDING'))}}" aria-expanded="true" class="nav-link @if($status=='PENDING') {{'active'}} @endif">
+                                                <a href="{{url('arrears/sectionarrears/'.Crypt::encryptString('PENDING'))}}" aria-expanded="true" class="nav-link @if($status=='PENDING') {{'active'}} @endif">
                                                     Pending
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="{{url('contributions/arrears/'.Crypt::encryptString('CLOSED'))}}" aria-expanded="true" class="nav-link @if($status=='CLOSED') {{'active'}} @endif">
+                                                <a href="{{url('arrears/sectionarrears/'.Crypt::encryptString('CLOSED'))}}" aria-expanded="true" class="nav-link @if($status=='CLOSED') {{'active'}} @endif">
                                                     Paid
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="{{url('contributions/arrears/'.Crypt::encryptString('CLOSURE REJECTED'))}}" aria-expanded="true" class="nav-link @if($status=='CLOSURE REJECTED') {{'active'}} @endif">
+                                                <a href="{{url('arrears/sectionarrears/'.Crypt::encryptString('CLOSURE REJECTED'))}}" aria-expanded="true" class="nav-link @if($status=='CLOSURE REJECTED') {{'active'}} @endif">
                                                     Closure Rejected
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="{{url('contributions/arrears/'.Crypt::encryptString('SUSPENDED'))}}" aria-expanded="true" class="nav-link @if($status=='SUSPENDED') {{'active'}} @endif">
+                                                <a href="{{url('arrears/sectionarrears/'.Crypt::encryptString('SUSPENDED'))}}" aria-expanded="true" class="nav-link @if($status=='SUSPENDED') {{'active'}} @endif">
                                                     Waived
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="{{url('contributions/arrears/'.Crypt::encryptString('SUSPEND REJECTED'))}}" aria-expanded="true" class="nav-link @if($status=='SUSPEND REJECTED') {{'active'}} @endif">
+                                                <a href="{{url('arrears/sectionarrears/'.Crypt::encryptString('SUSPEND REJECTED'))}}" aria-expanded="true" class="nav-link @if($status=='SUSPEND REJECTED') {{'active'}} @endif">
                                                     Waives Rejected
                                                 </a>
                                             </li>
@@ -78,7 +78,7 @@
 
                                         <div class="tab-content">
                                             <div class="tab-pane active" id="active">
-                                                <form method="POST" action="{{url('contributions/waive/bulk/arrears/submit')}}">
+                                                <form method="POST" action="{{url('arrears/waive/bulk/arrears/submit')}}">
                                                 @csrf
                                                     <div class="table-responsive">
                                                         <table class="datatable-buttons table font-11 table-striped w-100">
@@ -87,13 +87,15 @@
                                                                     <th>#</th>
                                                                     <th style="width:14%">Section</th>
                                                                     <th style="width:10%">Arrear Date</th>
-                                                                    <th>Contribution Amount <sup class="text-muted"><small>TZS</small></sup></th>
-                                                                    <th>Penalty Amount <sup class="text-muted"><small>TZS</small></sup></th>
                                                                     <th>Arrears Age </th>
+                                                                    <th>Arrear Amount <sup class="text-muted"><small>TZS</small></sup></th>
+                                                                    <th>Penalty Amount <sup class="text-muted"><small>TZS</small></sup></th>
+                                                                    <th>Paid <sup class="text-muted"><small>TZS</small></sup></th>
+                                                                    <th>Refund <sup class="text-muted"><small>TZS</small></sup></th>
                                                                     <th>Process Status</th>
-                                                                    <th> 
-                                                                        <div class="row pl-2"> 
-                                                                            <div class="col-4 pl-2"> 
+                                                                    <th>
+                                                                        <div class="row pl-2">
+                                                                            <div class="col-4 pl-2">
                                                                                 <div class="custom-control custom-checkbox">
                                                                                     <input type="checkbox" class="custom-control-input sectioArrearParent" id="customCheck1">
                                                                                     <label class="custom-control-label" for="customCheck1"></label>
@@ -109,26 +111,40 @@
                                                             @php $n=3; $counter=1; @endphp
 
                                                             @foreach($arrears as $data)
-                                                                @php 
-                                                                    if($data->status =='ACTIVE' || $data->status=='ON PAYMENT'){ 
+                                                                @php
+                                                                    if($data->status =='ACTIVE' || $data->status=='ON PAYMENT'){
                                                                         $arrearPeriod = ($data->status =='ACTIVE')? date('Y-m-d'): date('Y-m-d', strtotime($data->closed_at));
-                                                                    }else{ 
+                                                                    }else{
                                                                         $arrearPeriod = ($data->status =='SUSPENDED')? date('Y-m-d', strtotime($data->suspended_at)): date('Y-m-d', strtotime($data->closed_at));
                                                                     }
 
                                                                     $totalSectionContribution = $data->arrearTotalContributionExpected($data->section_id, $data->arrear_period);
-                                                                    
+
                                                                     $totalPenalty = $data->arrearTotalPenaltyExpected($totalSectionContribution, $data->id, $arrearPeriod);
+                                                                    $penaltyPaid = $data->sectionPenatyPaid($data->id, $data->section_id);
                                                                     
+                                                                    //Start::payment cumputations
+                                                                    $refund = 0;
+                                                                    $penaltyBalance = 0;
+
+                                                                    if($penaltyPaid >= $totalPenalty ){
+                                                                        $refund = $penaltyPaid - $totalPenalty;
+                                                                    }else{
+                                                                        $penaltyBalance = $totalPenalty - $penaltyPaid;
+                                                                    }
+                                                                    //End::payment cumputations
+
                                                                     if($data->processing_status=="PENDING"){ $badgeText = "info";}else if ( $data->processing_status=="ON PAYMENT"){ $badgeText = "primary"; }elseif($data->processing_status == "CLOSED"){ $badgeText = "success"; }else if($data->processing_status=="CLOSURE REJECTED"){$badgeText = "danger";}elseif($data->processing_status=="SUSPEND REJECTED"){$badgeText = "pink";}else{$badgeText = "secondary";}
                                                                 @endphp
                                                                 <tr id="trID{{$n}}">
                                                                     <td>{{$counter}}.</td>
                                                                     <td class="text-muted font-9">{{$data->section->name}}</td>
                                                                     <td>{{date('M, Y', strtotime($data->arrear_period))}}</td>
+                                                                    <td class="text-info">{{$data->arrearAge($data->id, $arrearPeriod)}} <sup class="text-muted"><small>Days</small></sup></td>
                                                                     <td>{{number_format($totalSectionContribution,2)}}</td>
-                                                                    <td class="text-danger">{{number_format($totalPenalty,2)}}</td>
-                                                                    <td>{{$data->arrearAge($data->id, $arrearPeriod)}} <sup class="text-muted"><small>Days</small></sup></td>
+                                                                    <td class="text-danger">{{number_format($penaltyBalance,2)}}</td>
+                                                                    <td class="text-primary">{{number_format($penaltyPaid,2)}}</td>
+                                                                    <td class="text-primary">{{number_format($refund,2)}}</td>
                                                                     <td><span class="badge badge-xs badge-outline-{{$badgeText}} badge-pill">{{$data->processing_status}}</span></td>
                                                                     <td class="float-left py-1">
                                                                         <div class="btn-group dropdown float-right">
@@ -144,19 +160,19 @@
                                                                             </a>
 
                                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                                <a href="{{url('contributions/arrearsview/'.Crypt::encryptString($data->id))}}"  class="dropdown-item">
+                                                                                <a href="{{url('arrears/viewarrears/'.Crypt::encryptString($data->id))}}"  class="dropdown-item">
                                                                                     <i class='mdi mdi-eye-outline mr-1'></i>View
                                                                                 </a>
                                                                                 @if($data->processing_status=='ACTIVE')
-                                                                                <a href="javascript:void(0);" class="dropdown-item paySectionArrear" data-rowID="{{$n}}">
-                                                                                    <i class='flaticon-give-money-1 mr-1 font-18'></i>Pay Section Arrears
+                                                                                <a href="{{url('arrears/sectionarrears/pay/'.Crypt::encryptString($data->id))}}" class="dropdown-item paySectionArrear" data-rowID="{{$n}}">
+                                                                                    <i class='flaticon-give-money-1 mr-1 font-18'></i>Pay Section Penalty
                                                                                 </a>
-                                                                                
-                                                                                <a href="{{url('contributions/arrearsprocessing/'.Crypt::encryptString('PAY MEMBER ARREAR').'/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
-                                                                                    <i class='mdi mdi-account-cash mr-1'></i>Pay Member Arrears
+
+                                                                                <a href="{{url('arrears/processingarrears/'.Crypt::encryptString('PAY MEMBER ARREAR').'/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
+                                                                                    <i class='mdi mdi-account-cash mr-1'></i>Pay Member Penalty
                                                                                 </a>
-                                                                                <a href="{{url('contributions/arrearsprocessing/'.Crypt::encryptString('WAIVE MEMBER ARREAR').'/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
-                                                                                    <i class='flaticon-refund mr-1 font-18'></i>Waive Member Arrears
+                                                                                <a href="{{url('arrears/processingarrears/'.Crypt::encryptString('WAIVE MEMBER ARREAR').'/'.Crypt::encryptString($data->id))}}" class="dropdown-item">
+                                                                                    <i class='flaticon-refund mr-1 font-18'></i>Waive Member Penalty
                                                                                 </a>
                                                                                 @endif
                                                                             </div> <!-- end drop down menu-->
@@ -168,7 +184,7 @@
                                                             </tbody>
                                                         </table>
                                                     </div> <!-- end .table-responsive-->
-                                                
+
                                                     <div class="col-12 mt-3 px-0">
                                                     @if($arrears->count()>0 && $status=='ACTIVE')
                                                     <a href="javascript:void(0);" class="btn btn-info waves-effect waves-light float-right waiveBulkArrears border-top" data-toggle="modal" data-target="#waiveBulkArrearPenalties" > Waive Bulk Arrears</a>
@@ -182,7 +198,7 @@
                                                                             <i class="dripicons-warning h1 text-warning"></i>
                                                                             <h4 class="mt-2">Confirm Waiving all checked Arrear Penalties</h4>
                                                                             <p class="mt-3">Are you sure! <br> You are about to waive all the Arrear Penalties. You can <span class="text-info">cancel</span> to review Arrears before Waiving all</p>
-                                                                            <input type="hidden" value="{{$counter}}">
+                                                                            <input type="hidden" name="memberCounter" value="{{$counter}}">
                                                                              @if ($errors->suspendBulkArrears->has('sectionArrear')) <span class="text-danger" role="alert"> <strong>{{ $errors->suspendBulkArrears->first('sectionArrear') }}</strong></span>@endif
                                                                         </div>
                                                                         <button type="submit" class="btn btn-success my-2 float-left">Yes! Waive All Penalties</button>
@@ -194,65 +210,6 @@
                                                     <!--- END:: Waive All Arrear Penalties -->
                                                     </div>
                                                 </form>
-
-                                                <div class="col-12 arrearPenaltyPayementBlock border rounded p-3" style="display:none;">
-                                                    <h4 class="header-title mb-3 text-muted"> Section Details</h4>
-                                                    <div class="mb-2">
-                                                        
-                                                    </div>
-
-                                                    <h4 class="header-title mb-3 text-muted">Transaction Proofs</h4>
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label for="field-4" class="control-label">Total Arrear Paid  <span class="text-danger">*</span></label>
-                                                                        <input type="text" name="contributionAmount" id="contributionAmount" class="form-control form-control-sm totalContributionInput contriInput autonumber" value="{{old('contributionAmount' )}}" id="field-4" placeholder="Total Contribution">
-                                                                        <span class="text-danger" role="alert"> {{ $errors->first('contributionAmount') }}</span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label for="field-4" class="control-label">Payment Date  <span class="text-danger">*</span></label>
-                                                                        <input type="text" name="paymentDate" id="basic-datepicker" data-date-format="d M, Y" class="form-control form-control-sm contriInput" value="{{old('paymentDate')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Pick Payment Date">
-                                                                        <span class="text-danger" role="alert"> {{ $errors->first('paymentDate') }}</span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label for="field-1" class="control-label">Payment Mode  <span class="text-danger">*</span></label>
-                                                                        <select class="form-control contriInput" name="paymentMode" data-toggle="select2">
-                                                                            @foreach($paymentMode as $value)
-                                                                            <option value="{{$value->id}}" {{old ('paymentMode') == $value->id ? 'selected' : ''}}>{{$value->name}}</option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                        <span class="text-danger" role="alert"> {{ $errors->first('paymentMode') }}</span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label for="field-4" class="control-label">Transaction Reference  <span class="text-danger">*</span></label>
-                                                                        <input type="text" name="transactionReference" id="transaction" class="form-control form-control-sm contriInput" value="{{old('transaction')}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="Transaction Reference">
-                                                                        <span class="text-danger" role="alert"> {{ $errors->first('transactionReference') }}</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label for="field-3" class="control-label">Transaction Proof  <span class="text-danger">*</span></label>
-                                                                    <input type="file" class="form-control kartik-input-705 kv-fileinput-dropzone contriInput" name="transactionProof" id="field-4" required>
-                                                                    <span class="text-danger" role="alert"> {{ $errors->first('transactionProof') }}</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <button type="submit" class="btn btn-info waves-effect waves-light float-right">Submit Arrear Penalty Pay</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
                                             </div>
                                         </div>
@@ -336,17 +293,6 @@
             $('.sectioArrearParent').prop('checked', false);
         }
     });
-
-    $('.paySectionArrear').on('click', function(){
-        var rowID = $(this).attr('data-rowID');
-
-        $('#memberArrearCheckBox').prop('checked', false);
-        $('#customCheck'+rowID).prop('checked', true);
-
-        $('.sectioArrearParent').hide();
-        $('.waiveBulkArrears').hide();
-        $('.arrearPenaltyPayementBlock').show();
-    });
 </script>
 
 <script type="text/javascript">
@@ -354,7 +300,7 @@
         var data_id = $(this).attr("data-id");
         var new_status = $(this).attr("data-newstatus");
         var data_name = $(this).attr("data-name");
-        
+
         Swal.fire({
             title: "Are you sure?",
             html: 'You want to <span class="text-danger">' + new_status + '</span> <span class="text-info">' + data_name + ' </span>!',

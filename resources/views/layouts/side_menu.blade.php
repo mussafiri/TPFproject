@@ -39,8 +39,25 @@
                         <li  class="@if(request()->segment(2)=='add'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/add')}}">Add Contribution</a> </li>
                         <li  class="@if(request()->segment(2)=='transactions' || request()->segment(2)=='processing' || request()->segment(2)=='details'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/processing/'.Crypt::encryptString('PENDING'))}}">Process Contribution</a> </li>
                         <li  class="@if(request()->segment(2)=='search'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/search')}}">Search Contribution</a> </li>
-                        <li  class="@if(request()->segment(2)=='arrears' || request()->segment(2)=='arrearsprocessing'|| request()->segment(2)=='arrearsview'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/arrears/'.Crypt::encryptString('ACTIVE'))}}">Section Arrears</a> </li>
-                        <li  class="@if(request()->segment(2)=='membersarrears' || request()->segment(2)=='memberarrearsprocessing'|| request()->segment(2)=='memberarrearsview'){{'menuitem-active'}}@endif"> <a href="{{url('contributions/memberarrears/'.Crypt::encryptString('ACTIVE'))}}">Member Arrears</a> </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="@if(request()->segment(1)=='arrears'){{'menuitem-active'}}@endif">
+                <a href="#arrears" data-toggle="collapse">
+                    <i class="mdi flaticon-calculator-1"></i>
+                    <span> Arrears </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse @if(request()->segment(1)=='arrears'){{'show'}}@endif" id="arrears">
+                    <ul class="nav-second-level">
+                        <li  class="@if(request()->segment(2)=='processingarrears'|| request()->segment(2)=='sectionarrears'|| request()->segment(2)=='viewarrears'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/sectionarrears/'.Crypt::encryptString('ACTIVE'))}}">Section Arrears</a> </li>
+                        <li  class="@if(request()->segment(2)=='sectionpayments'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/sectionpayments/'.Crypt::encryptString('ACTIVE'))}}">Section Penalty Pay</a> </li>
+                        <li  class="@if(request()->segment(2)=='sectionpenalty'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/sectionpenalty/waived/'.Crypt::encryptString('PENDING'))}}">Section Penalty Waived</a> </li>
+                        <li  class="@if(request()->segment(2)=='membersarrears' || request()->segment(2)=='memberarrearsprocessing'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/membersarrears/'.Crypt::encryptString('ACTIVE'))}}">Member Arrears</a> </li>
+                        <li  class="@if(request()->segment(2)=='memberpayments'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/memberpayments/'.Crypt::encryptString('ACTIVE'))}}">Member Penalty Pay</a> </li>
+                        <li  class="@if(request()->segment(2)=='memberpenalty'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/memberpenalty/waived/'.Crypt::encryptString('ACTIVE'))}}">Member Penalty Waived</a> </li>
+                        <li  class="@if(request()->segment(2)=='memberpayments'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/memberpayments/'.Crypt::encryptString('ACTIVE'))}}">Penalty Payments</a> </li>
                     </ul>
                 </div>
             </li>

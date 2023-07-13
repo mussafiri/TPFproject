@@ -194,16 +194,25 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit/{id}', [ContributionController::class, 'editContribution']);
         Route::post('/submit/topup', [ContributionController::class, 'submitContributionTopup']);
         Route::post('/submit/edit/{id}', [ContributionController::class, 'submitContributionEdit']);
-        //start:: Arrears Routes
-        Route::get('/arrears/{status}', [ArrearsController::class, 'contributionArrears']);
-        Route::get('/arrearsview/{id}', [ArrearsController::class, 'arrearsView']);
-        Route::get('/arrearsprocessing/{action}/{id}', [ArrearsController::class, 'arrearsProcessing']);
-        Route::post('/waive/bulk/arrears/submit', [ArrearsController::class, 'submitBulkArrearsWaive']);
-        Route::post('/submit/member/arrearpenalty/waive', [ArrearsController::class, 'submitMemberArrearsPenaltyWaive']);
-        Route::get('/memberarrears', [ArrearsController::class, 'memberArrears']);
-        //end:: Arrears Routes
     });
     //End:: Contributions
+
+    //start:: Arrears Routes
+    Route::prefix('arrears')->group(function(){
+         Route::get('/sectionarrears/{status}', [ArrearsController::class, 'contributionArrears']);
+         Route::get('/viewarrears/{id}', [ArrearsController::class, 'arrearsView']);
+         Route::get('/processingarrears/{action}/{id}', [ArrearsController::class, 'arrearsProcessing']);
+         Route::post('/waive/bulk/arrears/submit', [ArrearsController::class, 'submitBulkArrearsWaive']);
+         Route::post('/submit/member/arrearpenalty/waive', [ArrearsController::class, 'submitMemberArrearsPenaltyWaive']);
+         Route::get('/sectionarrears/pay/{id}', [ArrearsController::class, 'paySectionArrearPenalty']);
+         Route::post('/submit/section/arrearpenalty/{id}', [ArrearsController::class, 'submitSectionArrearPenaltyPay']);
+         Route::post('/submit/member/arrearpenalty/{id}', [ArrearsController::class, 'submitMemberArrearPenaltyPay']);
+         Route::get('/sectionpenalty/waived/{id}', [ArrearsController::class, 'sectionPenaltyWaived']);
+         
+         Route::get('/memberpenalty/pay/{id}', [ArrearsController::class, 'payMemberArrearPenalty']);
+         Route::get('/memberarrears', [ArrearsController::class, 'memberArrears']);
+    });
+    //end:: Arrears Routes
 
     //Start:: Configurations routes
     Route::prefix('configs')->group(function(){
