@@ -159,6 +159,7 @@ Route::middleware('auth')->group(function () {
         
         #start:: arrear routes
         Route:: post('/get/arrear/data', [SettingsController::class, 'ajaxGetArrearData']);
+        Route:: post('/approve/arrearpenalty/waive', [ArrearsController::class, 'ajaxApproveSectionArrearPenalty']);
 
         #End:: arrear routes
     });
@@ -207,9 +208,11 @@ Route::middleware('auth')->group(function () {
          Route::get('/sectionarrears/pay/{id}', [ArrearsController::class, 'paySectionArrearPenalty']);
          Route::post('/submit/section/arrearpenalty/{id}', [ArrearsController::class, 'submitSectionArrearPenaltyPay']);
          Route::post('/submit/member/arrearpenalty/{id}', [ArrearsController::class, 'submitMemberArrearPenaltyPay']);
-         Route::get('/sectionpenalty/waived/{id}', [ArrearsController::class, 'sectionPenaltyWaived']);
+         Route::get('/sectionpenalties/{status}', [ArrearsController::class, 'sectionPenalties']);
+         Route::get('/sectionpayments/{status}', [ArrearsController::class, 'sectionPenaltyPayments']);
+         Route::get('/memberpayments/{status}', [ArrearsController::class, 'memberPenaltyPayments']);
          
-         Route::get('/memberpenalty/pay/{id}', [ArrearsController::class, 'payMemberArrearPenalty']);
+         Route::get('/memberpenaltypay/{id}', [ArrearsController::class, 'payMemberArrearPenalty']);
          Route::get('/memberarrears', [ArrearsController::class, 'memberArrears']);
     });
     //end:: Arrears Routes

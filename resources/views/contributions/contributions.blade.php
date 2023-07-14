@@ -78,7 +78,7 @@
                                                                 <th>Pay Mode</th>
                                                                 <th>Contributors</th>
                                                                 <th>Members</th>
-                                                                <th>Pay Proof</th>
+                                                                <th class="text-center">Pay Proof</th>
                                                                 <th>Type</th>
                                                                 <th>Process Status</th>
                                                                 <th>Action</th>
@@ -97,7 +97,7 @@
                                                                 <td><span class="badge badge-outline-ligh">{{$data->payMode->name}}</span></td>
                                                                 <td class="text-center">{{$data->total_contributors}}</td>
                                                                 <td class="text-center">{{$data->total_members}}</td>
-                                                                <td class="text-center"> <a class="font-14" href="{{Storage::url('contributionPaymentProof/'.$data->payment_proof)}}" target="_blank"><i class="mdi mdi-cloud-download-outline"></i></a> </td>
+                                                                <td class="text-center text-info"> <a class="font-16 text-info" href="{{Storage::url('contributionPaymentProof/'.$data->payment_proof)}}" target="_blank"><i class="mdi mdi-cloud-download-outline"></i></a> </td>
                                                                 <td><span class="badge badge-outline-{{$data->type=='CONTRIBUTION'?'info':'primary'}} badge-pill">{{$data->type}}</span></td>
                                                                 <td><span class="badge badge-outline-{{$badgeText}} badge-pill">{{$data->processing_status}}</span></td>
                                                                 <td>

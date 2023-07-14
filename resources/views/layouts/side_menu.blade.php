@@ -45,19 +45,20 @@
 
             <li class="@if(request()->segment(1)=='arrears'){{'menuitem-active'}}@endif">
                 <a href="#arrears" data-toggle="collapse">
-                    <i class="mdi flaticon-calculator-1"></i>
+                    <i class="mdi flaticon-payment"></i>
                     <span> Arrears </span>
                     <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse @if(request()->segment(1)=='arrears'){{'show'}}@endif" id="arrears">
                     <ul class="nav-second-level">
-                        <li  class="@if(request()->segment(2)=='processingarrears'|| request()->segment(2)=='sectionarrears'|| request()->segment(2)=='viewarrears'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/sectionarrears/'.Crypt::encryptString('ACTIVE'))}}">Section Arrears</a> </li>
-                        <li  class="@if(request()->segment(2)=='sectionpayments'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/sectionpayments/'.Crypt::encryptString('ACTIVE'))}}">Section Penalty Pay</a> </li>
-                        <li  class="@if(request()->segment(2)=='sectionpenalty'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/sectionpenalty/waived/'.Crypt::encryptString('PENDING'))}}">Section Penalty Waived</a> </li>
-                        <li  class="@if(request()->segment(2)=='membersarrears' || request()->segment(2)=='memberarrearsprocessing'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/membersarrears/'.Crypt::encryptString('ACTIVE'))}}">Member Arrears</a> </li>
-                        <li  class="@if(request()->segment(2)=='memberpayments'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/memberpayments/'.Crypt::encryptString('ACTIVE'))}}">Member Penalty Pay</a> </li>
-                        <li  class="@if(request()->segment(2)=='memberpenalty'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/memberpenalty/waived/'.Crypt::encryptString('ACTIVE'))}}">Member Penalty Waived</a> </li>
-                        <li  class="@if(request()->segment(2)=='memberpayments'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/memberpayments/'.Crypt::encryptString('ACTIVE'))}}">Penalty Payments</a> </li>
+                        <li  class="@if(request()->segment(2)=='processingarrears'|| request()->segment(2)=='sectionarrears'|| request()->segment(2)=='memberpenaltypay'|| request()->segment(2)=='viewarrears'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/sectionarrears/'.Crypt::encryptString('ACTIVE'))}}">Section Arrears</a> </li>
+                        <li  class="@if(request()->segment(2)=='membersarrears' || request()->segment(2)=='memberarrearsprocessing'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/membersarrears/'.Crypt::encryptString('ACTIVE'))}}">Member Arrears</a> </li> <!-- done -->
+                        <li  class="@if(request()->segment(2)=='sectionpayments'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/sectionpayments/'.Crypt::encryptString('PENDING'))}}">Section Penalty Pays</a> </li> <!-- done -->
+                        <li  class="@if(request()->segment(2)=='memberpayments'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/memberpayments/'.Crypt::encryptString('PENDING'))}}">Member Penalty Pays</a> </li>
+                        <li  class="@if(request()->segment(2)=='sectionpenalty'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/sectionpenalty/waived/'.Crypt::encryptString('PENDING'))}}">Section Penalty</a> </li>
+                        <li  class="@if(request()->segment(2)=='memberpenalty'){{'menuitem-active'}}@endif"> <a href="{{url('arrears/memberpenalty/waived/'.Crypt::encryptString('PENDING'))}}">Member Penalty</a> </li>
+
+
                     </ul>
                 </div>
             </li>
@@ -78,7 +79,7 @@
             </li>
             <li class="@if(request()->segment(1)=='zones'){{'menuitem-active'}} @endif">
                 <a href="#sidebarZones" data-toggle="collapse">
-                    <i class="mdi mdi-map-marker-radius-outline"></i>
+                    <i class="mdi flaticon-location"></i>
                     <span> Zones </span>
                     <span class="menu-arrow"></span>
                 </a>
@@ -96,7 +97,7 @@
 
             <li class="@if(request()->segment(1)=='users'){{'menuitem-active'}} @endif">
                 <a href="#sidebarUsers" data-toggle="collapse">
-                    <i class="mdi mdi-account-group-outline"></i>
+                    <i class="mdi flaticon-group-1"></i>
                     <span> Manage Users </span>
                     <span class="menu-arrow"></span>
                 </a>
@@ -111,7 +112,7 @@
 
             <li>
                 <a href="#sidebarSettings" data-toggle="collapse">
-                    <i data-feather="pocket"></i>
+                    <i class="mdi flaticon-wrench"></i>
                     <span> Configurations </span>
                     <span class="menu-arrow"></span>
                 </a>
@@ -123,12 +124,6 @@
                         <li> <a href="{{url('configs/arrears/recognition')}}">Arrears Control</a> </li>
                     </ul>
                 </div>
-            </li>
-            <li>
-                <a href="{{url('defaultpage')}}">
-                    <i data-feather="calendar"></i>
-                    <span> Default Page </span>
-                </a>
             </li>
         </ul>
     </div>

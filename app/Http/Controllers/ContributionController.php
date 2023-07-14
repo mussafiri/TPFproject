@@ -34,6 +34,8 @@ class ContributionController extends Controller {
     }
 
     public function ajaxGetSectionContributionData( Request $request ) {
+        $cmn = new Common();
+        
         $getSectionData = Section::find( $request->section_id );
         $countContributors = Contributor::where( 'section_id', $request->section_id )->count();
 
@@ -78,12 +80,7 @@ class ContributionController extends Controller {
 
         $memberList = '';
 
-        $getCurrentContributorMember = ContributorMember::join( 'contributors', 'contributors.id', '=', 'contributor_members.contributor_id' )
-        ->where( 'contributors.section_id', $request->section_id )
-        ->where( 'contributor_members.start_date', '<=', $contributionDate )
-        ->where( 'contributor_members.end_date', 'NULL' )
-        ->where( 'contributor_members.status', 'ACTIVE' )
-        ->get();
+        $getCurrentContributorMember = $cmn->getCurrentContributorMember($request->section_id, $contributionDate);
 
         $counter = 1;
 
@@ -113,13 +110,7 @@ class ContributionController extends Controller {
         // END:: Get current members
 
         //START:: Qualifying member
-        $getQualifyingContributorMember = ContributorMember::join( 'contributors', 'contributors.id', '=', 'contributor_members.contributor_id' )
-        ->where( 'contributors.section_id', $request->section_id )
-        ->where( 'contributor_members.start_date', '<=', $contributionDate )
-        ->where( 'contributor_members.end_date', '>=', $contributionDate )
-        ->where( 'contributor_members.end_date', '!=', 'NULL' )
-        ->where( 'contributor_members.status', 'ACTIVE' )
-        ->get();
+        $getQualifyingContributorMember = $cmn->getQualifyingContributorMember($request->section_id, $contributionDate);
 
         foreach ( $getQualifyingContributorMember AS $qualifiedMembers ) {
             $statusBadge = ( $qualifiedMembers->status == 'ACTIVE' )?'success':'danger';
@@ -557,7 +548,6 @@ class ContributionController extends Controller {
         return redirect('contributions/processing/'.Crypt::encryptString('PENDING'))->with(['success'=>'You have Successfully Rejected a Section Contribution']);
     }
 
-
     public function submitContributionTopup(Request $request){
         $valid = Validator::make( $request->all(), [
             'contriDetailID'      => 'required',
@@ -660,20 +650,20 @@ class ContributionController extends Controller {
             return back()->withErrors( $valid )->withInput();
         }
 
-        //START:: Validation of Array Inputs
-        $valid = Validator::make( $request->all(), [
-            'contributor'             =>'required',
-            'member'                  =>'required',
-            'memberMonthlyIncome'     =>'required',
-            'memberContribution'      =>'required',
-            'contributorContribution' =>'required',
-            'topup'                   =>'required',
-            'total'                   =>'required' ] );
+            //START:: Validation of Array Inputs
+            $valid = Validator::make( $request->all(), [
+                'contributor'             =>'required',
+                'member'                  =>'required',
+                'memberMonthlyIncome'     =>'required',
+                'memberContribution'      =>'required',
+                'contributorContribution' =>'required',
+                'topup'                   =>'required',
+                'total'                   =>'required' ] );
 
-            if ( $valid->fails() ) {
-                return back()->withErrors( $valid, 'dynamicInputsValidation' )->withInput();
-            }
-        //END:: Validation of Array Inputs
+                if ( $valid->fails() ) {
+                    return back()->withErrors( $valid, 'dynamicInputsValidation' )->withInput();
+                }
+            //END:: Validation of Array Inputs
 
             //Start:: Get Payment Proof
             if ( $request->hasFile( 'transactionProof' ) ) {
@@ -708,9 +698,9 @@ class ContributionController extends Controller {
             //End: insert into contribution
 
             //Start:: Insert contribution details
-                #Start:: remove old Contribution Details
-                    ContributionDetail::where('contribution_id', $contributionID)->delete();
-                #End:: remove old Contribution Details
+            #Start:: remove old Contribution Details
+            ContributionDetail::where('contribution_id', $contributionID)->delete();
+            #End:: remove old Contribution Details
 
             $contributor = $request->contributor;
             $member = $request->member;
@@ -719,14 +709,12 @@ class ContributionController extends Controller {
             $contributorContribution = $request->contributorContribution;
             $contributorMonthlyIncome = $request->contributorMonthlyIncome;
             $topup = $request->topup;
-            //$totalContribution = $request->total;
+            
 
             for ( $aa = 0; $aa < count( $memberContribution );
             $aa++ ) {
-
                 $getContributorData = Contributor::find($contributor[ $aa ]);
                 $getContriRate = ContributorCatContrStructure:: where('contributor_category_id', $getContributorData->contributor_type_id)->where('status','ACTIVE')->first();
-
 
                 $member_monthly_income = str_replace( ',', '', (100 * str_replace( ',', '', $memberContribution[ $aa ] )) / $getContriRate->member_contribution_rate);
 

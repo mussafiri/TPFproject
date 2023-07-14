@@ -104,7 +104,7 @@
                                                     <td> {{number_format( $arrearData->getMemberContributionAmount( $arrearData->contributor_id, $arrearData->member_id ), 2 )}}</td>
                                                     <td> {{number_format( ($totalMemberContribution), 2 )}}</td>
                                                     <td class="text-danger text-center"> {{number_format( $arrearData->totalMemberArrearPenaltyExpected($totalMemberContribution, $arrearData->arrear_id, $arrearPeriod),2)}}</td>
-                                                    <td> <span id="status{{$counter}}" class="badge badge-outline-{{$arrearData->status == 'ACTIVE'?'success':'danger';}} badge-pill">{{$arrearData->status}}</span></td>
+                                                    <td> <span id="status{{$counter}}" class="badge badge-outline-{{$arrearData->status == 'ACTIVE'?'success':'danger'}} badge-pill">{{$arrearData->status}}</span></td>
                                                     <td>
                                                         <div class="float-right">
                                                             <a href="javascript:void(0);" class="text-blue btn btn-light btn-sm waveArrear editButton{{$counter}}" data-memberID="{{$arrearData->member_id}}" data-contributorID="{{$arrearData->contributor_id}}" aria-expanded="false" data-rowID="{{$counter}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Suspend User Contribution">
