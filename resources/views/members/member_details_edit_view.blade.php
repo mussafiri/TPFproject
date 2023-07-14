@@ -18,6 +18,13 @@ use Carbon\Carbon;
         object-fit: cover;
         /* scale and align the image within its container */
     }
+    .select2fontSize .select2-results__option {
+        font-size: 12px;
+    }
+    /* Set font size of selected option */
+    .select2fontSize .select2-selection__choice {
+        font-size: 12px;
+    }
 </style>
 @endsection
 @section('content')
@@ -267,9 +274,9 @@ use Carbon\Carbon;
                                         <div class="row">
                                             <div class="col-md-8 pr-4">
                                                 <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label for="field-1" class="control-label">Contributor</label>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group font-11">
+                                                            <label for="field-1" class="control-label font-14">Contributor</label>
                                                             <select class="form-control contirbutorSelect" name="contributor_name" data-toggle="select2">
                                                                 <option value="0">-- Select Contributor --</option>
                                                                 @foreach($contributors as $contributor)
@@ -299,10 +306,16 @@ use Carbon\Carbon;
                                                             <input type="text" name="section" id="section" class="form-control form-control-sm" value="{{old('section',$member_data->contributor->contributorSection->name)}}" oninput="this.value = this.value.toUpperCase()" id="field-4" placeholder="District" readonly>
                                                         </div>
                                                     </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="field-4" class="control-label">Contribution Startdate</label>
+                                                            <input type="text" name="startdate" class="form-control form-control-sm"  data-provide="datepicker" data-date-autoclose="true" onkeydown="return false;" onpaste="return false;" data-date-format="dd MM yyyy" value="{{old('startdate')}}" placeholder="Contribution Startdate">
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class=" dropdown-divider col-12"></div>
                                                 <div class="col-sm-12">
-                                                    <button type="submit" class="btn btn-info waves-effect waves-light float-right">Update Primary Contributor</button>
+                                                    <button type="submit" class="btn btn-sm btn-info waves-effect waves-light float-right">Update Primary Contributor</button>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">

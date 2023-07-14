@@ -124,7 +124,6 @@
 
                             <div class="col-md-12 px-3 pt-2">
                                 <a href="javascript:void(0);" class="btn btn-info waves-effect waves-light float-right" data-toggle="modal" data-target="#contributionSubmisionAlert">Submit Contribution</a>
-
                                 <!-- Start:: Warning Alert Modal -->
                                 <div id="contributionSubmisionAlert" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                                     <div class="modal-dialog modal-md">

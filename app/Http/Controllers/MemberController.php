@@ -65,11 +65,8 @@ class MemberController extends Controller {
                 return back()->withErrors( $valid, 'editMemberDetails' )->withInput();
             }
 
-            $newFormatteddate =  Carbon::createFromFormat('d M Y',$request->dob);
-            $dob = $this->carbonDateObj->format('Y-m-d',$newFormatteddate);
-            
-            $servicedate_format = Carbon::createFromFormat('d M Y',$request->service_date);
-            $servicedate = $this->carbonDateObj->format('Y-m-d',$servicedate_format);
+            $dob = $this->carbonDateObj->createFromFormat('d M Y',$request->dob)->format('Y-m-d',$newFormatteddate);
+            $servicedate = $this->carbonDateObj->createFromFormat('d M Y',$request->service_date)->format('Y-m-d');
                 
                 $memberDetsUpdateObject = Member::find($member_id);
                 $memberDetsUpdateObject->title                 = $request->salutation;
@@ -99,13 +96,10 @@ class MemberController extends Controller {
             
             $valid = Validator::make($request->all(), [
                 'contributor_name' => 'required|gt:0',
-                'middle_name' => 'required|min:3',
+                'startdate' => 'required',
             ],
-            [   'evengelical_title.gt' => 'You must select Evengelical Title',
-                'salutation.not_in' => 'You must select Salutation',
-                'marital_status.not_in' => 'You must select Marital Status',
-                'gender.not_in' => 'You must select Gender',
-                'occupation.gt' => 'You must select Occupation',
+            [   'contributor_name.gt' => 'You must select Contributor',
+                'startdate.required' => 'Select Contribution Startdate',
             ]);
 
             if ( $valid->fails() ) {
@@ -113,14 +107,44 @@ class MemberController extends Controller {
                 #Returns errors with Error Bag 'registerMember'
                 return back()->withErrors( $valid, 'editMemberContributorDetails' )->withInput();
             }
-            $validityforActiveContributor = ContributorMember::join( 'members', 'members.id', '=', 'contributor_members.member_id' )
-                    ->where( 'contributors.section_id', $request->section_id )
-                    ->where( 'contributor_members.start_date', '<=', $contributionDate )
-                    ->where( 'contributor_members.end_date', 'NULL' )
-                    ->where( 'contributor_members.status', 'ACTIVE' )
-                    ->count();
+            $contribution_startdate = $this->carbonDateObj->createFromFormat('d M Y', $request->startdate)->format('Y-m-d');
 
+            // Check if the contribution period is valid for Primary Contributor
+            $existingContributor = ContributorMember::join('members', 'members.id', '=', 'contributor_members.member_id')
+                ->where('contributor_members.member_id', $member_id)
+                ->where('contributor_members.start_date', '>', $contribution_startdate)
+                ->count();
+          
+            if ($existingContributor == 0){
+                //The new contibutor contributions start date is greater than the existing
+                //returns error There are existing data earlier than the given date
+            }
+            elseif($existingContributor != 0){
+                // The New contributor is older than the Existing Primary contributor
+                $existingPrimaryContributor = ContributorMember::join('members', 'members.id', '=', 'contributor_members.member_id')
+                    ->where('contributor_members.member_id', $member_id)
+                    ->latest('contributor_members.id')->first();
 
+                # Insert the new Primary contributor and update the existing as the secondary contributor
+                    $newContributorObj                          = new ContributorMember;
+                    $newContributorObj->contributor_id          = $request->contributor_name;
+                    $newContributorObj->member_id               = $request->member_id;
+                    $newContributorObj->contributormem_type     = "PRIMARY";
+                    $newContributorObj->start_date              = $request->startdate;
+                    $newContributorObj->end_date                = $existingPrimaryContributor->end_date;
+                    $newContributorObj->status                  = "DORMANT";
+                    $newContributorObj->save();
+
+                #Update the existing primary contributor
+                    $existingContributorObj                          = ContributorMember::find($existingPrimaryContributor->contributor_id);
+                    $existingContributorObj->contributormem_type     = "SECONDARY";
+                    $existingContributorObj->save();
+                
+                    toastr();
+                    return redirect('members/list')->with(['success'=>'Member\'s Primary Contributor has been successfully Updated!']);
+            }
+
+            dd($existingContributor." ".$contribution_startdate."  ".$member_id);
 
 
         }
@@ -137,9 +161,9 @@ class MemberController extends Controller {
     }
 
     public function membersEditView($member) {
-        $id= Crypt::decryptString($member);
+        $id = Crypt::decryptString($member);
         $member_data = Member::find($id);
-        $contributor_history = ContributorMember::latest()->take(3)->orderBy("id")->get();
+        $contributor_history = ContributorMember::latest()->take(3)->orderBy("id")->where("member_id",$id)->get();
         $salutation_title = MemberSalutation::all();
         $identity_types = MemberIdentityType::all();
         $contributors = Contributor::all();
@@ -202,8 +226,7 @@ class MemberController extends Controller {
 
     public function ajaxMemberDuplicateValidation(Request $ajaxreq){
         #Taking all POST requests from the form
-        $newFormatteddate =  Carbon::createFromFormat('d M Y',$ajaxreq['dob']);
-        $formatted_date =  $newFormatteddate->format('Y-m-d',$ajaxreq['dob']);
+        $formatted_date = $this->carbonDateObj->createFromFormat('d M Y',$ajaxreq['dob'])->format('Y-m-d');
         // Check if the member already exists in the database
         $member = Member::where('fname', $ajaxreq['firstname'])
                 ->where('mname', $ajaxreq['midname'])
@@ -430,11 +453,8 @@ class MemberController extends Controller {
             $signature = 'NULL';
         }
         #END::Handle File Upload Registration Form
-        $newFormatteddate =  Carbon::createFromFormat('d M Y',$request->dob);
-        $dob = $this->carbonDateObj->format('Y-m-d',$newFormatteddate);
-        
-        $servicedate_format = Carbon::createFromFormat('d M Y',$request->service_date);
-        $servicedate = $this->carbonDateObj->format('Y-m-d',$servicedate_format);
+        $dob = $this->carbonDateObj->createFromFormat('d M Y',$request->dob)->format('Y-m-d');
+        $servicedate = $this->carbonDateObj->createFromFormat('d M Y',$request->service_date)->format('Y-m-d');
 
         $default_pwd = password_hash( $request->firstname.$dob, PASSWORD_BCRYPT, [ 'cost'=>10 ] );
 
